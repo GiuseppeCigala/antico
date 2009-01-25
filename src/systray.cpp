@@ -59,6 +59,7 @@ void Systray::add(Frame *frm)
     sys_icons.insert(frm->winId(), s_icon); // save the Frame winId/Sysicon
     layout->addWidget(s_icon);
     qDebug() <<"Frame added to System Tray." << "Frame name:" << frm->cl_name() << "Frame Id:" << frm->winId() << "Client Id:" << frm->cl_win();
+    connect(s_icon, SIGNAL(destroy_sys(Sysicon *)), this, SLOT(remove(Sysicon *)));
 }
 
 void Systray::add(Window win_id)
@@ -87,6 +88,13 @@ void Systray::remove(Window win_id) // if Sysicon is on Systray together with eq
     }
 }
 
+void Systray::remove(Sysicon *s_icon) // remove from "Close" right button mouse on SysTray
+{
+    sys_icons.remove(sys_icons.key(s_icon));
+    qDebug() << "Sysicon remove. Num. after deletion:" << sys_icons.size();
+    s_icon->close();
+}
+
 bool Systray::x11Event(XEvent *event)
 {
     if (event->type == ClientMessage)
@@ -97,9 +105,13 @@ bool Systray::x11Event(XEvent *event)
             add(event->xclient.data.l[2]);
         }
         else if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_BEGIN_MESSAGE)
-        {}
+        {
+            qDebug("SYSTEM_TRAY_BEGIN_MESSAGE");
+        }
         else if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_CANCEL_MESSAGE)
-        {}
+        {
+            remove(event->xclient.data.l[2]);
+        }
         else if (event->xclient.data.l[1] == (signed)net_message_data_atom)
         {
             qDebug("Text message from Dockapp:\n%s", event->xclient.data.b);

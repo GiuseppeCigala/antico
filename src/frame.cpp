@@ -138,8 +138,6 @@ void Frame::init()
 
     // show frame
     show();
-    // add frame to dockbar (pager)
-    dock->add(this);
 }
 
 void Frame::get_client_geometry()
@@ -291,6 +289,7 @@ void Frame::set_focus(long timestamp) // set to focus to child
 void Frame::withdraw()
 {
     unmap();
+    XUnmapWindow(QX11Info::display(), c_win);
     set_client_state(WithdrawnState);
 }
 
@@ -303,6 +302,7 @@ void Frame::map()
 {
     show();
     XMapWindow(QX11Info::display(), winId());
+    XMapWindow(QX11Info::display(), c_win);
     set_client_state(NormalState);
     iconize = false;
 }
@@ -311,6 +311,7 @@ void Frame::raise()
 {
     show();
     XRaiseWindow(QX11Info::display(), winId());
+    XRaiseWindow(QX11Info::display(), c_win);
     set_client_state(NormalState);
     iconize = false;
     dock->add(this); // transition from systray to raised (add to pager)

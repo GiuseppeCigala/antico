@@ -217,6 +217,7 @@ bool Antico::x11EventFilter(XEvent *event)
             if (event->xunmap.send_event)
             {
                 frm->withdraw();
+                dock->remove(frm->winId()); // remove Dockicon still mapped
                 qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name();
             }
             else
@@ -228,7 +229,7 @@ bool Antico::x11EventFilter(XEvent *event)
         }
         if (event->xunmap.event != event->xunmap.window)
             return true;
-
+       
         return false;
         break;
 
@@ -513,6 +514,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
     mapping_clients.insert(c_win, frm); // save the client winId/frame
     mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
     frame_type.clear(); // clear the window type list
+    dock->add(frm); // add frame to dockbar (pager)
 }
 
 bool Antico::check_net_sys_tray_for(Window c_win)

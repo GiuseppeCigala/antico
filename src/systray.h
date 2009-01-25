@@ -30,6 +30,9 @@ public:
     void add(Window);
     void remove(Window);
     void update_style();
+ 
+public slots:
+    void remove(Sysicon *);
     
 protected:
     virtual bool x11Event (XEvent *);
