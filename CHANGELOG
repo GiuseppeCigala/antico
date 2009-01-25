@@ -31,6 +31,7 @@ CHANGELOG
 23/01/09: path completion on "Add app" and Filedialog.
 24/01/09: add Pager (on Dockbar).
 25/01/09: add Drag&Drop of Folder/File/App from Filedialog to Desktop.
+25/01/09: update header title on frame - fix SysTray map/unmap bug.
 
 ***********
 TO DO

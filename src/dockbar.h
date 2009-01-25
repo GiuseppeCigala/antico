@@ -38,6 +38,7 @@ public:
     void set_geometry();
     void update_style();
     void remove(Window);
+    void update_dockicon_name(const QString &, Frame *);
     Systray *system_tray() const
     {
         return sys;

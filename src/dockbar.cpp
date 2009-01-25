@@ -75,6 +75,15 @@ void Dockbar::set_geometry()
     setGeometry(0, QApplication::desktop()->height()-dock_height, QApplication::desktop()->width(), dock_height);
 }
 
+void Dockbar::update_dockicon_name(const QString &name, Frame *frm)
+{
+     if (dock_icons.contains(frm->winId())) // if already present
+     {
+         Dockicon *d_icon = dock_icons.value(frm->winId());
+         d_icon->update_name(name);
+     }
+}
+
 void Dockbar::add(Frame *frm)
 {
     if (! dock_icons.contains(frm->winId())) // if not already present

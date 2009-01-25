@@ -21,11 +21,12 @@ class Header : public QWidget
     Q_OBJECT
 
 public:
-    Header(const QPixmap &icon, const QString &name, QWidget *parent=0);
+    Header(const QPixmap &, const QString &, QWidget *parent=0);
     ~Header();
-    void set_pixmap(const QPixmap &active, const QPixmap &inactive, const QColor &clr);
+    void set_pixmap(const QPixmap &, const QPixmap &, const QColor &);
     void set_active();
     void set_inactive();
+    void update_name(const QString nm);
 
 signals:
     void mouse_release(QMouseEvent *);

@@ -11,6 +11,7 @@
 Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(parent)
 {
     frm = frame;
+    title = frm->cl_name();
     sys = sys_tr;
     read_settings();
     iconize = true;
@@ -46,7 +47,7 @@ void Dockicon::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(title_color);
     painter.drawRoundRect(0, 0, width(), height(), 5, 20);
-    painter.drawText(QRect(height()+3, 0, width(), height()), Qt::AlignVCenter, frm->cl_name()); // dock text
+    painter.drawText(QRect(height()+3, 0, width(), height()), Qt::AlignVCenter, title); // dock title
     painter.drawPixmap(QRect(0, 0, width(), height()), pix, QRect(0, 0, pix.width(), pix.height()));// dock pixmap
     painter.drawPixmap(QRect(3, 3, height()-6, height()-6), frm->cl_icon(), QRect(0, 0, frm->cl_icon().width(), frm->cl_icon().height()));// dock icon
 }
@@ -92,6 +93,12 @@ void Dockicon::run_menu(QAction *act)
         frm->unmap();
         close();
     }
+}
+
+void Dockicon::update_name(const QString &name)
+{
+    title = name;
+    update();
 }
 
 void Dockicon::update_style()

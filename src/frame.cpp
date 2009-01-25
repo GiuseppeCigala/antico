@@ -80,12 +80,12 @@ void Frame::init()
     get_wm_hints();
     // get the client normal hints
     get_wm_normal_hints();
-    // get the client name
-    get_wm_name();
     // get the client prot
     get_wm_protocols();
     // get the client icon to show on header
     get_icon();
+    // get the client name
+    get_wm_name();
     // set the frame geometry
     set_frame_geometry();
 
@@ -135,7 +135,7 @@ void Frame::init()
     XMapWindow(QX11Info::display(), c_win);
     XSync(QX11Info::display(), false);
     XUngrabServer(QX11Info::display());
-
+      
     // show frame
     show();
 }
@@ -212,7 +212,7 @@ void Frame::get_wm_hints()
     {
         if (xwmhints->flags & StateHint && xwmhints->initial_state == IconicState)
         {
-            set_client_state(IconicState);
+            set_state(IconicState);
         }
         XFree(xwmhints);
     }
@@ -268,7 +268,7 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
     }
 }
 
-void Frame::set_client_state(int state)
+void Frame::set_state(int state)
 {
     ulong data[2];
     data[0] = (ulong)state;
@@ -290,7 +290,7 @@ void Frame::withdraw()
 {
     unmap();
     XUnmapWindow(QX11Info::display(), c_win);
-    set_client_state(WithdrawnState);
+    set_state(WithdrawnState);
 }
 
 void Frame::unmap()
@@ -303,7 +303,7 @@ void Frame::map()
     show();
     XMapWindow(QX11Info::display(), winId());
     XMapWindow(QX11Info::display(), c_win);
-    set_client_state(NormalState);
+    set_state(NormalState);
     iconize = false;
 }
 
@@ -312,7 +312,7 @@ void Frame::raise()
     show();
     XRaiseWindow(QX11Info::display(), winId());
     XRaiseWindow(QX11Info::display(), c_win);
-    set_client_state(NormalState);
+    set_state(NormalState);
     iconize = false;
     dock->add(this); // transition from systray to raised (add to pager)
 }
@@ -320,7 +320,7 @@ void Frame::raise()
 void Frame::iconify()
 {
     unmap();
-    set_client_state(IconicState);
+    set_state(IconicState);
     dock->add(this);  // add frame to dockbar (pager)
     iconize = true;
 }
@@ -369,6 +369,12 @@ void Frame::get_wm_name()  // get WM_NAME
         qDebug() << "wm_locale_name:" << QString::fromUtf8((char *)data);
         XFree(data);
     }
+}
+
+void Frame::update_name()
+{
+    tm_bdr->update_name(wm_name); // update header name
+    dock->update_dockicon_name(wm_name, this); // update Dockicon name
 }
 
 void Frame::get_wm_protocols()
@@ -514,7 +520,7 @@ void Frame::create_border()
     tr_bdr->setScaledContents(true);
     tr_bdr->setAlignment(Qt::AlignCenter);
     layout->addWidget(tr_bdr, 0, 2);
-    // top mid header border (move frame)
+    // top mid header border (header frame)
     tm_bdr = new Header(cl_icon(), cl_name());
     tm_bdr->set_pixmap(header_active_pix, header_inactive_pix, title_color);
     tm_bdr->setFixedHeight(top_bdr_height);

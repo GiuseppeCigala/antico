@@ -28,6 +28,7 @@ public:
     ~Dockicon();
     void read_settings();
     void update_style();
+    void update_name(const QString &);
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -44,6 +45,7 @@ private:
     Frame *frm;
     Systray *sys;
     QColor title_color;
+    QString title;
     QString d_icon_pix;
     QString close_dock_pix;
     QString add_to_sys_pix;

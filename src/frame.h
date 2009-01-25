@@ -27,7 +27,7 @@ class Frame : public QFrame
     Q_OBJECT
 
 public:
-    Frame(Window w, const QString &type, Dockbar *dock, QWidget *parent=0);
+    Frame(Window, const QString &, Dockbar *, QWidget *parent=0);
     ~Frame();
     void init();
     void update_style();
@@ -41,12 +41,13 @@ public:
     void map();
     void raise();
     void get_wm_name();
+    void update_name();
     void get_wm_protocols();
     void send_wm_protocols(long, long);
     void resize_request(int, int);
     void set_active();
     void set_inactive();
-    void set_client_state(int);
+    void set_state(int);
     void set_focus(long);
     void get_icon();
     void get_colormaps();

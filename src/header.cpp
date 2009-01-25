@@ -47,6 +47,12 @@ void Header::set_active()
     update();
 }
 
+void Header::update_name(const QString nm)
+{
+    name = nm;
+    update();
+}
+
 void Header::set_inactive()
 {
     back = inactive_back;

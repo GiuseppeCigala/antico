@@ -373,6 +373,11 @@ bool Antico::x11EventFilter(XEvent *event)
             {
                 qDebug() << "---> wm_name";
                 frm->get_wm_name();
+                frm->update_name();
+            }
+            if (pev->atom == wm_state)
+            {
+                qDebug() << "---> wm_state";
             }
             else if (pev->atom == wm_colormaps)
             {
