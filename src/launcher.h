@@ -42,6 +42,8 @@ protected:
 private:
  
     QAction *quit;
+    QAction *shutdown;
+    QAction *restart;
     QAction *refresh;
     QAction *run;
     QAction *show_desk;
@@ -51,6 +53,8 @@ private:
 	QString launcher_pix;
  	QString app_pix;
     QString quit_pix;
+    QString shutdown_pix;
+    QString restart_pix;
     QString show_pix;
     QString refresh_pix;
     QString run_pix;

@@ -29,12 +29,18 @@ void Launcher::init()
     connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
 
     quit = new QAction("Quit WM", this);
+    shutdown = new QAction("Shutdown PC", this);
+    restart = new QAction("Restart PC", this);
     refresh = new QAction("Refresh WM", this);
     run = new QAction("Run...", this);
     manag = new QAction("Manager", this);
     show_desk = new QAction("Show Desktop", this);
     quit->setIcon(QIcon(quit_pix));
     quit->setData("quit");
+    shutdown->setIcon(QIcon(shutdown_pix));
+    shutdown->setData("shutdown");
+    restart->setIcon(QIcon(restart_pix));
+    restart->setData("restart");
     refresh->setIcon(QIcon(refresh_pix));
     refresh->setData("refresh");
     show_desk->setIcon(QIcon(show_pix));
@@ -47,6 +53,8 @@ void Launcher::init()
     main_menu->addAction(run);
     main_menu->addAction(show_desk);
     main_menu->addAction(quit);
+    main_menu->addAction(shutdown);
+    main_menu->addAction(restart);
     main_menu->addAction(refresh);
 }
 
@@ -65,6 +73,8 @@ void Launcher::read_settings()
     launcher_pix = stl_path + style->value("launcher_pix").toString();
     app_pix = stl_path + style->value("application_pix").toString();
     quit_pix = stl_path + style->value("quit_pix").toString();
+    shutdown_pix = stl_path + style->value("shutdown_pix").toString();
+    restart_pix = stl_path + style->value("restart_pix").toString();
     refresh_pix = stl_path + style->value("refresh_pix").toString();
     show_pix = stl_path + style->value("show_pix").toString();
     run_pix = stl_path + style->value("run_pix").toString();
@@ -79,6 +89,10 @@ void Launcher::run_command(QAction *act)
 
     if (cmd == "quit")
         app->wm_quit();
+    if (cmd == "shutdown")
+        app->shutdown();
+    if (cmd == "restart")
+        app->restart();
     if (cmd == "refresh")
         app->wm_refresh();
     if (cmd == "show")
@@ -108,6 +122,8 @@ void Launcher::update_style()
     setPixmap(QPixmap(launcher_pix));
     setScaledContents(true);
     quit->setIcon(QIcon(quit_pix));
+    shutdown->setIcon(QIcon(shutdown_pix));
+    restart->setIcon(QIcon(restart_pix));
     refresh->setIcon(QIcon(refresh_pix));
     show_desk->setIcon(QIcon(show_pix));
     run->setIcon(QIcon(run_pix));

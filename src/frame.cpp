@@ -224,11 +224,7 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
     long hints = NULL;
     long wm_flags = NULL;
     int win_grav = 0;
-    int norm_x = 0;
-    int norm_y = 0;
-    int norm_w = 0;
-    int norm_h = 0;
-
+   
     if ((xsizehints = XAllocSizeHints()) != NULL)
     {
         if (XGetWMNormalHints(QX11Info::display(), c_win, xsizehints, &hints) == 0)
@@ -242,7 +238,7 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
         {
             client_x = xsizehints->x;
             client_y = xsizehints->y;
-            qDebug() << "PPosition:" << norm_x << norm_y;
+            qDebug() << "PPosition:" << client_x << client_y;
         }
         if (wm_flags & PSize)
         {
@@ -250,7 +246,7 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
             client_w = xsizehints->width;
             if(xsizehints->height != 0)
             client_h = xsizehints->height;
-            qDebug() << "PSize:" << norm_w << norm_h;
+            qDebug() << "PSize:" << client_w << client_h;
         }
         if (wm_flags & PBaseSize)
         {
@@ -258,13 +254,16 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
             client_w = xsizehints->base_width;
             if(xsizehints->base_height != 0)
             client_h = xsizehints->base_height;
-            qDebug() << "PBaseSize:" << norm_w << norm_h;
+            qDebug() << "PBaseSize:" << client_w << client_h;
         }
         if (client_w >= desk->width()-10)
         client_w = desk->width()-10;
 
         if (client_h >= desk->height()-dock_height-20)
         client_h = desk->height()-dock_height-20;
+        
+        qDebug() << "Final Client Size:" << client_w << client_h;
+        
     }
 }
 

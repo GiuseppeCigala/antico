@@ -2,6 +2,8 @@
 Icon\launcher_pix=antico.png
 Icon\application_pix=application.png
 Icon\quit_pix=quit.png
+Icon\shutdown_pix=shutdown.png
+Icon\restart_pix=restart.png
 Icon\refresh_pix=refresh.png
 Icon\show_pix=show.png
 Icon\run_pix=run.png

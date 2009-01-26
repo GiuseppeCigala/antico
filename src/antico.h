@@ -18,6 +18,7 @@
 #include "frame.h"
 #include "dockbar.h"
 #include "desk.h"
+
 class Dockbar;
 class Frame;
 class Desk;
@@ -39,6 +40,8 @@ public:
     void set_active_frame(Frame *);
     void send_configurenotify(Frame *);
     void wm_quit();
+    void shutdown();
+    void restart();
     void wm_refresh();
     void show_desktop();
     void set_settings();

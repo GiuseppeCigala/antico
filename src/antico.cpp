@@ -229,7 +229,7 @@ bool Antico::x11EventFilter(XEvent *event)
         }
         if (event->xunmap.event != event->xunmap.window)
             return true;
-       
+
         return false;
         break;
 
@@ -682,19 +682,29 @@ void Antico::send_configurenotify(Frame *frm)
 
 void Antico::wm_quit()
 {
-    Frame *frm;
+    Msgbox *msg = new Msgbox();
+    msg->setText("<b>Quit the WM</b>");
+    msg->setInformativeText("Are you sure to quit the WM ?");
+    msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg->setIcon(QMessageBox::Warning);
+    int ret = msg->exec();
 
-    foreach(frm, mapping_clients)
+    if (ret == QMessageBox::Ok)
     {
-        qDebug() << "Quit process:" << frm->cl_win();
-        XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
-        XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
-        frm->destroy();
+        Frame *frm;
+
+        foreach(frm, mapping_clients)
+        {
+            qDebug() << "Quit process:" << frm->cl_win();
+            XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
+            XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
+            frm->destroy();
+        }
+        mapping_clients.clear();
+        XSync(QX11Info::display(), FALSE);
+        flush();
+        quit(); // quit the WM
     }
-    mapping_clients.clear();
-    XSync(QX11Info::display(), FALSE);
-    flush();
-    quit(); // quit the WM
 }
 
 void Antico::wm_refresh()
@@ -712,6 +722,44 @@ void Antico::wm_refresh()
 
     XSync(QX11Info::display(), FALSE);
     flush();
+}
+
+void Antico::shutdown()
+{
+    Msgbox *msg = new Msgbox();
+    msg->setText("<b>Shutdown the PC</b>");
+    msg->setInformativeText("Are you sure to shutdown the PC ?");
+    msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg->setIcon(QMessageBox::Warning);
+    int ret = msg->exec();
+
+    if (ret == QMessageBox::Ok)
+    {
+        qDebug() << "Shutdown ...";
+        QDBusConnection bus = QDBusConnection::systemBus();
+        QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
+        hal.call("Shutdown");
+        wm_quit();
+    }
+}
+
+void Antico::restart()
+{
+    Msgbox *msg = new Msgbox();
+    msg->setText("<b>Restart the PC</b>");
+    msg->setInformativeText("Are you sure to restart the PC ?");
+    msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg->setIcon(QMessageBox::Warning);
+    int ret = msg->exec();
+
+    if (ret == QMessageBox::Ok)
+    {
+        qDebug() << "Restart ...";
+        QDBusConnection bus = QDBusConnection::systemBus();
+        QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
+        hal.call("Reboot");
+        wm_quit();
+    }
 }
 
 void Antico::show_desktop()
@@ -776,6 +824,8 @@ void Antico::set_settings()
         style->setValue("launcher_pix", "antico.png");
         style->setValue("application_pix", "application.png");
         style->setValue("quit_pix", "quit.png");
+        style->setValue("shutdown_pix", "shutdown.png");
+        style->setValue("restart_pix", "restart.png");
         style->setValue("refresh_pix", "refresh.png");
         style->setValue("show_pix", "show.png");
         style->setValue("run_pix", "run.png");

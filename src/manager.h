@@ -76,6 +76,8 @@ private:
     QLabel *launcher_pix;
     QLabel *application_pix;
     QLabel *quit_pix;
+    QLabel *shutdown_pix;
+    QLabel *restart_pix;
     QLabel *refresh_pix;
     QLabel *run_pix;
     QLabel *show_pix;
@@ -113,6 +115,8 @@ private:
     QString launcher_pix_path;
     QString application_pix_path;
     QString quit_pix_path;
+    QString shutdown_pix_path;
+    QString restart_pix_path;
     QString refresh_pix_path;
     QString run_pix_path;
     QString show_pix_path;

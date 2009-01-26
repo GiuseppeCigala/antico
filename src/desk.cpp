@@ -232,8 +232,9 @@ void Desk::run_menu(QAction *act)
             QString name = sel_dir->get_selected_name();
             QString icon = sel_dir->get_selected_icon();
             QPoint pos = menu->pos();
+            QFileInfo pathinfo(path+name);
 
-            if (name != "")
+            if (name != "" && pathinfo.isFile())
             {
                 create_desk_file(name, path, icon, pos, this);
             }
