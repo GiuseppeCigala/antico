@@ -15,6 +15,7 @@ Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(par
     sys = sys_tr;
     read_settings();
     iconize = true;
+    bdr_width = 1;
 }
 
 Dockicon::~Dockicon()
@@ -33,20 +34,20 @@ void Dockicon::read_settings()
     style->beginGroup("Dockicon");
     d_icon_pix = stl_path + style->value("d_icon_pix").toString();
     title_color = style->value("title_color").value<QColor>();
-    pix = QPixmap(d_icon_pix);
     style->endGroup(); //Dockicon
     style->beginGroup("Other");
     close_dock_pix = stl_path + style->value("close_dock_pix").toString();
     add_to_sys_pix = stl_path + style->value("add_to_sys_pix").toString();
     style->endGroup(); //Other
+    pix = QPixmap(d_icon_pix);
 }
 
 void Dockicon::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(title_color);
-    painter.drawRoundRect(0, 0, width(), height(), 5, 20);
+    painter.setPen(QPen(title_color, bdr_width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawRoundedRect(0, 0, width(), height(), 5, 5);
     painter.drawText(QRect(height()+3, 0, width(), height()), Qt::AlignVCenter, title); // dock title
     painter.drawPixmap(QRect(0, 0, width(), height()), pix, QRect(0, 0, pix.width(), pix.height()));// dock pixmap
     painter.drawPixmap(QRect(3, 3, height()-6, height()-6), frm->cl_icon(), QRect(0, 0, frm->cl_icon().width(), frm->cl_icon().height()));// dock icon
@@ -70,22 +71,36 @@ void Dockicon::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::RightButton)
     {
         QMenu *menu = new QMenu(this);
-        menu->addAction(QIcon(close_dock_pix), "Close");
-        menu->addAction(QIcon(add_to_sys_pix), "Add to System Tray");
+        menu->addAction(QIcon(close_dock_pix), tr("Close"));
+        menu->addAction(QIcon(add_to_sys_pix), tr("Add to System Tray"));
         menu->popup(event->globalPos());
         connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
     }
 }
 
+void Dockicon::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    bdr_width = 2;
+    update();
+}
+
+void Dockicon::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    bdr_width = 1;
+    update();
+}
+
 void Dockicon::run_menu(QAction *act)
 {
-    if (act->text() == "Close")
+    if (act->text() == tr("Close"))
     {
         emit destroy_dock(this);
         frm->destroy();
         close();
     }
-    if (act->text() == "Add to System Tray")
+    if (act->text() == tr("Add to System Tray"))
     {
         emit destroy_dock(this);
         sys->add(frm); // add Dockicon to System Tray

@@ -27,8 +27,10 @@ void Colordialog::init()
     setLayout(layout);
     col_sel = new Colorsel(actual_col); // update colorsel with actual color
     layout->addWidget(col_sel);
-
-    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+   
+    buttonBox = new QDialogButtonBox(this);
+    buttonBox->addButton(tr("Ok"), QDialogButtonBox::AcceptRole);
+    buttonBox->addButton(tr("Cancel"), QDialogButtonBox::RejectRole);
     layout->addWidget(buttonBox);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));

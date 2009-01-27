@@ -15,7 +15,7 @@ Deskdev::Deskdev(const QString &device, const QString &mnt_path, const QString &
     device_label = label;
     device_type = type;
     setFixedSize(100, 50);
-    setToolTip("Mount path: " + mnt_path);
+    setToolTip(tr("Mount path: ") + mnt_path);
     read_settings();
     init();
     show();
@@ -84,7 +84,7 @@ void Deskdev::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        Filedialog *open_dir = new Filedialog("Device contents:", "Close", this);
+        Filedialog *open_dir = new Filedialog(tr("Device contents:"), "Close", this);
         open_dir->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
         open_dir->set_path(mount_path);
     }

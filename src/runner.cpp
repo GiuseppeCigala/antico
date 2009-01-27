@@ -23,12 +23,12 @@ void Runner::init()
 {
     QGridLayout *layout = new QGridLayout(this);
     setLayout(layout);
-    QLabel *win_lab = new QLabel("<b>RUNNER</b>", this);
+    QLabel *win_lab = new QLabel(tr("<b>RUNNER</b>"), this);
     win_lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    QLabel *text = new QLabel("Type command line:", this);
+    QLabel *text = new QLabel(tr("Type command line:"), this);
     command = new QLineEdit("", this);
-    QPushButton *run = new QPushButton("Run", this);
-    QPushButton *quit = new QPushButton("Quit", this);
+    QPushButton *run = new QPushButton(tr("Run"), this);
+    QPushButton *quit = new QPushButton(tr("Quit"), this);
     layout->addWidget(win_lab, 0, 0, 1, 0);
     layout->addWidget(text, 1, 0, 1, 0);
     layout->addWidget(command, 2, 0, 1, 0);
@@ -76,8 +76,8 @@ void Runner::run()
         else
         {
             Msgbox *msg = new Msgbox(this);
-            msg->setText("<b>COMMAND INCORRECT</b>");
-            msg->setInformativeText("Check the command syntax. If the app is not in your $PATH, type the absolute app path.");
+            msg->setText(tr("<b>COMMAND INCORRECT</b>"));
+            msg->setInformativeText(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
             msg->setIcon(QMessageBox::Critical);
         }
     }

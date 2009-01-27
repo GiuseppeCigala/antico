@@ -33,7 +33,7 @@ void Manager::init()
     tab = new QTabWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
-    QLabel *lab = new QLabel("<b>MANAGER</b>", this);
+    QLabel *lab = new QLabel(tr("<b>MANAGER</b>"), this);
     lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     layout->addWidget(lab);
     layout->addWidget(tab);
@@ -233,7 +233,7 @@ void Manager::add_app_tab()
 {
     QFrame *add_frm = new QFrame(this);
     add_frm->setFrameStyle(QFrame::Panel);
-    tab->addTab(add_frm, QString("Add application"));
+    tab->addTab(add_frm, tr("Add application"));
     QVBoxLayout *layout = new QVBoxLayout();
     add_frm->setLayout(layout);
     app_path = new QLineEdit(this); // show selection path
@@ -250,23 +250,23 @@ void Manager::add_app_tab()
 
     QHBoxLayout *category_lay = new QHBoxLayout(this);
     layout->addLayout(category_lay);
-    QLabel *category_lab = new QLabel("Select the category:", this);
+    QLabel *category_lab = new QLabel(tr("Select the category:"), this);
     category_combo = new QComboBox(this);
     // add Category with icon on Combobox (if new Category is added, remember to update Launcher menu)
     style->beginGroup("Launcher");
     style->beginGroup("Icon");
-    category_combo->addItem(QIcon(stl_path + style->value("utility_pix").toString()), "Utility");
-    category_combo->addItem(QIcon(stl_path + style->value("office_pix").toString()), "Office");
-    category_combo->addItem(QIcon(stl_path + style->value("internet_pix").toString()), "Internet");
-    category_combo->addItem(QIcon(stl_path + style->value("graphic_pix").toString()), "Graphic");
-    category_combo->addItem(QIcon(stl_path + style->value("development_pix").toString()), "Development");
-    category_combo->addItem(QIcon(stl_path + style->value("system_pix").toString()), "System");
-    category_combo->addItem(QIcon(stl_path + style->value("audio_pix").toString()), "Audio");
-    category_combo->addItem(QIcon(stl_path + style->value("video_pix").toString()), "Video");
+    category_combo->addItem(QIcon(stl_path + style->value("utility_pix").toString()), tr("Utility"));
+    category_combo->addItem(QIcon(stl_path + style->value("office_pix").toString()), tr("Office"));
+    category_combo->addItem(QIcon(stl_path + style->value("internet_pix").toString()), tr("Internet"));
+    category_combo->addItem(QIcon(stl_path + style->value("graphic_pix").toString()), tr("Graphic"));
+    category_combo->addItem(QIcon(stl_path + style->value("development_pix").toString()), tr("Development"));
+    category_combo->addItem(QIcon(stl_path + style->value("system_pix").toString()), tr("System"));
+    category_combo->addItem(QIcon(stl_path + style->value("audio_pix").toString()), tr("Audio"));
+    category_combo->addItem(QIcon(stl_path + style->value("video_pix").toString()), tr("Video"));
     style->endGroup(); // Icon
     style->endGroup(); // Launcher
-    QPushButton *add_but = new QPushButton("Add", this);
-    QPushButton* quit_but = new QPushButton("Quit", this);
+    QPushButton *add_but = new QPushButton(tr("Add"), this);
+    QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     category_lay->addWidget(category_lab);
     category_lay->addWidget(category_combo);
     category_lay->addWidget(add_but);
@@ -283,18 +283,18 @@ void Manager::remove_app_tab()
 {
     QFrame *rem_frm = new QFrame(this);
     rem_frm->setFrameStyle(QFrame::Panel);
-    tab->addTab(rem_frm, QString("Remove application"));
+    tab->addTab(rem_frm, tr("Remove application"));
     QVBoxLayout *rem_layout = new QVBoxLayout(this);
     rem_frm->setLayout(rem_layout);
 
     app_tree = new QTreeWidget(this);
     app_tree->setColumnCount(1);
-    app_tree->setHeaderLabel("Category/Applications");
+    app_tree->setHeaderLabel(tr("Category/Applications"));
     update_remove_list();
 
     QGridLayout *rem_grid = new QGridLayout(this);
-    QPushButton *rem_but = new QPushButton("Remove", this);
-    QPushButton* quit_but = new QPushButton("Quit", this);
+    QPushButton *rem_but = new QPushButton(tr("Remove"), this);
+    QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     rem_grid->addWidget(rem_but, 0, 0);
     rem_grid->addWidget(quit_but, 0, 1);
 
@@ -325,7 +325,7 @@ void Manager::run_app_tab()
 {
     QFrame *run_frm = new QFrame(this);
     run_frm->setFrameStyle(QFrame::Panel);
-    tab->addTab(run_frm, QString("Run at startup"));
+    tab->addTab(run_frm, tr("Run at startup"));
     QVBoxLayout *run_layout = new QVBoxLayout(this);
     run_frm->setLayout(run_layout);
 
@@ -333,9 +333,9 @@ void Manager::run_app_tab()
     update_run_list();
 
     QGridLayout *run_grid = new QGridLayout(this);
-    QPushButton *add_but = new QPushButton("Add", this);
-    QPushButton *rem_but = new QPushButton("Remove", this);
-    QPushButton* quit_but = new QPushButton("Quit", this);
+    QPushButton *add_but = new QPushButton(tr("Add"), this);
+    QPushButton *rem_but = new QPushButton(tr("Remove"), this);
+    QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     run_grid->addWidget(add_but, 0, 0);
     run_grid->addWidget(rem_but, 0, 1);
     run_grid->addWidget(quit_but, 0, 2);
@@ -351,14 +351,14 @@ void Manager::run_app_tab()
 void Manager::style_tab()
 {
     QFrame *style_frm = new QFrame(this);
-    tab->addTab(style_frm, QString("Style"));
+    tab->addTab(style_frm, tr("Style"));
     style_frm->setFrameStyle(QFrame::Panel);
     QVBoxLayout *style_layout = new QVBoxLayout(this);
     style_frm->setLayout(style_layout);
     ///////// STYLE SELECTION /////////
     QGridLayout *style_sel_layout = new QGridLayout(this);
     style_layout->addLayout(style_sel_layout);
-    QLabel *style_sel_lb = new QLabel(QString("Actual style:"), this);
+    QLabel *style_sel_lb = new QLabel(tr("Actual style:"), this);
     style_sel_tx = new QLineEdit(this);
     style_sel_tx->setReadOnly(true);
     QPushButton *style_sel_but = new QPushButton("...", this);
@@ -377,14 +377,14 @@ void Manager::style_tab()
     frame_layout->setColumnMinimumWidth(0, 50);
     frame_layout->setColumnMinimumWidth(1, 75);
     frame_layout->setColumnMinimumWidth(2, 75);
-    QLabel *top_bdr_lb = new QLabel(QString("Top border height:"), this);
-    QLabel *lateral_bdr_lb = new QLabel(QString("Lateral border width:"), this);
-    QLabel *bottom_bdr_lb = new QLabel(QString("Bottom border height:"), this);
-    QLabel *header_active_pix_lb = new QLabel(QString("Header active pixmap:"), this);
-    QLabel *header_inactive_pix_lb = new QLabel(QString("Header inactive pixmap:"), this);
-    QLabel *header_color = new QLabel(QString("Title color:"), this);
-    QLabel *minmax_pix_lb = new QLabel(QString("Minimize/Maximize pixmap:"), this);
-    QLabel *close_pix_lb = new QLabel(QString("Close pixmap:"), this);
+    QLabel *top_bdr_lb = new QLabel(tr("Top border height:"), this);
+    QLabel *lateral_bdr_lb = new QLabel(tr("Lateral border width:"), this);
+    QLabel *bottom_bdr_lb = new QLabel(tr("Bottom border height:"), this);
+    QLabel *header_active_pix_lb = new QLabel(tr("Header active pixmap:"), this);
+    QLabel *header_inactive_pix_lb = new QLabel(tr("Header inactive pixmap:"), this);
+    QLabel *header_color = new QLabel(tr("Title color:"), this);
+    QLabel *minmax_pix_lb = new QLabel(tr("Minimize/Maximize pixmap:"), this);
+    QLabel *close_pix_lb = new QLabel(tr("Close pixmap:"), this);
     header_active_pix = new QLabel(this);
     header_inactive_pix = new QLabel(this);
     header_active_pix->setMaximumSize(32, 32);
@@ -444,10 +444,10 @@ void Manager::style_tab()
     dockbar_layout->setColumnMinimumWidth(0, 50);
     dockbar_layout->setColumnMinimumWidth(1, 75);
     dockbar_layout->setColumnMinimumWidth(2, 75);
-    QLabel *dockbar_height_lb = new QLabel(QString("Height:"), this);
+    QLabel *dockbar_height_lb = new QLabel(tr("Height:"), this);
     dockbar_height_spinBox = new QSpinBox(this);
     dockbar_height_spinBox->setMaximumWidth(50);
-    QLabel *dockbar_pix_lb = new QLabel(QString("Pixmap:"), this);
+    QLabel *dockbar_pix_lb = new QLabel(tr("Pixmap:"), this);
     dockbar_pix = new QLabel(this);
     dockbar_pix->setMaximumSize(32, 32);
     dockbar_pix->setScaledContents(true);
@@ -465,11 +465,11 @@ void Manager::style_tab()
     dockicon_layout->setColumnMinimumWidth(0, 50);
     dockicon_layout->setColumnMinimumWidth(1, 75);
     dockicon_layout->setColumnMinimumWidth(2, 75);
-    QLabel *dockicon_pix_lb = new QLabel(QString("Pixmap:"), this);
+    QLabel *dockicon_pix_lb = new QLabel(tr("Pixmap:"), this);
     dockicon_pix = new QLabel(this);
     dockicon_pix->setMaximumSize(32, 32);
     dockicon_pix->setScaledContents(true);
-    QLabel *dockicon_color = new QLabel(QString("Title color:"), this);
+    QLabel *dockicon_color = new QLabel(tr("Title color:"), this);
     dockicon_col_lab = new QLabel(this);
     dockicon_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     dockicon_col_lab->setMaximumWidth(32);
@@ -490,11 +490,11 @@ void Manager::style_tab()
     deskfolder_layout->setColumnMinimumWidth(0, 50);
     deskfolder_layout->setColumnMinimumWidth(1, 75);
     deskfolder_layout->setColumnMinimumWidth(2, 75);
-    QLabel *deskfolder_pix_lb = new QLabel(QString("Pixmap:"), this);
+    QLabel *deskfolder_pix_lb = new QLabel(tr("Pixmap:"), this);
     deskfolder_pix = new QLabel(this);
     deskfolder_pix->setMaximumSize(32, 32);
     deskfolder_pix->setScaledContents(true);
-    QLabel *deskfolder_color = new QLabel(QString("Name color:"), this);
+    QLabel *deskfolder_color = new QLabel(tr("Name color:"), this);
     deskfolder_col_lab = new QLabel(this);
     deskfolder_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     deskfolder_col_lab->setMaximumWidth(32);
@@ -515,7 +515,7 @@ void Manager::style_tab()
     deskfile_layout->setColumnMinimumWidth(0, 50);
     deskfile_layout->setColumnMinimumWidth(1, 75);
     deskfile_layout->setColumnMinimumWidth(2, 75);
-    QLabel *deskfile_color = new QLabel(QString("Name color:"), this);
+    QLabel *deskfile_color = new QLabel(tr("Name color:"), this);
     deskfile_col_lab = new QLabel(this);
     deskfile_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     deskfile_col_lab->setMaximumWidth(32);
@@ -531,15 +531,15 @@ void Manager::style_tab()
     deskdev_layout->setColumnMinimumWidth(0, 50);
     deskdev_layout->setColumnMinimumWidth(1, 75);
     deskdev_layout->setColumnMinimumWidth(2, 75);
-    QLabel *deskdev_disk_pix_lb = new QLabel(QString("Disk pixmap:"), this);
+    QLabel *deskdev_disk_pix_lb = new QLabel(tr("Disk pixmap:"), this);
     deskdev_disk_pix = new QLabel(this);
     deskdev_disk_pix->setMaximumSize(32, 32);
     deskdev_disk_pix->setScaledContents(true);
-    QLabel *deskdev_cdrom_pix_lb = new QLabel(QString("CDRom pixmap:"), this);
+    QLabel *deskdev_cdrom_pix_lb = new QLabel(tr("CDRom pixmap:"), this);
     deskdev_cdrom_pix = new QLabel(this);
     deskdev_cdrom_pix->setMaximumSize(32, 32);
     deskdev_cdrom_pix->setScaledContents(true);
-    QLabel *deskdev_color = new QLabel(QString("Name color:"), this);
+    QLabel *deskdev_color = new QLabel(tr("Name color:"), this);
     deskdev_col_lab = new QLabel(this);
     deskdev_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     deskdev_col_lab->setMaximumWidth(32);
@@ -565,7 +565,7 @@ void Manager::style_tab()
     sysicon_layout->setColumnMinimumWidth(0, 50);
     sysicon_layout->setColumnMinimumWidth(1, 75);
     sysicon_layout->setColumnMinimumWidth(2, 75);
-    QLabel *sysicon_pix_lb = new QLabel(QString("Pixmap:"), this);
+    QLabel *sysicon_pix_lb = new QLabel(tr("Pixmap:"), this);
     sysicon_pix = new QLabel(this);
     sysicon_pix->setMaximumSize(32, 32);
     sysicon_pix->setScaledContents(true);
@@ -581,7 +581,7 @@ void Manager::style_tab()
     deskapp_layout->setColumnMinimumWidth(0, 50);
     deskapp_layout->setColumnMinimumWidth(1, 75);
     deskapp_layout->setColumnMinimumWidth(2, 75);
-    QLabel *deskapp_color = new QLabel(QString("Name color:"), this);
+    QLabel *deskapp_color = new QLabel(tr("Name color:"), this);
     deskapp_col_lab = new QLabel(this);
     deskapp_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     deskapp_col_lab->setMaximumWidth(32);
@@ -597,8 +597,8 @@ void Manager::style_tab()
     dateclock_layout->setColumnMinimumWidth(0, 50);
     dateclock_layout->setColumnMinimumWidth(1, 75);
     dateclock_layout->setColumnMinimumWidth(2, 75);
-    QLabel *date_color = new QLabel(QString("Date color:"), this);
-    QLabel *clock_color = new QLabel(QString("Clock color:"), this);
+    QLabel *date_color = new QLabel(tr("Date color:"), this);
+    QLabel *clock_color = new QLabel(tr("Clock color:"), this);
     date_col_lab = new QLabel(this);
     clock_col_lab = new QLabel(this);
     date_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -619,7 +619,7 @@ void Manager::style_tab()
     QGroupBox *desktop_box = new QGroupBox(this);
     QGridLayout *desktop_layout = new QGridLayout(this);
     desktop_box->setLayout(desktop_layout);
-    QLabel *desktop_pix_lb = new QLabel(QString("Wallpaper:"), this);
+    QLabel *desktop_pix_lb = new QLabel(tr("Wallpaper:"), this);
     desktop_pix = new QLabel(this);
     desktop_pix->setMinimumSize(100, 100);
     desktop_pix->setScaledContents(true);
@@ -635,23 +635,23 @@ void Manager::style_tab()
     launcher_layout->setColumnMinimumWidth(0, 50);
     launcher_layout->setColumnMinimumWidth(1, 75);
     launcher_layout->setColumnMinimumWidth(2, 75);
-    QLabel *launcher_pix_lb = new QLabel(QString("Launcher pixmap:"), this);
-    QLabel *application_pix_lb = new QLabel(QString("Application pixmap:"), this);
-    QLabel *quit_pix_lb = new QLabel(QString("Quit pixmap:"), this);
-    QLabel *shutdown_pix_lb = new QLabel(QString("Shutdown pixmap:"), this);
-    QLabel *restart_pix_lb = new QLabel(QString("Restart pixmap:"), this);
-    QLabel *refresh_pix_lb = new QLabel(QString("Refresh pixmap:"), this);
-    QLabel *run_pix_lb = new QLabel(QString("Run pixmap:"), this);
-    QLabel *show_pix_lb = new QLabel(QString("Show Desktop pixmap:"), this);
-    QLabel *manager_pix_lb = new QLabel(QString("Manager pixmap:"), this);
-    QLabel *utility_pix_lb = new QLabel(QString("Utility pixmap:"), this);
-    QLabel *office_pix_lb = new QLabel(QString("Office pixmap:"), this);
-    QLabel *internet_pix_lb = new QLabel(QString("Internet pixmap:"), this);
-    QLabel *graphic_pix_lb = new QLabel(QString("Graphic pixmap:"), this);
-    QLabel *development_pix_lb = new QLabel(QString("Development pixmap:"), this);
-    QLabel *system_pix_lb = new QLabel(QString("System pixmap:"), this);
-    QLabel *audio_pix_lb = new QLabel(QString("Audio pixmap:"), this);
-    QLabel *video_pix_lb = new QLabel(QString("Video pixmap:"), this);
+    QLabel *launcher_pix_lb = new QLabel(tr("Launcher pixmap:"), this);
+    QLabel *application_pix_lb = new QLabel(tr("Application pixmap:"), this);
+    QLabel *quit_pix_lb = new QLabel(tr("Quit pixmap:"), this);
+    QLabel *shutdown_pix_lb = new QLabel(tr("Shutdown pixmap:"), this);
+    QLabel *restart_pix_lb = new QLabel(tr("Restart pixmap:"), this);
+    QLabel *refresh_pix_lb = new QLabel(tr("Refresh pixmap:"), this);
+    QLabel *run_pix_lb = new QLabel(tr("Run pixmap:"), this);
+    QLabel *show_pix_lb = new QLabel(tr("Show Desktop pixmap:"), this);
+    QLabel *manager_pix_lb = new QLabel(tr("Manager pixmap:"), this);
+    QLabel *utility_pix_lb = new QLabel(tr("Utility pixmap:"), this);
+    QLabel *office_pix_lb = new QLabel(tr("Office pixmap:"), this);
+    QLabel *internet_pix_lb = new QLabel(tr("Internet pixmap:"), this);
+    QLabel *graphic_pix_lb = new QLabel(tr("Graphic pixmap:"), this);
+    QLabel *development_pix_lb = new QLabel(tr("Development pixmap:"), this);
+    QLabel *system_pix_lb = new QLabel(tr("System pixmap:"), this);
+    QLabel *audio_pix_lb = new QLabel(tr("Audio pixmap:"), this);
+    QLabel *video_pix_lb = new QLabel(tr("Video pixmap:"), this);
     launcher_pix = new QLabel(this);
     application_pix = new QLabel(this);
     quit_pix = new QLabel(this);
@@ -795,14 +795,14 @@ void Manager::style_tab()
     other_layout->setColumnMinimumWidth(0, 50);
     other_layout->setColumnMinimumWidth(1, 75);
     other_layout->setColumnMinimumWidth(2, 75);
-    QLabel *folder_link_pix_lb = new QLabel(QString("Folder link pixmap:"), this);
-    QLabel *file_link_pix_lb = new QLabel(QString("File link pixmap:"), this);
-    QLabel *app_link_pix_lb = new QLabel(QString("Application link pixmap:"), this);
-    QLabel *delete_link_pix_lb = new QLabel(QString("Delete link pixmap:"), this);
-    QLabel *delete_file_pix_lb = new QLabel(QString("Delete file pixmap:"), this);
-    QLabel *close_dock_pix_lb = new QLabel(QString("Close Dock pixmap:"), this);
-    QLabel *add_to_sys_pix_lb = new QLabel(QString("Add to SysTray pixmap:"), this);
-    QLabel *open_with_pix_lb = new QLabel(QString("Open with pixmap:"), this);
+    QLabel *folder_link_pix_lb = new QLabel(tr("Folder link pixmap:"), this);
+    QLabel *file_link_pix_lb = new QLabel(tr("File link pixmap:"), this);
+    QLabel *app_link_pix_lb = new QLabel(tr("Application link pixmap:"), this);
+    QLabel *delete_link_pix_lb = new QLabel(tr("Delete link pixmap:"), this);
+    QLabel *delete_file_pix_lb = new QLabel(tr("Delete file pixmap:"), this);
+    QLabel *close_dock_pix_lb = new QLabel(tr("Close Dock pixmap:"), this);
+    QLabel *add_to_sys_pix_lb = new QLabel(tr("Add to SysTray pixmap:"), this);
+    QLabel *open_with_pix_lb = new QLabel(tr("Open with pixmap:"), this);
     folder_link_pix = new QLabel(this);
     file_link_pix = new QLabel(this);
     app_link_pix = new QLabel(this);
@@ -872,25 +872,25 @@ void Manager::style_tab()
     style_layout->addWidget(ok_quit_box);
     QGridLayout *ok_quit_layout = new QGridLayout(this);
     ok_quit_box->setLayout(ok_quit_layout);
-    QPushButton *ok_but = new QPushButton("OK", this);
-    QPushButton* quit_but = new QPushButton("Quit", this);
+    QPushButton *ok_but = new QPushButton(tr("OK"), this);
+    QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     ok_but->setMaximumWidth(75);
     quit_but->setMaximumWidth(75);
     ok_quit_layout->addWidget(ok_but, 0, 0);
     ok_quit_layout->addWidget(quit_but, 0, 1);
     /////////////////////////////////////////////////////////
-    tool_box->addItem(frame_box, "Frame settings");
-    tool_box->addItem(dockbar_box, "Dockbar settings");
-    tool_box->addItem(dockicon_box, "Dockbar icon");
-    tool_box->addItem(desktop_box, "Desktop wallpaper");
-    tool_box->addItem(deskfolder_box, "Desktop folder");
-    tool_box->addItem(deskfile_box, "Desktop file");
-    tool_box->addItem(deskapp_box, "Desktop application");
-    tool_box->addItem(deskdev_box, "Desktop device");
-    tool_box->addItem(sysicon_box, "System Tray icon");
-    tool_box->addItem(dateclock_box, "Clock/Date");
-    tool_box->addItem(launcher_box, "Launcher");
-    tool_box->addItem(other_box, "Other");
+    tool_box->addItem(frame_box, tr("Frame settings"));
+    tool_box->addItem(dockbar_box, tr("Dockbar settings"));
+    tool_box->addItem(dockicon_box, tr("Dockbar icon"));
+    tool_box->addItem(desktop_box, tr("Desktop wallpaper"));
+    tool_box->addItem(deskfolder_box, tr("Desktop folder"));
+    tool_box->addItem(deskfile_box, tr("Desktop file"));
+    tool_box->addItem(deskapp_box, tr("Desktop application"));
+    tool_box->addItem(deskdev_box, tr("Desktop device"));
+    tool_box->addItem(sysicon_box, tr("System Tray icon"));
+    tool_box->addItem(dateclock_box, tr("Clock/Date"));
+    tool_box->addItem(launcher_box, tr("Launcher"));
+    tool_box->addItem(other_box, tr("Other"));
     /////////////////////////////////////////////////////////
 
     connect(ok_but, SIGNAL(clicked()), this, SLOT(ok_frame_pressed()));
@@ -1001,7 +1001,7 @@ void Manager::style_tab()
 
 void Manager::select_style()
 {
-    Filedialog *sel_style = new Filedialog("Select the style", "OK_Cancel", this);
+    Filedialog *sel_style = new Filedialog(tr("Select the style"), "OK_Cancel", this);
     QStringList filters;
     filters << "*.stl";
     sel_style->set_name_filters(filters); // show only style file (.stl)
@@ -1026,7 +1026,7 @@ void Manager::select_style()
 void Manager::select_pixmap(QWidget *pix)
 {
     QLabel *pixmap = (QLabel *)pix;
-    Filedialog *sel_pix = new Filedialog("Select the pixmap", "OK_Cancel", this);
+    Filedialog *sel_pix = new Filedialog(tr("Select the pixmap"), "OK_Cancel", this);
     sel_pix->set_path(stl_path);
     sel_pix->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
     sel_pix->set_read_only(true);
@@ -1155,8 +1155,8 @@ void Manager::ok_frame_pressed()
     //////////////////////////////////////////////////////////////////
 
     msg = new Msgbox(this);
-    msg->setText("<b>Antico style settings updated</b>");
-    msg->setInformativeText("To apply the modify, select <b>Refresh WM</b> on Launcher menu");
+    msg->setText(tr("<b>Antico style settings updated</b>"));
+    msg->setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
     msg->setIcon(QMessageBox::Information);
     msg->exec();
 }
@@ -1187,7 +1187,7 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
             antico->endGroup(); // Launcher
             update_remove_list();
             msg = new Msgbox(this);
-            msg->setText("<b>" + app.toUpper() + "</b>" + " added to " + "<b>" + category_combo->currentText() + "</b>" + " menu");
+            msg->setText("<b>" + app.toUpper() + "</b>" + tr(" added to ") + "<b>" + category_combo->currentText() + "</b>" + tr(" menu"));
             msg->setIcon(QMessageBox::Information);
         }
     }
@@ -1195,7 +1195,7 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
 
 void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
 {
-    Filedialog *sel_dir = new Filedialog("Add application to run at startup:", "OK_Cancel", this);
+    Filedialog *sel_dir = new Filedialog(tr("Add application to run at startup:"), "OK_Cancel", this);
 
     if (sel_dir->exec() == QDialog::Accepted)
     {
@@ -1213,7 +1213,7 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
             antico->endGroup(); // Name
             antico->endGroup(); // Startup
             msg = new Msgbox(this);
-            msg->setText("<b>" + name.toUpper() + "</b>" + " added to Run list");
+            msg->setText("<b>" + name.toUpper() + "</b>" + tr(" added to Run list"));
             msg->setIcon(QMessageBox::Information);
         }
     }
@@ -1229,7 +1229,7 @@ void Manager::remove_run_app_pressed() // remove selected app from "Run at start
         antico->remove(app_name); // remove the application
         antico->endGroup(); // Startup
         msg = new Msgbox(this);
-        msg->setText("<b>" + app_name.toUpper() + "</b>" + " removed from list");
+        msg->setText("<b>" + app_name.toUpper() + "</b>" + tr(" removed from list"));
         msg->setIcon(QMessageBox::Information);
         update_run_list();
     }
@@ -1252,7 +1252,7 @@ void Manager::remove_app_pressed() // remove selected app from Launcher menu
         antico->endGroup(); // Launcher
         update_remove_list();
         msg = new Msgbox(this);
-        msg->setText("<b>" + app.toUpper() + "</b>" + " removed from " + "<b>" + cat_group + "</b>" + " menu");
+        msg->setText("<b>" + app.toUpper() + "</b>" + tr(" removed from ") + "<b>" + cat_group + "</b>" + tr(" menu"));
         msg->setIcon(QMessageBox::Information);
     }
 }

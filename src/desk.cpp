@@ -121,9 +121,9 @@ void Desk::set_desk_icons()
 void Desk::init()
 {
     menu = new QMenu(this);
-    menu->addAction(QIcon(folder_link_pix), "New link to folder");
-    menu->addAction(QIcon(file_link_pix), "New link to file");
-    menu->addAction(QIcon(app_link_pix), "New link to application");
+    menu->addAction(QIcon(folder_link_pix), tr("New link to folder"));
+    menu->addAction(QIcon(file_link_pix), tr("New link to file"));
+    menu->addAction(QIcon(app_link_pix), tr("New link to application"));
     connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
     // to mount external device
     dbus_interface = new QDBusInterface("org.freedesktop.Hal", "/org/freedesktop/Hal/Manager", "org.freedesktop.Hal.Manager", QDBusConnection::systemBus(), this);
@@ -204,9 +204,9 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
 
 void Desk::run_menu(QAction *act)
 {
-    if (act->text() == "New link to folder")
+    if (act->text() == tr("New link to folder"))
     {
-        Filedialog *sel_dir = new Filedialog("New link to folder:", "OK_Cancel", this);
+        Filedialog *sel_dir = new Filedialog(tr("New link to folder:"), "OK_Cancel", this);
         sel_dir->set_filter(QDir::Dirs|QDir::NoDotAndDotDot);
 
         if (sel_dir->exec() == QDialog::Accepted)
@@ -222,9 +222,9 @@ void Desk::run_menu(QAction *act)
             }
         }
     }
-    if (act->text() == "New link to file")
+    if (act->text() == tr("New link to file"))
     {
-        Filedialog *sel_dir = new Filedialog("New link to file:", "OK_Cancel", this);
+        Filedialog *sel_dir = new Filedialog(tr("New link to file:"), "OK_Cancel", this);
 
         if (sel_dir->exec() == QDialog::Accepted)
         {
@@ -240,9 +240,9 @@ void Desk::run_menu(QAction *act)
             }
         }
     }
-    if (act->text() == "New link to application")
+    if (act->text() == tr("New link to application"))
     {
-        Filedialog *sel_dir = new Filedialog("New link to application:", "OK_Cancel", this);
+        Filedialog *sel_dir = new Filedialog(tr("New link to application:"), "OK_Cancel", this);
 
         if (sel_dir->exec() == QDialog::Accepted)
         {
@@ -415,15 +415,15 @@ void Desk::mount_device(const QString &uuid, const QString &block_device, const 
     if (mnt_cmd)
     {
         Msgbox *info = new Msgbox(this);
-        info->setText("WARNING");
-        info->setInformativeText("<b>Problem to mount the device</b>");
+        info->setText(tr("WARNING"));
+        info->setInformativeText(tr("<b>Problem to mount the device</b>"));
         info->setIcon(QMessageBox::Warning);
     }
     else
     {
         QDBusReply<QString> mnt_point = uuid_interface.call("GetProperty", "volume.mount_point");
         Msgbox *info = new Msgbox(this);
-        info->setText("Device mounted in:");
+        info->setText(tr("Device mounted in:"));
         info->setInformativeText("<b>" + mnt_dir + "</b>");
         info->setIcon(QMessageBox::Information);
     }
@@ -454,15 +454,15 @@ void Desk::unmount_device(const QString &uuid)
     if (unmnt_cmd)
     {
         Msgbox *info = new Msgbox(this);
-        info->setText("WARNING");
-        info->setInformativeText("<b>Problem to unmount the device</b>");
+        info->setText(tr("WARNING"));
+        info->setInformativeText(tr("<b>Problem to unmount the device</b>"));
         info->setIcon(QMessageBox::Warning);
     }
     else
     {
         Msgbox *info = new Msgbox(this);
-        info->setText("INFORMATION");
-        info->setInformativeText("<b>Device correctly unmounted</b>");
+        info->setText(tr("INFORMATION"));
+        info->setInformativeText(tr("<b>Device correctly unmounted</b>"));
         info->setIcon(QMessageBox::Information);
     }
 }

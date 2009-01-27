@@ -69,7 +69,8 @@
 #include <QKeyEvent>
 #include <QFileIconProvider>
 #include <QCompleter>
-
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

@@ -30,6 +30,8 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void paintEvent(QPaintEvent *);
 
 public slots:
@@ -45,6 +47,8 @@ private:
     QString close_dock_pix;
     QPixmap pix;
     QSettings *style;
+    QColor title_color;
+    int bdr_width;
 
 };
 

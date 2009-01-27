@@ -58,7 +58,7 @@ void Deskfolder::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::RightButton)
     {
         menu = new QMenu(this);
-        QAction *del_folder = menu->addAction(QIcon(delete_link_pix), "Delete link");
+        QAction *del_folder = menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
         menu->popup(event->globalPos());
         connect(del_folder, SIGNAL(triggered()), this, SLOT(del_folder()));
     }
@@ -94,7 +94,7 @@ void Deskfolder::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        Filedialog *open_dir = new Filedialog("Folder contents:", "Close", this);
+        Filedialog *open_dir = new Filedialog(tr("Folder contents:"), "Close", this);
         open_dir->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
         open_dir->setGeometry(geometry);
         open_dir->set_path(dir_path);

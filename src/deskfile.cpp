@@ -27,9 +27,9 @@ void Deskfile::init()
     setToolTip(file_path + file_name);
     main_menu = new QMenu(this);
     // show the Category apps list for open the file
-    open_menu = main_menu->addMenu(QIcon(open_with_pix), "Open with");
+    open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
     cat_menu = new Categorymenu(open_menu);
-    QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), "Delete");
+    QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete"));
     connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
 

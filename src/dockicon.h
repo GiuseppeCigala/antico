@@ -32,6 +32,8 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void paintEvent(QPaintEvent *);
 
 public slots:
@@ -52,6 +54,7 @@ private:
     QPixmap pix;
     QSettings *style;
     bool iconize;
+    int bdr_width;
 
 };
 

@@ -505,7 +505,7 @@ void Frame::create_border()
     layout->addWidget(c_bdr, 1, 1);
     // top left border (icon)
     tl_bdr = new Border(this);
-    tl_bdr->setToolTip(QString("Minimize/Maximize"));
+    tl_bdr->setToolTip(tr("Minimize/Maximize"));
     tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tl_bdr->setPixmap(minmax_pix);
     tl_bdr->setScaledContents(true);
@@ -513,7 +513,7 @@ void Frame::create_border()
     layout->addWidget(tl_bdr, 0, 0);
     // top right border (icon)
     tr_bdr = new Border(this);
-    tr_bdr->setToolTip(QString("Close"));
+    tr_bdr->setToolTip(tr("Close"));
     tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tr_bdr->setPixmap(close_pix);
     tr_bdr->setScaledContents(true);

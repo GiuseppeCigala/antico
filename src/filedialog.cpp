@@ -54,7 +54,7 @@ void Filedialog::init()
     win_label = new QLabel("<b>" + win_text + "</b>", this); // show window text
     win_label->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     line_path = new QLineEdit(this); // show selection path
-    hidden_files = new QRadioButton("Show hidden files", this);
+    hidden_files = new QRadioButton(tr("Show hidden files"), this);
     preview_label = new QLabel(this); // show pixmap preview
     preview_label->setMaximumSize(32, 32);
     preview_label->setScaledContents(true);
@@ -84,32 +84,26 @@ void Filedialog::init()
   
     if (button_type == "OK_Cancel") // on new creation
     {
-        QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+        buttonBox->addButton(tr("Ok"), QDialogButtonBox::AcceptRole);
+        buttonBox->addButton(tr("Cancel"), QDialogButtonBox::RejectRole);
         layout->addWidget(buttonBox);
         connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
         connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     }
     if (button_type == "Close") // on navigation
     {
-        QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+        QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+        buttonBox->addButton(tr("Close"), QDialogButtonBox::RejectRole);
         layout->addWidget(buttonBox);
         connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
     }
     // show the Category apps list for open the file
     main_menu = new QMenu();
-    open_menu = main_menu->addMenu(QIcon(open_with_pix), "Open with");
+    open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
     cat_menu = new Categorymenu(open_menu);
-    QAction *del_file = main_menu->addAction(QIcon(delete_file_pix), "Delete");
+    QAction *del_file = main_menu->addAction(QIcon(delete_file_pix), tr("Delete"));
     connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
-}
-
-void Filedialog::contextMenuEvent(QContextMenuEvent *event)
-{
-    if(tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos()))
-    {
-        cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
-        main_menu->exec(event->globalPos());
-    }
 }
 
 void Filedialog::del_file()
@@ -122,14 +116,14 @@ void Filedialog::del_file()
         if (dir_model->rmdir(selection))
         {
             Msgbox *msg = new Msgbox(this);
-            msg->setText("<b>" + name + "</b>" + " deleted");
+            msg->setText("<b>" + name + "</b>" + tr(" deleted"));
             msg->setIcon(QMessageBox::Information);
         }
     }
     else if (dir_model->remove(selection)) // else is a file
     {
         Msgbox *msg = new Msgbox(this);
-        msg->setText("<b>" + name + "</b>" + " deleted");
+        msg->setText("<b>" + name + "</b>" + tr(" deleted"));
         msg->setIcon(QMessageBox::Information);
     }
 }
@@ -252,4 +246,12 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
     releaseMouse();
 }
 
+void Filedialog::contextMenuEvent(QContextMenuEvent *event)
+{
+    if(tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos()))
+    {
+        cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
+        main_menu->exec(event->globalPos());
+    }
+}
 

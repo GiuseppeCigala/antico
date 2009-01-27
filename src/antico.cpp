@@ -11,15 +11,12 @@
 Antico::Antico(int &argc, char **argv) : QApplication(argc, argv)
 {
     set_event_names();
-    next_frame = 0; // for [Alt+Tab] key combination
+    // for [Alt+Tab] key combination
+    next_frame = 0;
     // get the atoms (ICCCM/EWMH)
     get_atoms();
     // set application settings on first installation
     set_settings();
-    // create dockbar
-    dock = new Dockbar(this);
-    //create desk
-    dsk = new Desk();
     // send ClientMessage to root for supported hints
     send_supported_hints();
     // run application from startup list
@@ -683,9 +680,11 @@ void Antico::send_configurenotify(Frame *frm)
 void Antico::wm_quit()
 {
     Msgbox *msg = new Msgbox();
-    msg->setText("<b>Quit the WM</b>");
-    msg->setInformativeText("Are you sure to quit the WM ?");
+    msg->setText(tr("<b>Quit the WM</b>"));
+    msg->setInformativeText(tr("Are you sure to quit the WM ?"));
     msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg->setButtonText(QMessageBox::Ok, tr("Ok"));
+    msg->setButtonText(QMessageBox::Cancel, tr("Cancel"));
     msg->setIcon(QMessageBox::Warning);
     int ret = msg->exec();
 
@@ -727,9 +726,11 @@ void Antico::wm_refresh()
 void Antico::shutdown()
 {
     Msgbox *msg = new Msgbox();
-    msg->setText("<b>Shutdown the PC</b>");
-    msg->setInformativeText("Are you sure to shutdown the PC ?");
+    msg->setText(tr("<b>Shutdown the PC</b>"));
+    msg->setInformativeText(tr("Are you sure to shutdown the PC ?"));
     msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg->setButtonText(QMessageBox::Ok, tr("Ok"));
+    msg->setButtonText(QMessageBox::Cancel, tr("Cancel"));
     msg->setIcon(QMessageBox::Warning);
     int ret = msg->exec();
 
@@ -746,9 +747,11 @@ void Antico::shutdown()
 void Antico::restart()
 {
     Msgbox *msg = new Msgbox();
-    msg->setText("<b>Restart the PC</b>");
-    msg->setInformativeText("Are you sure to restart the PC ?");
+    msg->setText(tr("<b>Restart the PC</b>"));
+    msg->setInformativeText(tr("Are you sure to restart the PC ?"));
     msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg->setButtonText(QMessageBox::Ok, tr("Ok"));
+    msg->setButtonText(QMessageBox::Cancel, tr("Cancel"));
     msg->setIcon(QMessageBox::Warning);
     int ret = msg->exec();
 
@@ -795,6 +798,15 @@ void Antico::run_app_at_startup()
     }
     antico->endGroup(); // Startup
 }
+
+void Antico::create_gui()
+{
+    // create dockbar
+    dock = new Dockbar(this);
+    //create desk
+    dsk = new Desk();
+}
+
 
 void Antico::set_settings()
 {

@@ -47,6 +47,7 @@ public:
     void set_settings();
     void run_app_at_startup();
     void get_atoms();
+    void create_gui();
     void set_event_names();
     void send_supported_hints();
     void check_window_type(Window);

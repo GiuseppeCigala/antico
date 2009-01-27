@@ -15,6 +15,7 @@ Sysicon::Sysicon(Frame *frame, QWidget *parent) : QWidget(parent)
     setContentsMargins(0, 0, 0, 0);
     setFixedSize(32, 32);
     setToolTip(frm->cl_name());
+    bdr_width = 1;
 }
 
 Sysicon::~Sysicon()
@@ -37,12 +38,17 @@ void Sysicon::read_settings()
     style->beginGroup("Other");
     close_dock_pix = stl_path + style->value("close_dock_pix").toString();
     style->endGroup(); //Other
+    style->beginGroup("Dockicon");
+    title_color = style->value("title_color").value<QColor>();
+    style->endGroup(); //Dockicon
 }
 
 void Sysicon::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(QPen(title_color, bdr_width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawRoundedRect(0, 0, width(), height(), 5, 5);
     painter.drawPixmap(QRect(0, 0, width(), height()), pix, QRect(0, 0, pix.width(), pix.height()));// sysicon pixmap
     painter.drawPixmap(QRect(3, 3, height()-6, height()-6), frm->cl_icon(), QRect(0, 0, frm->cl_icon().width(), frm->cl_icon().height()));// sysicon
 }
@@ -62,6 +68,20 @@ void Sysicon::mousePressEvent(QMouseEvent *event)
         menu->popup(event->globalPos());
         connect(sys_close, SIGNAL(triggered()), this, SLOT(sys_close()));
     }
+}
+
+void Sysicon::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    bdr_width = 2;
+    update();
+}
+
+void Sysicon::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    bdr_width = 1;
+    update();
 }
 
 void Sysicon::sys_close()

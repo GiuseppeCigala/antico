@@ -18,6 +18,15 @@ int main(int argc, char **argv)
                  ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
     XClearWindow(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()));
     XSync(QX11Info::display(), FALSE);
+    
+    QTranslator translator;
+    qDebug() << "Language:" << QLocale::system().name();
+    translator.load(QLocale::system().name(), QCoreApplication::applicationDirPath() + "/language/");
+    a.installTranslator(&translator);
+    
+    qDebug() << "GUI creation.";
+    a.create_gui();
+    
     return a.exec();
 }
 

@@ -33,6 +33,7 @@ CHANGELOG
 25/01/09: add Drag&Drop of Folder/File/App from Filedialog to Desktop.
 25/01/09: update header title on frame/dock - fix SysTray map/unmap bug.
 26/01/09: add PC Restart/Shutdown.
+27/01/09: add internationalization - shading on Dockicon/Sysicon.
 
 ***********
 TO DO

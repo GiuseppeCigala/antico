@@ -104,14 +104,14 @@ Categorymenu::~Categorymenu()
 
 void Categorymenu::init()
 {
-    audio_menu = main_menu->addMenu(QIcon(audio_pix), "Audio");
-    video_menu = main_menu->addMenu(QIcon(video_pix), "Video");
-    system_menu = main_menu->addMenu(QIcon(system_pix), "System");
-    development_menu = main_menu->addMenu(QIcon(devel_pix), "Development");
-    graphic_menu = main_menu->addMenu(QIcon(graphic_pix), "Graphic");
-    internet_menu = main_menu->addMenu(QIcon(internet_pix), "Internet");
-    office_menu = main_menu->addMenu(QIcon(office_pix), "Office");
-    utility_menu = main_menu->addMenu(QIcon(utility_pix), "Utility");
+    audio_menu = main_menu->addMenu(QIcon(audio_pix), tr("Audio"));
+    video_menu = main_menu->addMenu(QIcon(video_pix), tr("Video"));
+    system_menu = main_menu->addMenu(QIcon(system_pix), tr("System"));
+    development_menu = main_menu->addMenu(QIcon(devel_pix), tr("Development"));
+    graphic_menu = main_menu->addMenu(QIcon(graphic_pix), tr("Graphic"));
+    internet_menu = main_menu->addMenu(QIcon(internet_pix), tr("Internet"));
+    office_menu = main_menu->addMenu(QIcon(office_pix), tr("Office"));
+    utility_menu = main_menu->addMenu(QIcon(utility_pix), tr("Utility"));
     main_menu->addSeparator();
 
     connect(audio_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));

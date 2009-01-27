@@ -28,13 +28,13 @@ void Launcher::init()
 
     connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
 
-    quit = new QAction("Quit WM", this);
-    shutdown = new QAction("Shutdown PC", this);
-    restart = new QAction("Restart PC", this);
-    refresh = new QAction("Refresh WM", this);
-    run = new QAction("Run...", this);
-    manag = new QAction("Manager", this);
-    show_desk = new QAction("Show Desktop", this);
+    quit = new QAction(tr("Quit WM"), this);
+    shutdown = new QAction(tr("Shutdown PC"), this);
+    restart = new QAction(tr("Restart PC"), this);
+    refresh = new QAction(tr("Refresh WM"), this);
+    run = new QAction(tr("Run..."), this);
+    manag = new QAction(tr("Manager"), this);
+    show_desk = new QAction(tr("Show Desktop"), this);
     quit->setIcon(QIcon(quit_pix));
     quit->setData("quit");
     shutdown->setIcon(QIcon(shutdown_pix));
