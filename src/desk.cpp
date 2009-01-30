@@ -307,7 +307,7 @@ void Desk::create_desk_app(const QString &name, const QString &path, const QPoin
     antico->beginGroup("App");
     antico->beginGroup(name);
     antico->setValue("name", name);
-    antico->setValue("path", path);
+    antico->setValue("exec", path + name);
     antico->setValue("pix", icon);
     antico->setValue("pos", pos);
     antico->endGroup(); //name

@@ -84,12 +84,11 @@ private:
     QLabel *manager_pix;
     QLabel *utility_pix;
     QLabel *office_pix;
-    QLabel *internet_pix;
-    QLabel *graphic_pix;
+    QLabel *network_pix;
+    QLabel *graphics_pix;
     QLabel *development_pix;
     QLabel *system_pix;
-    QLabel *audio_pix;
-    QLabel *video_pix;
+    QLabel *audiovideo_pix;
     /// Other ///
     QLabel *folder_link_pix;
     QLabel *file_link_pix;
@@ -123,12 +122,11 @@ private:
     QString manager_pix_path;
     QString utility_pix_path;
     QString office_pix_path;
-    QString internet_pix_path;
-    QString graphic_pix_path;
+    QString network_pix_path;
+    QString graphics_pix_path;
     QString development_pix_path;
     QString system_pix_path;
-    QString audio_pix_path;
-    QString video_pix_path;
+    QString audiovideo_pix_path;
     /// Other ///
     QString folder_link_pix_path;
     QString file_link_pix_path;
@@ -162,6 +160,5 @@ private:
     QLineEdit *app_path;
     QComboBox *category_combo;
     Msgbox *msg;
-    
 };
 #endif

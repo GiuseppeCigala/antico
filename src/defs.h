@@ -71,6 +71,8 @@
 #include <QCompleter>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QTextCodec>
+#include <QByteArray>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

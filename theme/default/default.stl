@@ -10,12 +10,11 @@ Icon\run_pix=run.png
 Icon\manager_pix=manager.png
 Icon\utility_pix=utility.png
 Icon\office_pix=office.png
-Icon\internet_pix=internet.png
-Icon\graphic_pix=graphic.png
+Icon\network_pix=network.png
+Icon\graphics_pix=graphics.png
 Icon\development_pix=development.png
 Icon\system_pix=system.png
-Icon\audio_pix=audio.png
-Icon\video_pix=video.png
+Icon\audiovideo_pix=audiovideo.png
 
 [Frame]
 Border\lateral_bdr_width=3

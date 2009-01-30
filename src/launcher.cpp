@@ -25,7 +25,6 @@ void Launcher::init()
 {
     main_menu = new QMenu(this);
     cat_menu = new Categorymenu(main_menu); // add Category menu on Launcher
-
     connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
 
     quit = new QAction(tr("Quit WM"), this);

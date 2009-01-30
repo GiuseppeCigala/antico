@@ -449,7 +449,7 @@ bool Antico::x11EventFilter(XEvent *event)
 
     case EnterNotify:
         qDebug() << "[EnterNotify]";
-
+        /*
         if ((frm = mapping_frames.value(event->xcrossing.window)) != NULL)
         {
             frm->set_focus(event->xcrossing.time);
@@ -457,9 +457,9 @@ bool Antico::x11EventFilter(XEvent *event)
         }
         else
         {
-            XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToParent, CurrentTime);
+            XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToNone, CurrentTime);
             qDebug() << "Enter in not map client:" << event->xcrossing.window;
-        }
+        }*/
         return false;
         break;
 
@@ -844,12 +844,11 @@ void Antico::set_settings()
         style->setValue("manager_pix", "manager.png");
         style->setValue("utility_pix", "utility.png");
         style->setValue("office_pix", "office.png");
-        style->setValue("internet_pix", "internet.png");
-        style->setValue("graphic_pix", "graphic.png");
+        style->setValue("network_pix", "network.png");
+        style->setValue("graphics_pix", "graphics.png");
         style->setValue("development_pix", "development.png");
         style->setValue("system_pix", "system.png");
-        style->setValue("audio_pix", "audio.png");
-        style->setValue("video_pix", "video.png");
+        style->setValue("audiovideo_pix", "audiovideo.png");
         style->endGroup(); //Icon
         style->endGroup(); //Launcher
         /////////////////////////////////////////////////////////////////////////

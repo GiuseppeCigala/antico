@@ -1,8 +1,6 @@
 Antico is a Qt4/X11 Window/Desktop manager.
 The goal is to create a Window/Desktop manager simple and fast. All parameters must be configured from few files, avoiding unnecessary complications, following the K.I.S.S. philosophy.
 The whole project should be based solely on Qt4 libraries, without any other external dependencies (e.g. kdelibs ...). 
-If you don't like the heaviness of KDE/Gnome, contribute at development... 
-
 
 ***********
 FEATURES
@@ -23,23 +21,37 @@ See CHANGELOG ...
 ***********
 DEVELOPMENT
 ***********
-Extract and compile in your $HOME
+DOWNLOAD:
 
+git clone git://github.com/antico/antico.git (on first installation)
+
+git pull (to update your local repository)
+---------------------------------------------------
+To compile, enter in "Antico" dir (where is the antico.pro) and type on shell:
+"qmake" (this create the Makefile)
+"make"
+(no installation)
+---------------------------------------------------
 To test the window manager, type on shell:
-----------------------------------------------------------------
+
 DISPLAY=:0
 Xephyr :1 -ac -screen 1000x800 & DISPLAY=:1; $HOME/antico/antico
-----------------------------------------------------------------
 
+(where 1000x800 is your preferred screen size and $HOME if you have download Antico in user home)
+---------------------------------------------------
 To run the window manager, type on shell:
-----------------------------------------------------------------
-xinit /path/to/antico/bin
-----------------------------------------------------------------
 
+xinit /path/to/antico/bin
+
+(first "pkill" kdm/gdm and X)
+---------------------------------------------------
 To hide debug messages, uncomment in antico.pro
 //DEFINES = QT_NO_DEBUG_OUTPUT
-
-To init the WM, delete the "antico.cfg"
+---------------------------------------------------
+(*) Internationalization: put your language.qm in /language dir (lupdate+linguist+lrelease). The language file name should be your locale lang. (e.g. it_IT.qm). Check debug msg. at startup for control.
+---------------------------------------------------
+To init the WM, just delete the "antico.cfg".
+---------------------------------------------------
 
 ***********
 REPOSITORY
@@ -51,7 +63,6 @@ git clone git://github.com/antico/antico.git
 
 To update your local repository:
 git pull
-
 
 ***********
 THANKS

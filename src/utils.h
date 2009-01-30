@@ -42,6 +42,7 @@ public:
     void update_menu();
     void init();
     void update_style();
+    void parse_desktop_file();
     void set_cmd_arguments(const QString &);
 
 public slots:
@@ -51,12 +52,11 @@ private:
     QSettings *style;
     QSettings *antico;
     QMenu *main_menu;
-    QMenu *audio_menu;
-    QMenu *video_menu;
+    QMenu *audiovideo_menu;
     QMenu *system_menu;
     QMenu *development_menu;
-    QMenu *graphic_menu;
-    QMenu *internet_menu;
+    QMenu *graphics_menu;
+    QMenu *network_menu;
     QMenu *office_menu;
     QMenu *utility_menu;
     QString launch_pix;
@@ -67,13 +67,13 @@ private:
     QString manager_pix;
     QString utility_pix;
     QString office_pix;
-    QString internet_pix;
-    QString graphic_pix;
+    QString network_pix;
+    QString graphics_pix;
     QString devel_pix;
     QString system_pix;
-    QString audio_pix;
-    QString video_pix;
+    QString audiovideo_pix;
     QString cmd_arguments;
+    QHash<QString, QMenu *> cat_menu;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -96,21 +96,19 @@ private:
     QSettings *antico;
     QString utility_pix;
     QString office_pix;
-    QString internet_pix;
-    QString graphic_pix;
+    QString network_pix;
+    QString graphics_pix;
     QString devel_pix;
     QString system_pix;
-    QString audio_pix;
-    QString video_pix;
+    QString audiovideo_pix;
     QString d_folder_pix;
     
-    QStringList graphic;
+    QStringList graphics;
     QStringList devel;
     QStringList system;
     QStringList office;
-    QStringList video;
-    QStringList audio;
-    QStringList internet;
+    QStringList audiovideo;
+    QStringList network;
     QStringList utility;
    
 };

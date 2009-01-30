@@ -81,7 +81,7 @@ void Filedialog::init()
     connect(hidden_files, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
     connect(line_path, SIGNAL(returnPressed()), this, SLOT(path_completer()));
     connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(update_tree(QModelIndex)));
-  
+
     if (button_type == "OK_Cancel") // on new creation
     {
         QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
@@ -102,6 +102,7 @@ void Filedialog::init()
     main_menu = new QMenu();
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
     cat_menu = new Categorymenu(open_menu);
+    cat_menu->update_menu();
     QAction *del_file = main_menu->addAction(QIcon(delete_file_pix), tr("Delete"));
     connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
@@ -144,12 +145,12 @@ void Filedialog::show_preview(const QModelIndex &index) // show file pixmap prev
     preview_label->setPixmap(QPixmap(dir_model->filePath(index)));
 }
 
-void Filedialog::path_completer() // on user button press in line_path 
+void Filedialog::path_completer() // on user button press in line_path
 {
     qDebug() << "Path completer:" << line_path->text();
     QModelIndex index = dir_model->index(line_path->text());
-    
-    if(index.isValid())
+
+    if (index.isValid())
     {
         tree_view->setCurrentIndex(index);
     }
@@ -161,8 +162,17 @@ void Filedialog::path_completer() // on user button press in line_path
 
 void Filedialog::update_tree(const QModelIndex &index) // update the tree on path completer
 {
-    tree_view->scrollTo(index);
-    tree_view->setCurrentIndex(index);
+    if (! index.isValid())
+    {
+        QModelIndex id = dir_model->index(line_path->text());
+        tree_view->scrollTo(id);
+        tree_view->setCurrentIndex(id);
+    }
+    else
+    {
+        tree_view->scrollTo(index);
+        tree_view->setCurrentIndex(index);
+    }
 }
 
 void Filedialog::set_filter(QDir::Filters fltr)
@@ -228,7 +238,7 @@ QString Filedialog::get_selected_icon() const
 void Filedialog::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
-    { 
+    {
         mousepos = event->pos();
         grabMouse(QCursor(Qt::SizeAllCursor));
     }
@@ -248,7 +258,7 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 {
-    if(tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos()))
+    if (tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos()) && !dir_model->isDir(tree_view->currentIndex()))
     {
         cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
         main_menu->exec(event->globalPos());

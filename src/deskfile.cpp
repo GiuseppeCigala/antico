@@ -29,6 +29,7 @@ void Deskfile::init()
     // show the Category apps list for open the file
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
     cat_menu = new Categorymenu(open_menu);
+    cat_menu->update_menu();
     QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete"));
     connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
@@ -104,6 +105,7 @@ void Deskfile::del_file()
 
 void Deskfile::contextMenuEvent(QContextMenuEvent *event)
 {
+    cat_menu->update_menu();
     cat_menu->set_cmd_arguments(file_path + file_name); // set the file path+name as argument
     main_menu->exec(event->globalPos());
 }

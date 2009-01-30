@@ -149,12 +149,11 @@ void Manager::read_settings()
     manager_pix_path = stl_path + style->value("manager_pix").toString();
     utility_pix_path = stl_path + style->value("utility_pix").toString();
     office_pix_path = stl_path + style->value("office_pix").toString();
-    internet_pix_path = stl_path + style->value("internet_pix").toString();
-    graphic_pix_path = stl_path + style->value("graphic_pix").toString();
+    network_pix_path = stl_path + style->value("network_pix").toString();
+    graphics_pix_path = stl_path + style->value("graphics_pix").toString();
     development_pix_path = stl_path + style->value("development_pix").toString();
     system_pix_path = stl_path + style->value("system_pix").toString();
-    audio_pix_path = stl_path + style->value("audio_pix").toString();
-    video_pix_path = stl_path + style->value("video_pix").toString();
+    audiovideo_pix_path = stl_path + style->value("audiovideo_pix").toString();
     launcher_pix->setToolTip(style->value("launcher_pix").toString());
     application_pix->setToolTip(style->value("application_pix").toString());
     quit_pix->setToolTip(style->value("quit_pix").toString());
@@ -166,12 +165,11 @@ void Manager::read_settings()
     manager_pix->setToolTip(style->value("manager_pix").toString());
     utility_pix->setToolTip(style->value("utility_pix").toString());
     office_pix->setToolTip(style->value("office_pix").toString());
-    internet_pix->setToolTip(style->value("internet_pix").toString());
-    graphic_pix->setToolTip(style->value("graphic_pix").toString());
+    network_pix->setToolTip(style->value("network_pix").toString());
+    graphics_pix->setToolTip(style->value("graphics_pix").toString());
     development_pix->setToolTip(style->value("development_pix").toString());
     system_pix->setToolTip(style->value("system_pix").toString());
-    audio_pix->setToolTip(style->value("audio_pix").toString());
-    video_pix->setToolTip(style->value("video_pix").toString());
+    audiovideo_pix->setToolTip(style->value("audiovideo_pix").toString());
     launcher_pix->setPixmap(QPixmap(launcher_pix_path));
     application_pix->setPixmap(QPixmap(application_pix_path));
     quit_pix->setPixmap(QPixmap(quit_pix_path));
@@ -183,12 +181,11 @@ void Manager::read_settings()
     manager_pix->setPixmap(QPixmap(manager_pix_path));
     utility_pix->setPixmap(QPixmap(utility_pix_path));
     office_pix->setPixmap(QPixmap(office_pix_path));
-    internet_pix->setPixmap(QPixmap(internet_pix_path));
-    graphic_pix->setPixmap(QPixmap(graphic_pix_path));
+    network_pix->setPixmap(QPixmap(network_pix_path));
+    graphics_pix->setPixmap(QPixmap(graphics_pix_path));
     development_pix->setPixmap(QPixmap(development_pix_path));
     system_pix->setPixmap(QPixmap(system_pix_path));
-    audio_pix->setPixmap(QPixmap(audio_pix_path));
-    video_pix->setPixmap(QPixmap(video_pix_path));
+    audiovideo_pix->setPixmap(QPixmap(audiovideo_pix_path));
     style->endGroup(); // Icon
     style->endGroup(); // Launcher
     /////////////////////////////////////////////////////////////////////////
@@ -257,12 +254,11 @@ void Manager::add_app_tab()
     style->beginGroup("Icon");
     category_combo->addItem(QIcon(stl_path + style->value("utility_pix").toString()), tr("Utility"));
     category_combo->addItem(QIcon(stl_path + style->value("office_pix").toString()), tr("Office"));
-    category_combo->addItem(QIcon(stl_path + style->value("internet_pix").toString()), tr("Internet"));
-    category_combo->addItem(QIcon(stl_path + style->value("graphic_pix").toString()), tr("Graphic"));
+    category_combo->addItem(QIcon(stl_path + style->value("network_pix").toString()), tr("Network"));
+    category_combo->addItem(QIcon(stl_path + style->value("graphics_pix").toString()), tr("Graphics"));
     category_combo->addItem(QIcon(stl_path + style->value("development_pix").toString()), tr("Development"));
     category_combo->addItem(QIcon(stl_path + style->value("system_pix").toString()), tr("System"));
-    category_combo->addItem(QIcon(stl_path + style->value("audio_pix").toString()), tr("Audio"));
-    category_combo->addItem(QIcon(stl_path + style->value("video_pix").toString()), tr("Video"));
+    category_combo->addItem(QIcon(stl_path + style->value("audiovideo_pix").toString()), tr("AudioVideo"));
     style->endGroup(); // Icon
     style->endGroup(); // Launcher
     QPushButton *add_but = new QPushButton(tr("Add"), this);
@@ -284,7 +280,7 @@ void Manager::remove_app_tab()
     QFrame *rem_frm = new QFrame(this);
     rem_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(rem_frm, tr("Remove application"));
-    QVBoxLayout *rem_layout = new QVBoxLayout(this);
+    QVBoxLayout *rem_layout = new QVBoxLayout();
     rem_frm->setLayout(rem_layout);
 
     app_tree = new QTreeWidget(this);
@@ -292,7 +288,7 @@ void Manager::remove_app_tab()
     app_tree->setHeaderLabel(tr("Category/Applications"));
     update_remove_list();
 
-    QGridLayout *rem_grid = new QGridLayout(this);
+    QGridLayout *rem_grid = new QGridLayout();
     QPushButton *rem_but = new QPushButton(tr("Remove"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     rem_grid->addWidget(rem_but, 0, 0);
@@ -307,15 +303,24 @@ void Manager::remove_app_tab()
 
 void Manager::update_add_tree(const QModelIndex &index)
 {
-    tree_view->scrollTo(index);
-    tree_view->setCurrentIndex(index);
+    if (! index.isValid())
+    {
+        QModelIndex id = dir_model->index(app_path->text());
+        tree_view->scrollTo(id);
+        tree_view->setCurrentIndex(id);
+    }
+    else
+    {
+        tree_view->scrollTo(index);
+        tree_view->setCurrentIndex(index);
+    }
 }
 
-void Manager::path_completer() // on user button press in line_path 
+void Manager::path_completer() // on user button press in line_path
 {
     QModelIndex index = dir_model->index(app_path->text());
-    
-    if(index.isValid())
+
+    if (index.isValid())
     {
         tree_view->setCurrentIndex(index);
     }
@@ -326,13 +331,13 @@ void Manager::run_app_tab()
     QFrame *run_frm = new QFrame(this);
     run_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(run_frm, tr("Run at startup"));
-    QVBoxLayout *run_layout = new QVBoxLayout(this);
+    QVBoxLayout *run_layout = new QVBoxLayout();
     run_frm->setLayout(run_layout);
 
     run_list = new QListWidget(this);
     update_run_list();
 
-    QGridLayout *run_grid = new QGridLayout(this);
+    QGridLayout *run_grid = new QGridLayout();
     QPushButton *add_but = new QPushButton(tr("Add"), this);
     QPushButton *rem_but = new QPushButton(tr("Remove"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
@@ -353,10 +358,10 @@ void Manager::style_tab()
     QFrame *style_frm = new QFrame(this);
     tab->addTab(style_frm, tr("Style"));
     style_frm->setFrameStyle(QFrame::Panel);
-    QVBoxLayout *style_layout = new QVBoxLayout(this);
+    QVBoxLayout *style_layout = new QVBoxLayout();
     style_frm->setLayout(style_layout);
     ///////// STYLE SELECTION /////////
-    QGridLayout *style_sel_layout = new QGridLayout(this);
+    QGridLayout *style_sel_layout = new QGridLayout();
     style_layout->addLayout(style_sel_layout);
     QLabel *style_sel_lb = new QLabel(tr("Actual style:"), this);
     style_sel_tx = new QLineEdit(this);
@@ -372,7 +377,7 @@ void Manager::style_tab()
     style_layout->addWidget(tool_box);
     ///////// FRAME /////////
     QGroupBox *frame_box = new QGroupBox(this);
-    QGridLayout *frame_layout = new QGridLayout(this);
+    QGridLayout *frame_layout = new QGridLayout();
     frame_box->setLayout(frame_layout);
     frame_layout->setColumnMinimumWidth(0, 50);
     frame_layout->setColumnMinimumWidth(1, 75);
@@ -439,7 +444,7 @@ void Manager::style_tab()
     frame_layout->addWidget(close_pix_but, 7, 2);
     ///////// DOCKBAR /////////
     QGroupBox *dockbar_box = new QGroupBox(this);
-    QGridLayout *dockbar_layout = new QGridLayout(this);
+    QGridLayout *dockbar_layout = new QGridLayout();
     dockbar_box->setLayout(dockbar_layout);
     dockbar_layout->setColumnMinimumWidth(0, 50);
     dockbar_layout->setColumnMinimumWidth(1, 75);
@@ -460,7 +465,7 @@ void Manager::style_tab()
     dockbar_layout->addWidget(dockbar_pix_but, 1, 2);
     ///////// DOCKICON /////////
     QGroupBox *dockicon_box = new QGroupBox(this);
-    QGridLayout *dockicon_layout = new QGridLayout(this);
+    QGridLayout *dockicon_layout = new QGridLayout();
     dockicon_box->setLayout(dockicon_layout);
     dockicon_layout->setColumnMinimumWidth(0, 50);
     dockicon_layout->setColumnMinimumWidth(1, 75);
@@ -485,7 +490,7 @@ void Manager::style_tab()
     dockicon_layout->addWidget(dockicon_col_but, 1, 2);
     ///////// DESKFOLDER /////////
     QGroupBox *deskfolder_box = new QGroupBox(this);
-    QGridLayout *deskfolder_layout = new QGridLayout(this);
+    QGridLayout *deskfolder_layout = new QGridLayout();
     deskfolder_box->setLayout(deskfolder_layout);
     deskfolder_layout->setColumnMinimumWidth(0, 50);
     deskfolder_layout->setColumnMinimumWidth(1, 75);
@@ -510,7 +515,7 @@ void Manager::style_tab()
     deskfolder_layout->addWidget(deskfolder_col_but, 1, 2);
     ///////// DESKFILE /////////
     QGroupBox *deskfile_box = new QGroupBox(this);
-    QGridLayout *deskfile_layout = new QGridLayout(this);
+    QGridLayout *deskfile_layout = new QGridLayout();
     deskfile_box->setLayout(deskfile_layout);
     deskfile_layout->setColumnMinimumWidth(0, 50);
     deskfile_layout->setColumnMinimumWidth(1, 75);
@@ -526,7 +531,7 @@ void Manager::style_tab()
     deskfile_layout->addWidget(deskfile_col_but, 0, 2);
     ///////// DESKDEV /////////
     QGroupBox *deskdev_box = new QGroupBox(this);
-    QGridLayout *deskdev_layout = new QGridLayout(this);
+    QGridLayout *deskdev_layout = new QGridLayout();
     deskdev_box->setLayout(deskdev_layout);
     deskdev_layout->setColumnMinimumWidth(0, 50);
     deskdev_layout->setColumnMinimumWidth(1, 75);
@@ -560,7 +565,7 @@ void Manager::style_tab()
     deskdev_layout->addWidget(deskdev_col_but, 2, 2);
     ///////// SYSICON /////////
     QGroupBox *sysicon_box = new QGroupBox(this);
-    QGridLayout *sysicon_layout = new QGridLayout(this);
+    QGridLayout *sysicon_layout = new QGridLayout();
     sysicon_box->setLayout(sysicon_layout);
     sysicon_layout->setColumnMinimumWidth(0, 50);
     sysicon_layout->setColumnMinimumWidth(1, 75);
@@ -576,7 +581,7 @@ void Manager::style_tab()
     sysicon_layout->addWidget(sysicon_pix_but, 0, 2);
     ///////// DESKAPP /////////
     QGroupBox *deskapp_box = new QGroupBox(this);
-    QGridLayout *deskapp_layout = new QGridLayout(this);
+    QGridLayout *deskapp_layout = new QGridLayout();
     deskapp_box->setLayout(deskapp_layout);
     deskapp_layout->setColumnMinimumWidth(0, 50);
     deskapp_layout->setColumnMinimumWidth(1, 75);
@@ -592,7 +597,7 @@ void Manager::style_tab()
     deskapp_layout->addWidget(deskapp_col_but, 0, 2);
     ///////// DATECLOCK /////////
     QGroupBox *dateclock_box = new QGroupBox(this);
-    QGridLayout *dateclock_layout = new QGridLayout(this);
+    QGridLayout *dateclock_layout = new QGridLayout();
     dateclock_box->setLayout(dateclock_layout);
     dateclock_layout->setColumnMinimumWidth(0, 50);
     dateclock_layout->setColumnMinimumWidth(1, 75);
@@ -617,7 +622,7 @@ void Manager::style_tab()
     dateclock_layout->addWidget(clock_col_but, 0, 2);
     ///////// DESKTOP /////////
     QGroupBox *desktop_box = new QGroupBox(this);
-    QGridLayout *desktop_layout = new QGridLayout(this);
+    QGridLayout *desktop_layout = new QGridLayout();
     desktop_box->setLayout(desktop_layout);
     QLabel *desktop_pix_lb = new QLabel(tr("Wallpaper:"), this);
     desktop_pix = new QLabel(this);
@@ -630,7 +635,7 @@ void Manager::style_tab()
     desktop_layout->addWidget(desktop_pix_but, 0, 2);
     ///////// LAUNCHER /////////
     QGroupBox *launcher_box = new QGroupBox(this);
-    QGridLayout *launcher_layout = new QGridLayout(this);
+    QGridLayout *launcher_layout = new QGridLayout();
     launcher_box->setLayout(launcher_layout);
     launcher_layout->setColumnMinimumWidth(0, 50);
     launcher_layout->setColumnMinimumWidth(1, 75);
@@ -646,12 +651,11 @@ void Manager::style_tab()
     QLabel *manager_pix_lb = new QLabel(tr("Manager pixmap:"), this);
     QLabel *utility_pix_lb = new QLabel(tr("Utility pixmap:"), this);
     QLabel *office_pix_lb = new QLabel(tr("Office pixmap:"), this);
-    QLabel *internet_pix_lb = new QLabel(tr("Internet pixmap:"), this);
-    QLabel *graphic_pix_lb = new QLabel(tr("Graphic pixmap:"), this);
+    QLabel *network_pix_lb = new QLabel(tr("Network pixmap:"), this);
+    QLabel *graphics_pix_lb = new QLabel(tr("Graphics pixmap:"), this);
     QLabel *development_pix_lb = new QLabel(tr("Development pixmap:"), this);
     QLabel *system_pix_lb = new QLabel(tr("System pixmap:"), this);
-    QLabel *audio_pix_lb = new QLabel(tr("Audio pixmap:"), this);
-    QLabel *video_pix_lb = new QLabel(tr("Video pixmap:"), this);
+    QLabel *audiovideo_pix_lb = new QLabel(tr("AudioVideo pixmap:"), this);
     launcher_pix = new QLabel(this);
     application_pix = new QLabel(this);
     quit_pix = new QLabel(this);
@@ -663,12 +667,11 @@ void Manager::style_tab()
     manager_pix = new QLabel(this);
     utility_pix = new QLabel(this);
     office_pix = new QLabel(this);
-    internet_pix = new QLabel(this);
-    graphic_pix = new QLabel(this);
+    network_pix = new QLabel(this);
+    graphics_pix = new QLabel(this);
     development_pix = new QLabel(this);
     system_pix = new QLabel(this);
-    audio_pix = new QLabel(this);
-    video_pix = new QLabel(this);
+    audiovideo_pix = new QLabel(this);
     launcher_pix->setMaximumSize(32, 32);
     application_pix->setMaximumSize(32, 32);
     quit_pix->setMaximumSize(32, 32);
@@ -680,12 +683,11 @@ void Manager::style_tab()
     manager_pix->setMaximumSize(32, 32);
     utility_pix->setMaximumSize(32, 32);
     office_pix->setMaximumSize(32, 32);
-    internet_pix->setMaximumSize(32, 32);
-    graphic_pix->setMaximumSize(32, 32);
+    network_pix->setMaximumSize(32, 32);
+    graphics_pix->setMaximumSize(32, 32);
     development_pix->setMaximumSize(32, 32);
     system_pix->setMaximumSize(32, 32);
-    audio_pix->setMaximumSize(32, 32);
-    video_pix->setMaximumSize(32, 32);
+    audiovideo_pix->setMaximumSize(32, 32);
     launcher_pix->setScaledContents(true);
     application_pix->setScaledContents(true);
     quit_pix->setScaledContents(true);
@@ -697,12 +699,11 @@ void Manager::style_tab()
     manager_pix->setScaledContents(true);
     utility_pix->setScaledContents(true);
     office_pix->setScaledContents(true);
-    internet_pix->setScaledContents(true);
-    graphic_pix->setScaledContents(true);
+    network_pix->setScaledContents(true);
+    graphics_pix->setScaledContents(true);
     development_pix->setScaledContents(true);
     system_pix->setScaledContents(true);
-    audio_pix->setScaledContents(true);
-    video_pix->setScaledContents(true);
+    audiovideo_pix->setScaledContents(true);
     QPushButton *launcher_pix_but = new QPushButton("...", this);
     QPushButton *application_pix_but = new QPushButton("...", this);
     QPushButton *quit_pix_but = new QPushButton("...", this);
@@ -714,12 +715,11 @@ void Manager::style_tab()
     QPushButton *manager_pix_but = new QPushButton("...", this);
     QPushButton *utility_pix_but = new QPushButton("...", this);
     QPushButton *office_pix_but = new QPushButton("...", this);
-    QPushButton *internet_pix_but = new QPushButton("...", this);
-    QPushButton *graphic_pix_but = new QPushButton("...", this);
+    QPushButton *network_pix_but = new QPushButton("...", this);
+    QPushButton *graphics_pix_but = new QPushButton("...", this);
     QPushButton *development_pix_but = new QPushButton("...", this);
     QPushButton *system_pix_but = new QPushButton("...", this);
-    QPushButton *audio_pix_but = new QPushButton("...", this);
-    QPushButton *video_pix_but = new QPushButton("...", this);
+    QPushButton *audiovideo_pix_but = new QPushButton("...", this);
     launcher_pix_but->setMaximumWidth(50);
     application_pix_but->setMaximumWidth(50);
     quit_pix_but->setMaximumWidth(50);
@@ -731,12 +731,11 @@ void Manager::style_tab()
     manager_pix_but->setMaximumWidth(50);
     utility_pix_but->setMaximumWidth(50);
     office_pix_but->setMaximumWidth(50);
-    internet_pix_but->setMaximumWidth(50);
-    graphic_pix_but->setMaximumWidth(50);
+    network_pix_but->setMaximumWidth(50);
+    graphics_pix_but->setMaximumWidth(50);
     development_pix_but->setMaximumWidth(50);
     system_pix_but->setMaximumWidth(50);
-    audio_pix_but->setMaximumWidth(50);
-    video_pix_but->setMaximumWidth(50);
+    audiovideo_pix_but->setMaximumWidth(50);
     launcher_layout->addWidget(launcher_pix_lb, 0, 0);
     launcher_layout->addWidget(application_pix_lb, 1, 0);
     launcher_layout->addWidget(quit_pix_lb, 2, 0);
@@ -748,12 +747,11 @@ void Manager::style_tab()
     launcher_layout->addWidget(manager_pix_lb, 8, 0);
     launcher_layout->addWidget(utility_pix_lb, 9, 0);
     launcher_layout->addWidget(office_pix_lb, 10, 0);
-    launcher_layout->addWidget(internet_pix_lb, 11, 0);
-    launcher_layout->addWidget(graphic_pix_lb, 12, 0);
+    launcher_layout->addWidget(network_pix_lb, 11, 0);
+    launcher_layout->addWidget(graphics_pix_lb, 12, 0);
     launcher_layout->addWidget(development_pix_lb, 13, 0);
     launcher_layout->addWidget(system_pix_lb, 14, 0);
-    launcher_layout->addWidget(audio_pix_lb, 15, 0);
-    launcher_layout->addWidget(video_pix_lb, 16, 0);
+    launcher_layout->addWidget(audiovideo_pix_lb, 15, 0);
     launcher_layout->addWidget(launcher_pix, 0, 1);
     launcher_layout->addWidget(application_pix, 1, 1);
     launcher_layout->addWidget(quit_pix, 2, 1);
@@ -765,12 +763,11 @@ void Manager::style_tab()
     launcher_layout->addWidget(manager_pix, 8, 1);
     launcher_layout->addWidget(utility_pix, 9, 1);
     launcher_layout->addWidget(office_pix, 10, 1);
-    launcher_layout->addWidget(internet_pix, 11, 1);
-    launcher_layout->addWidget(graphic_pix, 12, 1);
+    launcher_layout->addWidget(network_pix, 11, 1);
+    launcher_layout->addWidget(graphics_pix, 12, 1);
     launcher_layout->addWidget(development_pix, 13, 1);
     launcher_layout->addWidget(system_pix, 14, 1);
-    launcher_layout->addWidget(audio_pix, 15, 1);
-    launcher_layout->addWidget(video_pix, 16, 1);
+    launcher_layout->addWidget(audiovideo_pix, 15, 1);
     launcher_layout->addWidget(launcher_pix_but, 0, 2);
     launcher_layout->addWidget(application_pix_but, 1, 2);
     launcher_layout->addWidget(quit_pix_but, 2, 2);
@@ -782,15 +779,14 @@ void Manager::style_tab()
     launcher_layout->addWidget(manager_pix_but, 8, 2);
     launcher_layout->addWidget(utility_pix_but, 9, 2);
     launcher_layout->addWidget(office_pix_but, 10, 2);
-    launcher_layout->addWidget(internet_pix_but, 11, 2);
-    launcher_layout->addWidget(graphic_pix_but, 12, 2);
+    launcher_layout->addWidget(network_pix_but, 11, 2);
+    launcher_layout->addWidget(graphics_pix_but, 12, 2);
     launcher_layout->addWidget(development_pix_but, 13, 2);
     launcher_layout->addWidget(system_pix_but, 14, 2);
-    launcher_layout->addWidget(audio_pix_but, 15, 2);
-    launcher_layout->addWidget(video_pix_but, 16, 2);
+    launcher_layout->addWidget(audiovideo_pix_but, 15, 2);
     ///////// OTHER /////////
     QGroupBox *other_box = new QGroupBox(this);
-    QGridLayout *other_layout = new QGridLayout(this);
+    QGridLayout *other_layout = new QGridLayout();
     other_box->setLayout(other_layout);
     other_layout->setColumnMinimumWidth(0, 50);
     other_layout->setColumnMinimumWidth(1, 75);
@@ -870,7 +866,7 @@ void Manager::style_tab()
     ///////// OK-QUIT /////////
     QGroupBox *ok_quit_box = new QGroupBox(this);
     style_layout->addWidget(ok_quit_box);
-    QGridLayout *ok_quit_layout = new QGridLayout(this);
+    QGridLayout *ok_quit_layout = new QGridLayout();
     ok_quit_box->setLayout(ok_quit_layout);
     QPushButton *ok_but = new QPushButton(tr("OK"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
@@ -921,12 +917,11 @@ void Manager::style_tab()
     pixmapMapper->setMapping(manager_pix_but, manager_pix);
     pixmapMapper->setMapping(utility_pix_but, utility_pix);
     pixmapMapper->setMapping(office_pix_but, office_pix);
-    pixmapMapper->setMapping(internet_pix_but, internet_pix);
-    pixmapMapper->setMapping(graphic_pix_but, graphic_pix);
+    pixmapMapper->setMapping(network_pix_but, network_pix);
+    pixmapMapper->setMapping(graphics_pix_but, graphics_pix);
     pixmapMapper->setMapping(development_pix_but, development_pix);
     pixmapMapper->setMapping(system_pix_but, system_pix);
-    pixmapMapper->setMapping(audio_pix_but, audio_pix);
-    pixmapMapper->setMapping(video_pix_but, video_pix);
+    pixmapMapper->setMapping(audiovideo_pix_but, audiovideo_pix);
     ///////// Other //////////
     pixmapMapper->setMapping(folder_link_pix_but, folder_link_pix);
     pixmapMapper->setMapping(file_link_pix_but, file_link_pix);
@@ -960,12 +955,11 @@ void Manager::style_tab()
     connect(manager_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(utility_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(office_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
-    connect(internet_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
-    connect(graphic_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(network_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(graphics_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(development_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(system_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
-    connect(audio_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
-    connect(video_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(audiovideo_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     ///////// Other //////////
     connect(folder_link_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(file_link_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
@@ -1133,12 +1127,11 @@ void Manager::ok_frame_pressed()
     style->setValue("manager_pix", manager_pix->toolTip());
     style->setValue("utility_pix", utility_pix->toolTip());
     style->setValue("office_pix", office_pix->toolTip());
-    style->setValue("internet_pix", internet_pix->toolTip());
-    style->setValue("graphic_pix", graphic_pix->toolTip());
+    style->setValue("network_pix", network_pix->toolTip());
+    style->setValue("graphics_pix", graphics_pix->toolTip());
     style->setValue("development_pix", development_pix->toolTip());
     style->setValue("system_pix", system_pix->toolTip());
-    style->setValue("audio_pix", audio_pix->toolTip());
-    style->setValue("video_pix", video_pix->toolTip());
+    style->setValue("audiovideo_pix", audiovideo_pix->toolTip());
     style->endGroup(); //Icon
     style->endGroup(); //Launcher
     //////////////////////////////////////////////////////////////////
@@ -1163,6 +1156,15 @@ void Manager::ok_frame_pressed()
 
 void Manager::add_app_pressed() // add selected app on lancher menu (in the select Category)
 {
+    QMap <QString, QString> cat_map; // to map translated name with native categories
+    cat_map.insert(tr("Utility"), "Utility");
+    cat_map.insert(tr("Office"), "Office");
+    cat_map.insert(tr("Network"), "Network");
+    cat_map.insert(tr("Graphics"), "Graphics");
+    cat_map.insert(tr("Development"), "Development");
+    cat_map.insert(tr("System"), "System");
+    cat_map.insert(tr("AudioVideo"), "AudioVideo");
+
     if (tree_view->currentIndex().isValid())
     {
         QString path = dir_model->filePath(tree_view->currentIndex());
@@ -1176,19 +1178,21 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
             qDebug() << "app:" << app << "path:" << path;
             antico->beginGroup("Launcher");
             antico->beginGroup("Category");
-            antico->beginGroup(category_combo->currentText()); // the select Category type from combobox
+            antico->beginGroup(cat_map.value(category_combo->currentText())); // the select Category type from combobox (with translation)
             antico->beginGroup(app);
+
             antico->setValue("name", app);
-            antico->setValue("path", path);
-            antico->setValue("icon", icon);
+            antico->setValue("exec", path);
+            antico->setValue("pix", icon);
+            msg = new Msgbox(this);
+            msg->setText("<b>" + app.toUpper() + "</b>" + tr(" added to ") + "<b>" + category_combo->currentText() + "</b>" + tr(" menu"));
+            msg->setIcon(QMessageBox::Information);
+
             antico->endGroup(); // App name
             antico->endGroup(); // Category type
             antico->endGroup(); // Category group
             antico->endGroup(); // Launcher
             update_remove_list();
-            msg = new Msgbox(this);
-            msg->setText("<b>" + app.toUpper() + "</b>" + tr(" added to ") + "<b>" + category_combo->currentText() + "</b>" + tr(" menu"));
-            msg->setIcon(QMessageBox::Information);
         }
     }
 }
