@@ -177,7 +177,7 @@ void Categorymenu::update_menu()
     {
         cat_iter.next();
         antico->beginGroup(cat_iter.key()); // category name
-        for (int i = 0; i < antico->childGroups().size(); i++) 
+        for (int i = 0; i < antico->childGroups().size(); i++)
         {
             antico->beginGroup(antico->childGroups().value(i)); // App name
             QString name = antico->value("name").toString();
@@ -190,9 +190,9 @@ void Categorymenu::update_menu()
     }
     antico->endGroup(); // Category
     antico->endGroup(); // Launcher
-    
+
     /////////// READ FROM .DESKTOP FILE ///////////
-    antico->beginGroup("Launcher-Desk"); 
+    antico->beginGroup("Launcher-Desk");
     antico->beginGroup("Category");
 
     QHashIterator<QString, QMenu *> cat_desk_iter(cat_menu);
@@ -200,7 +200,7 @@ void Categorymenu::update_menu()
     {
         cat_desk_iter.next();
         antico->beginGroup(cat_desk_iter.key()); // category name
-        for (int i = 0; i < antico->childGroups().size(); i++) 
+        for (int i = 0; i < antico->childGroups().size(); i++)
         {
             antico->beginGroup(antico->childGroups().value(i)); // App name
             QString name = antico->value("name").toString();
@@ -415,6 +415,13 @@ Fileicon::Fileicon() : QFileIconProvider()
     audiovideo << "wav" << "mp3" << "ogg" << "mpg" << "avi";
     network << "htm" << "html" << "xlm";
     utility << "gz" << "zip" << "bz2";
+    cat_map.insert(devel_pix, devel);
+    cat_map.insert(graphics_pix, graphics);
+    cat_map.insert(system_pix, system);
+    cat_map.insert(office_pix, office);
+    cat_map.insert(audiovideo_pix, audiovideo);
+    cat_map.insert(network_pix, network);
+    cat_map.insert(utility_pix, utility);
 }
 
 Fileicon::~Fileicon()
@@ -429,64 +436,18 @@ QIcon Fileicon::icon(const QFileInfo &info) const
     }
 
     QString suff = info.suffix(); // get the file extension
+    QMapIterator<QString, QStringList> iter (cat_map); // (key = category pix path) (value = category file suffix list)
 
-    for (int i = 0; i < graphics.size(); i++)
+    while (iter.hasNext())
     {
-        if (graphics.at(i) == suff)
+        iter.next();
+        if (iter.value().contains(suff, Qt::CaseInsensitive))
         {
-            QIcon ico(graphics_pix);
+            QString ico_name = iter.key();
+            QIcon ico(ico_name);
             return ico;
         }
     }
-    for (int i = 0; i < devel.size(); i++)
-    {
-        if (devel.at(i) == suff)
-        {
-            QIcon ico(devel_pix);
-            return ico;
-        }
-    }
-    for (int i = 0; i < system.size(); i++)
-    {
-        if (system.at(i) == suff)
-        {
-            QIcon ico(system_pix);
-            return ico;
-        }
-    }
-    for (int i = 0; i < office.size(); i++)
-    {
-        if (office.at(i) == suff)
-        {
-            QIcon ico(office_pix);
-            return ico;
-        }
-    }
-    for (int i = 0; i < audiovideo.size(); i++)
-    {
-        if (audiovideo.at(i) == suff)
-        {
-            QIcon ico(audiovideo_pix);
-            return ico;
-        }
-    }
-    for (int i = 0; i < network.size(); i++)
-    {
-        if (network.at(i) == suff)
-        {
-            QIcon ico(network_pix);
-            return ico;
-        }
-    }
-    for (int i = 0; i < utility.size(); i++)
-    {
-        if (utility.at(i) == suff)
-        {
-            QIcon ico(utility_pix);
-            return ico;
-        }
-    }
-
     return QApplication::style()->standardIcon(QStyle::SP_FileIcon); //default icon
 }
 
@@ -499,54 +460,15 @@ QIcon Fileicon::icon()
 QString Fileicon::type(const QFileInfo &info) const
 {
     QString suff = info.suffix(); // get the file extension
+    QMapIterator<QString, QStringList> iter (cat_map); // (key = category pix path) (value = category file suffix list)
 
-    for (int i = 0; i < graphics.size(); i++)
+    while (iter.hasNext())
     {
-        if (graphics.at(i) == suff)
+        iter.next();
+        if (iter.value().contains(suff, Qt::CaseInsensitive))
         {
-            return graphics_pix;
-        }
-    }
-    for (int i = 0; i < devel.size(); i++)
-    {
-        if (devel.at(i) == suff)
-        {
-            return devel_pix;
-        }
-    }
-    for (int i = 0; i < system.size(); i++)
-    {
-        if (system.at(i) == suff)
-        {
-            return system_pix;
-        }
-    }
-    for (int i = 0; i < office.size(); i++)
-    {
-        if (office.at(i) == suff)
-        {
-            return office_pix;
-        }
-    }
-    for (int i = 0; i < audiovideo.size(); i++)
-    {
-        if (audiovideo.at(i) == suff)
-        {
-            return audiovideo_pix;
-        }
-    }
-    for (int i = 0; i < network.size(); i++)
-    {
-        if (network.at(i) == suff)
-        {
-            return network_pix;
-        }
-    }
-    for (int i = 0; i < utility.size(); i++)
-    {
-        if (utility.at(i) == suff)
-        {
-            return utility_pix;
+            QString ico_name = iter.key();
+            return ico_name;
         }
     }
     return system_pix; // default pix

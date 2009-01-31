@@ -642,9 +642,7 @@ void Antico::raise_next_frame() // raise next frame on [Alt+Tab] key combination
 
 void Antico::set_active_frame(Frame *frm) // activation of selected frame and unactivation of others
 {
-    Frame *frame;
-
-    foreach(frame, mapping_frames)
+    foreach(Frame *frame, mapping_frames)
     {
         if (frame == frm)
         {
@@ -690,9 +688,7 @@ void Antico::wm_quit()
 
     if (ret == QMessageBox::Ok)
     {
-        Frame *frm;
-
-        foreach(frm, mapping_clients)
+        foreach(Frame *frm, mapping_clients)
         {
             qDebug() << "Quit process:" << frm->cl_win();
             XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
@@ -713,8 +709,7 @@ void Antico::wm_refresh()
     dsk->update_style(); //update desktop, all deskicons and all deskapps
     dock->update_style(); //update dockbar and all dockicons
 
-    Frame *frm;
-    foreach(frm, mapping_clients) //update all map apps
+    foreach(Frame *frm, mapping_clients) //update all map apps
     {
         frm->update_style();
     }
@@ -769,8 +764,7 @@ void Antico::show_desktop()
 {
     qDebug() << "Show Desktop. Iconize all the apps ...";
 
-    Frame *frm;
-    foreach(frm, mapping_clients)
+    foreach(Frame *frm, mapping_clients)
     {
         if (!frm->is_iconize()) // if not yet iconize
             frm->iconify();

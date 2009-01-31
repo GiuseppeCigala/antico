@@ -110,6 +110,7 @@ private:
     QStringList audiovideo;
     QStringList network;
     QStringList utility;
+    QMap <QString, QStringList> cat_map; // (key = category pix path) (value = category file suffix list)
    
 };
 
