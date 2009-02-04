@@ -16,11 +16,18 @@ Deskapp::Deskapp(const QString &app_nm, const QString &app_pth, const QString &a
     app_path = app_pth;
     setToolTip(app_path + app_name);
     d_app_pix = QPixmap(app_pix);
+    zoom = false;
     show();
 }
 
 Deskapp::~Deskapp()
-{}
+{
+    delete &app_name;
+    delete &app_path;
+    delete &d_app_pix;
+    delete &d_app_col;
+    delete &delete_link_pix;
+}
 
 void Deskapp::read_settings()
 {
@@ -45,9 +52,16 @@ void Deskapp::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
-    painter.drawPixmap(QRect(-16, -50, 32, 32), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
+    if (zoom)
+    {
+        painter.drawPixmap(QRect(-18, -50, 36, 36), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
+    }
+    else
+    {
+        painter.drawPixmap(QRect(-16, -50, 32, 32), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
+    }
     painter.setPen(d_app_col);
-    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter|Qt::TextWordWrap, app_name); // deskapp name
+    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, app_name); // deskapp name
 }
 
 void Deskapp::mousePressEvent(QMouseEvent *event)
@@ -55,7 +69,7 @@ void Deskapp::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::RightButton)
     {
         menu = new QMenu(this);
-        QAction *del_app = menu->addAction(QIcon(delete_link_pix), "Delete link");
+        QAction *del_app = menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
         menu->popup(event->globalPos());
         connect(del_app, SIGNAL(triggered()), this, SLOT(del_app()));
     }
@@ -92,6 +106,20 @@ void Deskapp::mouseDoubleClickEvent(QMouseEvent *event)
     {
         QProcess::startDetached(app_path + app_name); //launch the application
     }
+}
+
+void Deskapp::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    zoom = true;
+    update();
+}
+
+void Deskapp::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    zoom = false;
+    update();
 }
 
 void Deskapp::del_app()

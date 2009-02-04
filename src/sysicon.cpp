@@ -19,7 +19,12 @@ Sysicon::Sysicon(Frame *frame, QWidget *parent) : QWidget(parent)
 }
 
 Sysicon::~Sysicon()
-{}
+{
+    delete &pix;
+    delete &s_icon_pix;
+    delete &close_dock_pix;
+    delete &title_color;
+}
 
 void Sysicon::read_settings()
 {
@@ -64,9 +69,9 @@ void Sysicon::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::RightButton)
     {
         QMenu *menu = new QMenu(this);
-        QAction *sys_close = menu->addAction(QIcon(close_dock_pix), "Close");
+        QAction *close = menu->addAction(QIcon(close_dock_pix), "Close");
         menu->popup(event->globalPos());
-        connect(sys_close, SIGNAL(triggered()), this, SLOT(sys_close()));
+        connect(close, SIGNAL(triggered()), this, SLOT(sys_close()));
     }
 }
 

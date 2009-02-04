@@ -41,6 +41,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QDir>
+#include <QDirIterator> 
 #include <QSettings>
 #include <QTabWidget>
 #include <QDirModel>
@@ -73,6 +74,7 @@
 #include <QLibraryInfo>
 #include <QTextCodec>
 #include <QByteArray>
+#include <QSizeGrip>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

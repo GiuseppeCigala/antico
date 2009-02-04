@@ -31,6 +31,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void paintEvent(QPaintEvent *);
 
 signals:
@@ -48,7 +50,7 @@ private:
     QPixmap d_app_pix;
     QSettings *style;
     QSettings *antico;
-
+    bool zoom;
 };
 
 #endif

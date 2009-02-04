@@ -11,7 +11,7 @@
 Dockbar::Dockbar(Antico *a, QWidget *parent) : QFrame(parent)
 {
     app = a;
-    dock_layout = new QHBoxLayout();
+    dock_layout = new QHBoxLayout(this);
     setLayout(dock_layout);
     dock_layout->setContentsMargins(0, 0, 0, 0);
     dock_layout->setSpacing(1);
@@ -48,12 +48,19 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QFrame(parent)
 }
 
 Dockbar::~Dockbar()
-{}
+{
+    delete app;
+    delete icon_layout;
+    delete d_icon;
+    delete &dock_icons;
+    delete &dock_pix;
+    delete &dock_height;
+}
 
 void Dockbar::read_settings()
 {
     // get style path
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();

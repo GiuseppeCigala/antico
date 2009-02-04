@@ -15,8 +15,9 @@
 #include "defs.h"
 #include "filedialog.h"
 #include "colordialog.h"
-#include "msgbox.h"
 #include "utils.h"
+
+class Filedialog;
 
 ////////////////////////////////////////
 
@@ -148,17 +149,50 @@ private:
     QLabel *date_col_lab;
     QLabel *clock_col_lab;
     QLineEdit *style_sel_tx;
+    QString man_ico;
+    QPoint mousepos;
+    QTreeView *tree_view;
+    QTreeWidget *app_tree;
+    QListWidget *run_list;
+    QTabWidget *tab;
+    QVBoxLayout *main_layout;
+    QLineEdit *app_path;
+    
     QSettings *style;
     QSettings *antico;
-    QTabWidget *tab;
-    QTreeWidget *app_tree;
-    QTreeView *tree_view;
-    QListWidget *run_list;
-    QString man_ico;
+    QVBoxLayout *add_layout;
+    QVBoxLayout *rem_layout;
+    QVBoxLayout *run_layout;
+    QVBoxLayout *style_layout;
+    QGridLayout *rem_grid;
+    QGridLayout *run_grid;
+    QGridLayout *style_grid;
+    QGridLayout *frame_grid;
+    QGridLayout *dockbar_grid;
+    QGridLayout *dockicon_grid;
+    QGridLayout *deskfolder_grid;
+    QGridLayout *deskfile_grid;
+    QGridLayout *deskdev_grid;
+    QGridLayout *sysicon_grid;
+    QGridLayout *deskapp_grid;
+    QGridLayout *dateclock_grid;
+    QGridLayout *desktop_grid;
+    QGridLayout *launcher_grid;
+    QGridLayout *other_grid;
+    QGridLayout *ok_quit_grid;
     QDirModel *dir_model;
-    QPoint mousepos;
-    QLineEdit *app_path;
+    QCompleter *completer;
+    QHBoxLayout *category_lay;
     QComboBox *category_combo;
-    Msgbox *msg;
+    QSignalMapper *pixmapMapper;
+    QSignalMapper *colorMapper;
+    QTreeWidgetItem *category;
+    QTreeWidgetItem *app;
+    QLabel *color_lab;
+    QLabel *pixmap;
+    QMap <QString, QString> cat_map;
+    Filedialog *file_dialog;
+    Fileicon *prov;
+    Appicon *app_ico;
 };
 #endif

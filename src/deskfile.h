@@ -22,7 +22,7 @@ class Deskfile : public QLabel
     Q_OBJECT
 
 public:
-    Deskfile(const QString &dir_name, const QString &dir_path, QString pix, QWidget *parent=0);
+    Deskfile(Categorymenu *, const QString &dir_name, const QString &dir_path, QString pix, QWidget *parent=0);
     ~Deskfile();
     void read_settings();
     void init();
@@ -32,6 +32,8 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void paintEvent(QPaintEvent *);
     void contextMenuEvent(QContextMenuEvent *);
 
@@ -52,7 +54,8 @@ private:
     QPixmap d_file_pix;
     QSettings *style;
     QSettings *antico;
-    Categorymenu * cat_menu;
+    bool zoom;
+    Categorymenu *cat_menu;
 };
 
 #endif

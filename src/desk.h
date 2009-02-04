@@ -26,6 +26,7 @@ class Deskapp;
 class Deskdev;
 class Deskfile;
 class Deskfolder;
+class Filedialog;
 
 ////////////////////////////////////////
 
@@ -34,7 +35,7 @@ class Desk : public QFrame
     Q_OBJECT
 
 public:
-    Desk(QWidget *parent=0);
+    Desk(Antico *, QWidget *parent=0);
     ~Desk();
     void init();
     void read_settings();
@@ -72,6 +73,16 @@ private:
     QString folder_link_pix;
     QString file_link_pix;
     QString app_link_pix;
+    QTreeView *tree_view;
+    QDirModel *dir_model;
+    Antico *app;
+    Filedialog *file_dialog;
+    Categorymenu *cat_menu;
+    Deskfolder *d_folder;
+    Deskfile *d_file;
+    Deskapp *d_app;
+    Appicon *app_icon;
+    
 };
 
 

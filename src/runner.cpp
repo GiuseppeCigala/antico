@@ -75,10 +75,10 @@ void Runner::run()
             close();
         else
         {
-            Msgbox *msg = new Msgbox(this);
-            msg->setText(tr("<b>COMMAND INCORRECT</b>"));
-            msg->setInformativeText(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
-            msg->setIcon(QMessageBox::Critical);
+            Msgbox msg;
+            msg.setText(tr("<b>COMMAND INCORRECT</b>"));
+            msg.setInformativeText(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
+            msg.setIcon(QMessageBox::Critical);
         }
     }
 }

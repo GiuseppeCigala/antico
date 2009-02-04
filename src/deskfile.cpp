@@ -8,18 +8,29 @@
 
 ////////////////////////////////////////
 
-Deskfile::Deskfile(const QString &file_nm, const QString &file_pth, QString pix, QWidget *parent) : QLabel(parent)
+Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &file_pth, QString pix, QWidget *parent) : QLabel(parent)
 {
+    cat_menu = menu;
     file_name = file_nm;
     file_path = file_pth;
     d_file_pix = QPixmap(pix);
+    zoom = false;
     read_settings();
     init();
     show();
 }
 
 Deskfile::~Deskfile()
-{}
+{
+    delete cat_menu;
+    delete open_menu;
+    delete &file_name;
+    delete &file_path;
+    delete &d_file_pix;
+    delete &d_file_col;
+    delete &delete_link_pix;
+    delete &open_with_pix;
+}
 
 void Deskfile::init()
 {
@@ -28,9 +39,14 @@ void Deskfile::init()
     main_menu = new QMenu(this);
     // show the Category apps list for open the file
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
-    cat_menu = new Categorymenu(open_menu);
-    cat_menu->update_menu();
-    QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete"));
+    
+    QList <QMenu *> menu_list = cat_menu->get_menus();
+    for (int i = 0; i <  menu_list.size(); ++i)
+    {
+        open_menu->addMenu(menu_list.at(i));
+    }
+   
+    QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
     connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
 
@@ -58,7 +74,14 @@ void Deskfile::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
-    painter.drawPixmap(QRect(-16, -50, 32, 32), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
+    if (zoom)
+    {
+        painter.drawPixmap(QRect(-18, -50, 36, 36), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
+    }
+    else
+    {
+        painter.drawPixmap(QRect(-16, -50, 32, 32), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
+    }
     painter.setPen(d_file_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, file_name); // deskfile name
 }
@@ -92,6 +115,20 @@ void Deskfile::mouseReleaseEvent(QMouseEvent *event)
     antico->endGroup(); // Desktop
 }
 
+void Deskfile::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    zoom = true;
+    update();
+}
+
+void Deskfile::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    zoom = false;
+    update();
+}
+
 void Deskfile::del_file()
 {
     // remove the deskicon from desk and from antico.cfg
@@ -105,7 +142,6 @@ void Deskfile::del_file()
 
 void Deskfile::contextMenuEvent(QContextMenuEvent *event)
 {
-    cat_menu->update_menu();
     cat_menu->set_cmd_arguments(file_path + file_name); // set the file path+name as argument
     main_menu->exec(event->globalPos());
 }

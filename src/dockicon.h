@@ -53,6 +53,7 @@ private:
     QString add_to_sys_pix;
     QPixmap pix;
     QSettings *style;
+    QSettings *antico;
     bool iconize;
     int bdr_width;
 

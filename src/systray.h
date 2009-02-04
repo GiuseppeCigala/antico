@@ -40,6 +40,8 @@ protected:
 private:
     QHBoxLayout *layout;
     QHash<int, Sysicon *> sys_icons; // mapping frame id with Sysicon (key=frame_win_id value=Sysicon)
+    Sysicon *s_icon;
+    QX11EmbedContainer *emb_cont;
     // System tray properties
     Atom kde_systray_prop;
     Atom net_opcode_atom;

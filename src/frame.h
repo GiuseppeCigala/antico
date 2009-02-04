@@ -36,7 +36,6 @@ public:
     void set_frame_geometry();
     void get_wm_hints();
     void get_wm_normal_hints();
-    void withdraw();
     void unmap();
     void map();
     void raise();
@@ -81,11 +80,15 @@ public:
     {
         return(wicon);
     }
-    bool is_iconize()
+    QString win_state()
     {
-        return iconize;
+        return state;
     }
-
+    bool is_splash()
+    {
+        return splash;
+    }
+ 
 private:
     QDesktopWidget *desk;       // root window
     WId c_win;                  // client window
@@ -99,9 +102,10 @@ private:
     int frame_x, frame_y;       // frame geometry
     int client_x, client_y;     // client geometry
     int client_w, client_h;     // client geometry
-    int lateral_bdr_width;	    // parent lateral border width
+    int lateral_bdr_width;      // parent lateral border width
     int top_bdr_height;         // parent top border height
-    int bottom_bdr_height;	    // parent top border height
+    int bottom_bdr_height;      // parent top border height
+    int win_gravity;            // client gravity
     QString header_active_pix;  // frame header pixmap
     QString header_inactive_pix;// frame header pixmap
     QString minmax_pix;         // frame minmax pixmap
@@ -117,7 +121,8 @@ private:
     int diff_border_h;          // height space between parent frame (qt) and client frame
     int diff_border_w;          // width space between parent frame (qt) and client frame
     bool maximized;             // maximize window
-    bool iconize;               // iconize window
+    bool splash;                // splash window
+    QString state;              // window state (Normal, Iconic, Withdrawn)
     bool prot_delete;           // client has delete WM protocol
     bool prot_take_focus;       // client has take focus WM protocol
     QPixmap wicon;              // window icon
@@ -138,6 +143,7 @@ private:
     Border *c_bdr;              // center window border (client apps)
     QGridLayout *layout;
     QSettings *style;
+    QSettings *antico;
 
 public slots:
     void press_top_mid(QMouseEvent *);          // top mid border press
@@ -155,6 +161,9 @@ public slots:
     void destroy();                             // destroy client
     void maximize();                            // maximize client
     void iconify();                             // iconify client
+    void dragEnterEvent(QDragEnterEvent *);
+    void dragMoveEvent(QDragMoveEvent *);
+    void dropEvent(QDropEvent *);
 
 };
 #endif

@@ -8,8 +8,11 @@
 
 ////////////////////////////////////////
 
-Desk::Desk(QWidget *parent) : QFrame(parent)
+Desk::Desk(Antico *a, QWidget *parent) : QFrame(parent)
 {
+    app = a;
+    file_dialog = app->get_file_dialog();
+    cat_menu = app->get_category_menu();
     read_settings();
     set_geometry();
     set_desk_icons();
@@ -19,7 +22,26 @@ Desk::Desk(QWidget *parent) : QFrame(parent)
 }
 
 Desk::~Desk()
-{}
+{
+    delete app;
+    delete file_dialog;
+    delete cat_menu;
+    delete tree_view;
+    delete dir_model;
+    delete d_folder;
+    delete d_file;
+    delete d_app;
+    delete app_icon;
+    delete &dock_height;
+    delete &wall_pix;
+    delete &file_link_pix;
+    delete &folder_link_pix;
+    delete &app_link_pix;
+    delete &desk_folders;
+    delete &desk_files;
+    delete &desk_apps;
+    delete &desk_dev;
+}
 
 void Desk::read_settings()
 {
@@ -70,7 +92,7 @@ void Desk::set_desk_icons()
         QString path = antico->value("path").toString();
         QPoint pos = antico->value("pos").value<QPoint>();
         QRect geom = antico->value("geometry").value<QRect>();
-        Deskfolder *d_folder = new Deskfolder(name, path, geom, this);
+        Deskfolder *d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geom, this);
         desk_folders << d_folder; // save the deskfolder
         d_folder->move(pos);
 
@@ -89,7 +111,7 @@ void Desk::set_desk_icons()
         QString path = antico->value("path").toString();
         QString pix = antico->value("pix").toString();
         QPoint pos = antico->value("pos").value<QPoint>();
-        Deskfile *d_file = new Deskfile(name, path, pix, this);
+        Deskfile *d_file = new Deskfile(cat_menu, name, path, pix, this);
         desk_files << d_file; // save the deskfile
         d_file->move(pos);
 
@@ -153,84 +175,86 @@ void Desk::dragMoveEvent(QDragMoveEvent *event)
 
 void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by drag&drop from Filedialog
 {
-    event->acceptProposedAction();
-    qDebug() << "dropEvent";
-    QTreeView *tree_view = (QTreeView *)event->source();
-    QDirModel *dir_model = (QDirModel *)tree_view->model();
-    QModelIndex selection = tree_view->currentIndex();
-    
-    QString name = dir_model->fileName(tree_view->currentIndex());
-    qDebug() << "Selected name:" << name;
-    QPoint pos = event->pos(); // position of drop event
-
-    QString path;
-    QString icon;
-
-    if (dir_model->isDir(selection)) // is a directory
+    if (event->proposedAction() == Qt::LinkAction)
     {
-        path = dir_model->filePath(selection);
-        qDebug() << "Selected path:" << path;
-        QRect geometry = tree_view->geometry(); // get the dimension of TreeView
+        qDebug() << "dropEvent";
+        tree_view = (QTreeView *)event->source();
+        dir_model = (QDirModel *)tree_view->model();
+        QModelIndex selection = tree_view->currentIndex();
 
-        if (name != "")
+        QString name = dir_model->fileName(tree_view->currentIndex());
+        qDebug() << "Selected name:" << name;
+        QPoint pos = event->pos(); // position of drop event
+
+        QString path;
+        QString icon;
+
+        if (dir_model->isDir(selection)) // is a directory
         {
-            create_desk_folder(name, path, geometry, pos, this);
-        }
-    }
-    else // is a file
-    {
-        QString filepath = dir_model->filePath(selection);
-        QFileInfo pathinfo(filepath);
-        path = pathinfo.absolutePath(); // remove the file name from path
-        path.append("/"); // add slash at the end
-        qDebug() << "Selected path:" << path;
-
-        QFileInfo nameinfo(name);
-        Fileicon *prov = (Fileicon *)dir_model->iconProvider();
-        icon = prov->type(nameinfo); // get the file icon
-         
-        if (name != "")
-        {
-            if(pathinfo.isExecutable()) // is an application
-            {
-                qDebug() << "The file is an executable.";
-                create_desk_app(name, path, pos, this);
-            }
-            else // is a file
-            create_desk_file(name, path, icon, pos, this);    
-        }
-    }
-}
-
-void Desk::run_menu(QAction *act)
-{
-    if (act->text() == tr("New link to folder"))
-    {
-        Filedialog *sel_dir = new Filedialog(tr("New link to folder:"), "OK_Cancel", this);
-        sel_dir->set_filter(QDir::Dirs|QDir::NoDotAndDotDot);
-
-        if (sel_dir->exec() == QDialog::Accepted)
-        {
-            QString path = sel_dir->get_selected_path();
-            QString name = sel_dir->get_selected_name();
-            QRect geometry = sel_dir->geometry(); // get the dimension of Filedialog
-            QPoint pos = menu->pos();
+            path = dir_model->filePath(selection);
+            qDebug() << "Selected path:" << path;
+            QRect geometry = tree_view->geometry(); // get the dimension of TreeView
 
             if (name != "")
             {
                 create_desk_folder(name, path, geometry, pos, this);
             }
         }
-    }
-    if (act->text() == tr("New link to file"))
-    {
-        Filedialog *sel_dir = new Filedialog(tr("New link to file:"), "OK_Cancel", this);
-
-        if (sel_dir->exec() == QDialog::Accepted)
+        else // is a file
         {
-            QString path = sel_dir->get_selected_path();
-            QString name = sel_dir->get_selected_name();
-            QString icon = sel_dir->get_selected_icon();
+            QString filepath = dir_model->filePath(selection);
+            QFileInfo pathinfo(filepath);
+            path = pathinfo.absolutePath(); // remove the file name from path
+            path.append("/"); // add slash at the end
+            qDebug() << "Selected path:" << path;
+
+            QFileInfo nameinfo(name);
+            Fileicon *prov = (Fileicon *)dir_model->iconProvider();
+            icon = prov->type(nameinfo); // get the file icon
+
+            if (name != "")
+            {
+                if (pathinfo.isExecutable()) // is an application
+                {
+                    qDebug() << "The file is an executable.";
+                    create_desk_app(name, path, pos, this);
+                }
+                else // is a file
+                    create_desk_file(name, path, icon, pos, this);
+            }
+        }
+    }
+}
+
+void Desk::run_menu(QAction *act)
+{
+    if (act->text().compare(tr("New link to folder")) == 0)
+    {
+        file_dialog->set_type(tr("New link to folder:"), "OK_Cancel");
+  
+        if (file_dialog->exec() == QDialog::Accepted)
+        {
+            QString path = file_dialog->get_selected_path();
+            QString name = file_dialog->get_selected_name();
+            QRect geometry = file_dialog->geometry(); // get the dimension of Filedialog
+            QPoint pos = menu->pos();
+            QFileInfo pathinfo(path+name);
+
+            if (name != "" && ! pathinfo.isFile())
+            {
+                create_desk_folder(name, path, geometry, pos, this);
+            }
+        }
+    }
+    if (act->text().compare(tr("New link to file")) == 0)
+    {
+        file_dialog->set_type(tr("New link to file:"), "OK_Cancel");
+       
+        if (file_dialog->exec() == QDialog::Accepted)
+        {
+            QString path = file_dialog->get_selected_path();
+            QString name = file_dialog->get_selected_name();
+            QString icon = file_dialog->get_selected_icon();
             QPoint pos = menu->pos();
             QFileInfo pathinfo(path+name);
 
@@ -240,14 +264,14 @@ void Desk::run_menu(QAction *act)
             }
         }
     }
-    if (act->text() == tr("New link to application"))
+    if (act->text().compare(tr("New link to application")) == 0)
     {
-        Filedialog *sel_dir = new Filedialog(tr("New link to application:"), "OK_Cancel", this);
-
-        if (sel_dir->exec() == QDialog::Accepted)
+        file_dialog->set_type(tr("New link to application:"), "OK_Cancel");
+        
+        if (file_dialog->exec() == QDialog::Accepted)
         {
-            QString path = sel_dir->get_selected_path();
-            QString name = sel_dir->get_selected_name();
+            QString path = file_dialog->get_selected_path();
+            QString name = file_dialog->get_selected_name();
             QPoint pos = menu->pos();
             QFileInfo pathinfo(path+name);
 
@@ -261,7 +285,7 @@ void Desk::run_menu(QAction *act)
 
 void Desk::create_desk_folder(const QString &name, const QString &path, const QRect &geometry, const QPoint &pos, QWidget *parent)
 {
-    Deskfolder *d_folder = new Deskfolder(name, path, geometry, parent);
+    d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geometry, parent);
     desk_folders << d_folder; // save the new deskfolder
     d_folder->move(pos.x(), pos.y());
     // save new deskfolder name, path, pos and geometry
@@ -279,7 +303,7 @@ void Desk::create_desk_folder(const QString &name, const QString &path, const QR
 
 void Desk::create_desk_file(const QString &name, const QString &path, const QString &icon, const QPoint &pos, QWidget *parent)
 {
-    Deskfile *d_file = new Deskfile(name, path, icon, parent);
+    d_file = new Deskfile(cat_menu, name, path, icon, parent);
     desk_files << d_file; // save the new deskfile
     d_file->move(pos.x(), pos.y());
     // save new deskfile name, path, icon and pos
@@ -297,9 +321,9 @@ void Desk::create_desk_file(const QString &name, const QString &path, const QStr
 
 void Desk::create_desk_app(const QString &name, const QString &path, const QPoint &pos, QWidget *parent)
 {
-    Appicon *app_icon = new Appicon(parent); // get application icon
+    app_icon = new Appicon(parent); // get application icon
     QString icon = app_icon->get_app_icon(name);
-    Deskapp *d_app = new Deskapp(name, path, icon, parent); // new desktop application
+    d_app = new Deskapp(name, path, icon, parent); // new desktop application
     desk_apps << d_app; // save the new deskapp
     d_app->move(pos.x(), pos.y());
     // save new deskapp name, path, pix and pos
@@ -410,32 +434,36 @@ void Desk::mount_device(const QString &uuid, const QString &block_device, const 
     QDBusReply<QString> mnt_point = uuid_interface.call("GetProperty", "volume.mount_point");
     QString mnt_dir = mnt_point.value();
 
-    desk_dev[uuid] = new Deskdev(block_device, mnt_dir, vol_label, drive_type, this); // save the new deskdev
-
+    Deskdev *d_dev = new Deskdev(file_dialog, cat_menu, block_device, mnt_dir, vol_label, drive_type, this); // save the new deskdev
+    desk_dev.insert(uuid, d_dev);
+     
     if (mnt_cmd)
     {
-        Msgbox *info = new Msgbox(this);
-        info->setText(tr("WARNING"));
-        info->setInformativeText(tr("<b>Problem to mount the device</b>"));
-        info->setIcon(QMessageBox::Warning);
+        Msgbox info;
+        info.setText(tr("WARNING"));
+        info.setInformativeText(tr("<b>Problem to mount the device</b>"));
+        info.setIcon(QMessageBox::Warning);
+        info.exec();
     }
     else
     {
         QDBusReply<QString> mnt_point = uuid_interface.call("GetProperty", "volume.mount_point");
-        Msgbox *info = new Msgbox(this);
-        info->setText(tr("Device mounted in:"));
-        info->setInformativeText("<b>" + mnt_dir + "</b>");
-        info->setIcon(QMessageBox::Information);
+        Msgbox info;
+        info.setText(tr("Device mounted in:"));
+        info.setInformativeText("<b>" + mnt_dir + "</b>");
+        info.setIcon(QMessageBox::Information);
+        info.exec();
     }
 }
 
 void Desk::device_removed(const QString &uuid)
 {
-    if (desk_dev[uuid])
+    if (desk_dev.contains(uuid))
     {
         qDebug() << "Deskdev removed. UUID:" << uuid;
-        delete desk_dev[uuid];
-        desk_dev.remove(uuid); // delete the deskdev
+        Deskdev *d_dev = desk_dev.value(uuid);
+        d_dev->close(); // remove the Deskdev icon from Desktop
+        desk_dev.remove(uuid); // delete the Deskdev
         unmount_device(uuid);
     }
 }
@@ -453,17 +481,19 @@ void Desk::unmount_device(const QString &uuid)
 
     if (unmnt_cmd)
     {
-        Msgbox *info = new Msgbox(this);
-        info->setText(tr("WARNING"));
-        info->setInformativeText(tr("<b>Problem to unmount the device</b>"));
-        info->setIcon(QMessageBox::Warning);
+        Msgbox info;
+        info.setText(tr("WARNING"));
+        info.setInformativeText(tr("<b>Problem to unmount the device</b>"));
+        info.setIcon(QMessageBox::Warning);
+        info.exec();
     }
     else
     {
-        Msgbox *info = new Msgbox(this);
-        info->setText(tr("INFORMATION"));
-        info->setInformativeText(tr("<b>Device correctly unmounted</b>"));
-        info->setIcon(QMessageBox::Information);
+        Msgbox info;
+        info.setText(tr("INFORMATION"));
+        info.setInformativeText(tr("<b>Device correctly unmounted</b>"));
+        info.setIcon(QMessageBox::Information);
+        info.exec();
     }
 }
 

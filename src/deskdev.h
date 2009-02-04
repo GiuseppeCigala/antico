@@ -14,6 +14,8 @@
 #include "defs.h"
 #include "filedialog.h"
 
+class Filedialog;
+
 ////////////////////////////////////////
 
 class Deskdev : public QLabel
@@ -21,7 +23,7 @@ class Deskdev : public QLabel
     Q_OBJECT
 
 public:
-    Deskdev(const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent=0);
+    Deskdev(Filedialog *, Categorymenu *, const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent=0);
     ~Deskdev();
     void read_settings();
     void init();
@@ -32,13 +34,18 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void paintEvent(QPaintEvent *);
+    void contextMenuEvent(QContextMenuEvent *);
 
 signals:
 
 public slots:
  
 private:
+    QMenu *main_menu;
+    QMenu *open_menu;
     QString device_name;
     QString mount_path;
     QString device_label;
@@ -46,11 +53,14 @@ private:
     QPoint mousepos;
     QString d_disk_pix;
     QString d_cdrom_pix;
+    QString open_with_pix;
     QColor d_dev_col;
     QPixmap dev_pix;
     QSettings *style;
     QSettings *antico;
-    
+    bool zoom;
+    Filedialog *file_dialog;
+    Categorymenu *cat_menu;
 };
 
 #endif

@@ -10,8 +10,7 @@
 
 Msgbox::Msgbox(QWidget *parent) : QMessageBox(parent)
 {
-    setModal(false);
-    show();
+  
 }
 
 Msgbox::~Msgbox()

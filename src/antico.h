@@ -18,10 +18,12 @@
 #include "frame.h"
 #include "dockbar.h"
 #include "desk.h"
+#include "filedialog.h"
 
 class Dockbar;
 class Frame;
 class Desk;
+class Filedialog;
 
 ////////////////////////////////////////
 
@@ -54,15 +56,18 @@ public:
     void print_window_prop(Window);
     bool check_net_sys_tray_for(Window);
     void check_wm_transient_for(Window);
+    Filedialog * get_file_dialog();
+    Categorymenu * get_category_menu();
    
 private:
     QHash<int, QString> event_names; // event names
     QHash<int, Frame *> mapping_clients; // mapping client and frame (key=client_win_id value=frame)
     QHash<int, Frame *> mapping_frames; // mapping frame with their winId (key=frame_win_id value=frame)
+    QList<Frame *> frm_list;
     int next_frame;
-    Dockbar *dock;
-    Desk *dsk;
     QStringList frame_type;
+    QSettings *antico;
+    QSettings *style;
     // get WM protocols required by ICCCM
     Atom wm_protocols;
     Atom wm_delete_window;
@@ -80,11 +85,18 @@ private:
     Atom _net_wm_icon;
     Atom _net_supported;
     Atom _net_wm_user_time;
+    Atom _net_wm_state;
     Atom _net_wm_window_type;
     Atom _net_wm_window_type_normal;
     Atom _net_wm_window_type_desktop;
     Atom _net_wm_window_type_dialog;
     Atom _net_wm_window_type_splash;
     Atom _kde_net_wm_system_tray_window_for;
+    //////////////
+    Dockbar *dock;
+    Desk *dsk;
+    Frame *frm;
+    Categorymenu *cat_menu;
+    Filedialog *file_dialog;
 };
 #endif

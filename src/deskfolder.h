@@ -14,6 +14,8 @@
 #include "defs.h"
 #include "filedialog.h"
 
+class Filedialog;
+
 ////////////////////////////////////////
 
 class Deskfolder : public QLabel
@@ -21,17 +23,21 @@ class Deskfolder : public QLabel
     Q_OBJECT
 
 public:
-    Deskfolder(const QString &dir_name, const QString &dir_path, const QRect &geometry, QWidget *parent=0);
+    Deskfolder(Filedialog *, Categorymenu *, const QString &dir_name, const QString &dir_path, const QRect &geometry, QWidget *parent=0);
     ~Deskfolder();
     void read_settings();
     void update_style();
+    void init();
 
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void paintEvent(QPaintEvent *);
+    void contextMenuEvent(QContextMenuEvent *);
 
 signals:
 
@@ -39,18 +45,22 @@ public slots:
     void del_folder();
 
 private:
-    QMenu *menu;
+    QMenu *main_menu;
+    QMenu *open_menu;
     QString dir_name;
     QString dir_path;
     QRect geometry;
     QPoint mousepos;
     QString d_folder_pix;
     QString delete_link_pix;
+    QString open_with_pix;
     QColor d_folder_col;
     QPixmap pix;
     QSettings *style;
     QSettings *antico;
-    
+    bool zoom;
+    Filedialog *file_dialog;
+    Categorymenu *cat_menu;
 };
 
 #endif

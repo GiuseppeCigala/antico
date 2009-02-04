@@ -27,7 +27,7 @@ class Launcher : public QLabel
     Q_OBJECT
 
 public:
-    Launcher(Antico *a, QWidget *parent=0);
+    Launcher(Antico *, QWidget *parent=0);
     ~Launcher();
     void read_settings();
     void init();
@@ -38,6 +38,8 @@ public slots:
 
 protected:
     void mousePressEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
 private:
  
@@ -49,6 +51,7 @@ private:
     QAction *show_desk;
     QAction *manag;
 	QSettings *style;
+    QSettings *antico;
 	QMenu *main_menu;
 	QString launcher_pix;
  	QString app_pix;
@@ -59,7 +62,6 @@ private:
     QString refresh_pix;
     QString run_pix;
     QString manager_pix;
-    Categorymenu *cat_menu;
     Antico *app;
 };
 

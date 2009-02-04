@@ -26,17 +26,91 @@ Manager::Manager(QWidget *parent) : QDialog(parent)
 }
 
 Manager::~Manager()
-{}
+{
+    delete add_layout;
+    delete rem_layout;
+    delete run_layout;
+    delete style_layout;
+    delete rem_grid;
+    delete run_grid;
+    delete style_grid;
+    delete frame_grid;
+    delete dockbar_grid;
+    delete dockicon_grid;
+    delete deskfolder_grid;
+    delete deskfile_grid;
+    delete deskdev_grid;
+    delete sysicon_grid;
+    delete deskapp_grid;
+    delete dateclock_grid;
+    delete desktop_grid;
+    delete launcher_grid;
+    delete other_grid;
+    delete ok_quit_grid;
+    delete dir_model;
+    delete completer;
+    delete category_lay;
+    delete category_combo;
+    delete pixmapMapper;
+    delete colorMapper;
+    delete category;
+    delete app;
+    delete color_lab;
+    delete pixmap;
+    delete file_dialog;
+    delete prov;
+    delete app_ico;
+    delete &top_bdr_spinBox;
+    delete &lateral_bdr_spinBox;
+    delete &bottom_bdr_spinBox;
+    delete &header_active_pix_path;
+    delete &header_inactive_pix_path;
+    delete &minmax_pix_path;
+    delete &close_pix_path;
+    delete &dockbar_pix_path;
+    delete &dockicon_pix_path;
+    delete &sysicon_pix_path;
+    delete &desktop_pix_path;
+    delete &deskfolder_pix_path;
+    delete &deskdev_disk_pix_path;
+    delete &deskdev_cdrom_pix_path;
+    delete &launcher_pix_path;
+    delete &application_pix_path;
+    delete &quit_pix_path;
+    delete &shutdown_pix_path;
+    delete &restart_pix_path;
+    delete &refresh_pix_path;
+    delete &run_pix_path;
+    delete &show_pix_path;
+    delete &manager_pix_path;
+    delete &utility_pix_path;
+    delete &office_pix_path;
+    delete &network_pix_path;
+    delete &graphics_pix_path;
+    delete &development_pix_path;
+    delete &system_pix_path;
+    delete &audiovideo_pix_path;
+    delete &folder_link_pix_path;
+    delete &file_link_pix_path;
+    delete &app_link_pix_path;
+    delete &delete_link_pix_path;
+    delete &delete_file_pix_path;
+    delete &close_dock_pix_path;
+    delete &add_to_sys_pix_path;
+    delete &open_with_pix_path;
+    delete &cat_map;
+}
 
 void Manager::init()
 {
     tab = new QTabWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    setLayout(layout);
+    main_layout = new QVBoxLayout(this);
+    setLayout(main_layout);
     QLabel *lab = new QLabel(tr("<b>MANAGER</b>"), this);
     lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    layout->addWidget(lab);
-    layout->addWidget(tab);
+    file_dialog = new Filedialog();
+    main_layout->addWidget(lab);
+    main_layout->addWidget(tab);
     style_tab();
     add_app_tab();
     remove_app_tab();
@@ -231,24 +305,23 @@ void Manager::add_app_tab()
     QFrame *add_frm = new QFrame(this);
     add_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(add_frm, tr("Add application"));
-    QVBoxLayout *layout = new QVBoxLayout();
-    add_frm->setLayout(layout);
+    add_layout = new QVBoxLayout();
+    add_frm->setLayout(add_layout);
     app_path = new QLineEdit(this); // show selection path
-    dir_model = new QDirModel(this);
-    Fileicon *prov = new Fileicon(); // get the files icon
+    dir_model = new QDirModel();
+    prov = new Fileicon(); // get the files icon
     dir_model->setIconProvider(prov);
-    QCompleter *completer = new QCompleter(this);
+    completer = new QCompleter();
     completer->setModel(dir_model);
     app_path->setCompleter(completer);
     tree_view = new QTreeView(this);
     tree_view->setModel(dir_model);
-    layout->addWidget(app_path);
-    layout->addWidget(tree_view);
-
-    QHBoxLayout *category_lay = new QHBoxLayout(this);
-    layout->addLayout(category_lay);
+    add_layout->addWidget(app_path);
+    add_layout->addWidget(tree_view);
+    category_lay = new QHBoxLayout();
+    add_layout->addLayout(category_lay);
     QLabel *category_lab = new QLabel(tr("Select the category:"), this);
-    category_combo = new QComboBox(this);
+    category_combo = new QComboBox();
     // add Category with icon on Combobox (if new Category is added, remember to update Launcher menu)
     style->beginGroup("Launcher");
     style->beginGroup("Icon");
@@ -261,6 +334,14 @@ void Manager::add_app_tab()
     category_combo->addItem(QIcon(stl_path + style->value("audiovideo_pix").toString()), tr("AudioVideo"));
     style->endGroup(); // Icon
     style->endGroup(); // Launcher
+    // to map translated name with native categories
+    cat_map.insert(tr("Utility"), "Utility");
+    cat_map.insert(tr("Office"), "Office");
+    cat_map.insert(tr("Network"), "Network");
+    cat_map.insert(tr("Graphics"), "Graphics");
+    cat_map.insert(tr("Development"), "Development");
+    cat_map.insert(tr("System"), "System");
+    cat_map.insert(tr("AudioVideo"), "AudioVideo");
     QPushButton *add_but = new QPushButton(tr("Add"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     category_lay->addWidget(category_lab);
@@ -280,7 +361,7 @@ void Manager::remove_app_tab()
     QFrame *rem_frm = new QFrame(this);
     rem_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(rem_frm, tr("Remove application"));
-    QVBoxLayout *rem_layout = new QVBoxLayout();
+    rem_layout = new QVBoxLayout();
     rem_frm->setLayout(rem_layout);
 
     app_tree = new QTreeWidget(this);
@@ -288,7 +369,7 @@ void Manager::remove_app_tab()
     app_tree->setHeaderLabel(tr("Category/Applications"));
     update_remove_list();
 
-    QGridLayout *rem_grid = new QGridLayout();
+    rem_grid = new QGridLayout();
     QPushButton *rem_but = new QPushButton(tr("Remove"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     rem_grid->addWidget(rem_but, 0, 0);
@@ -301,43 +382,18 @@ void Manager::remove_app_tab()
     connect(quit_but, SIGNAL(pressed()), this, SLOT(quit_pressed()));
 }
 
-void Manager::update_add_tree(const QModelIndex &index)
-{
-    if (! index.isValid())
-    {
-        QModelIndex id = dir_model->index(app_path->text());
-        tree_view->scrollTo(id);
-        tree_view->setCurrentIndex(id);
-    }
-    else
-    {
-        tree_view->scrollTo(index);
-        tree_view->setCurrentIndex(index);
-    }
-}
-
-void Manager::path_completer() // on user button press in line_path
-{
-    QModelIndex index = dir_model->index(app_path->text());
-
-    if (index.isValid())
-    {
-        tree_view->setCurrentIndex(index);
-    }
-}
-
 void Manager::run_app_tab()
 {
     QFrame *run_frm = new QFrame(this);
     run_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(run_frm, tr("Run at startup"));
-    QVBoxLayout *run_layout = new QVBoxLayout();
+    run_layout = new QVBoxLayout();
     run_frm->setLayout(run_layout);
 
     run_list = new QListWidget(this);
     update_run_list();
 
-    QGridLayout *run_grid = new QGridLayout();
+    run_grid = new QGridLayout();
     QPushButton *add_but = new QPushButton(tr("Add"), this);
     QPushButton *rem_but = new QPushButton(tr("Remove"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
@@ -358,30 +414,30 @@ void Manager::style_tab()
     QFrame *style_frm = new QFrame(this);
     tab->addTab(style_frm, tr("Style"));
     style_frm->setFrameStyle(QFrame::Panel);
-    QVBoxLayout *style_layout = new QVBoxLayout();
+    style_layout = new QVBoxLayout();
     style_frm->setLayout(style_layout);
     ///////// STYLE SELECTION /////////
-    QGridLayout *style_sel_layout = new QGridLayout();
-    style_layout->addLayout(style_sel_layout);
+    style_grid = new QGridLayout();
+    style_layout->addLayout(style_grid);
     QLabel *style_sel_lb = new QLabel(tr("Actual style:"), this);
     style_sel_tx = new QLineEdit(this);
     style_sel_tx->setReadOnly(true);
     QPushButton *style_sel_but = new QPushButton("...", this);
     style_sel_but->setMaximumWidth(50);
-    style_sel_layout->addWidget(style_sel_lb, 0, 0);
-    style_sel_layout->addWidget(style_sel_tx, 0, 1);
-    style_sel_layout->addWidget(style_sel_but, 0, 2);
+    style_grid->addWidget(style_sel_lb, 0, 0);
+    style_grid->addWidget(style_sel_tx, 0, 1);
+    style_grid->addWidget(style_sel_but, 0, 2);
     connect(style_sel_but, SIGNAL(clicked()), this, SLOT(select_style()));
     /////////////////////////
     QToolBox *tool_box = new QToolBox(this);
     style_layout->addWidget(tool_box);
     ///////// FRAME /////////
     QGroupBox *frame_box = new QGroupBox(this);
-    QGridLayout *frame_layout = new QGridLayout();
-    frame_box->setLayout(frame_layout);
-    frame_layout->setColumnMinimumWidth(0, 50);
-    frame_layout->setColumnMinimumWidth(1, 75);
-    frame_layout->setColumnMinimumWidth(2, 75);
+    frame_grid = new QGridLayout();
+    frame_box->setLayout(frame_grid);
+    frame_grid->setColumnMinimumWidth(0, 50);
+    frame_grid->setColumnMinimumWidth(1, 75);
+    frame_grid->setColumnMinimumWidth(2, 75);
     QLabel *top_bdr_lb = new QLabel(tr("Top border height:"), this);
     QLabel *lateral_bdr_lb = new QLabel(tr("Lateral border width:"), this);
     QLabel *bottom_bdr_lb = new QLabel(tr("Bottom border height:"), this);
@@ -421,34 +477,34 @@ void Manager::style_tab()
     close_pix_but->setMaximumWidth(50);
     QPushButton *header_col_but = new QPushButton("...", this);
     header_col_but->setMaximumWidth(50);
-    frame_layout->addWidget(top_bdr_lb, 0, 0);
-    frame_layout->addWidget(lateral_bdr_lb, 1, 0);
-    frame_layout->addWidget(bottom_bdr_lb, 2, 0);
-    frame_layout->addWidget(header_active_pix_lb, 3, 0);
-    frame_layout->addWidget(header_inactive_pix_lb, 4, 0);
-    frame_layout->addWidget(header_color, 5, 0);
-    frame_layout->addWidget(minmax_pix_lb, 6, 0);
-    frame_layout->addWidget(close_pix_lb, 7, 0);
-    frame_layout->addWidget(top_bdr_spinBox, 0, 1);
-    frame_layout->addWidget(lateral_bdr_spinBox, 1, 1);
-    frame_layout->addWidget(bottom_bdr_spinBox, 2, 1);
-    frame_layout->addWidget(header_active_pix, 3, 1);
-    frame_layout->addWidget(header_inactive_pix, 4, 1);
-    frame_layout->addWidget(header_col_lab, 5, 1);
-    frame_layout->addWidget(minmax_pix, 6, 1);
-    frame_layout->addWidget(close_pix, 7, 1);
-    frame_layout->addWidget(header_active_pix_but, 3, 2);
-    frame_layout->addWidget(header_inactive_pix_but, 4, 2);
-    frame_layout->addWidget(header_col_but, 5, 2);
-    frame_layout->addWidget(minmax_pix_but, 6, 2);
-    frame_layout->addWidget(close_pix_but, 7, 2);
+    frame_grid->addWidget(top_bdr_lb, 0, 0);
+    frame_grid->addWidget(lateral_bdr_lb, 1, 0);
+    frame_grid->addWidget(bottom_bdr_lb, 2, 0);
+    frame_grid->addWidget(header_active_pix_lb, 3, 0);
+    frame_grid->addWidget(header_inactive_pix_lb, 4, 0);
+    frame_grid->addWidget(header_color, 5, 0);
+    frame_grid->addWidget(minmax_pix_lb, 6, 0);
+    frame_grid->addWidget(close_pix_lb, 7, 0);
+    frame_grid->addWidget(top_bdr_spinBox, 0, 1);
+    frame_grid->addWidget(lateral_bdr_spinBox, 1, 1);
+    frame_grid->addWidget(bottom_bdr_spinBox, 2, 1);
+    frame_grid->addWidget(header_active_pix, 3, 1);
+    frame_grid->addWidget(header_inactive_pix, 4, 1);
+    frame_grid->addWidget(header_col_lab, 5, 1);
+    frame_grid->addWidget(minmax_pix, 6, 1);
+    frame_grid->addWidget(close_pix, 7, 1);
+    frame_grid->addWidget(header_active_pix_but, 3, 2);
+    frame_grid->addWidget(header_inactive_pix_but, 4, 2);
+    frame_grid->addWidget(header_col_but, 5, 2);
+    frame_grid->addWidget(minmax_pix_but, 6, 2);
+    frame_grid->addWidget(close_pix_but, 7, 2);
     ///////// DOCKBAR /////////
     QGroupBox *dockbar_box = new QGroupBox(this);
-    QGridLayout *dockbar_layout = new QGridLayout();
-    dockbar_box->setLayout(dockbar_layout);
-    dockbar_layout->setColumnMinimumWidth(0, 50);
-    dockbar_layout->setColumnMinimumWidth(1, 75);
-    dockbar_layout->setColumnMinimumWidth(2, 75);
+    dockbar_grid = new QGridLayout();
+    dockbar_box->setLayout(dockbar_grid);
+    dockbar_grid->setColumnMinimumWidth(0, 50);
+    dockbar_grid->setColumnMinimumWidth(1, 75);
+    dockbar_grid->setColumnMinimumWidth(2, 75);
     QLabel *dockbar_height_lb = new QLabel(tr("Height:"), this);
     dockbar_height_spinBox = new QSpinBox(this);
     dockbar_height_spinBox->setMaximumWidth(50);
@@ -458,18 +514,18 @@ void Manager::style_tab()
     dockbar_pix->setScaledContents(true);
     QPushButton *dockbar_pix_but = new QPushButton("...", this);
     dockbar_pix_but->setMaximumWidth(50);
-    dockbar_layout->addWidget(dockbar_height_lb, 0, 0);
-    dockbar_layout->addWidget(dockbar_height_spinBox, 0, 1);
-    dockbar_layout->addWidget(dockbar_pix_lb, 1, 0);
-    dockbar_layout->addWidget(dockbar_pix, 1, 1);
-    dockbar_layout->addWidget(dockbar_pix_but, 1, 2);
+    dockbar_grid->addWidget(dockbar_height_lb, 0, 0);
+    dockbar_grid->addWidget(dockbar_height_spinBox, 0, 1);
+    dockbar_grid->addWidget(dockbar_pix_lb, 1, 0);
+    dockbar_grid->addWidget(dockbar_pix, 1, 1);
+    dockbar_grid->addWidget(dockbar_pix_but, 1, 2);
     ///////// DOCKICON /////////
     QGroupBox *dockicon_box = new QGroupBox(this);
-    QGridLayout *dockicon_layout = new QGridLayout();
-    dockicon_box->setLayout(dockicon_layout);
-    dockicon_layout->setColumnMinimumWidth(0, 50);
-    dockicon_layout->setColumnMinimumWidth(1, 75);
-    dockicon_layout->setColumnMinimumWidth(2, 75);
+    dockicon_grid = new QGridLayout();
+    dockicon_box->setLayout(dockicon_grid);
+    dockicon_grid->setColumnMinimumWidth(0, 50);
+    dockicon_grid->setColumnMinimumWidth(1, 75);
+    dockicon_grid->setColumnMinimumWidth(2, 75);
     QLabel *dockicon_pix_lb = new QLabel(tr("Pixmap:"), this);
     dockicon_pix = new QLabel(this);
     dockicon_pix->setMaximumSize(32, 32);
@@ -478,23 +534,23 @@ void Manager::style_tab()
     dockicon_col_lab = new QLabel(this);
     dockicon_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     dockicon_col_lab->setMaximumWidth(32);
-    QPushButton *dockicon_pix_but = new QPushButton("...");
+    QPushButton *dockicon_pix_but = new QPushButton("...", this);
     dockicon_pix_but->setMaximumWidth(50);
-    QPushButton *dockicon_col_but = new QPushButton("...");
+    QPushButton *dockicon_col_but = new QPushButton("...", this);
     dockicon_col_but->setMaximumWidth(50);
-    dockicon_layout->addWidget(dockicon_pix_lb, 0, 0);
-    dockicon_layout->addWidget(dockicon_pix, 0, 1);
-    dockicon_layout->addWidget(dockicon_pix_but, 0, 2);
-    dockicon_layout->addWidget(dockicon_color, 1, 0);
-    dockicon_layout->addWidget(dockicon_col_lab, 1, 1);
-    dockicon_layout->addWidget(dockicon_col_but, 1, 2);
+    dockicon_grid->addWidget(dockicon_pix_lb, 0, 0);
+    dockicon_grid->addWidget(dockicon_pix, 0, 1);
+    dockicon_grid->addWidget(dockicon_pix_but, 0, 2);
+    dockicon_grid->addWidget(dockicon_color, 1, 0);
+    dockicon_grid->addWidget(dockicon_col_lab, 1, 1);
+    dockicon_grid->addWidget(dockicon_col_but, 1, 2);
     ///////// DESKFOLDER /////////
     QGroupBox *deskfolder_box = new QGroupBox(this);
-    QGridLayout *deskfolder_layout = new QGridLayout();
-    deskfolder_box->setLayout(deskfolder_layout);
-    deskfolder_layout->setColumnMinimumWidth(0, 50);
-    deskfolder_layout->setColumnMinimumWidth(1, 75);
-    deskfolder_layout->setColumnMinimumWidth(2, 75);
+    deskfolder_grid = new QGridLayout();
+    deskfolder_box->setLayout(deskfolder_grid);
+    deskfolder_grid->setColumnMinimumWidth(0, 50);
+    deskfolder_grid->setColumnMinimumWidth(1, 75);
+    deskfolder_grid->setColumnMinimumWidth(2, 75);
     QLabel *deskfolder_pix_lb = new QLabel(tr("Pixmap:"), this);
     deskfolder_pix = new QLabel(this);
     deskfolder_pix->setMaximumSize(32, 32);
@@ -507,35 +563,35 @@ void Manager::style_tab()
     deskfolder_pix_but->setMaximumWidth(50);
     QPushButton *deskfolder_col_but = new QPushButton("...", this);
     deskfolder_col_but->setMaximumWidth(50);
-    deskfolder_layout->addWidget(deskfolder_pix_lb, 0, 0);
-    deskfolder_layout->addWidget(deskfolder_pix, 0, 1);
-    deskfolder_layout->addWidget(deskfolder_pix_but, 0, 2);
-    deskfolder_layout->addWidget(deskfolder_color, 1, 0);
-    deskfolder_layout->addWidget(deskfolder_col_lab, 1, 1);
-    deskfolder_layout->addWidget(deskfolder_col_but, 1, 2);
+    deskfolder_grid->addWidget(deskfolder_pix_lb, 0, 0);
+    deskfolder_grid->addWidget(deskfolder_pix, 0, 1);
+    deskfolder_grid->addWidget(deskfolder_pix_but, 0, 2);
+    deskfolder_grid->addWidget(deskfolder_color, 1, 0);
+    deskfolder_grid->addWidget(deskfolder_col_lab, 1, 1);
+    deskfolder_grid->addWidget(deskfolder_col_but, 1, 2);
     ///////// DESKFILE /////////
     QGroupBox *deskfile_box = new QGroupBox(this);
-    QGridLayout *deskfile_layout = new QGridLayout();
-    deskfile_box->setLayout(deskfile_layout);
-    deskfile_layout->setColumnMinimumWidth(0, 50);
-    deskfile_layout->setColumnMinimumWidth(1, 75);
-    deskfile_layout->setColumnMinimumWidth(2, 75);
+    deskfile_grid = new QGridLayout();
+    deskfile_box->setLayout(deskfile_grid);
+    deskfile_grid->setColumnMinimumWidth(0, 50);
+    deskfile_grid->setColumnMinimumWidth(1, 75);
+    deskfile_grid->setColumnMinimumWidth(2, 75);
     QLabel *deskfile_color = new QLabel(tr("Name color:"), this);
     deskfile_col_lab = new QLabel(this);
     deskfile_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     deskfile_col_lab->setMaximumWidth(32);
     QPushButton *deskfile_col_but = new QPushButton("...", this);
     deskfile_col_but->setMaximumWidth(50);
-    deskfile_layout->addWidget(deskfile_color, 0, 0);
-    deskfile_layout->addWidget(deskfile_col_lab, 0, 1);
-    deskfile_layout->addWidget(deskfile_col_but, 0, 2);
+    deskfile_grid->addWidget(deskfile_color, 0, 0);
+    deskfile_grid->addWidget(deskfile_col_lab, 0, 1);
+    deskfile_grid->addWidget(deskfile_col_but, 0, 2);
     ///////// DESKDEV /////////
     QGroupBox *deskdev_box = new QGroupBox(this);
-    QGridLayout *deskdev_layout = new QGridLayout();
-    deskdev_box->setLayout(deskdev_layout);
-    deskdev_layout->setColumnMinimumWidth(0, 50);
-    deskdev_layout->setColumnMinimumWidth(1, 75);
-    deskdev_layout->setColumnMinimumWidth(2, 75);
+    deskdev_grid = new QGridLayout();
+    deskdev_box->setLayout(deskdev_grid);
+    deskdev_grid->setColumnMinimumWidth(0, 50);
+    deskdev_grid->setColumnMinimumWidth(1, 75);
+    deskdev_grid->setColumnMinimumWidth(2, 75);
     QLabel *deskdev_disk_pix_lb = new QLabel(tr("Disk pixmap:"), this);
     deskdev_disk_pix = new QLabel(this);
     deskdev_disk_pix->setMaximumSize(32, 32);
@@ -554,54 +610,54 @@ void Manager::style_tab()
     deskdev_cdrom_pix_but->setMaximumWidth(50);
     QPushButton *deskdev_col_but = new QPushButton("...", this);
     deskdev_col_but->setMaximumWidth(50);
-    deskdev_layout->addWidget(deskdev_disk_pix_lb, 0, 0);
-    deskdev_layout->addWidget(deskdev_disk_pix, 0, 1);
-    deskdev_layout->addWidget(deskdev_disk_pix_but, 0, 2);
-    deskdev_layout->addWidget(deskdev_cdrom_pix_lb, 1, 0);
-    deskdev_layout->addWidget(deskdev_cdrom_pix, 1, 1);
-    deskdev_layout->addWidget(deskdev_cdrom_pix_but, 1, 2);
-    deskdev_layout->addWidget(deskdev_color, 2, 0);
-    deskdev_layout->addWidget(deskdev_col_lab, 2, 1);
-    deskdev_layout->addWidget(deskdev_col_but, 2, 2);
+    deskdev_grid->addWidget(deskdev_disk_pix_lb, 0, 0);
+    deskdev_grid->addWidget(deskdev_disk_pix, 0, 1);
+    deskdev_grid->addWidget(deskdev_disk_pix_but, 0, 2);
+    deskdev_grid->addWidget(deskdev_cdrom_pix_lb, 1, 0);
+    deskdev_grid->addWidget(deskdev_cdrom_pix, 1, 1);
+    deskdev_grid->addWidget(deskdev_cdrom_pix_but, 1, 2);
+    deskdev_grid->addWidget(deskdev_color, 2, 0);
+    deskdev_grid->addWidget(deskdev_col_lab, 2, 1);
+    deskdev_grid->addWidget(deskdev_col_but, 2, 2);
     ///////// SYSICON /////////
     QGroupBox *sysicon_box = new QGroupBox(this);
-    QGridLayout *sysicon_layout = new QGridLayout();
-    sysicon_box->setLayout(sysicon_layout);
-    sysicon_layout->setColumnMinimumWidth(0, 50);
-    sysicon_layout->setColumnMinimumWidth(1, 75);
-    sysicon_layout->setColumnMinimumWidth(2, 75);
+    sysicon_grid = new QGridLayout();
+    sysicon_box->setLayout(sysicon_grid);
+    sysicon_grid->setColumnMinimumWidth(0, 50);
+    sysicon_grid->setColumnMinimumWidth(1, 75);
+    sysicon_grid->setColumnMinimumWidth(2, 75);
     QLabel *sysicon_pix_lb = new QLabel(tr("Pixmap:"), this);
     sysicon_pix = new QLabel(this);
     sysicon_pix->setMaximumSize(32, 32);
     sysicon_pix->setScaledContents(true);
     QPushButton *sysicon_pix_but = new QPushButton("...", this);
     sysicon_pix_but->setMaximumWidth(50);
-    sysicon_layout->addWidget(sysicon_pix_lb, 0, 0);
-    sysicon_layout->addWidget(sysicon_pix, 0, 1);
-    sysicon_layout->addWidget(sysicon_pix_but, 0, 2);
+    sysicon_grid->addWidget(sysicon_pix_lb, 0, 0);
+    sysicon_grid->addWidget(sysicon_pix, 0, 1);
+    sysicon_grid->addWidget(sysicon_pix_but, 0, 2);
     ///////// DESKAPP /////////
     QGroupBox *deskapp_box = new QGroupBox(this);
-    QGridLayout *deskapp_layout = new QGridLayout();
-    deskapp_box->setLayout(deskapp_layout);
-    deskapp_layout->setColumnMinimumWidth(0, 50);
-    deskapp_layout->setColumnMinimumWidth(1, 75);
-    deskapp_layout->setColumnMinimumWidth(2, 75);
+    deskapp_grid = new QGridLayout();
+    deskapp_box->setLayout(deskapp_grid);
+    deskapp_grid->setColumnMinimumWidth(0, 50);
+    deskapp_grid->setColumnMinimumWidth(1, 75);
+    deskapp_grid->setColumnMinimumWidth(2, 75);
     QLabel *deskapp_color = new QLabel(tr("Name color:"), this);
     deskapp_col_lab = new QLabel(this);
     deskapp_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     deskapp_col_lab->setMaximumWidth(32);
     QPushButton *deskapp_col_but = new QPushButton("...", this);
     deskapp_col_but->setMaximumWidth(50);
-    deskapp_layout->addWidget(deskapp_color, 0, 0);
-    deskapp_layout->addWidget(deskapp_col_lab, 0, 1);
-    deskapp_layout->addWidget(deskapp_col_but, 0, 2);
+    deskapp_grid->addWidget(deskapp_color, 0, 0);
+    deskapp_grid->addWidget(deskapp_col_lab, 0, 1);
+    deskapp_grid->addWidget(deskapp_col_but, 0, 2);
     ///////// DATECLOCK /////////
     QGroupBox *dateclock_box = new QGroupBox(this);
-    QGridLayout *dateclock_layout = new QGridLayout();
-    dateclock_box->setLayout(dateclock_layout);
-    dateclock_layout->setColumnMinimumWidth(0, 50);
-    dateclock_layout->setColumnMinimumWidth(1, 75);
-    dateclock_layout->setColumnMinimumWidth(2, 75);
+    dateclock_grid = new QGridLayout();
+    dateclock_box->setLayout(dateclock_grid);
+    dateclock_grid->setColumnMinimumWidth(0, 50);
+    dateclock_grid->setColumnMinimumWidth(1, 75);
+    dateclock_grid->setColumnMinimumWidth(2, 75);
     QLabel *date_color = new QLabel(tr("Date color:"), this);
     QLabel *clock_color = new QLabel(tr("Clock color:"), this);
     date_col_lab = new QLabel(this);
@@ -614,32 +670,32 @@ void Manager::style_tab()
     QPushButton *clock_col_but = new QPushButton("...", this);
     date_col_but->setMaximumWidth(50);
     clock_col_but->setMaximumWidth(50);
-    dateclock_layout->addWidget(date_color, 1, 0);
-    dateclock_layout->addWidget(date_col_lab, 1, 1);
-    dateclock_layout->addWidget(date_col_but, 1, 2);
-    dateclock_layout->addWidget(clock_color, 0, 0);
-    dateclock_layout->addWidget(clock_col_lab, 0, 1);
-    dateclock_layout->addWidget(clock_col_but, 0, 2);
+    dateclock_grid->addWidget(date_color, 1, 0);
+    dateclock_grid->addWidget(date_col_lab, 1, 1);
+    dateclock_grid->addWidget(date_col_but, 1, 2);
+    dateclock_grid->addWidget(clock_color, 0, 0);
+    dateclock_grid->addWidget(clock_col_lab, 0, 1);
+    dateclock_grid->addWidget(clock_col_but, 0, 2);
     ///////// DESKTOP /////////
     QGroupBox *desktop_box = new QGroupBox(this);
-    QGridLayout *desktop_layout = new QGridLayout();
-    desktop_box->setLayout(desktop_layout);
+    desktop_grid = new QGridLayout();
+    desktop_box->setLayout(desktop_grid);
     QLabel *desktop_pix_lb = new QLabel(tr("Wallpaper:"), this);
     desktop_pix = new QLabel(this);
     desktop_pix->setMinimumSize(100, 100);
     desktop_pix->setScaledContents(true);
     QPushButton *desktop_pix_but = new QPushButton("...", this);
     desktop_pix_but->setMaximumWidth(50);
-    desktop_layout->addWidget(desktop_pix_lb, 0, 0);
-    desktop_layout->addWidget(desktop_pix, 0, 1);
-    desktop_layout->addWidget(desktop_pix_but, 0, 2);
+    desktop_grid->addWidget(desktop_pix_lb, 0, 0);
+    desktop_grid->addWidget(desktop_pix, 0, 1);
+    desktop_grid->addWidget(desktop_pix_but, 0, 2);
     ///////// LAUNCHER /////////
     QGroupBox *launcher_box = new QGroupBox(this);
-    QGridLayout *launcher_layout = new QGridLayout();
-    launcher_box->setLayout(launcher_layout);
-    launcher_layout->setColumnMinimumWidth(0, 50);
-    launcher_layout->setColumnMinimumWidth(1, 75);
-    launcher_layout->setColumnMinimumWidth(2, 75);
+    launcher_grid = new QGridLayout();
+    launcher_box->setLayout(launcher_grid);
+    launcher_grid->setColumnMinimumWidth(0, 50);
+    launcher_grid->setColumnMinimumWidth(1, 75);
+    launcher_grid->setColumnMinimumWidth(2, 75);
     QLabel *launcher_pix_lb = new QLabel(tr("Launcher pixmap:"), this);
     QLabel *application_pix_lb = new QLabel(tr("Application pixmap:"), this);
     QLabel *quit_pix_lb = new QLabel(tr("Quit pixmap:"), this);
@@ -736,61 +792,61 @@ void Manager::style_tab()
     development_pix_but->setMaximumWidth(50);
     system_pix_but->setMaximumWidth(50);
     audiovideo_pix_but->setMaximumWidth(50);
-    launcher_layout->addWidget(launcher_pix_lb, 0, 0);
-    launcher_layout->addWidget(application_pix_lb, 1, 0);
-    launcher_layout->addWidget(quit_pix_lb, 2, 0);
-    launcher_layout->addWidget(shutdown_pix_lb, 3, 0);
-    launcher_layout->addWidget(restart_pix_lb, 4, 0);
-    launcher_layout->addWidget(refresh_pix_lb, 5, 0);
-    launcher_layout->addWidget(run_pix_lb, 6, 0);
-    launcher_layout->addWidget(show_pix_lb, 7, 0);
-    launcher_layout->addWidget(manager_pix_lb, 8, 0);
-    launcher_layout->addWidget(utility_pix_lb, 9, 0);
-    launcher_layout->addWidget(office_pix_lb, 10, 0);
-    launcher_layout->addWidget(network_pix_lb, 11, 0);
-    launcher_layout->addWidget(graphics_pix_lb, 12, 0);
-    launcher_layout->addWidget(development_pix_lb, 13, 0);
-    launcher_layout->addWidget(system_pix_lb, 14, 0);
-    launcher_layout->addWidget(audiovideo_pix_lb, 15, 0);
-    launcher_layout->addWidget(launcher_pix, 0, 1);
-    launcher_layout->addWidget(application_pix, 1, 1);
-    launcher_layout->addWidget(quit_pix, 2, 1);
-    launcher_layout->addWidget(shutdown_pix, 3, 1);
-    launcher_layout->addWidget(restart_pix, 4, 1);
-    launcher_layout->addWidget(refresh_pix, 5, 1);
-    launcher_layout->addWidget(run_pix, 6, 1);
-    launcher_layout->addWidget(show_pix, 7, 1);
-    launcher_layout->addWidget(manager_pix, 8, 1);
-    launcher_layout->addWidget(utility_pix, 9, 1);
-    launcher_layout->addWidget(office_pix, 10, 1);
-    launcher_layout->addWidget(network_pix, 11, 1);
-    launcher_layout->addWidget(graphics_pix, 12, 1);
-    launcher_layout->addWidget(development_pix, 13, 1);
-    launcher_layout->addWidget(system_pix, 14, 1);
-    launcher_layout->addWidget(audiovideo_pix, 15, 1);
-    launcher_layout->addWidget(launcher_pix_but, 0, 2);
-    launcher_layout->addWidget(application_pix_but, 1, 2);
-    launcher_layout->addWidget(quit_pix_but, 2, 2);
-    launcher_layout->addWidget(shutdown_pix_but, 3, 2);
-    launcher_layout->addWidget(restart_pix_but, 4, 2);
-    launcher_layout->addWidget(refresh_pix_but, 5, 2);
-    launcher_layout->addWidget(run_pix_but, 6, 2);
-    launcher_layout->addWidget(show_pix_but, 7, 2);
-    launcher_layout->addWidget(manager_pix_but, 8, 2);
-    launcher_layout->addWidget(utility_pix_but, 9, 2);
-    launcher_layout->addWidget(office_pix_but, 10, 2);
-    launcher_layout->addWidget(network_pix_but, 11, 2);
-    launcher_layout->addWidget(graphics_pix_but, 12, 2);
-    launcher_layout->addWidget(development_pix_but, 13, 2);
-    launcher_layout->addWidget(system_pix_but, 14, 2);
-    launcher_layout->addWidget(audiovideo_pix_but, 15, 2);
+    launcher_grid->addWidget(launcher_pix_lb, 0, 0);
+    launcher_grid->addWidget(application_pix_lb, 1, 0);
+    launcher_grid->addWidget(quit_pix_lb, 2, 0);
+    launcher_grid->addWidget(shutdown_pix_lb, 3, 0);
+    launcher_grid->addWidget(restart_pix_lb, 4, 0);
+    launcher_grid->addWidget(refresh_pix_lb, 5, 0);
+    launcher_grid->addWidget(run_pix_lb, 6, 0);
+    launcher_grid->addWidget(show_pix_lb, 7, 0);
+    launcher_grid->addWidget(manager_pix_lb, 8, 0);
+    launcher_grid->addWidget(utility_pix_lb, 9, 0);
+    launcher_grid->addWidget(office_pix_lb, 10, 0);
+    launcher_grid->addWidget(network_pix_lb, 11, 0);
+    launcher_grid->addWidget(graphics_pix_lb, 12, 0);
+    launcher_grid->addWidget(development_pix_lb, 13, 0);
+    launcher_grid->addWidget(system_pix_lb, 14, 0);
+    launcher_grid->addWidget(audiovideo_pix_lb, 15, 0);
+    launcher_grid->addWidget(launcher_pix, 0, 1);
+    launcher_grid->addWidget(application_pix, 1, 1);
+    launcher_grid->addWidget(quit_pix, 2, 1);
+    launcher_grid->addWidget(shutdown_pix, 3, 1);
+    launcher_grid->addWidget(restart_pix, 4, 1);
+    launcher_grid->addWidget(refresh_pix, 5, 1);
+    launcher_grid->addWidget(run_pix, 6, 1);
+    launcher_grid->addWidget(show_pix, 7, 1);
+    launcher_grid->addWidget(manager_pix, 8, 1);
+    launcher_grid->addWidget(utility_pix, 9, 1);
+    launcher_grid->addWidget(office_pix, 10, 1);
+    launcher_grid->addWidget(network_pix, 11, 1);
+    launcher_grid->addWidget(graphics_pix, 12, 1);
+    launcher_grid->addWidget(development_pix, 13, 1);
+    launcher_grid->addWidget(system_pix, 14, 1);
+    launcher_grid->addWidget(audiovideo_pix, 15, 1);
+    launcher_grid->addWidget(launcher_pix_but, 0, 2);
+    launcher_grid->addWidget(application_pix_but, 1, 2);
+    launcher_grid->addWidget(quit_pix_but, 2, 2);
+    launcher_grid->addWidget(shutdown_pix_but, 3, 2);
+    launcher_grid->addWidget(restart_pix_but, 4, 2);
+    launcher_grid->addWidget(refresh_pix_but, 5, 2);
+    launcher_grid->addWidget(run_pix_but, 6, 2);
+    launcher_grid->addWidget(show_pix_but, 7, 2);
+    launcher_grid->addWidget(manager_pix_but, 8, 2);
+    launcher_grid->addWidget(utility_pix_but, 9, 2);
+    launcher_grid->addWidget(office_pix_but, 10, 2);
+    launcher_grid->addWidget(network_pix_but, 11, 2);
+    launcher_grid->addWidget(graphics_pix_but, 12, 2);
+    launcher_grid->addWidget(development_pix_but, 13, 2);
+    launcher_grid->addWidget(system_pix_but, 14, 2);
+    launcher_grid->addWidget(audiovideo_pix_but, 15, 2);
     ///////// OTHER /////////
     QGroupBox *other_box = new QGroupBox(this);
-    QGridLayout *other_layout = new QGridLayout();
-    other_box->setLayout(other_layout);
-    other_layout->setColumnMinimumWidth(0, 50);
-    other_layout->setColumnMinimumWidth(1, 75);
-    other_layout->setColumnMinimumWidth(2, 75);
+    other_grid = new QGridLayout();
+    other_box->setLayout(other_grid);
+    other_grid->setColumnMinimumWidth(0, 50);
+    other_grid->setColumnMinimumWidth(1, 75);
+    other_grid->setColumnMinimumWidth(2, 75);
     QLabel *folder_link_pix_lb = new QLabel(tr("Folder link pixmap:"), this);
     QLabel *file_link_pix_lb = new QLabel(tr("File link pixmap:"), this);
     QLabel *app_link_pix_lb = new QLabel(tr("Application link pixmap:"), this);
@@ -839,41 +895,41 @@ void Manager::style_tab()
     close_dock_pix_but->setMaximumWidth(50);
     add_to_sys_pix_but->setMaximumWidth(50);
     open_with_pix_but->setMaximumWidth(50);
-    other_layout->addWidget(folder_link_pix_lb, 0, 0);
-    other_layout->addWidget(file_link_pix_lb, 1, 0);
-    other_layout->addWidget(app_link_pix_lb, 2, 0);
-    other_layout->addWidget(delete_link_pix_lb, 3, 0);
-    other_layout->addWidget(delete_file_pix_lb, 4, 0);
-    other_layout->addWidget(close_dock_pix_lb, 5, 0);
-    other_layout->addWidget(add_to_sys_pix_lb, 6, 0);
-    other_layout->addWidget(open_with_pix_lb, 7, 0);
-    other_layout->addWidget(folder_link_pix, 0, 1);
-    other_layout->addWidget(file_link_pix, 1, 1);
-    other_layout->addWidget(app_link_pix, 2, 1);
-    other_layout->addWidget(delete_link_pix, 3, 1);
-    other_layout->addWidget(delete_file_pix, 4, 1);
-    other_layout->addWidget(close_dock_pix, 5, 1);
-    other_layout->addWidget(add_to_sys_pix, 6, 1);
-    other_layout->addWidget(open_with_pix, 7, 1);
-    other_layout->addWidget(folder_link_pix_but, 0, 2);
-    other_layout->addWidget(file_link_pix_but, 1, 2);
-    other_layout->addWidget(app_link_pix_but, 2, 2);
-    other_layout->addWidget(delete_link_pix_but, 3, 2);
-    other_layout->addWidget(delete_file_pix_but, 4, 2);
-    other_layout->addWidget(close_dock_pix_but, 5, 2);
-    other_layout->addWidget(add_to_sys_pix_but, 6, 2);
-    other_layout->addWidget(open_with_pix_but, 7, 2);
+    other_grid->addWidget(folder_link_pix_lb, 0, 0);
+    other_grid->addWidget(file_link_pix_lb, 1, 0);
+    other_grid->addWidget(app_link_pix_lb, 2, 0);
+    other_grid->addWidget(delete_link_pix_lb, 3, 0);
+    other_grid->addWidget(delete_file_pix_lb, 4, 0);
+    other_grid->addWidget(close_dock_pix_lb, 5, 0);
+    other_grid->addWidget(add_to_sys_pix_lb, 6, 0);
+    other_grid->addWidget(open_with_pix_lb, 7, 0);
+    other_grid->addWidget(folder_link_pix, 0, 1);
+    other_grid->addWidget(file_link_pix, 1, 1);
+    other_grid->addWidget(app_link_pix, 2, 1);
+    other_grid->addWidget(delete_link_pix, 3, 1);
+    other_grid->addWidget(delete_file_pix, 4, 1);
+    other_grid->addWidget(close_dock_pix, 5, 1);
+    other_grid->addWidget(add_to_sys_pix, 6, 1);
+    other_grid->addWidget(open_with_pix, 7, 1);
+    other_grid->addWidget(folder_link_pix_but, 0, 2);
+    other_grid->addWidget(file_link_pix_but, 1, 2);
+    other_grid->addWidget(app_link_pix_but, 2, 2);
+    other_grid->addWidget(delete_link_pix_but, 3, 2);
+    other_grid->addWidget(delete_file_pix_but, 4, 2);
+    other_grid->addWidget(close_dock_pix_but, 5, 2);
+    other_grid->addWidget(add_to_sys_pix_but, 6, 2);
+    other_grid->addWidget(open_with_pix_but, 7, 2);
     ///////// OK-QUIT /////////
     QGroupBox *ok_quit_box = new QGroupBox(this);
     style_layout->addWidget(ok_quit_box);
-    QGridLayout *ok_quit_layout = new QGridLayout();
-    ok_quit_box->setLayout(ok_quit_layout);
+    ok_quit_grid = new QGridLayout();
+    ok_quit_box->setLayout(ok_quit_grid);
     QPushButton *ok_but = new QPushButton(tr("OK"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
     ok_but->setMaximumWidth(75);
     quit_but->setMaximumWidth(75);
-    ok_quit_layout->addWidget(ok_but, 0, 0);
-    ok_quit_layout->addWidget(quit_but, 0, 1);
+    ok_quit_grid->addWidget(ok_but, 0, 0);
+    ok_quit_grid->addWidget(quit_but, 0, 1);
     /////////////////////////////////////////////////////////
     tool_box->addItem(frame_box, tr("Frame settings"));
     tool_box->addItem(dockbar_box, tr("Dockbar settings"));
@@ -893,7 +949,7 @@ void Manager::style_tab()
     connect(quit_but, SIGNAL(clicked()), this, SLOT(quit_pressed()));
 
     // mapper for pixmap selection (dockbar - dockicon - sysicon - deskfolder - deskdev - desktop - frame header active/inactive - frame button - all laucher button - other)
-    QSignalMapper *pixmapMapper = new QSignalMapper(this);
+    pixmapMapper = new QSignalMapper();
     pixmapMapper->setMapping(dockbar_pix_but, dockbar_pix);
     pixmapMapper->setMapping(desktop_pix_but, desktop_pix);
     pixmapMapper->setMapping(dockicon_pix_but, dockicon_pix);
@@ -973,7 +1029,7 @@ void Manager::style_tab()
     connect(pixmapMapper, SIGNAL(mapped(QWidget *)), this, SLOT(select_pixmap(QWidget *)));
 
     // mapper for color selection (frame header text - dockicon text - deskfile name - deskfilder name - deskapp name - deskdev name - date/clock)
-    QSignalMapper *colorMapper = new QSignalMapper(this);
+    colorMapper = new QSignalMapper();
     colorMapper->setMapping(header_col_but, header_col_lab);
     colorMapper->setMapping(dockicon_col_but, dockicon_col_lab);
     colorMapper->setMapping(deskfolder_col_but, deskfolder_col_lab);
@@ -993,20 +1049,47 @@ void Manager::style_tab()
     connect(colorMapper, SIGNAL(mapped(QWidget *)), this, SLOT(select_color(QWidget *)));
 }
 
+void Manager::update_add_tree(const QModelIndex &index)
+{
+    if (! index.isValid())
+    {
+        QModelIndex id = dir_model->index(app_path->text());
+        tree_view->scrollTo(id);
+        tree_view->setCurrentIndex(id);
+    }
+    else
+    {
+        tree_view->scrollTo(index);
+        tree_view->setCurrentIndex(index);
+    }
+}
+
+void Manager::path_completer() // on user button press in line_path
+{
+    QModelIndex index = dir_model->index(app_path->text());
+
+    if (index.isValid())
+    {
+        tree_view->setCurrentIndex(index);
+    }
+}
+
 void Manager::select_style()
 {
-    Filedialog *sel_style = new Filedialog(tr("Select the style"), "OK_Cancel", this);
+    file_dialog->clear();
+    file_dialog->set_type(tr("Select the style"), "OK_Cancel");
+    file_dialog->raise();
     QStringList filters;
     filters << "*.stl";
-    sel_style->set_name_filters(filters); // show only style file (.stl)
-    sel_style->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
-    sel_style->set_path(QCoreApplication::applicationDirPath() + "/theme/");
-    sel_style->set_read_only(true);
+    file_dialog->set_name_filters(filters); // show only style file (.stl)
+    file_dialog->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
+    file_dialog->set_path(QCoreApplication::applicationDirPath() + "/theme/");
+    file_dialog->set_read_only(true);
 
-    if (sel_style->exec() == QDialog::Accepted)
+    if (file_dialog->exec() == QDialog::Accepted)
     {
-        QString path = sel_style->get_selected_path();
-        QString name = sel_style->get_selected_name();
+        QString path = file_dialog->get_selected_path();
+        QString name = file_dialog->get_selected_name();
         stl_name = name; // update path and name style
         stl_path = path;
         qDebug() << "Style path:" << stl_path;
@@ -1019,16 +1102,17 @@ void Manager::select_style()
 
 void Manager::select_pixmap(QWidget *pix)
 {
-    QLabel *pixmap = (QLabel *)pix;
-    Filedialog *sel_pix = new Filedialog(tr("Select the pixmap"), "OK_Cancel", this);
-    sel_pix->set_path(stl_path);
-    sel_pix->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
-    sel_pix->set_read_only(true);
+    pixmap = (QLabel *)pix;
+    file_dialog->clear();
+    file_dialog->set_type(tr("Select the pixmap"), "OK_Cancel");
+    file_dialog->set_path(stl_path);
+    file_dialog->set_read_only(true);
+    file_dialog->raise();
 
-    if (sel_pix->exec())
+    if (file_dialog->exec() == QDialog::Accepted)
     {
-        QString pix_path = sel_pix->get_selected_path();
-        QString pix_name = sel_pix->get_selected_name();
+        QString pix_path = file_dialog->get_selected_path();
+        QString pix_name = file_dialog->get_selected_name();
         pixmap->setPixmap(QPixmap(pix_path + pix_name)); // set pixmap
         pixmap->setToolTip(pix_name); // set tooltip (see ok_frame_pressed)
     }
@@ -1036,9 +1120,10 @@ void Manager::select_pixmap(QWidget *pix)
 
 void Manager::select_color(QWidget *col)
 {
-    QLabel *color_lab = (QLabel *)col;
+    color_lab = (QLabel *)col;
     Colordialog *diag = new Colordialog(color_lab->palette().color(QPalette::Window)); // update colordialog with actual color
-    if (diag->exec())
+
+    if (diag->exec() == QDialog::Accepted)
     {
         QColor col = diag->get_color();
         color_lab->setPalette(QPalette(col));
@@ -1147,33 +1232,24 @@ void Manager::ok_frame_pressed()
     style->endGroup(); //Other
     //////////////////////////////////////////////////////////////////
 
-    msg = new Msgbox(this);
-    msg->setText(tr("<b>Antico style settings updated</b>"));
-    msg->setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
-    msg->setIcon(QMessageBox::Information);
-    msg->exec();
+    Msgbox msg;
+    msg.setText(tr("<b>Antico style settings updated</b>"));
+    msg.setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
+    msg.setIcon(QMessageBox::Information);
+    msg.exec();
 }
 
 void Manager::add_app_pressed() // add selected app on lancher menu (in the select Category)
 {
-    QMap <QString, QString> cat_map; // to map translated name with native categories
-    cat_map.insert(tr("Utility"), "Utility");
-    cat_map.insert(tr("Office"), "Office");
-    cat_map.insert(tr("Network"), "Network");
-    cat_map.insert(tr("Graphics"), "Graphics");
-    cat_map.insert(tr("Development"), "Development");
-    cat_map.insert(tr("System"), "System");
-    cat_map.insert(tr("AudioVideo"), "AudioVideo");
-
     if (tree_view->currentIndex().isValid())
     {
         QString path = dir_model->filePath(tree_view->currentIndex());
         QString app = dir_model->fileName(tree_view->currentIndex());
         QFileInfo info = dir_model->fileInfo(tree_view->currentIndex());
-        Appicon *app_ico = new Appicon(this); // get application icon
+        app_ico = new Appicon(this); // get application icon
         QString icon = app_ico->get_app_icon(app);
 
-        if ((app != "") && (info.isDir() == false))
+        if ( ! app.isEmpty() && info.isExecutable() && ! info.isDir())
         {
             qDebug() << "app:" << app << "path:" << path;
             antico->beginGroup("Launcher");
@@ -1184,29 +1260,33 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
             antico->setValue("name", app);
             antico->setValue("exec", path);
             antico->setValue("pix", icon);
-            msg = new Msgbox(this);
-            msg->setText("<b>" + app.toUpper() + "</b>" + tr(" added to ") + "<b>" + category_combo->currentText() + "</b>" + tr(" menu"));
-            msg->setIcon(QMessageBox::Information);
-
             antico->endGroup(); // App name
             antico->endGroup(); // Category type
             antico->endGroup(); // Category group
             antico->endGroup(); // Launcher
             update_remove_list();
+            Msgbox msg;
+            msg.setText(tr("<b>Application added</b>"));
+            msg.setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
+            msg.setIcon(QMessageBox::Information);
+            msg.exec();
         }
     }
 }
 
 void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
 {
-    Filedialog *sel_dir = new Filedialog(tr("Add application to run at startup:"), "OK_Cancel", this);
+    file_dialog->clear();
+    file_dialog->set_type(tr("Add application to run at startup:"), "OK_Cancel");
+    file_dialog->raise();
 
-    if (sel_dir->exec() == QDialog::Accepted)
+    if (file_dialog->exec() == QDialog::Accepted)
     {
-        QString path = sel_dir->get_selected_path();
-        QString name = sel_dir->get_selected_name();
+        QString path = file_dialog->get_selected_path();
+        QString name = file_dialog->get_selected_name();
+        QFileInfo pathinfo(path+name);
 
-        if (name != "")
+        if (! name.isEmpty() && pathinfo.isExecutable())
         {
             qDebug() << "App:" << name << "Path:" << path;
             run_list->addItem(name); // add app on run list
@@ -1216,9 +1296,11 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
             antico->setValue("path", path);
             antico->endGroup(); // Name
             antico->endGroup(); // Startup
-            msg = new Msgbox(this);
-            msg->setText("<b>" + name.toUpper() + "</b>" + tr(" added to Run list"));
-            msg->setIcon(QMessageBox::Information);
+            Msgbox msg;
+            msg.setText(tr("<b>Application added to run list</b>"));
+            msg.setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
+            msg.setIcon(QMessageBox::Information);
+            msg.exec();
         }
     }
 }
@@ -1232,16 +1314,18 @@ void Manager::remove_run_app_pressed() // remove selected app from "Run at start
         antico->beginGroup("Startup");
         antico->remove(app_name); // remove the application
         antico->endGroup(); // Startup
-        msg = new Msgbox(this);
-        msg->setText("<b>" + app_name.toUpper() + "</b>" + tr(" removed from list"));
-        msg->setIcon(QMessageBox::Information);
         update_run_list();
+        Msgbox msg;
+        msg.setText(tr("<b>Application removed from run list</b>"));
+        msg.setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
+        msg.setIcon(QMessageBox::Information);
+        msg.exec();
     }
 }
 
 void Manager::remove_app_pressed() // remove selected app from Launcher menu
 {
-    if (app_tree->currentItem() != NULL)
+    if (app_tree->currentItem() != NULL && app_tree->currentItem()->parent() != NULL) // remove only is item is selected (no if it's a Category)
     {
         QString app = app_tree->currentItem()->text(0);
         QString cat_group = app_tree->currentItem()->parent()->text(0);
@@ -1255,9 +1339,11 @@ void Manager::remove_app_pressed() // remove selected app from Launcher menu
         antico->endGroup(); // Category
         antico->endGroup(); // Launcher
         update_remove_list();
-        msg = new Msgbox(this);
-        msg->setText("<b>" + app.toUpper() + "</b>" + tr(" removed from ") + "<b>" + cat_group + "</b>" + tr(" menu"));
-        msg->setIcon(QMessageBox::Information);
+        Msgbox msg;
+        msg.setText(tr("<b>Application removed</b>"));
+        msg.setInformativeText(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
+        msg.setIcon(QMessageBox::Information);
+        msg.exec();
     }
 }
 
@@ -1271,13 +1357,13 @@ void Manager::update_remove_list() // update the Category/Apps list on remove ta
     {
         QString cat_name = antico->childGroups().value(c); //Category group (Utility, Office ...)
         antico->beginGroup(cat_name); // Category group
-        QTreeWidgetItem *category = new QTreeWidgetItem(app_tree); // add Category group on TreeWidget
+        category = new QTreeWidgetItem(app_tree); // add Category group on TreeWidget
         category->setText(0, cat_name); // set Category group name (top-level item)
 
         for (int i = 0; i < antico->childGroups().size(); i++)
         {
             QString app_name = antico->childGroups().value(i); //Application name
-            QTreeWidgetItem *app = new QTreeWidgetItem(category);
+            app = new QTreeWidgetItem(category); // add Application on TreeWidget
             app->setText(0, app_name);
         }
         antico->endGroup(); // Category group

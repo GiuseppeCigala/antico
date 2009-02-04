@@ -14,107 +14,102 @@ Appicon::Appicon(QObject *parent) : QObject(parent)
 {}
 
 Appicon::~Appicon()
-{}
-
-QString Appicon::get_app_icon(const QString &app) // select the application from ".desktop" file
 {
-    QString app_icon;
-    // get style path
-    QSettings settings("/usr/share/applications/" + app + ".desktop", QSettings::IniFormat);
-    qDebug() << "Application:" << app;
-    settings.beginGroup("Desktop Entry");
-    QString icon = settings.value("Icon").toString();
-    qDebug() << "Icon:" << icon;
-    settings.endGroup(); // Desktop Entry
-
-    if (icon.isEmpty()) // if not defined, set default application icon
-    {
-        // get style path
-        QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
-        antico->beginGroup("Style");
-        QString stl_name = antico->value("name").toString();
-        QString stl_path = antico->value("path").toString();
-        antico->endGroup(); //Style
-        // get style values
-        QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
-        style->beginGroup("Launcher");
-        style->beginGroup("Icon");
-        app_icon = stl_path + style->value("application_pix").toString();
-        style->endGroup(); // Icon
-        style->endGroup(); // Launcher
-        return app_icon;
-    }
-    else
-    {
-        // remove the extension (.png/.xpm)
-        if (icon.endsWith(".png"))
-            icon.remove(".png");
-        else if (icon.endsWith(".xpm"))
-            icon.remove(".xpm");
-        // first search in /pixmaps directory
-        app_icon = search_in_path(QString("/usr/share/pixmaps/"), icon);
-        if (!app_icon.isEmpty())
-            return app_icon;
-        // else search in /icons directory
-        app_icon = search_in_path(QString("/usr/share/icons/hicolor/32x32/apps/"), icon);
-        if (!app_icon.isEmpty())
-            return app_icon;
-    }
-    return "";
+   
 }
 
-QString Appicon::search_in_path(const QString &path, const QString &icon)
+QString Appicon::get_app_icon(const QString &app) // select the application icon
 {
-    QString icon_path;
-    QString png_path(path + icon + (".png"));
-    QFile png_file(png_path);
-    QString xpm_path(path + icon + (".xpm"));
-    QFile xpm_file(xpm_path);
+    QString app_icon = "";
 
-    if (png_file.exists())
+    // if not defined, set default application icon
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico->beginGroup("Style");
+    QString stl_name = antico->value("name").toString();
+    QString stl_path = antico->value("path").toString();
+    antico->endGroup(); //Style
+    // get style values
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    style->beginGroup("Launcher");
+    style->beginGroup("Icon");
+    app_icon = stl_path + style->value("application_pix").toString();
+    style->endGroup(); // Icon
+    style->endGroup(); // Launcher
+
+    QDirIterator pix_iter("/usr/share/pixmaps/", QDirIterator::Subdirectories);
+    while (pix_iter.hasNext())
     {
-        icon_path = png_path;
-        qDebug() << "Pixmap (.png) path:" << png_path;
-        qDebug() << "---------------------------------------------";
-        return icon_path;
+        pix_iter.next(); // move to child directory
+        QFileInfo pix_file(pix_iter.fileInfo());
+                
+        if (pix_file.baseName().compare(app) == 0)
+        {
+            qDebug() << "File name:" << pix_file.fileName();
+            app_icon = pix_file.absoluteFilePath();
+            return app_icon;
+        }
     }
-    else if (xpm_file.exists())
+    // else search in /icons directory
+    QDirIterator icon_iter("/usr/share/icons/hicolor/32x32/apps/", QDirIterator::Subdirectories);
+    while (icon_iter.hasNext())
     {
-        icon_path = xpm_path;
-        qDebug() << "Pixmap (.xpm) path:" << xpm_path;
-        qDebug() << "---------------------------------------------";
-        return icon_path;
+        icon_iter.next(); // move to child directory
+        QFileInfo icon_file(icon_iter.fileInfo());
+
+        if (icon_file.baseName().compare(app) == 0)
+        {
+            qDebug() << "File name:" << icon_file.fileName();
+            app_icon = icon_file.absoluteFilePath();
+            return app_icon;
+        }
     }
-    return "";
+    return app_icon; // if not defined, set default application icon
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// CATEGORYMENU ////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Categorymenu::Categorymenu(QMenu *menu, QWidget *parent) : QWidget(parent)
+Categorymenu::Categorymenu(QWidget *parent) : QWidget(parent)
 {
-    main_menu = menu;
     read_settings();
     init();
-    parse_desktop_file();
-    update_menu();
 }
 
 Categorymenu::~Categorymenu()
-{}
+{
+    delete &audiovideo_menu;
+    delete &system_menu;
+    delete &development_menu;
+    delete &graphics_menu;
+    delete &network_menu;
+    delete &office_menu;
+    delete &utility_menu;
+    delete &utility_pix;
+    delete &office_pix;
+    delete &network_pix;
+    delete &graphics_pix;
+    delete &devel_pix;
+    delete &system_pix;
+    delete &audiovideo_pix;
+}
 
 void Categorymenu::init()
 {
-    audiovideo_menu = main_menu->addMenu(QIcon(audiovideo_pix), tr("AudioVideo"));
-    system_menu = main_menu->addMenu(QIcon(system_pix), tr("System"));
-    development_menu = main_menu->addMenu(QIcon(devel_pix), tr("Development"));
-    graphics_menu = main_menu->addMenu(QIcon(graphics_pix), tr("Graphics"));
-    network_menu = main_menu->addMenu(QIcon(network_pix), tr("Network"));
-    office_menu = main_menu->addMenu(QIcon(office_pix), tr("Office"));
-    utility_menu = main_menu->addMenu(QIcon(utility_pix), tr("Utility"));
-    main_menu->addSeparator();
+    audiovideo_menu = new QMenu(tr("AudioVideo"));
+    audiovideo_menu->setIcon(QIcon(audiovideo_pix));
+    system_menu = new QMenu(tr("System"));
+    system_menu->setIcon(QIcon(system_pix));
+    development_menu = new QMenu(tr("Development"));
+    development_menu->setIcon(QIcon(devel_pix));
+    graphics_menu = new QMenu(tr("Graphics"));
+    graphics_menu->setIcon(QIcon(graphics_pix));
+    network_menu = new QMenu(tr("Network"));
+    network_menu->setIcon(QIcon(network_pix));
+    office_menu = new QMenu(tr("Office"));
+    office_menu->setIcon(QIcon(office_pix));
+    utility_menu = new QMenu(tr("Utility"));
+    utility_menu->setIcon(QIcon(utility_pix));
 
     connect(audiovideo_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
     connect(system_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
@@ -128,13 +123,13 @@ void Categorymenu::init()
 
 void Categorymenu::read_settings()
 {
-    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get category menu icons
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat);
+    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Launcher");
     style->beginGroup("Icon");
     utility_pix = stl_path + style->value("utility_pix").toString();
@@ -158,7 +153,8 @@ void Categorymenu::update_menu()
     cat_menu.insert("AudioVideo", audiovideo_menu);
     cat_menu.insert("Utility", utility_menu);
 
-    utility_menu->clear(); // update Category menu
+    // update Category menu
+    utility_menu->clear(); 
     office_menu->clear();
     network_menu->clear();
     graphics_menu->clear();
@@ -215,6 +211,20 @@ void Categorymenu::update_menu()
     antico->endGroup(); // Launcher-Desk
 }
 
+QList <QMenu *> Categorymenu::get_menus()
+{
+    QList <QMenu *> menu_list;
+    menu_list.append(utility_menu);
+    menu_list.append(office_menu);
+    menu_list.append(network_menu);
+    menu_list.append(graphics_menu);
+    menu_list.append(development_menu);
+    menu_list.append(system_menu);
+    menu_list.append(audiovideo_menu);
+ 
+    return menu_list;
+}
+
 void Categorymenu::add_app(QMenu *category_menu, const QString &name, const QString &exec, const QString &icon) // add application and icon on Category menu
 {
     QAction *act = new QAction(QIcon(icon), name, category_menu);
@@ -231,6 +241,9 @@ void Categorymenu::run_menu(QAction *act)
         QProcess::startDetached(cmd); // start Application from Category menu
     else
         QProcess::startDetached(cmd + " " + cmd_arguments); //start Application + arguments from Category menu
+    
+    cmd.clear();
+    cmd_arguments.clear();
 }
 
 void Categorymenu::set_cmd_arguments(const QString &arg) // add arguments after application name on run
@@ -254,11 +267,6 @@ void Categorymenu::update_style()
 void Categorymenu::parse_desktop_file()
 {
     antico->remove("Launcher-Desk"); // clear Launcher-Desk entry
-
-    QDir desktop_dir("/usr/share/applications/");
-    QFileInfoList list = desktop_dir.entryInfoList();
-    qDebug() << "Number of .desktop file:" << list.size();
-
     QList<QString> cat_list;
     cat_list.append("Office");
     cat_list.append("Network");
@@ -272,8 +280,15 @@ void Categorymenu::parse_desktop_file()
     QString country = lang.section('_', 0, 0); // (it_IT -> it)
     QString locale_name = QString("Name").append("[").append(country).append("]").append("="); // Name[it]
 
-    for (int i = 0; i < list.size(); i++)
+    QDirIterator desktop_iter("/usr/share/applications/", QDirIterator::Subdirectories);
+
+    while (desktop_iter.hasNext())
     {
+        desktop_iter.next(); // move to child directory
+
+        QFile desktop_file(desktop_iter.filePath());
+        qDebug() << "Parsing file:" << desktop_iter.filePath();
+
         QString name;
         QString exec;
         QString icon_name;
@@ -284,21 +299,18 @@ void Categorymenu::parse_desktop_file()
         QStringList split_path;
         QString app_name;
 
-        QFileInfo finf = list.at(i);
-        QString file_name = finf.fileName();
+        QString file_name = desktop_file.fileName();
 
         if (file_name == "." || file_name == "..")
             continue;
 
-        QFile file("/usr/share/applications/" + file_name);
-
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (!desktop_file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             qDebug() << "Problem to read .desktop file:" << file_name;
             continue;
         }
 
-        QTextStream stream(&file);
+        QTextStream stream(&desktop_file);
         QString line;
 
         ///////////// PARSE THE .DESKTOP FILE /////////////
@@ -348,12 +360,11 @@ void Categorymenu::parse_desktop_file()
 
         if (! exec.isEmpty() && ! categories.isEmpty() && ! name.isEmpty() && ! icon_name.isEmpty())
         {
-
             full_path = exec.section(' ', 0, 0); // remove eventually args after app name (/usr/bin/vlc %U -> /usr/bin/vlc)
             qDebug() << "full_path:" << full_path;
             args = exec.section(' ', 1, 1); // save args after app name with space (/usr/bin/vlc %U -> _%U)
 
-            if (args.startsWith('-')) // leave only args i.e. for OpenOffice (soffice -writer)
+            if (args.startsWith('-')) // leave only args i.e. for OpenOffice (soffice-writer)
                 qDebug() << "args:" << args;
             else
                 args.clear();
@@ -372,7 +383,7 @@ void Categorymenu::parse_desktop_file()
                 else if (icon_name.endsWith(".xpm"))
                     icon_name.remove(".xpm");
                 Appicon *app_ico = new Appicon(); // get application icon path
-                icon_path = app_ico->get_app_icon(icon_name);
+                icon_path = app_ico->get_app_icon(icon_name); // icon_name without extension
             }
             else
                 icon_path = icon_name; // full icon path already set
@@ -383,21 +394,20 @@ void Categorymenu::parse_desktop_file()
             antico->beginGroup("Launcher-Desk");
             antico->beginGroup("Category");
             antico->beginGroup(categories);
-            antico->beginGroup(app_name + args); // for i.e. soffice -writer
+            antico->beginGroup(app_name + args); // for i.e. soffice-writer
 
             antico->setValue("name", name);
-            if (args.isEmpty())
-                antico->setValue("exec", full_path);
-            else
-                antico->setValue("exec", full_path.append(" ").append(args));
+            antico->setValue("exec", full_path);
             antico->setValue("pix", icon_path);
 
             antico->endGroup(); // App name
             antico->endGroup(); // Category type
             antico->endGroup(); // Category group
             antico->endGroup(); // Launcher-Desk
+            qDebug() << "---------------------------------------------";
         }
     }
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,7 +435,18 @@ Fileicon::Fileicon() : QFileIconProvider()
 }
 
 Fileicon::~Fileicon()
-{}
+{
+    delete &utility_pix;
+    delete &office_pix;
+    delete &network_pix;
+    delete &graphics_pix;
+    delete &devel_pix;
+    delete &system_pix;
+    delete &audiovideo_pix;
+    delete &d_folder_pix;
+    delete antico;
+    delete style;
+}
 
 QIcon Fileicon::icon(const QFileInfo &info) const
 {

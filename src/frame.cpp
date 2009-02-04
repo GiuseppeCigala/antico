@@ -16,21 +16,34 @@ Frame::Frame(Window w, const QString &type, Dockbar *dkbr, QWidget *parent) : QF
     read_settings();
     init();
     setFrameStyle(QFrame::Panel|QFrame::Raised);
+    setAcceptDrops(true);
 }
 
 Frame::~Frame()
-{}
+{
+    delete desk;
+    delete &title_color;
+    delete &lateral_bdr_width;
+    delete &top_bdr_height;
+    delete &bottom_bdr_height;
+    delete &header_active_pix;
+    delete &header_inactive_pix;
+    delete &minmax_pix;
+    delete &close_pix;
+    delete tr_bdr;
+    delete tl_bdr;
+}
 
 void Frame::read_settings()
 {
     // get style path
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat);
+    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     ////// Frame //////
     style->beginGroup("Frame");
     style->beginGroup("Border");
@@ -62,7 +75,7 @@ void Frame::init()
 {
     desk = QApplication::desktop();
     maximized = false;
-    iconize = false;
+    state = "NormalState";
 
     XSelectInput(QX11Info::display(), winId(), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
                  KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask |
@@ -96,27 +109,39 @@ void Frame::init()
     XReparentWindow(QX11Info::display(), c_win, winId(), lateral_bdr_width, top_bdr_height);
     qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
     qDebug() << "Reparent Client:" << c_win << "with Frame:" << winId() << "- Name:" << cl_name();
-    qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << "\n";
+    qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
 
     XAddToSaveSet(QX11Info::display(), c_win);
     // move and resize client
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
 
-    // move the frame in desktop center and resize
-    move((desk->width()/2)-(frame_w/2), (desk->height()/2)-(frame_h/2));
-    
     //if the frame is too large, maximize
-    if(frame_w >= QApplication::desktop()->width()-dock_height/2 || frame_h >= QApplication::desktop()->height()-dock_height)
-        maximize();
-    else
-    resize(frame_w, frame_h); // normal size
-
-    if (frame_type != "Splash") // Splash frame with no border
+    if (frame_w >= QApplication::desktop()->width()-dock_height/2 || frame_h >= QApplication::desktop()->height()-dock_height)
     {
-        // create frame borders
+        maximize();
+    }
+    else // normal size
+    {
+        // move the frame in desktop center and resize
+        move((desk->width()/2)-(frame_w/2), (desk->height()/2)-(frame_h/2));
+        resize(frame_w, frame_h);
+    }
+    qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    qDebug() << "Frame_x:" << frame_x << "Frame_y:" << frame_y << "Frame_w:" << frame_w << "Frame_h:" << frame_h;
+    qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << "\n";
+
+    if (frame_type != "Splash") // Splash frame have no header and no border
+    {
+        // create frame borders/header
         create_border();
         // set the header pixmap
         set_inactive();
+        splash = false;
+    }
+    else
+    {
+        qDebug() << "Frame:" << winId() << "Name:" << wm_name << "is Splash type";
+        splash = true;
     }
 
     // send _NET_ACTIVE_WINDOW property
@@ -135,7 +160,7 @@ void Frame::init()
     XMapWindow(QX11Info::display(), c_win);
     XSync(QX11Info::display(), false);
     XUngrabServer(QX11Info::display());
-      
+
     // show frame
     show();
 }
@@ -162,16 +187,16 @@ void Frame::set_frame_geometry()
 {
     qDebug() << "Frame type:" << frame_type;
 
-    if (frame_type == "Splash")
+    if (frame_type.compare("Splash") == 0)
     {
         // set spacing between client and frame window
         diff_border_h = 0; // height space
         diff_border_w = 0; // width space
         // set frame width and height
-        frame_w = client_w;
-        frame_h = client_h;
         frame_x = client_x;
         frame_y = client_y;
+        frame_w = client_w;
+        frame_h = client_h;
         lateral_bdr_width = 0;
         top_bdr_height = 0;
     }
@@ -181,27 +206,11 @@ void Frame::set_frame_geometry()
         diff_border_h = top_bdr_height+bottom_bdr_height+3; // height space
         diff_border_w = 2*lateral_bdr_width; // width space
         // set frame width and height
-        frame_w = client_w + diff_border_w;
-        frame_h = client_h + diff_border_h;
         frame_x = client_x;
         frame_y = client_y;
+        frame_w = client_w + diff_border_w;
+        frame_h = client_h + diff_border_h;
     }
-}
-
-void Frame::update_style()
-{
-    read_settings();
-    tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
-    tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
-    tm_bdr->set_pixmap(header_active_pix, header_inactive_pix, title_color);
-    tm_bdr->setFixedHeight(top_bdr_height);
-    bm_bdr->setFixedHeight(bottom_bdr_height);
-    bl_bdr->setFixedSize(top_bdr_height, bottom_bdr_height);
-    br_bdr->setFixedSize(top_bdr_height, bottom_bdr_height);
-    get_client_geometry();
-    set_frame_geometry();
-    XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h); // update client
-    resize(frame_w, frame_h); //update frame
 }
 
 void Frame::get_wm_hints()
@@ -223,16 +232,15 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
     XSizeHints *xsizehints;
     long hints = NULL;
     long wm_flags = NULL;
-    int win_grav = 0;
-   
+
     if ((xsizehints = XAllocSizeHints()) != NULL)
     {
         if (XGetWMNormalHints(QX11Info::display(), c_win, xsizehints, &hints) == 0)
             return;
 
         wm_flags = xsizehints->flags;
-        win_grav = xsizehints->win_gravity;
-        qDebug() << "Window flags:" << wm_flags << "Window grav:" << win_grav;
+        win_gravity = xsizehints->win_gravity;
+        qDebug() << "Window flags:" << wm_flags << "Window gravity:" << win_gravity;
 
         if (wm_flags & PPosition)
         {
@@ -242,28 +250,28 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
         }
         if (wm_flags & PSize)
         {
-            if(xsizehints->width != 0)
-            client_w = xsizehints->width;
-            if(xsizehints->height != 0)
-            client_h = xsizehints->height;
+            if (xsizehints->width != 0)
+                client_w = xsizehints->width;
+            if (xsizehints->height != 0)
+                client_h = xsizehints->height;
             qDebug() << "PSize:" << client_w << client_h;
         }
         if (wm_flags & PBaseSize)
         {
-            if(xsizehints->base_width != 0)
-            client_w = xsizehints->base_width;
-            if(xsizehints->base_height != 0)
-            client_h = xsizehints->base_height;
+            if (xsizehints->base_width != 0)
+                client_w = xsizehints->base_width;
+            if (xsizehints->base_height != 0)
+                client_h = xsizehints->base_height;
             qDebug() << "PBaseSize:" << client_w << client_h;
         }
         if (client_w >= desk->width()-10)
-        client_w = desk->width()-10;
+            client_w = desk->width()-10;
 
         if (client_h >= desk->height()-dock_height-20)
-        client_h = desk->height()-dock_height-20;
-        
+            client_h = desk->height()-dock_height-20;
+
         qDebug() << "Final Client Size:" << client_w << client_h;
-        
+
     }
 }
 
@@ -274,54 +282,53 @@ void Frame::set_state(int state)
     data[1] = (ulong)None;
     Atom wm_state = XInternAtom(QX11Info::display(), "WM_STATE", FALSE);
     XChangeProperty(QX11Info::display(), c_win, wm_state, wm_state, 32, PropModeReplace, (uchar *)data, 2);
+    qDebug() << "Frame:" << winId() << "Name:" << wm_name << "Client:" << c_win << "changhin state:" << wm_state;
 }
 
 void Frame::set_focus(long timestamp) // set to focus to child
 {
     XSetInputFocus(QX11Info::display(), c_win, RevertToNone, CurrentTime);
- 
+
     Atom wm_take_focus = XInternAtom(QX11Info::display(), "WM_TAKE_FOCUS", False);
     if (prot_take_focus) // WM_TAKE_FOCUS protocol
         send_wm_protocols(wm_take_focus, timestamp);
 }
 
-void Frame::withdraw()
-{
-    unmap();
-    XUnmapWindow(QX11Info::display(), c_win);
-    set_state(WithdrawnState);
-}
-
 void Frame::unmap()
 {
-    hide();
+    XUnmapWindow(QX11Info::display(), winId());
+    XUnmapWindow(QX11Info::display(), c_win);
+    set_state(WithdrawnState);
+    state = "WithdrawnState";
+    qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
 void Frame::map()
 {
-    show();
     XMapWindow(QX11Info::display(), winId());
     XMapWindow(QX11Info::display(), c_win);
     set_state(NormalState);
-    iconize = false;
+    state = "NormalState";
+    qDebug() << "Frame mapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
 void Frame::raise()
 {
-    show();
-    XRaiseWindow(QX11Info::display(), winId());
-    XRaiseWindow(QX11Info::display(), c_win);
+    XMapRaised(QX11Info::display(), winId());
+    XMapRaised(QX11Info::display(), c_win);
     set_state(NormalState);
-    iconize = false;
-    dock->add(this); // transition from systray to raised (add to pager)
+    state = "NormalState";
+    qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    dock->add(this);  // add frame to dockbar (pager)
 }
 
 void Frame::iconify()
 {
-    unmap();
+    XUnmapWindow(QX11Info::display(), winId());
+    XUnmapWindow(QX11Info::display(), c_win);
     set_state(IconicState);
-    dock->add(this);  // add frame to dockbar (pager)
-    iconize = true;
+    state = "IconicState";
+    qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
 void Frame::get_wm_name()  // get WM_NAME
@@ -488,6 +495,21 @@ void Frame::set_colormaps(Colormap cmap)
     XInstallColormap(QX11Info::display(), cmap);
 }
 
+void Frame::update_style()
+{
+    read_settings();
+    tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
+    tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
+    tm_bdr->set_pixmap(header_active_pix, header_inactive_pix, title_color);
+    tm_bdr->setFixedHeight(top_bdr_height);
+    bm_bdr->setFixedHeight(bottom_bdr_height);
+    bl_bdr->setFixedSize(top_bdr_height, bottom_bdr_height);
+    br_bdr->setFixedSize(top_bdr_height, bottom_bdr_height);
+    get_client_geometry();
+    set_frame_geometry();
+    XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h); // update client
+    resize(frame_w, frame_h); //update frame
+}
 
 ////////// WINDOW BORDER CREATION //////////////
 
@@ -497,12 +519,12 @@ void Frame::create_border()
     layout->setMargin(0);
     layout->setSpacing(0);
     setLayout(layout);
-  
+
     // center frame where client apps is shown
     c_bdr = new Border(this);
     layout->addWidget(c_bdr, 1, 1);
     // top left border (icon)
-    tl_bdr = new Border(this);
+    tl_bdr = new Border(); // no this to show tooltip 
     tl_bdr->setToolTip(tr("Minimize/Maximize"));
     tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tl_bdr->setPixmap(minmax_pix);
@@ -510,7 +532,7 @@ void Frame::create_border()
     tl_bdr->setAlignment(Qt::AlignCenter);
     layout->addWidget(tl_bdr, 0, 0);
     // top right border (icon)
-    tr_bdr = new Border(this);
+    tr_bdr = new Border(); // no this to show tooltip 
     tr_bdr->setToolTip(tr("Close"));
     tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tr_bdr->setPixmap(close_pix);
@@ -518,7 +540,7 @@ void Frame::create_border()
     tr_bdr->setAlignment(Qt::AlignCenter);
     layout->addWidget(tr_bdr, 0, 2);
     // top mid header border (header frame)
-    tm_bdr = new Header(cl_icon(), cl_name());
+    tm_bdr = new Header(cl_icon(), cl_name(), this);
     tm_bdr->set_pixmap(header_active_pix, header_inactive_pix, title_color);
     tm_bdr->setFixedHeight(top_bdr_height);
     layout->addWidget(tm_bdr, 0, 1);
@@ -734,3 +756,23 @@ void Frame::maximize()
         maximized = false;
     }
 }
+
+void Frame::dragEnterEvent(QDragEnterEvent *event)
+{
+    qDebug() << "dragEnterEvent";
+    event->acceptProposedAction();
+}
+
+void Frame::dragMoveEvent(QDragMoveEvent *event)
+{
+    qDebug() << "dragMoveEvent";
+    event->acceptProposedAction();
+}
+
+void Frame::dropEvent(QDropEvent *event)
+{
+    qDebug() << "dropEvent";
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+}
+

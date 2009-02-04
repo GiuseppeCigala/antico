@@ -8,21 +8,35 @@
 
 ////////////////////////////////////////
 
-Deskdev::Deskdev(const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent) : QLabel(parent)
+Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent) : QLabel(parent)
 {
+    file_dialog = dial;
+    cat_menu = menu;
     device_name = device;
     mount_path = mnt_path;
     device_label = label;
     device_type = type;
     setFixedSize(100, 50);
     setToolTip(tr("Mount path: ") + mnt_path);
+    zoom = false;
     read_settings();
     init();
     show();
 }
 
 Deskdev::~Deskdev()
-{}
+{
+    delete file_dialog;
+    delete cat_menu;
+    delete &device_name;
+    delete &mount_path;
+    delete &device_label;
+    delete &device_type;
+    delete &d_disk_pix;
+    delete &d_cdrom_pix;
+    delete &open_with_pix;
+    delete &d_dev_col;
+}
 
 void Deskdev::read_settings()
 {
@@ -39,14 +53,27 @@ void Deskdev::read_settings()
     d_cdrom_pix = stl_path + style->value("d_cdrom_pix").toString();
     d_dev_col = style->value("name_color").value<QColor>();
     style->endGroup(); //Deskdev
+    style->beginGroup("Other");
+    open_with_pix = stl_path + style->value("open_with_pix").toString();
+    style->endGroup(); //Other
 }
 
 void Deskdev::init()
-{ 
+{         
     if (device_type == "disk") // select the right pixmap (cdrom-disk)
         dev_pix = QPixmap(d_disk_pix);
     else // is cdrom
         dev_pix = QPixmap(d_cdrom_pix);
+        
+    main_menu = new QMenu(this);
+    // show the Category apps list for open the device
+    open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
+    
+    QList <QMenu *> menu_list = cat_menu->get_menus();
+    for (int i = 0; i <  menu_list.size(); ++i)
+    {
+        open_menu->addMenu(menu_list.at(i));
+    }
 }
 
 void Deskdev::paintEvent(QPaintEvent *)
@@ -54,9 +81,16 @@ void Deskdev::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
-    painter.drawPixmap(QRect(-16, -50, 32, 32), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
+    if (zoom)
+    {
+        painter.drawPixmap(QRect(-18, -50, 36, 36), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
+    }
+    else
+    {
+        painter.drawPixmap(QRect(-16, -50, 32, 32), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
+    }
     painter.setPen(d_dev_col);
-    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter|Qt::TextWordWrap, device_name); // deskdev name
+    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, device_name); // deskdev name
 }
 
 void Deskdev::mousePressEvent(QMouseEvent *event)
@@ -84,10 +118,30 @@ void Deskdev::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        Filedialog *open_dir = new Filedialog(tr("Device contents:"), "Close", this);
-        open_dir->set_filter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files);
-        open_dir->set_path(mount_path);
+        file_dialog->set_type(tr("Device contents:"), "Close");
+        file_dialog->set_path(mount_path);
+        file_dialog->exec();
     }
+}
+
+void Deskdev::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    zoom = true;
+    update();
+}
+
+void Deskdev::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    zoom = false;
+    update();
+}
+
+void Deskdev::contextMenuEvent(QContextMenuEvent *event)
+{
+    cat_menu->set_cmd_arguments(mount_path); // set the mount path as argument
+    main_menu->exec(event->globalPos());
 }
 
 void Deskdev::update_style()

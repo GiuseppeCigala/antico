@@ -30,7 +30,7 @@ class Dockbar : public QFrame
     Q_OBJECT
 
 public:
-    Dockbar(Antico *a, QWidget *parent=0);
+    Dockbar(Antico *, QWidget *parent=0);
     ~Dockbar();
     void add(Frame *);
     void update_size();
@@ -57,6 +57,7 @@ private:
     QString dock_pix;
     QString arrow_pix;
     QSettings *style;
+    QSettings *antico;
     Launcher *lchr;
     Dockicon *d_icon;
     Systray *sys;

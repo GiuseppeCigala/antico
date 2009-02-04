@@ -19,12 +19,22 @@ Launcher::Launcher(Antico *a, QWidget *parent) : QLabel(parent)
 }
 
 Launcher::~Launcher()
-{}
+{
+    delete app;
+    delete &launcher_pix;
+    delete &app_pix;
+    delete &quit_pix;
+    delete &shutdown_pix;
+    delete &restart_pix;
+    delete &refresh_pix;
+    delete &show_pix;
+    delete &run_pix;
+    delete &manager_pix;
+}
 
 void Launcher::init()
 {
     main_menu = new QMenu(this);
-    cat_menu = new Categorymenu(main_menu); // add Category menu on Launcher
     connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
 
     quit = new QAction(tr("Quit WM"), this);
@@ -48,6 +58,13 @@ void Launcher::init()
     run->setData("run");
     manag->setIcon(QIcon(manager_pix));
     manag->setData("manager");
+    ////////////
+    QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
+    for (int i = 0; i <  menu_list.size(); ++i)
+    {
+        main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
+    }
+    main_menu->addSeparator();
     main_menu->addAction(manag);
     main_menu->addAction(run);
     main_menu->addAction(show_desk);
@@ -60,7 +77,7 @@ void Launcher::init()
 void Launcher::read_settings()
 {
     // get style path
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();
@@ -104,8 +121,6 @@ void Launcher::run_command(QAction *act)
 
 void Launcher::mousePressEvent(QMouseEvent *event)
 {
-    cat_menu->update_menu();
-
     if (event->button() == Qt::LeftButton)
     {
         QPoint p = mapToGlobal(QPoint(0, 0));
@@ -113,6 +128,18 @@ void Launcher::mousePressEvent(QMouseEvent *event)
         p.setY(p.y()-s.height());
         main_menu->exec(p);
     }
+}
+
+void Launcher::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+}
+
+void Launcher::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    setFrameStyle(QFrame::NoFrame);
 }
 
 void Launcher::update_style()
@@ -127,7 +154,7 @@ void Launcher::update_style()
     show_desk->setIcon(QIcon(show_pix));
     run->setIcon(QIcon(run_pix));
     manag->setIcon(QIcon(manager_pix));
-    cat_menu->update_style(); // update category pixmaps
+    app->get_category_menu()->update_menu(); // update .desktop/user menu entry
 }
 
 

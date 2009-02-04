@@ -51,11 +51,15 @@ Systray::Systray(QWidget *parent) : QFrame(parent)
 }
 
 Systray::~Systray()
-{}
+{
+    delete layout;
+    delete s_icon;
+    delete emb_cont;
+}
 
 void Systray::add(Frame *frm)
 {
-    Sysicon *s_icon = new Sysicon(frm, this);
+    s_icon = new Sysicon(frm, this);
     sys_icons.insert(frm->winId(), s_icon); // save the Frame winId/Sysicon
     layout->addWidget(s_icon);
     qDebug() <<"Frame added to System Tray." << "Frame name:" << frm->cl_name() << "Frame Id:" << frm->winId() << "Client Id:" << frm->cl_win();
@@ -64,23 +68,23 @@ void Systray::add(Frame *frm)
 
 void Systray::add(Window win_id)
 {
-    QX11EmbedContainer *item = new QX11EmbedContainer(this);
-    item->embedClient(win_id);
+    emb_cont = new QX11EmbedContainer(this);
+    emb_cont->embedClient(win_id);
     qDebug() << "Client added to System Tray." << "Client Id:" << win_id;
-    layout->addWidget(item);
-    item->setContentsMargins(0, 0, 0, 0);
-    item->setFixedSize(qMin(25, height()), qMin(25, height()));
-    XResizeWindow(QX11Info::display(), win_id, item->width(), item->height());
+    layout->addWidget(emb_cont);
+    emb_cont->setContentsMargins(0, 0, 0, 0);
+    emb_cont->setFixedSize(qMin(25, height()), qMin(25, height()));
+    XResizeWindow(QX11Info::display(), win_id, emb_cont->width(), emb_cont->height());
     XMapRaised(QX11Info::display(), win_id);
 
-    connect(item, SIGNAL(clientClosed()), item, SLOT(close()));
+    connect(emb_cont, SIGNAL(clientClosed()), emb_cont, SLOT(close()));
 }
 
 void Systray::remove(Window win_id) // if Sysicon is on Systray together with equal icon from _NET_SYSTEM_TRAY protocol
 {
     if (sys_icons.contains(win_id))
     {
-        Sysicon *s_icon = sys_icons.value(win_id);
+        s_icon = sys_icons.value(win_id);
         sys_icons.remove(win_id);
         qDebug() << "Sysicon remove from Systray cmd.";
         s_icon->close();
@@ -102,6 +106,7 @@ bool Systray::x11Event(XEvent *event)
         qDebug("Systray::x11Event client message");
         if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_REQUEST_DOCK)
         {
+            qDebug("SYSTEM_TRAY_REQUEST_DOCK");
             add(event->xclient.data.l[2]);
         }
         else if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_BEGIN_MESSAGE)
@@ -110,7 +115,7 @@ bool Systray::x11Event(XEvent *event)
         }
         else if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_CANCEL_MESSAGE)
         {
-            remove(event->xclient.data.l[2]);
+            qDebug("SYSTEM_TRAY_CANCEL_MESSAGE");
         }
         else if (event->xclient.data.l[1] == (signed)net_message_data_atom)
         {

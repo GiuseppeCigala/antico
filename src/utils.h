@@ -23,7 +23,6 @@ public:
     Appicon(QObject *parent=0);
     ~Appicon();
     QString get_app_icon(const QString &);
-    QString search_in_path(const QString &, const QString &);
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@ class Categorymenu : public QWidget
     Q_OBJECT
 
 public:
-    Categorymenu(QMenu *menu, QWidget *parent=0);
+    Categorymenu(QWidget *parent=0);
     ~Categorymenu();
     void add_app(QMenu *, const QString &, const QString &, const QString &);
     void read_settings();
@@ -43,6 +42,7 @@ public:
     void init();
     void update_style();
     void parse_desktop_file();
+    QList <QMenu *> get_menus();
     void set_cmd_arguments(const QString &);
 
 public slots:
@@ -51,7 +51,6 @@ public slots:
 private:
     QSettings *style;
     QSettings *antico;
-    QMenu *main_menu;
     QMenu *audiovideo_menu;
     QMenu *system_menu;
     QMenu *development_menu;

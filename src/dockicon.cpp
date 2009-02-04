@@ -19,12 +19,20 @@ Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(par
 }
 
 Dockicon::~Dockicon()
-{}
+{
+    delete frm;
+    delete sys;
+    delete &pix;
+    delete &d_icon_pix;
+    delete &title_color;
+    delete &close_dock_pix;
+    delete &add_to_sys_pix;
+}
 
 void Dockicon::read_settings()
 {
     // get style path
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();

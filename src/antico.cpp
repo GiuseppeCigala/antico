@@ -26,6 +26,15 @@ Antico::Antico(int &argc, char **argv) : QApplication(argc, argv)
 Antico::~Antico()
 {
     delete dsk;
+    delete frm;
+    delete dock;
+    delete cat_menu;
+    delete file_dialog;
+    delete &frm_list;
+    delete &frm_list;
+    delete &event_names;
+    delete &mapping_clients;
+    delete &mapping_frames;
 }
 
 void Antico::set_event_names()
@@ -86,6 +95,7 @@ void Antico::get_atoms()
     _net_wm_name = XInternAtom(QX11Info::display(), "_NET_WM_NAME", False);
     _net_wm_icon = XInternAtom(QX11Info::display(), "_NET_WM_ICON", False);
     _net_wm_user_time = XInternAtom(QX11Info::display(), "_NET_WM_USER_TIME", False);
+    _net_wm_state = XInternAtom(QX11Info::display(), "_NET_WM_STATE", False);
     _net_supported = XInternAtom(QX11Info::display(), "_NET_SUPPORTED", False);
     _net_wm_window_type = XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE", False);
     _net_wm_window_type_normal = XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_NORMAL", False);
@@ -159,10 +169,10 @@ void Antico::send_supported_hints()
     xev5.message_type = _net_supported;
     xev5.format = 32;
     xev5.data.l[0] = _kde_net_wm_system_tray_window_for;
+    xev5.data.l[1] = _net_wm_state;
     XSendEvent(QX11Info::display(), QApplication::desktop()->winId(), False,
                (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&xev5);
 }
-
 
 bool Antico::x11EventFilter(XEvent *event)
 {
@@ -186,13 +196,13 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_clients.value(event->xmaprequest.window)) != NULL)
         {
-            qDebug() << "--> Map client:" << event->xmaprequest.window;
+            qDebug() << "--> Map Client:" << event->xmaprequest.window;
             frm->map();
         }
         else
         {
-            qDebug() << "--> Map new client:" << event->xmaprequest.window;
-            create_frame(event->xmaprequest.window, dock); // create new frame for client
+            qDebug() << "--> Map new Client:" << event->xmaprequest.window;
+            create_frame(event->xmaprequest.window, dock); // create new Frame for Client
         }
         return false;
         break;
@@ -200,6 +210,12 @@ bool Antico::x11EventFilter(XEvent *event)
     case MapNotify:
         qDebug() << "[MapNotify]";
 
+        if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
+        {
+            frm->map();
+            qDebug() << "MapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+            return true;
+        }
         if (event->xmap.event != event->xmap.window)
             return true;
         else
@@ -211,17 +227,8 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
         {
-            if (event->xunmap.send_event)
-            {
-                frm->withdraw();
-                dock->remove(frm->winId()); // remove Dockicon still mapped
-                qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name();
-            }
-            else
-            {
-                frm->unmap();
-                qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name();
-            }
+            frm->unmap();
+            qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
             return true;
         }
         if (event->xunmap.event != event->xunmap.window)
@@ -239,7 +246,6 @@ bool Antico::x11EventFilter(XEvent *event)
             mapping_clients.remove(event->xdestroywindow.window);
             mapping_frames.remove(frm->winId());
             dock->remove(frm->winId()); // remove eventually Dockicon or Sysicon still mapped
-            delete frm;
             return true;
         }
         if (event->xdestroywindow.event != event->xdestroywindow.window)
@@ -372,9 +378,10 @@ bool Antico::x11EventFilter(XEvent *event)
                 frm->get_wm_name();
                 frm->update_name();
             }
-            if (pev->atom == wm_state)
+            if (pev->atom == wm_state || pev->atom == _net_wm_state)
             {
                 qDebug() << "---> wm_state";
+                qDebug() << "Window changing state:" << pev->window;
             }
             else if (pev->atom == wm_colormaps)
             {
@@ -450,16 +457,16 @@ bool Antico::x11EventFilter(XEvent *event)
     case EnterNotify:
         qDebug() << "[EnterNotify]";
         /*
-        if ((frm = mapping_frames.value(event->xcrossing.window)) != NULL)
-        {
-            frm->set_focus(event->xcrossing.time);
-            qDebug() << "Enter in map frame:" << frm->winId();
-        }
-        else
-        {
-            XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToNone, CurrentTime);
-            qDebug() << "Enter in not map client:" << event->xcrossing.window;
-        }*/
+          if ((frm = mapping_frames.value(event->xcrossing.window)) != NULL)
+          {
+              frm->set_focus(event->xcrossing.time);
+              qDebug() << "Enter in map frame:" << frm->winId();
+          }
+          else
+          {
+              XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToNone, CurrentTime);
+              qDebug() << "Enter in not map client:" << event->xcrossing.window;
+          }*/
         return false;
         break;
 
@@ -512,11 +519,11 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
 
     /////// MAP THE NEW CLIENT ////////
     qDebug() << "Mapping window type:" << frame_type.at(0);
-    Frame *frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
+    frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
     mapping_clients.insert(c_win, frm); // save the client winId/frame
     mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
-    frame_type.clear(); // clear the window type list
     dock->add(frm); // add frame to dockbar (pager)
+    frame_type.clear(); // clear the window type list
 }
 
 bool Antico::check_net_sys_tray_for(Window c_win)
@@ -627,7 +634,7 @@ void Antico::print_window_prop(Window c_win) // print the window properties
 
 void Antico::raise_next_frame() // raise next frame on [Alt+Tab] key combination
 {
-    QList<Frame *> frm_list = mapping_clients.values();
+    frm_list = mapping_clients.values();
 
     if (frm_list.size() == 0)
         return;
@@ -642,18 +649,21 @@ void Antico::raise_next_frame() // raise next frame on [Alt+Tab] key combination
 
 void Antico::set_active_frame(Frame *frm) // activation of selected frame and unactivation of others
 {
-    foreach(Frame *frame, mapping_frames)
+    foreach(Frame *frame, mapping_clients)
     {
         if (frame == frm)
         {
-            qDebug() << "Frame raise and active: " << frame->winId() << "- Name:" << frame->cl_name();
+            qDebug() << "Frame raise and active: " << frame->winId() << "- Name:" << frame->cl_name() << "- state:" << frm->win_state();
             frame->set_active();
             frame->raise();
         }
         else
         {
-            qDebug() << "Frame inactive:"  << frame->winId() << "- Name:" << frame->cl_name();
-            frame->set_inactive();
+            if ((frm->win_state().compare("IconicState") != 0 || frm->win_state().compare("WithdrawnState") != 0) && ! frm->is_splash()) // if not active
+            {
+                qDebug() << "Frame inactive:"  << frame->winId() << "- Name:" << frame->cl_name() << "- state:" << frm->win_state() << "- is Splash:" << frm->is_splash();
+                frame->set_inactive();
+            }
         }
     }
 }
@@ -677,14 +687,14 @@ void Antico::send_configurenotify(Frame *frm)
 
 void Antico::wm_quit()
 {
-    Msgbox *msg = new Msgbox();
-    msg->setText(tr("<b>Quit the WM</b>"));
-    msg->setInformativeText(tr("Are you sure to quit the WM ?"));
-    msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg->setButtonText(QMessageBox::Ok, tr("Ok"));
-    msg->setButtonText(QMessageBox::Cancel, tr("Cancel"));
-    msg->setIcon(QMessageBox::Warning);
-    int ret = msg->exec();
+    Msgbox msg;
+    msg.setText(tr("<b>Quit the WM</b>"));
+    msg.setInformativeText(tr("Are you sure to quit the WM ?"));
+    msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg.setButtonText(QMessageBox::Ok, tr("Ok"));
+    msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
+    msg.setIcon(QMessageBox::Warning);
+    int ret = msg.exec();
 
     if (ret == QMessageBox::Ok)
     {
@@ -720,14 +730,14 @@ void Antico::wm_refresh()
 
 void Antico::shutdown()
 {
-    Msgbox *msg = new Msgbox();
-    msg->setText(tr("<b>Shutdown the PC</b>"));
-    msg->setInformativeText(tr("Are you sure to shutdown the PC ?"));
-    msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg->setButtonText(QMessageBox::Ok, tr("Ok"));
-    msg->setButtonText(QMessageBox::Cancel, tr("Cancel"));
-    msg->setIcon(QMessageBox::Warning);
-    int ret = msg->exec();
+    Msgbox msg;
+    msg.setText(tr("<b>Shutdown the PC</b>"));
+    msg.setInformativeText(tr("Are you sure to shutdown the PC ?"));
+    msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg.setButtonText(QMessageBox::Ok, tr("Ok"));
+    msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
+    msg.setIcon(QMessageBox::Warning);
+    int ret = msg.exec();
 
     if (ret == QMessageBox::Ok)
     {
@@ -741,14 +751,15 @@ void Antico::shutdown()
 
 void Antico::restart()
 {
-    Msgbox *msg = new Msgbox();
-    msg->setText(tr("<b>Restart the PC</b>"));
-    msg->setInformativeText(tr("Are you sure to restart the PC ?"));
-    msg->setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg->setButtonText(QMessageBox::Ok, tr("Ok"));
-    msg->setButtonText(QMessageBox::Cancel, tr("Cancel"));
-    msg->setIcon(QMessageBox::Warning);
-    int ret = msg->exec();
+    Msgbox msg;
+    msg.setText(tr("<b>Restart the PC</b>"));
+    msg.setInformativeText(tr("Are you sure to restart the PC ?"));
+    msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msg.setButtonText(QMessageBox::Ok, tr("Ok"));
+    msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
+    msg.setIcon(QMessageBox::Warning);
+    
+    int ret = msg.exec();
 
     if (ret == QMessageBox::Ok)
     {
@@ -766,7 +777,7 @@ void Antico::show_desktop()
 
     foreach(Frame *frm, mapping_clients)
     {
-        if (!frm->is_iconize()) // if not yet iconize
+        if ((frm->win_state().compare("IconicState") != 0 || frm->win_state().compare("WithdrawnState") != 0) && ! frm->is_splash()) // if not yet iconize/inactive
             frm->iconify();
     }
 
@@ -777,7 +788,7 @@ void Antico::show_desktop()
 void Antico::run_app_at_startup()
 {
     // default path
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
 
     antico->beginGroup("Startup");
 
@@ -795,17 +806,29 @@ void Antico::run_app_at_startup()
 
 void Antico::create_gui()
 {
+    cat_menu = new Categorymenu();
+    cat_menu->update_menu();
+    file_dialog = new Filedialog(cat_menu);
     // create dockbar
     dock = new Dockbar(this);
     //create desk
-    dsk = new Desk();
+    dsk = new Desk(this);
 }
 
+Filedialog * Antico::get_file_dialog()
+{
+    return file_dialog;
+}
+
+Categorymenu * Antico::get_category_menu()
+{
+    return cat_menu;
+}
 
 void Antico::set_settings()
 {
     // default path
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat);
+    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     // set default style on first installation, if no "/antico.cfg" is set
     if (antico->childGroups().isEmpty())
     {
@@ -819,7 +842,7 @@ void Antico::set_settings()
     if (antico->status() == QSettings::AccessError)
         qDebug () << "Error on setting antico.cfg";
 
-    QSettings *style = new QSettings(QCoreApplication::applicationDirPath() + "/theme/default/default.stl", QSettings::IniFormat);
+    style = new QSettings(QCoreApplication::applicationDirPath() + "/theme/default/default.stl", QSettings::IniFormat, this);
     // set default icon on first installation, if no "/default.stl" is set
     if (style->childGroups().isEmpty())
     {

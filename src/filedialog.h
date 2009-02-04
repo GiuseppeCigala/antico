@@ -23,17 +23,21 @@ class Filedialog : public QDialog
     Q_OBJECT
 
 public:
-    Filedialog(const QString &, const QString &, QWidget *parent=0);
+    Filedialog(Categorymenu *, QWidget *parent=0);
+    Filedialog(QWidget *parent=0);
     ~Filedialog();
     void init();
     void set_path(const QString &path);
+    void set_type(const QString &, const QString &);
     QString get_selected_path() const;
     QString get_selected_name() const;
     QString get_selected_icon() const;
     void set_filter(QDir::Filters);
     void set_name_filters(const QStringList &fltr);
     void set_read_only(bool);
+    void clear();
     void read_settings();
+    void set_category_menu();
    
 protected:
     void mouseMoveEvent(QMouseEvent *);
@@ -59,14 +63,24 @@ private:
     QLineEdit *line_path;
     QMenu *main_menu;
     QMenu *open_menu;
-    QString button_type;
     QString win_text;
     QString delete_file_pix;
     QString open_with_pix;
     QLabel *win_label;
     QLabel *preview_label;
     QRadioButton *hidden_files;
-    Categorymenu * cat_menu;
+    QVBoxLayout *layout;
+    QHBoxLayout *hor_layout;
+    QDialogButtonBox *button_box;
+    QPushButton *ok;
+    QPushButton *cancel;
+    QPushButton *close;
+    QSettings *antico;
+    QSettings *style;
+    QCompleter *completer;
+    Categorymenu *cat_menu;
+    Fileicon *prov;
+    QList <QMenu *> menu_list;
 };
 
 
