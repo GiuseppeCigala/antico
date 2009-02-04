@@ -230,6 +230,7 @@ void Desk::run_menu(QAction *act)
 {
     if (act->text().compare(tr("New link to folder")) == 0)
     {
+        file_dialog->clear();
         file_dialog->set_type(tr("New link to folder:"), "OK_Cancel");
   
         if (file_dialog->exec() == QDialog::Accepted)
@@ -248,6 +249,7 @@ void Desk::run_menu(QAction *act)
     }
     if (act->text().compare(tr("New link to file")) == 0)
     {
+        file_dialog->clear();
         file_dialog->set_type(tr("New link to file:"), "OK_Cancel");
        
         if (file_dialog->exec() == QDialog::Accepted)
@@ -266,6 +268,7 @@ void Desk::run_menu(QAction *act)
     }
     if (act->text().compare(tr("New link to application")) == 0)
     {
+        file_dialog->clear();
         file_dialog->set_type(tr("New link to application:"), "OK_Cancel");
         
         if (file_dialog->exec() == QDialog::Accepted)

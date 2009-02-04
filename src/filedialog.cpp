@@ -289,6 +289,7 @@ void Filedialog::clear()
 {
     tree_view->setRootIndex(dir_model->index("/"));
     tree_view->clearSelection();
+    line_path->clear();
 }
 
 void Filedialog::mousePressEvent(QMouseEvent *event)
