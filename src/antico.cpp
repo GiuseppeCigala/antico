@@ -191,6 +191,7 @@ bool Antico::x11EventFilter(XEvent *event)
 
     switch (event->type)
     {
+    /////////////////// REQUEST EVENTS ///////////////////
     case MapRequest:
         qDebug() << "[MapRequest]" << event->xmaprequest.window;
 
@@ -204,53 +205,6 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "--> Map new Client:" << event->xmaprequest.window;
             create_frame(event->xmaprequest.window, dock); // create new Frame for Client
         }
-        return false;
-        break;
-
-    case MapNotify:
-        qDebug() << "[MapNotify]";
-
-        if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
-        {
-            frm->map();
-            qDebug() << "MapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
-            return true;
-        }
-        if (event->xmap.event != event->xmap.window)
-            return true;
-        else
-            return false;
-        break;
-
-    case UnmapNotify:
-        qDebug() << "[UnmapNotify]";
-
-        if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
-        {
-            frm->unmap();
-            qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
-            return true;
-        }
-        if (event->xunmap.event != event->xunmap.window)
-            return true;
-
-        return false;
-        break;
-
-    case DestroyNotify:
-        qDebug() << "[DestroyNotify]";
-
-        if ((frm = mapping_clients.value(event->xdestroywindow.window)) != NULL)
-        {
-            qDebug() << "--> Destroy frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xdestroywindow.window;
-            mapping_clients.remove(event->xdestroywindow.window);
-            mapping_frames.remove(frm->winId());
-            dock->remove(frm->winId()); // remove eventually Dockicon or Sysicon still mapped
-            return true;
-        }
-        if (event->xdestroywindow.event != event->xdestroywindow.window)
-            return true;
-
         return false;
         break;
 
@@ -316,6 +270,94 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
+    case CirculateRequest:
+        qDebug() << "[CirculateRequest]";
+
+        if ((frm = mapping_clients.value(event->xcirculaterequest.window)) != NULL)
+        {
+            if (event->xcirculaterequest.place == PlaceOnTop)
+            {
+                frm->raise();
+                qDebug() << "--> CirculateRequest for frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xcirculaterequest.window;
+            }
+        }
+        else
+            XLowerWindow(QX11Info::display(), event->xcirculaterequest.window);
+
+        return false;
+        break;
+
+    /////////////////// NOTIFY EVENTS ///////////////////
+    case MapNotify:
+        qDebug() << "[MapNotify]";
+
+        if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
+        {
+            frm->map();
+            qDebug() << "MapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+            return true;
+        }
+        if (event->xmap.event != event->xmap.window)
+            return true;
+
+        return false;
+        break;
+
+    case UnmapNotify:
+        qDebug() << "[UnmapNotify]";
+
+        if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
+        {
+            frm->unmap();
+            qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+            return true;
+        }
+        if (event->xunmap.event != event->xunmap.window)
+            return true;
+
+        return false;
+        break;
+
+    case DestroyNotify:
+        qDebug() << "[DestroyNotify]";
+
+        if ((frm = mapping_clients.value(event->xdestroywindow.window)) != NULL)
+        {
+            qDebug() << "--> Destroy frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xdestroywindow.window;
+            mapping_clients.remove(event->xdestroywindow.window);
+            mapping_frames.remove(frm->winId());
+            dock->remove(frm->winId()); // remove eventually Dockicon or Sysicon still mapped
+            return true;
+        }
+        if (event->xdestroywindow.event != event->xdestroywindow.window)
+            return true;
+
+        return false;
+        break;
+
+    case EnterNotify:
+        qDebug() << "[EnterNotify]";
+
+        if ((frm = mapping_frames.value(event->xcrossing.window)) != NULL)
+        {
+            frm->set_focus(event->xcrossing.time);
+            qDebug() << "Enter in map frame:" << frm->winId();
+            return true;
+        }
+        else
+        {
+            XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToNone, CurrentTime);
+            qDebug() << "Enter in not map client:" << event->xcrossing.window;
+        }
+        return false;
+        break;
+
+    case LeaveNotify:
+        qDebug() << "[LeaveNotify]";
+
+        return false;
+        break;
+
     case ConfigureNotify:
         qDebug() << "[ConfigureNotify]";
 
@@ -332,24 +374,8 @@ bool Antico::x11EventFilter(XEvent *event)
         {
             qDebug() << "ReparentNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name();
             mapping_clients.remove(event->xreparent.window);
+            return true;
         }
-        return true;
-        break;
-
-    case CirculateRequest:
-        qDebug() << "[CirculateRequest]";
-
-        if ((frm = mapping_clients.value(event->xcirculaterequest.window)) != NULL)
-        {
-            if (event->xcirculaterequest.place == PlaceOnTop)
-            {
-                frm->raise();
-                qDebug() << "--> CirculateRequest for frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xcirculaterequest.window;
-            }
-        }
-        else
-            XLowerWindow(QX11Info::display(), event->xcirculaterequest.window);
-
         return false;
         break;
 
@@ -372,7 +398,7 @@ bool Antico::x11EventFilter(XEvent *event)
                 qDebug() << "---> wm_normal_hints";
                 frm->get_wm_normal_hints();
             }
-            else if (pev->atom == wm_name || pev->atom == _net_wm_name)
+            if (pev->atom == wm_name || pev->atom == _net_wm_name)
             {
                 qDebug() << "---> wm_name";
                 frm->get_wm_name();
@@ -383,17 +409,17 @@ bool Antico::x11EventFilter(XEvent *event)
                 qDebug() << "---> wm_state";
                 qDebug() << "Window changing state:" << pev->window;
             }
-            else if (pev->atom == wm_colormaps)
+            if (pev->atom == wm_colormaps)
             {
                 qDebug() << "---> wm_colormap_windows";
                 frm->get_colormaps();
             }
-            else if (pev->atom == wm_transient_for)
+            if (pev->atom == wm_transient_for)
             {
                 qDebug() << "---> wm_transient_for";
                 XGrabServer(QX11Info::display());
             }
-            else if (pev->atom == _net_wm_user_time)
+            if (pev->atom == _net_wm_user_time)
             {
                 qDebug() << "---> _net_wm_user_time";
                 set_active_frame(frm); // activation of selected frame and unactivation of others
@@ -403,43 +429,13 @@ bool Antico::x11EventFilter(XEvent *event)
         else if ((frm = mapping_frames.value(event->xproperty.window)) != NULL)
         {
             qDebug() << "Frame already mapped:" << event->xproperty.window << "- Name:" << frm->cl_name() << "- Client:" << frm->cl_win();
-            return false;
+            return true;
         }
         else
         {
             qDebug() << "Client not mapped:" << event->xproperty.window;
             return false;
         }
-        break;
-
-    case ButtonPress:
-        qDebug() << "[ButtonPress]";
-
-        if ((frm = mapping_frames.value(event->xbutton.window)) != NULL) // get the frame from his winId
-        {
-            qDebug() << "Button press for map frame:" << event->xbutton.window;
-            set_active_frame(frm);
-        }
-        else if (event->xbutton.window != dsk->winId())
-        {
-            qDebug() << "Button press for not map client:" << event->xbutton.window;
-            XRaiseWindow(QX11Info::display(), event->xbutton.window);
-        }
-        return false;
-        break;
-
-    case ClientMessage:
-        qDebug() << "[ClientMessage]";
-        mev = &event->xclient;
-
-        if (mev->message_type == wm_change_state && event->xclient.format == 32 &&
-                event->xclient.data.l[0] == IconicState && (frm = mapping_clients.value(event->xclient.window)) != NULL)
-        {
-            qDebug() << "---> wm_change_state";
-            frm->iconify();
-            return true;
-        }
-        return false;
         break;
 
     case ColormapNotify:
@@ -454,25 +450,28 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
-    case EnterNotify:
-        qDebug() << "[EnterNotify]";
-        /*
-          if ((frm = mapping_frames.value(event->xcrossing.window)) != NULL)
-          {
-              frm->set_focus(event->xcrossing.time);
-              qDebug() << "Enter in map frame:" << frm->winId();
-          }
-          else
-          {
-              XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToNone, CurrentTime);
-              qDebug() << "Enter in not map client:" << event->xcrossing.window;
-          }*/
+    /////////////////// OTHER EVENTS ///////////////////
+    case ButtonPress:
+        qDebug() << "[ButtonPress]";
+
+        if ((frm = mapping_frames.value(event->xbutton.window)) != NULL) // get the frame from his winId
+        {
+            qDebug() << "Button press for map frame:" << event->xbutton.window;
+            set_active_frame(frm);
+        }
         return false;
         break;
 
-    case LeaveNotify:
-        qDebug() << "[LeaveNotify]";
+    case ClientMessage:
+        qDebug() << "[ClientMessage]";
+        mev = &event->xclient;
 
+        if (mev->message_type == wm_change_state && event->xclient.format == 32 &&
+                event->xclient.data.l[0] == IconicState && (frm = mapping_clients.value(event->xclient.window)) != NULL)
+        {
+            qDebug() << "---> wm_change_state";
+            frm->iconify();
+        }
         return false;
         break;
 
@@ -758,7 +757,7 @@ void Antico::restart()
     msg.setButtonText(QMessageBox::Ok, tr("Ok"));
     msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
     msg.setIcon(QMessageBox::Warning);
-    
+
     int ret = msg.exec();
 
     if (ret == QMessageBox::Ok)

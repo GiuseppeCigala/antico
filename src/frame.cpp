@@ -116,7 +116,7 @@ void Frame::init()
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
 
     //if the frame is too large, maximize
-    if (frame_w >= QApplication::desktop()->width()-dock_height/2 || frame_h >= QApplication::desktop()->height()-dock_height)
+    if (frame_w >= desk->width()-10 || frame_h >= desk->height()-20)
     {
         maximize();
     }
@@ -155,7 +155,7 @@ void Frame::init()
     xev.data.l[1] = CurrentTime;
     xev.data.l[2] = 0;
     XSendEvent(QX11Info::display(), QApplication::desktop()->winId(), False, StructureNotifyMask, (XEvent *)&xev);
-
+ 
     // map client
     XMapWindow(QX11Info::display(), c_win);
     XSync(QX11Info::display(), false);
@@ -759,20 +759,23 @@ void Frame::maximize()
 
 void Frame::dragEnterEvent(QDragEnterEvent *event)
 {
+    raise();
     qDebug() << "dragEnterEvent";
     event->acceptProposedAction();
+    qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data() << event->source();
 }
 
 void Frame::dragMoveEvent(QDragMoveEvent *event)
 {
     qDebug() << "dragMoveEvent";
-    event->acceptProposedAction();
+    event->accept();
+    qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data() << event->source();
 }
 
 void Frame::dropEvent(QDropEvent *event)
 {
     qDebug() << "dropEvent";
-    event->setDropAction(Qt::MoveAction);
-    event->accept();
+    event->acceptProposedAction();
+    qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data() << event->source();
 }
 
