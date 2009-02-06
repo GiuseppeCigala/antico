@@ -59,7 +59,6 @@ Manager::~Manager()
     delete pixmap;
     delete file_dialog;
     delete prov;
-    delete app_ico;
     delete &top_bdr_spinBox;
     delete &lateral_bdr_spinBox;
     delete &bottom_bdr_spinBox;
@@ -1246,8 +1245,8 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
         QString path = dir_model->filePath(tree_view->currentIndex());
         QString app = dir_model->fileName(tree_view->currentIndex());
         QFileInfo info = dir_model->fileInfo(tree_view->currentIndex());
-        app_ico = new Appicon(this); // get application icon
-        QString icon = app_ico->get_app_icon(app);
+        Appicon app_ico; // get application icon
+        QString icon = app_ico.get_app_icon(app);
 
         if ( ! app.isEmpty() && info.isExecutable() && ! info.isDir())
         {
@@ -1289,7 +1288,9 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
         if (! name.isEmpty() && pathinfo.isExecutable())
         {
             qDebug() << "App:" << name << "Path:" << path;
-            run_list->addItem(name); // add app on run list
+            Appicon app_icon; // get application icon
+            QString icon = app_icon.get_app_icon(name);
+            new QListWidgetItem(QIcon(icon), name, run_list); // add app on run list
             antico->beginGroup("Startup");
             antico->beginGroup(name);
             antico->setValue("name", name);
@@ -1359,12 +1360,16 @@ void Manager::update_remove_list() // update the Category/Apps list on remove ta
         antico->beginGroup(cat_name); // Category group
         category = new QTreeWidgetItem(app_tree); // add Category group on TreeWidget
         category->setText(0, cat_name); // set Category group name (top-level item)
+        category->setBackground(0, QBrush(Qt::gray));
 
         for (int i = 0; i < antico->childGroups().size(); i++)
         {
             QString app_name = antico->childGroups().value(i); //Application name
-            app = new QTreeWidgetItem(category); // add Application on TreeWidget
+            app = new QTreeWidgetItem(category); // add Application on Category tree
+            Appicon app_icon; // get application icon
+            QString icon = app_icon.get_app_icon(app_name);
             app->setText(0, app_name);
+            app->setIcon(0, QIcon(icon));
         }
         antico->endGroup(); // Category group
     }
@@ -1381,7 +1386,9 @@ void Manager::update_run_list() // update the "Run at startup" list
     {
         QString app_name = antico->childGroups().value(i);
         antico->beginGroup(app_name); // App group
-        run_list->addItem(app_name); // add app on run list
+        Appicon app_icon; // get application icon
+        QString icon = app_icon.get_app_icon(app_name);
+        new QListWidgetItem(QIcon(icon), app_name, run_list); // add app on run list
         antico->endGroup(); // Name
     }
     antico->endGroup(); // Startup

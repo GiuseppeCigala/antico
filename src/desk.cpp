@@ -31,7 +31,6 @@ Desk::~Desk()
     delete d_folder;
     delete d_file;
     delete d_app;
-    delete app_icon;
     delete &dock_height;
     delete &wall_pix;
     delete &file_link_pix;
@@ -324,8 +323,8 @@ void Desk::create_desk_file(const QString &name, const QString &path, const QStr
 
 void Desk::create_desk_app(const QString &name, const QString &path, const QPoint &pos, QWidget *parent)
 {
-    app_icon = new Appicon(parent); // get application icon
-    QString icon = app_icon->get_app_icon(name);
+    Appicon app_icon; // get application icon
+    QString icon = app_icon.get_app_icon(name);
     d_app = new Deskapp(name, path, icon, parent); // new desktop application
     desk_apps << d_app; // save the new deskapp
     d_app->move(pos.x(), pos.y());

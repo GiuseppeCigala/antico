@@ -762,20 +762,20 @@ void Frame::dragEnterEvent(QDragEnterEvent *event)
     raise();
     qDebug() << "dragEnterEvent";
     event->acceptProposedAction();
-    qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data() << event->source();
+    qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data();
 }
 
 void Frame::dragMoveEvent(QDragMoveEvent *event)
 {
     qDebug() << "dragMoveEvent";
     event->accept();
-    qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data() << event->source();
+    qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data();
 }
 
 void Frame::dropEvent(QDropEvent *event)
 {
     qDebug() << "dropEvent";
     event->acceptProposedAction();
-    qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data() << event->source();
+    qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data();
 }
 
