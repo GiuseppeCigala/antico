@@ -79,6 +79,7 @@ void Runner::run()
             msg.setText(tr("<b>COMMAND INCORRECT</b>"));
             msg.setInformativeText(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
             msg.setIcon(QMessageBox::Critical);
+            msg.exec();
         }
     }
 }
