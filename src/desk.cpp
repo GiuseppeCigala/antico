@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Desk::Desk(Antico *a, QWidget *parent) : QFrame(parent)
+Desk::Desk(Antico *a, QWidget *parent) : QLabel(parent)
 {
     app = a;
     file_dialog = app->get_file_dialog();
@@ -69,11 +69,8 @@ void Desk::read_settings()
 
 void Desk::set_geometry()
 {
-    QPalette current = palette();
-    QPixmap background = QPixmap(wall_pix).scaled(QApplication::desktop()->width(), QApplication::desktop()->height()-dock_height,
-                         Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    current.setBrush(QPalette::Window, background);
-    setPalette(current);
+    setPixmap(wall_pix);
+    setScaledContents(true);
     setGeometry(0, 0, QApplication::desktop()->width(), QApplication::desktop()->height()-dock_height);
 }
 

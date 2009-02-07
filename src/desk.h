@@ -30,7 +30,7 @@ class Filedialog;
 
 ////////////////////////////////////////
 
-class Desk : public QFrame
+class Desk : public QLabel
 {
     Q_OBJECT
 

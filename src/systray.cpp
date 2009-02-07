@@ -13,8 +13,11 @@
 #define SYSTEM_TRAY_CANCEL_MESSAGE  2
 
 
-Systray::Systray(QWidget *parent) : QFrame(parent)
+Systray::Systray(QWidget *parent) : QLabel(parent)
 {
+    read_settings();
+    setPixmap(sys_pix);
+    setScaledContents(true);
     layout = new QHBoxLayout(this);
     layout->setAlignment(Qt::AlignRight);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -57,6 +60,21 @@ Systray::~Systray()
     delete emb_cont;
 }
 
+void Systray::read_settings()
+{
+    // get style path
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico->beginGroup("Style");
+    QString stl_name = antico->value("name").toString();
+    QString stl_path = antico->value("path").toString();
+    antico->endGroup(); //Style
+    // get style values
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    style->beginGroup("Dockbar");
+    sys_pix = stl_path + style->value("dock_pix").toString();
+    style->endGroup(); //Dockbar
+}
+
 void Systray::add(Frame *frm)
 {
     s_icon = new Sysicon(frm, this);
@@ -69,6 +87,7 @@ void Systray::add(Frame *frm)
 void Systray::add(Window win_id)
 {
     emb_cont = new QX11EmbedContainer(this);
+    emb_cont->setPalette(QPalette(QPalette::Dark));
     emb_cont->embedClient(win_id);
     qDebug() << "Client added to System Tray." << "Client Id:" << win_id;
     layout->addWidget(emb_cont);

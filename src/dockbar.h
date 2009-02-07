@@ -25,7 +25,7 @@ class Launcher;
 
 ////////////////////////////////////////
 
-class Dockbar : public QFrame
+class Dockbar : public QLabel
 {
     Q_OBJECT
 

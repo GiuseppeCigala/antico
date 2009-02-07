@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Dockbar::Dockbar(Antico *a, QWidget *parent) : QFrame(parent)
+Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
 {
     app = a;
     dock_layout = new QHBoxLayout(this);
@@ -75,10 +75,8 @@ void Dockbar::read_settings()
 
 void Dockbar::set_geometry()
 {
-    QPalette current = palette();
-    current.setBrush(QPalette::Window, QPixmap(dock_pix).scaled(QApplication::desktop()->width(), dock_height,
-                     Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    setPalette(current);
+    setPixmap(dock_pix);
+    setScaledContents(true);
     setGeometry(0, QApplication::desktop()->height()-dock_height, QApplication::desktop()->width(), dock_height);
 }
 

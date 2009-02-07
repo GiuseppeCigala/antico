@@ -19,13 +19,14 @@ class Sysicon;
 
 ////////////////////////////////////////
 
-class Systray : public QFrame
+class Systray : public QLabel
 {
     Q_OBJECT
 
 public:
     Systray(QWidget *parent=0);
     ~Systray();
+    void read_settings();
     void add(Frame *);
     void add(Window);
     void remove(Window);
@@ -42,6 +43,7 @@ private:
     QHash<int, Sysicon *> sys_icons; // mapping frame id with Sysicon (key=frame_win_id value=Sysicon)
     Sysicon *s_icon;
     QX11EmbedContainer *emb_cont;
+    QString sys_pix;
     // System tray properties
     Atom kde_systray_prop;
     Atom net_opcode_atom;
