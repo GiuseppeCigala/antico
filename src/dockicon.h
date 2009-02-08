@@ -24,7 +24,7 @@ class Dockicon : public QWidget
     Q_OBJECT
 
 public:
-    Dockicon(Frame *frm, Systray *sys, QWidget *parent=0);
+    Dockicon(Frame *, Systray *, QWidget *parent=0);
     ~Dockicon();
     void read_settings();
     void update_style();
@@ -40,8 +40,7 @@ public slots:
     void run_menu(QAction *);
 
 signals:
-    void show_dock(Dockicon *);
-    void destroy_dock(Dockicon *);
+    void destroy_dockicon(Dockicon *);
 
 private:
     Frame *frm;

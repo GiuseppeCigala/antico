@@ -103,8 +103,8 @@ void Filedialog::init()
     layout->addWidget(tree_view);
     layout->addWidget(button_box);
 
-    connect(tree_view, SIGNAL(clicked(QModelIndex)), this, SLOT(show_path(QModelIndex)));
-    connect(tree_view, SIGNAL(clicked(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
+    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_path(QModelIndex)));
+    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
     connect(hidden_files, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
     connect(line_path, SIGNAL(returnPressed()), this, SLOT(path_completer()));
     connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(update_tree(QModelIndex)));

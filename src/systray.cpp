@@ -80,6 +80,7 @@ void Systray::add(Frame *frm)
     s_icon = new Sysicon(frm, this);
     sys_icons.insert(frm->winId(), s_icon); // save the Frame winId/Sysicon
     layout->addWidget(s_icon);
+    updateGeometry();
     qDebug() <<"Frame added to System Tray." << "Frame name:" << frm->cl_name() << "Frame Id:" << frm->winId() << "Client Id:" << frm->cl_win();
     connect(s_icon, SIGNAL(destroy_sys(Sysicon *)), this, SLOT(remove(Sysicon *)));
 }
@@ -93,6 +94,7 @@ void Systray::add(Window win_id)
     layout->addWidget(emb_cont);
     emb_cont->setContentsMargins(0, 0, 0, 0);
     emb_cont->setFixedSize(qMin(25, height()), qMin(25, height()));
+    updateGeometry();
     XResizeWindow(QX11Info::display(), win_id, emb_cont->width(), emb_cont->height());
     XMapRaised(QX11Info::display(), win_id);
 
@@ -107,7 +109,7 @@ void Systray::remove(Window win_id) // if Sysicon is on Systray together with eq
         sys_icons.remove(win_id);
         qDebug() << "Sysicon remove from Systray cmd.";
         s_icon->close();
-        layout->setAlignment(Qt::AlignRight);
+        updateGeometry();
     }
 }
 

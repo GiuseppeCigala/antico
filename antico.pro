@@ -20,7 +20,8 @@ SOURCES = src/main.cpp \
  src/utils.cpp \
  src/deskdev.cpp \
  src/deskfile.cpp \
- src/deskfolder.cpp
+ src/deskfolder.cpp \
+ src/dockapp.cpp
 HEADERS = src/defs.h \
  src/antico.h \
  src/frame.h \
@@ -43,7 +44,8 @@ HEADERS = src/defs.h \
  src/utils.h \
  src/deskdev.h \
  src/deskfile.h \
- src/deskfolder.h
+ src/deskfolder.h \
+ src/dockapp.h
 OBJECTS_DIR += build
 MOC_DIR += build
 QMAKE_INCDIR += /usr/include
@@ -51,7 +53,5 @@ QMAKE_CLEAN += antico
 TEMPLATE = app
 CONFIG += warn_on release
 QT += dbus
-TRANSLATIONS = language/it_IT.ts \
-language/cs_CZ.ts \
-language/ru_RU.ts
+TRANSLATIONS = language/it_IT.ts language/cs_CZ.ts language/ru_RU.ts
 //DEFINES = QT_NO_DEBUG_OUTPUT

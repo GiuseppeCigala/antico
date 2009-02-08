@@ -21,7 +21,7 @@ class Colordialog : public QDialog
     Q_OBJECT
 
 public:
-    Colordialog(const QColor &color, QWidget *parent=0);
+    Colordialog(const QColor &, QWidget *parent=0);
     ~Colordialog();
     QColor get_color();
     void init();

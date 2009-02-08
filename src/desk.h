@@ -50,6 +50,9 @@ public:
   
 public slots:
     void run_menu(QAction *);
+    void remove_deskfolder(Deskfolder *);
+    void remove_deskfile(Deskfile *);
+    void remove_deskapp(Deskapp *);
     void device_added( const QString &);
     void device_removed(const QString &);
 
@@ -73,8 +76,6 @@ private:
     QString folder_link_pix;
     QString file_link_pix;
     QString app_link_pix;
-    QTreeView *tree_view;
-    QDirModel *dir_model;
     Antico *app;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;

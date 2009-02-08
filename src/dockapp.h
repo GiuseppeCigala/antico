@@ -1,42 +1,39 @@
 ////////////////////////////////////////
-//  File      : deskapp.h             //
+//  File      : dockapp.h             //
 //  Written by: g_cigala@virgilio.it  //
 //  Copyright : GPL                   //
 ////////////////////////////////////////
 
-// add application link on the desk
+// add application link on the dockbar
 
 ////////////////////////////////////////
 
-#ifndef DESKAPP_H
-#define DESKAPP_H
+#ifndef DOCKAPP_H
+#define DOCKAPP_H
 
 #include "defs.h"
 #include "filedialog.h"
 
 ////////////////////////////////////////
 
-class Deskapp : public QWidget
+class Dockapp : public QLabel
 {
     Q_OBJECT
 
 public:
-    Deskapp(const QString &, const QString &, const QString &, QWidget *parent=0);
-    ~Deskapp();
+    Dockapp(const QString &, const QString &, const QString &, QWidget *parent=0);
+    ~Dockapp();
     void read_settings();
     void update_style();
 
 protected:
     void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
-    void paintEvent(QPaintEvent *);
 
 signals:
-    void destroy_deskapp(Deskapp *);
+    void destroy_dockapp(Dockapp *);
 
 public slots:
     void del_app();
@@ -46,12 +43,11 @@ private:
     QString app_name;
     QString app_path;
     QString delete_link_pix;
+    QString d_app_pix;
     QPoint mousepos;
-    QColor d_app_col;
-    QPixmap d_app_pix;
     QSettings *style;
     QSettings *antico;
-    bool zoom;
+    int dock_height;
 };
 
 #endif

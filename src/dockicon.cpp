@@ -14,7 +14,7 @@ Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(par
     title = frm->cl_name();
     sys = sys_tr;
     read_settings();
-    iconize = true;
+    iconize = false;
     bdr_width = 1;
 }
 
@@ -104,15 +104,15 @@ void Dockicon::run_menu(QAction *act)
 {
     if (act->text() == tr("Close"))
     {
-        emit destroy_dock(this);
+        emit destroy_dockicon(this);
         frm->destroy();
         close();
     }
     if (act->text() == tr("Add to System Tray"))
     {
-        emit destroy_dock(this);
         sys->add(frm); // add Dockicon to System Tray
         qDebug() << "Dockicon add to System Tray";
+        emit destroy_dockicon(this);
         frm->unmap();
         close();
     }

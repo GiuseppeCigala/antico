@@ -17,12 +17,12 @@
 
 ////////////////////////////////////////
 
-class Deskfile : public QLabel
+class Deskfile : public QWidget
 {
     Q_OBJECT
 
 public:
-    Deskfile(Categorymenu *, const QString &dir_name, const QString &dir_path, QString pix, QWidget *parent=0);
+    Deskfile(Categorymenu *, const QString &, const QString &, QString, QWidget *parent=0);
     ~Deskfile();
     void read_settings();
     void init();
@@ -38,7 +38,8 @@ protected:
     void contextMenuEvent(QContextMenuEvent *);
 
 signals:
-
+    void destroy_deskfile(Deskfile *);
+    
 public slots:
     void del_file();
 

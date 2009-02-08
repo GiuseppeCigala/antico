@@ -20,7 +20,7 @@ class Colorsel : public QWidget
     Q_OBJECT
 
 public:
-    Colorsel(const QColor &color, QWidget *parent = 0);
+    Colorsel(const QColor &, QWidget *parent = 0);
     ~Colorsel();
     QSize minimumSizeHint();
     QColor get_color();

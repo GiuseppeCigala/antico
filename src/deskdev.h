@@ -18,12 +18,12 @@ class Filedialog;
 
 ////////////////////////////////////////
 
-class Deskdev : public QLabel
+class Deskdev : public QWidget
 {
     Q_OBJECT
 
 public:
-    Deskdev(Filedialog *, Categorymenu *, const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent=0);
+    Deskdev(Filedialog *, Categorymenu *, const QString &, const QString &, const QString &, const QString &, QWidget *parent=0);
     ~Deskdev();
     void read_settings();
     void init();

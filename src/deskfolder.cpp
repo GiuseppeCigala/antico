@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_nm, const QString &dir_pth, const QRect &geom, QWidget *parent) : QLabel(parent)
+Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_nm, const QString &dir_pth, const QRect &geom, QWidget *parent) : QWidget(parent)
 {
     file_dialog = dial;
     cat_menu = menu;
@@ -168,13 +168,13 @@ void Deskfolder::contextMenuEvent(QContextMenuEvent *event)
 
 void Deskfolder::del_folder()
 {
+    emit destroy_deskfolder(this);
     // remove the deskfolder from desk and from antico.cfg
     antico->beginGroup("Desktop");
     antico->beginGroup("Folder");
     antico->remove(dir_name);
     antico->endGroup(); // Folder
     antico->endGroup(); // Desktop
-    close();
 }
 
 void Deskfolder::update_style()

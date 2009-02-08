@@ -133,7 +133,7 @@ void Launcher::mousePressEvent(QMouseEvent *event)
 void Launcher::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 }
 
 void Launcher::leaveEvent(QEvent *event)

@@ -326,7 +326,7 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "--> Destroy frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xdestroywindow.window;
             mapping_clients.remove(event->xdestroywindow.window);
             mapping_frames.remove(frm->winId());
-            dock->remove(frm->winId()); // remove eventually Dockicon or Sysicon still mapped
+            dock->remove_dockicon(frm->winId()); // remove eventually Dockicon or Sysicon still mapped
             return true;
         }
         if (event->xdestroywindow.event != event->xdestroywindow.window)
@@ -491,10 +491,10 @@ bool Antico::x11EventFilter(XEvent *event)
 
     case Expose:
         qDebug() << "[Expose]";
-
+/*
         if (event->xexpose.window == dock->winId()) // don't cover the dockbar by other apps
             XRaiseWindow(QX11Info::display(), event->xbutton.window);
-
+*/
         return false;
         break;
 

@@ -15,7 +15,7 @@ Desk::Desk(Antico *a, QWidget *parent) : QLabel(parent)
     cat_menu = app->get_category_menu();
     read_settings();
     set_geometry();
-    set_desk_icons();
+    set_desk_icons(); // at startup, restore deskfolder/deskfile/deskapp on desktop
     setAcceptDrops(true); // for drag and drop from Filedialog
     init();
     show();
@@ -26,8 +26,6 @@ Desk::~Desk()
     delete app;
     delete file_dialog;
     delete cat_menu;
-    delete tree_view;
-    delete dir_model;
     delete d_folder;
     delete d_file;
     delete d_app;
@@ -174,24 +172,21 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
     if (event->proposedAction() == Qt::LinkAction)
     {
         qDebug() << "dropEvent";
-        tree_view = (QTreeView *)event->source();
-        dir_model = (QDirModel *)tree_view->model();
+        QTreeView *tree_view = (QTreeView *)event->source();
+        QDirModel *dir_model = (QDirModel *)tree_view->model();
         QModelIndex selection = tree_view->currentIndex();
 
         QString name = dir_model->fileName(tree_view->currentIndex());
         qDebug() << "Selected name:" << name;
         QPoint pos = event->pos(); // position of drop event
 
-        QString path;
-        QString icon;
-
         if (dir_model->isDir(selection)) // is a directory
         {
-            path = dir_model->filePath(selection);
+            QString path = dir_model->filePath(selection);
             qDebug() << "Selected path:" << path;
             QRect geometry = tree_view->geometry(); // get the dimension of TreeView
 
-            if (name != "")
+            if (! name.isEmpty())
             {
                 create_desk_folder(name, path, geometry, pos, this);
             }
@@ -200,23 +195,24 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
         {
             QString filepath = dir_model->filePath(selection);
             QFileInfo pathinfo(filepath);
-            path = pathinfo.absolutePath(); // remove the file name from path
+            QString path = pathinfo.absolutePath(); // remove the file name from path
             path.append("/"); // add slash at the end
             qDebug() << "Selected path:" << path;
 
             QFileInfo nameinfo(name);
             Fileicon *prov = (Fileicon *)dir_model->iconProvider();
-            icon = prov->type(nameinfo); // get the file icon
+            QString icon = prov->type(nameinfo); // get the file icon
 
-            if (name != "")
+            if (! name.isEmpty())
             {
                 if (pathinfo.isExecutable()) // is an application
                 {
-                    qDebug() << "The file is an executable.";
                     create_desk_app(name, path, pos, this);
                 }
                 else // is a file
+                {
                     create_desk_file(name, path, icon, pos, this);
+                }
             }
         }
     }
@@ -228,16 +224,15 @@ void Desk::run_menu(QAction *act)
     {
         file_dialog->clear();
         file_dialog->set_type(tr("New link to folder:"), "OK_Cancel");
-  
+
         if (file_dialog->exec() == QDialog::Accepted)
         {
             QString path = file_dialog->get_selected_path();
             QString name = file_dialog->get_selected_name();
             QRect geometry = file_dialog->geometry(); // get the dimension of Filedialog
             QPoint pos = menu->pos();
-            QFileInfo pathinfo(path+name);
 
-            if (name != "" && ! pathinfo.isFile())
+            if (! name.isEmpty() && ! path.endsWith("/")) // is a directory
             {
                 create_desk_folder(name, path, geometry, pos, this);
             }
@@ -247,7 +242,7 @@ void Desk::run_menu(QAction *act)
     {
         file_dialog->clear();
         file_dialog->set_type(tr("New link to file:"), "OK_Cancel");
-       
+
         if (file_dialog->exec() == QDialog::Accepted)
         {
             QString path = file_dialog->get_selected_path();
@@ -256,7 +251,7 @@ void Desk::run_menu(QAction *act)
             QPoint pos = menu->pos();
             QFileInfo pathinfo(path+name);
 
-            if (name != "" && pathinfo.isFile())
+            if (! name.isEmpty() && pathinfo.isFile() && ! pathinfo.isExecutable())
             {
                 create_desk_file(name, path, icon, pos, this);
             }
@@ -266,7 +261,7 @@ void Desk::run_menu(QAction *act)
     {
         file_dialog->clear();
         file_dialog->set_type(tr("New link to application:"), "OK_Cancel");
-        
+
         if (file_dialog->exec() == QDialog::Accepted)
         {
             QString path = file_dialog->get_selected_path();
@@ -274,7 +269,7 @@ void Desk::run_menu(QAction *act)
             QPoint pos = menu->pos();
             QFileInfo pathinfo(path+name);
 
-            if (name != "" && pathinfo.isExecutable())
+            if (! name.isEmpty() && pathinfo.isExecutable())
             {
                 create_desk_app(name, path, pos, this);
             }
@@ -287,6 +282,7 @@ void Desk::create_desk_folder(const QString &name, const QString &path, const QR
     d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geometry, parent);
     desk_folders << d_folder; // save the new deskfolder
     d_folder->move(pos.x(), pos.y());
+    connect(d_folder, SIGNAL(destroy_deskfolder(Deskfolder *)), this, SLOT(remove_deskfolder(Deskfolder *))); // delete deskfolder from list
     // save new deskfolder name, path, pos and geometry
     antico->beginGroup("Desktop");
     antico->beginGroup("Folder");
@@ -300,11 +296,19 @@ void Desk::create_desk_folder(const QString &name, const QString &path, const QR
     antico->endGroup(); //Desktop
 }
 
+void Desk::remove_deskfolder(Deskfolder *d_folder) // remove from "Delete link" right button mouse on Desktop
+{
+    desk_folders.removeOne(d_folder);
+    qDebug() << "Deskfolder remove. Num. after deletion:" << desk_folders.size();
+    d_folder->close();
+}
+
 void Desk::create_desk_file(const QString &name, const QString &path, const QString &icon, const QPoint &pos, QWidget *parent)
 {
     d_file = new Deskfile(cat_menu, name, path, icon, parent);
     desk_files << d_file; // save the new deskfile
     d_file->move(pos.x(), pos.y());
+    connect(d_file, SIGNAL(destroy_deskfile(Deskfile *)), this, SLOT(remove_deskfile(Deskfile *))); // delete deskfile from list
     // save new deskfile name, path, icon and pos
     antico->beginGroup("Desktop");
     antico->beginGroup("File");
@@ -318,6 +322,13 @@ void Desk::create_desk_file(const QString &name, const QString &path, const QStr
     antico->endGroup(); //Desktop
 }
 
+void Desk::remove_deskfile(Deskfile *d_file) // remove from "Delete link" right button mouse on Desktop
+{
+    desk_files.removeOne(d_file);
+    qDebug() << "Deskfile remove. Num. after deletion:" << desk_files.size();
+    d_file->close();
+}
+
 void Desk::create_desk_app(const QString &name, const QString &path, const QPoint &pos, QWidget *parent)
 {
     Appicon app_icon; // get application icon
@@ -325,6 +336,7 @@ void Desk::create_desk_app(const QString &name, const QString &path, const QPoin
     d_app = new Deskapp(name, path, icon, parent); // new desktop application
     desk_apps << d_app; // save the new deskapp
     d_app->move(pos.x(), pos.y());
+    connect(d_app, SIGNAL(destroy_deskapp(Deskapp *)), this, SLOT(remove_deskapp(Deskapp *))); // delete deskapp from list
     // save new deskapp name, path, pix and pos
     antico->beginGroup("Desktop");
     antico->beginGroup("App");
@@ -336,6 +348,13 @@ void Desk::create_desk_app(const QString &name, const QString &path, const QPoin
     antico->endGroup(); //name
     antico->endGroup(); //App
     antico->endGroup(); //Desktop
+}
+
+void Desk::remove_deskapp(Deskapp *d_app) // remove from "Delete link" right button mouse on Desktop
+{
+    desk_apps.removeOne(d_app);
+    qDebug() << "Deskapp remove. Num. after deletion:" << desk_apps.size();
+    d_app->close();
 }
 
 void Desk::update_style()
@@ -435,7 +454,7 @@ void Desk::mount_device(const QString &uuid, const QString &block_device, const 
 
     Deskdev *d_dev = new Deskdev(file_dialog, cat_menu, block_device, mnt_dir, vol_label, drive_type, this); // save the new deskdev
     desk_dev.insert(uuid, d_dev);
-     
+
     if (mnt_cmd)
     {
         Msgbox info;

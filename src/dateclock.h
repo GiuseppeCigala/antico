@@ -15,7 +15,7 @@
 
 ////////////////////////////////////////
 
-class Dateclock : public QFrame
+class Dateclock : public QLabel
 {
     Q_OBJECT
 

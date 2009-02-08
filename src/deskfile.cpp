@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &file_pth, QString pix, QWidget *parent) : QLabel(parent)
+Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &file_pth, QString pix, QWidget *parent) : QWidget(parent)
 {
     cat_menu = menu;
     file_name = file_nm;
@@ -131,13 +131,13 @@ void Deskfile::leaveEvent(QEvent *event)
 
 void Deskfile::del_file()
 {
+    emit destroy_deskfile(this);
     // remove the deskicon from desk and from antico.cfg
     antico->beginGroup("Desktop");
     antico->beginGroup("File");
     antico->remove(file_name);
     antico->endGroup(); // File
     antico->endGroup(); // Desktop
-    close();
 }
 
 void Deskfile::contextMenuEvent(QContextMenuEvent *event)

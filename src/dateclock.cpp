@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Dateclock::Dateclock(QWidget *parent) : QFrame(parent)
+Dateclock::Dateclock(QWidget *parent) : QLabel(parent)
 {
     read_settings();
     timer = new QTimer(this);

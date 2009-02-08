@@ -36,6 +36,7 @@ CHANGELOG
 27/01/09: add internationalization - shading on Dockicon/Sysicon.
 30/01/09: add Freedesktop.org ".desktop" support (remove previous "Launcher" entry in "antico.cfg") - add CZ/RU translation./
 04/02/09: code optimization - "Open with" on Deskfolder/Deskdev - ".desktop" search on subdir.
+08/02/09: add Dockapps on Dockbar (also with Drag&Drop).
 
 ***********
 TO DO

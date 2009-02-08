@@ -23,7 +23,7 @@ class Sysicon : public QWidget
     Q_OBJECT
 
 public:
-    Sysicon(Frame *frm, QWidget *parent=0);
+    Sysicon(Frame *, QWidget *parent=0);
     ~Sysicon();
     void read_settings();
     void update_style();

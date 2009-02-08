@@ -18,12 +18,12 @@ class Filedialog;
 
 ////////////////////////////////////////
 
-class Deskfolder : public QLabel
+class Deskfolder : public QWidget
 {
     Q_OBJECT
 
 public:
-    Deskfolder(Filedialog *, Categorymenu *, const QString &dir_name, const QString &dir_path, const QRect &geometry, QWidget *parent=0);
+    Deskfolder(Filedialog *, Categorymenu *, const QString &, const QString &, const QRect &, QWidget *parent=0);
     ~Deskfolder();
     void read_settings();
     void update_style();
@@ -40,6 +40,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *);
 
 signals:
+    void destroy_deskfolder(Deskfolder *);
 
 public slots:
     void del_folder();

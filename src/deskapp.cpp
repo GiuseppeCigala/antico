@@ -124,13 +124,13 @@ void Deskapp::leaveEvent(QEvent *event)
 
 void Deskapp::del_app()
 {
+    emit destroy_deskapp(this);
     // remove the deskapp from desk and from Antico.conf
     antico->beginGroup("Desktop");
     antico->beginGroup("App");
     antico->remove(app_name);
     antico->endGroup(); // App
     antico->endGroup(); // Desktop
-    close();
 }
 
 void Deskapp::update_style()

@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent) : QLabel(parent)
+Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent) : QWidget(parent)
 {
     file_dialog = dial;
     cat_menu = menu;

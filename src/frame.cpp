@@ -258,9 +258,9 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
         }
         if (wm_flags & PBaseSize)
         {
-            if (xsizehints->base_width != 0)
+            if (xsizehints->base_width != 0 && xsizehints->base_width >= client_w)
                 client_w = xsizehints->base_width;
-            if (xsizehints->base_height != 0)
+            if (xsizehints->base_height != 0 && xsizehints->base_height >= client_h)
                 client_h = xsizehints->base_height;
             qDebug() << "PBaseSize:" << client_w << client_h;
         }
