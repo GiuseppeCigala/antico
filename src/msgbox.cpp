@@ -10,7 +10,7 @@
 
 Msgbox::Msgbox(QWidget *parent) : QMessageBox(parent)
 {
-  
+    setWindowModality(Qt::WindowModal);
 }
 
 Msgbox::~Msgbox()
@@ -28,6 +28,7 @@ void Msgbox::mousePressEvent(QMouseEvent *event)
 {
     mousepos = event->pos();
     grabMouse(QCursor(Qt::SizeAllCursor));
+    raise();
 }
 
 void Msgbox::mouseMoveEvent(QMouseEvent *event)
@@ -37,7 +38,7 @@ void Msgbox::mouseMoveEvent(QMouseEvent *event)
 }
 
 void Msgbox::mouseReleaseEvent(QMouseEvent *event)
-{ 
+{
     Q_UNUSED(event);
     releaseMouse();
 }

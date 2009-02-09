@@ -116,7 +116,7 @@ void Dockbar::add(Frame *frm)
     {
         d_icon = new Dockicon(frm, sys);
         dock_icons.insert(frm->winId(), d_icon); // save the Frame winId/Dockicon
-        qDebug() << "Dockicons added to Dockbar. Frame:" << frm->winId();
+        qDebug() << "Dockicon added to Dockbar. Frame:" << frm->winId();
         update_dockicon_size();
         connect(d_icon, SIGNAL(destroy_dockicon(Dockicon *)), this, SLOT(remove_dockicon(Dockicon *))); // delete iconize dockicon and update dockbar size
     }

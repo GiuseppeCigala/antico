@@ -155,7 +155,7 @@ void Frame::init()
     xev.data.l[1] = CurrentTime;
     xev.data.l[2] = 0;
     XSendEvent(QX11Info::display(), QApplication::desktop()->winId(), False, StructureNotifyMask, (XEvent *)&xev);
- 
+
     // map client
     XMapWindow(QX11Info::display(), c_win);
     XSync(QX11Info::display(), false);
@@ -319,16 +319,21 @@ void Frame::raise()
     set_state(NormalState);
     state = "NormalState";
     qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-    dock->add(this);  // add frame to dockbar (pager)
+
+    if (frame_type != "Dialog")
+        dock->add(this);  // add frame to dockbar (pager)
 }
 
 void Frame::iconify()
 {
-    XUnmapWindow(QX11Info::display(), winId());
-    XUnmapWindow(QX11Info::display(), c_win);
-    set_state(IconicState);
-    state = "IconicState";
-    qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    if (frame_type != "Dialog") // no iconify on Dialog frames
+    {
+        XUnmapWindow(QX11Info::display(), winId());
+        XUnmapWindow(QX11Info::display(), c_win);
+        set_state(IconicState);
+        state = "IconicState";
+        qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    }
 }
 
 void Frame::get_wm_name()  // get WM_NAME
@@ -524,7 +529,7 @@ void Frame::create_border()
     c_bdr = new Border(this);
     layout->addWidget(c_bdr, 1, 1);
     // top left border (icon)
-    tl_bdr = new Border(); // no this to show tooltip 
+    tl_bdr = new Border(); // no this to show tooltip
     tl_bdr->setToolTip(tr("Minimize/Maximize"));
     tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tl_bdr->setPixmap(minmax_pix);
@@ -532,7 +537,7 @@ void Frame::create_border()
     tl_bdr->setAlignment(Qt::AlignCenter);
     layout->addWidget(tl_bdr, 0, 0);
     // top right border (icon)
-    tr_bdr = new Border(); // no this to show tooltip 
+    tr_bdr = new Border(); // no this to show tooltip
     tr_bdr->setToolTip(tr("Close"));
     tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tr_bdr->setPixmap(close_pix);
@@ -567,6 +572,11 @@ void Frame::create_border()
     r_bdr = new Border(this);
     r_bdr->setCursor(Qt::SizeHorCursor);
     layout->addWidget(r_bdr, 1, 2);
+
+    if (frame_type == "Dialog") // no Max/Min on Dialog frames
+    {
+        tl_bdr->setEnabled(false);
+    }
 
     // top left (icon)
     connect(tl_bdr, SIGNAL(mouse_left_press()), this, SLOT(iconify()));

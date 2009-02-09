@@ -12,6 +12,7 @@ Runner::Runner(QWidget *parent) : QDialog(parent)
 {
     setSizeGripEnabled(true);
     setContentsMargins(0, 10, 0, 0);
+    setWindowModality(Qt::WindowModal);
     init();
     show();
 }
@@ -51,6 +52,7 @@ void Runner::mousePressEvent(QMouseEvent *event)
 {
     mousepos = event->pos();
     grabMouse(QCursor(Qt::SizeAllCursor));
+    raise();
 }
 
 void Runner::mouseMoveEvent(QMouseEvent *event)

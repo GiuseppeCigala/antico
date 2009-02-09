@@ -53,5 +53,5 @@ QMAKE_CLEAN += antico
 TEMPLATE = app
 CONFIG += warn_on release
 QT += dbus
-TRANSLATIONS = language/it_IT.ts language/cs_CZ.ts language/ru_RU.ts
+TRANSLATIONS = language/it_IT.ts language/cs_CZ.ts language/ru_RU.ts language/pl_PL.ts
 //DEFINES = QT_NO_DEBUG_OUTPUT

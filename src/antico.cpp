@@ -521,7 +521,10 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
     frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
     mapping_clients.insert(c_win, frm); // save the client winId/frame
     mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
+    
+    if(frame_type.at(0) != "Dialog") // no Dockbar for Dialog frames
     dock->add(frm); // add frame to dockbar (pager)
+    
     frame_type.clear(); // clear the window type list
 }
 

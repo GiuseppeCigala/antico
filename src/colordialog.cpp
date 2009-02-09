@@ -10,7 +10,7 @@
 
 Colordialog::Colordialog(const QColor &color, QWidget *parent) : QDialog(parent)
 {
-    //setModal(true);
+    setWindowModality(Qt::WindowModal);
     actual_col = color;
     setSizeGripEnabled(true);
     setMinimumSize(250, 250);
@@ -56,6 +56,7 @@ void Colordialog::mousePressEvent(QMouseEvent *event)
 {
     mousepos = event->pos();
     grabMouse(QCursor(Qt::SizeAllCursor));
+    raise();
 }
 
 void Colordialog::mouseMoveEvent(QMouseEvent *event)

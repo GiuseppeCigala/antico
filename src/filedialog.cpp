@@ -13,6 +13,7 @@ Filedialog::Filedialog(Categorymenu *menu, QWidget *parent) : QDialog(parent)
     cat_menu = menu;
     setSizeGripEnabled(true);
     setContentsMargins(0, 10, 0, 0);
+    setWindowModality(Qt::WindowModal);
     read_settings();
     init();
     set_category_menu();
@@ -298,6 +299,7 @@ void Filedialog::mousePressEvent(QMouseEvent *event)
     {
         mousepos = event->pos();
         grabMouse(QCursor(Qt::SizeAllCursor));
+        raise();
     }
 }
 
