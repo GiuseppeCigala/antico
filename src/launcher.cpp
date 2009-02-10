@@ -106,9 +106,9 @@ void Launcher::run_command(QAction *act)
     if (cmd == "quit")
         app->wm_quit();
     if (cmd == "shutdown")
-        app->shutdown();
+        app->wm_shutdown();
     if (cmd == "restart")
-        app->restart();
+        app->wm_restart();
     if (cmd == "refresh")
         app->wm_refresh();
     if (cmd == "show")

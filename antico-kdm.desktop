@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=XSession
+Exec=antico
+TryExec=antico
+Name=Antico
+Comment=Qt4-X11 Desktop-Window Manager

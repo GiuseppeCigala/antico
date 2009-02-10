@@ -42,8 +42,8 @@ public:
     void set_active_frame(Frame *);
     void send_configurenotify(Frame *);
     void wm_quit();
-    void shutdown();
-    void restart();
+    void wm_shutdown();
+    void wm_restart();
     void wm_refresh();
     void show_desktop();
     void set_settings();

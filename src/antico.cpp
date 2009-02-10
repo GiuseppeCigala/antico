@@ -8,6 +8,14 @@
 
 ////////////////////////////////////////
 
+/* define the qDebug() color */
+#define RED     "\e[0;31m"
+#define GREEN   "\e[0;32m"
+#define YELLOW  "\e[0;33m"
+#define MAGENTA "\e[0;35m"
+#define WHITE   "\e[0;37m"
+
+
 Antico::Antico(int &argc, char **argv) : QApplication(argc, argv)
 {
     set_event_names();
@@ -186,12 +194,12 @@ bool Antico::x11EventFilter(XEvent *event)
     if (event->type!=6) // ignore Motion event
     {
         qDebug() << "--------------------------------------------------------------------------------------------";
-        qDebug() << "XEvent:" << event_names.value(event->type) << " ( WId:" << event->xany.window << ")";
+        qDebug() << GREEN "XEvent:" YELLOW << event_names.value(event->type) << WHITE " ( WId:" MAGENTA << event->xany.window << WHITE")";
     }
 
     switch (event->type)
     {
-    /////////////////// REQUEST EVENTS ///////////////////
+        /////////////////// REQUEST EVENTS ///////////////////
     case MapRequest:
         qDebug() << "[MapRequest]" << event->xmaprequest.window;
 
@@ -287,7 +295,7 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
-    /////////////////// NOTIFY EVENTS ///////////////////
+        /////////////////// NOTIFY EVENTS ///////////////////
     case MapNotify:
         qDebug() << "[MapNotify]";
 
@@ -381,7 +389,7 @@ bool Antico::x11EventFilter(XEvent *event)
 
     case PropertyNotify:
         qDebug() << "[PropertyNotify]";
-        qDebug() << "Atom: " << XGetAtomName(QX11Info::display(), event->xproperty.atom) << '\n';
+        qDebug() << RED "Atom: " WHITE << XGetAtomName(QX11Info::display(), event->xproperty.atom) << '\n';
         pev = &event->xproperty;
 
         if ((frm = mapping_clients.value(event->xproperty.window)) != NULL)
@@ -450,7 +458,7 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
-    /////////////////// OTHER EVENTS ///////////////////
+        /////////////////// OTHER EVENTS ///////////////////
     case ButtonPress:
         qDebug() << "[ButtonPress]";
 
@@ -491,10 +499,10 @@ bool Antico::x11EventFilter(XEvent *event)
 
     case Expose:
         qDebug() << "[Expose]";
-/*
-        if (event->xexpose.window == dock->winId()) // don't cover the dockbar by other apps
-            XRaiseWindow(QX11Info::display(), event->xbutton.window);
-*/
+        /*
+                if (event->xexpose.window == dock->winId()) // don't cover the dockbar by other apps
+                    XRaiseWindow(QX11Info::display(), event->xbutton.window);
+        */
         return false;
         break;
 
@@ -521,10 +529,10 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
     frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
     mapping_clients.insert(c_win, frm); // save the client winId/frame
     mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
-    
-    if(frame_type.at(0) != "Dialog") // no Dockbar for Dialog frames
-    dock->add(frm); // add frame to dockbar (pager)
-    
+
+    if (frame_type.at(0) != "Dialog") // no Dockbar for Dialog frames
+        dock->add(frm); // add frame to dockbar (pager)
+
     frame_type.clear(); // clear the window type list
 }
 
@@ -730,7 +738,7 @@ void Antico::wm_refresh()
     flush();
 }
 
-void Antico::shutdown()
+void Antico::wm_shutdown()
 {
     Msgbox msg;
     msg.setText(tr("<b>Shutdown the PC</b>"));
@@ -747,11 +755,21 @@ void Antico::shutdown()
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Shutdown");
-        wm_quit();
+        foreach(Frame *frm, mapping_clients)
+        {
+            qDebug() << "Quit process:" << frm->cl_win();
+            XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
+            XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
+            frm->destroy();
+        }
+        mapping_clients.clear();
+        XSync(QX11Info::display(), FALSE);
+        flush();
+        quit(); // quit the WM
     }
 }
 
-void Antico::restart()
+void Antico::wm_restart()
 {
     Msgbox msg;
     msg.setText(tr("<b>Restart the PC</b>"));
@@ -769,7 +787,17 @@ void Antico::restart()
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Reboot");
-        wm_quit();
+        foreach(Frame *frm, mapping_clients)
+        {
+            qDebug() << "Quit process:" << frm->cl_win();
+            XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
+            XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
+            frm->destroy();
+        }
+        mapping_clients.clear();
+        XSync(QX11Info::display(), FALSE);
+        flush();
+        quit(); // quit the WM
     }
 }
 

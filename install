@@ -1,0 +1,20 @@
+#!/bin/sh
+green='\e[0;32m'
+yellow='\e[0;33m'
+white='\e[0;37m'
+
+if [ ! -e /usr/bin/antico ]; then
+    ln -s ${PWD}/antico /usr/bin/antico
+fi
+
+if [ -d /etc/X11/sessions ]; then
+    cp antico-gdm.desktop /etc/X11/sessions/
+fi
+
+if [ -d /usr/share/apps/kdm/sessions ]; then
+    cp antico-kdm.desktop /usr/share/apps/kdm/sessions/
+fi
+
+echo -e "${white}***********************************************"
+echo -e "        ${green}Antico ${yellow}successfully installed${white}"
+echo -e "***********************************************"

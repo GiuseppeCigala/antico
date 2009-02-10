@@ -19,19 +19,38 @@ Category apps menu on Launcher.
 See CHANGELOG ...
 
 ***********
-DEVELOPMENT
+REPOSITORY
 ***********
-DOWNLOAD:
+http://github.com/antico/antico/tree/master
 
-git clone git://github.com/antico/antico.git (on first installation)
+***********
+DOWNLOAD
+***********
+- on first installation: "git clone git://github.com/antico/antico.git"
+- to update your local repository: "git pull"
 
-git pull (to update your local repository)
----------------------------------------------------
+***********
+INSTALLATION
+***********
 To compile, enter in "Antico" dir (where is the antico.pro) and type on shell:
 "qmake" (this create the Makefile)
 "make"
-(no installation)
 ---------------------------------------------------
+To install, type on shell (as root):
+"sh install"
+---------------------------------------------------
+To run the window manager:
+- from KDM/GMD, select "Antico" from WM list
+- from shell, type "xinit /path/to/antico/bin" (first "pkill" kdm/gdm and X)
+---------------------------------------------------
+To uninstall, type on shell (as root):
+"sh uninstall"
+---------------------------------------------------
+To init the WM, just delete the "antico.cfg".
+
+***********
+DEVELOPMENT
+***********
 To test the window manager, type on shell:
 
 DISPLAY=:0
@@ -39,34 +58,26 @@ Xephyr :1 -ac -screen 1000x800 & DISPLAY=:1; $HOME/antico/antico
 
 (where 1000x800 is your preferred screen size and $HOME if you have download Antico in user home)
 ---------------------------------------------------
-To run the window manager, type on shell:
-
-xinit /path/to/antico/bin
-
-(first "pkill" kdm/gdm and X)
----------------------------------------------------
 To hide debug messages, uncomment in antico.pro
 //DEFINES = QT_NO_DEBUG_OUTPUT
 ---------------------------------------------------
-(*) Internationalization: put your language.qm in /language dir (lupdate+linguist+lrelease). The language file name should be your locale lang. (e.g. it_IT.qm). Check debug msg. at startup for control.
----------------------------------------------------
-To init the WM, just delete the "antico.cfg".
----------------------------------------------------
-
 ***********
-REPOSITORY
+LANGUAGE
 ***********
-http://github.com/antico/antico/tree/master
-
-To download:
-git clone git://github.com/antico/antico.git
-
-To update your local repository:
-git pull
+Add your language in "antico.pro";
+Type on shell "lupdate antico.pro";
+Run "linguistic" and make your language translation;
+Type on shell "lrelease antico.pro".
+Your language.qm (e.g. it_IT.qm) should be in /language dir.
+Check debug msg. at startup for control.
 
 ***********
 THANKS
 ***********
-Thanks to Alexander Linden (alinden@gmx.de) for QLWM (http://qlwm.get.to) 	
-from where I was inspired... and for his help.
-Thanks to Ian Reinhart Geiser (geiseri@yahoo.com) for his helpful patch.
+- Alexander Linden (alinden@gmx.de) for QLWM (http://qlwm.get.to) from where I was inspired... and for his help;
+- Ian Reinhart Geiser (geiseri@yahoo.com) for his helpful patch;
+- Ayoy for Polish translation;
+- Disels for Russian translation;
+- Jiri Popek for Czech translation;
+- Me for Italian translation :-)
+

@@ -1,0 +1,20 @@
+#!/bin/sh
+green='\e[0;32m'
+yellow='\e[0;33m'
+white='\e[0;37m'
+
+if [ -f /usr/bin/antico ]; then
+    rm /usr/bin/antico
+fi
+
+if [ -f /etc/X11/sessions/antico-gdm.desktop ]; then
+    rm /etc/X11/sessions/antico-gdm.desktop
+fi
+
+if [ -f /usr/share/apps/kdm/sessions/antico-kdm.desktop ]; then
+    rm /usr/share/apps/kdm/sessions/antico-kdm.desktop
+fi
+
+echo -e "${white}***********************************************"
+echo -e "        ${green}Antico ${yellow}successfully uninstalled${white}"
+echo -e "***********************************************"

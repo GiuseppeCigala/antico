@@ -13,7 +13,7 @@ Dockapp::Dockapp(const QString &app_nm, const QString &app_pth, const QString &a
     read_settings();
     app_name = app_nm;
     app_path = app_pth;
-    setToolTip(app_path + app_name);
+    setToolTip(app_name);
     d_app_pix = app_pix;
     setPixmap(QPixmap(d_app_pix).scaled(dock_height-10, dock_height-10, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     show();
