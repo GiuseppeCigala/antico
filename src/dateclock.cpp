@@ -65,7 +65,7 @@ void Dateclock::paintEvent(QPaintEvent *)
     QFontMetrics date_fm = fontMetrics();
     QString string_date = date.toString("dd.MM.yy");
     int date_h = date_fm.height();
-    date_font.setPixelSize(height()*4/date_h);
+    date_font.setPixelSize(height()*5/date_h);
     painter.setFont(date_font);
     painter.drawText(0, (height()/2)+2, width(), height()/2, Qt::AlignCenter, string_date); //date
 }

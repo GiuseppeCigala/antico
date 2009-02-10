@@ -282,7 +282,7 @@ void Frame::set_state(int state)
     data[1] = (ulong)None;
     Atom wm_state = XInternAtom(QX11Info::display(), "WM_STATE", FALSE);
     XChangeProperty(QX11Info::display(), c_win, wm_state, wm_state, 32, PropModeReplace, (uchar *)data, 2);
-    qDebug() << "Frame:" << winId() << "Name:" << wm_name << "Client:" << c_win << "changhin state:" << wm_state;
+    qDebug() << "Frame:" << winId() << "Name:" << wm_name << "Client:" << c_win << "changhin state:" << state;
 }
 
 void Frame::set_focus(long timestamp) // set to focus to child
@@ -298,9 +298,35 @@ void Frame::unmap()
 {
     XUnmapWindow(QX11Info::display(), winId());
     XUnmapWindow(QX11Info::display(), c_win);
+    qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+
+    if (frame_type != "Dialog")
+        dock->unmap(this);  // unmap Dockicon on Dockbar (pager)
+}
+
+void Frame::withdraw()
+{
+    XUnmapWindow(QX11Info::display(), winId());
+    XUnmapWindow(QX11Info::display(), c_win);
     set_state(WithdrawnState);
     state = "WithdrawnState";
     qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+
+    if (frame_type != "Dialog")
+        dock->remove(this);  // remove Dockicon from Dockbar (pager)
+}
+
+void Frame::iconify()
+{
+    if (frame_type != "Dialog") // no iconify on Dialog frames
+    {
+        XUnmapWindow(QX11Info::display(), winId());
+        XUnmapWindow(QX11Info::display(), c_win);
+        set_state(IconicState);
+        state = "IconicState";
+        qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+        dock->unmap(this);  // unmap Dockicon on Dockbar (pager)
+    }
 }
 
 void Frame::map()
@@ -310,6 +336,7 @@ void Frame::map()
     set_state(NormalState);
     state = "NormalState";
     qDebug() << "Frame mapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    dock->map(this);  // map Dockicon on Dockbar (pager)
 }
 
 void Frame::raise()
@@ -322,18 +349,6 @@ void Frame::raise()
 
     if (frame_type != "Dialog")
         dock->add(this);  // add frame to dockbar (pager)
-}
-
-void Frame::iconify()
-{
-    if (frame_type != "Dialog") // no iconify on Dialog frames
-    {
-        XUnmapWindow(QX11Info::display(), winId());
-        XUnmapWindow(QX11Info::display(), c_win);
-        set_state(IconicState);
-        state = "IconicState";
-        qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-    }
 }
 
 void Frame::get_wm_name()  // get WM_NAME

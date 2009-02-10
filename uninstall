@@ -11,6 +11,10 @@ if [ -f /etc/X11/sessions/antico-gdm.desktop ]; then
     rm /etc/X11/sessions/antico-gdm.desktop
 fi
 
+if [ -f /usr/share/xsessions/antico-kdm.desktop ]; then
+    rm /usr/share/xsessions/antico-kdm.desktop
+fi
+
 if [ -f /usr/share/apps/kdm/sessions/antico-kdm.desktop ]; then
     rm /usr/share/apps/kdm/sessions/antico-kdm.desktop
 fi

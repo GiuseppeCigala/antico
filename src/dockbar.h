@@ -37,6 +37,9 @@ public:
     Dockbar(Antico *, QWidget *parent=0);
     ~Dockbar();
     void add(Frame *);
+    void remove(Frame *);
+    void unmap(Frame *);
+    void map(Frame *);
     void update_dockicon_size();
     void read_settings();
     void init();

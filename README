@@ -29,9 +29,9 @@ DOWNLOAD
 - on first installation: "git clone git://github.com/antico/antico.git"
 - to update your local repository: "git pull"
 
-***********
+*************
 INSTALLATION
-***********
+*************
 To compile, enter in "Antico" dir (where is the antico.pro) and type on shell:
 "qmake" (this create the Makefile)
 "make"
@@ -48,9 +48,9 @@ To uninstall, type on shell (as root):
 ---------------------------------------------------
 To init the WM, just delete the "antico.cfg".
 
-***********
+************
 DEVELOPMENT
-***********
+************
 To test the window manager, type on shell:
 
 DISPLAY=:0

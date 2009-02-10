@@ -29,6 +29,7 @@ public:
     void read_settings();
     void update_style();
     void update_name(const QString &);
+    void set_state(QString);
 
 protected:
     void mousePressEvent(QMouseEvent *);

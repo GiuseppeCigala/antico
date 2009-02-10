@@ -37,6 +37,7 @@ public:
     void get_wm_hints();
     void get_wm_normal_hints();
     void unmap();
+    void withdraw();
     void map();
     void raise();
     void get_wm_name();

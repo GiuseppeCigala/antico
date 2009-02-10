@@ -61,19 +61,35 @@ void Dockicon::paintEvent(QPaintEvent *)
     painter.drawPixmap(QRect(3, 3, height()-6, height()-6), frm->cl_icon(), QRect(0, 0, frm->cl_icon().width(), frm->cl_icon().height()));// dock icon
 }
 
+void Dockicon::set_state(QString state)
+{
+    if (state == "Normal")
+    {
+        iconize = false;
+        qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
+    }
+    if (state == "Iconize")
+    {
+        iconize = true;
+        qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
+    }
+}
+
 void Dockicon::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        if(iconize)
+        if (iconize)
         {
             frm->raise();
             iconize = false;
+            qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
         }
         else
         {
             frm->iconify();
             iconize = true;
+            qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
         }
     }
     if (event->button() == Qt::RightButton)

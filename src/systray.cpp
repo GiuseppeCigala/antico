@@ -88,7 +88,7 @@ void Systray::add(Frame *frm)
 void Systray::add(Window win_id)
 {
     emb_cont = new QX11EmbedContainer(this);
-    emb_cont->setPalette(QPalette(QPalette::Dark));
+    emb_cont->setPalette(QPalette(QPalette::Light));
     emb_cont->embedClient(win_id);
     qDebug() << "Client added to System Tray." << "Client Id:" << win_id;
     layout->addWidget(emb_cont);

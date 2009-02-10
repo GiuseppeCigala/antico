@@ -115,10 +115,38 @@ void Dockbar::add(Frame *frm)
     if (! dock_icons.contains(frm->winId())) // if not already present
     {
         d_icon = new Dockicon(frm, sys);
+        d_icon->set_state("Normal");
         dock_icons.insert(frm->winId(), d_icon); // save the Frame winId/Dockicon
         qDebug() << "Dockicon added to Dockbar. Frame:" << frm->winId();
         update_dockicon_size();
         connect(d_icon, SIGNAL(destroy_dockicon(Dockicon *)), this, SLOT(remove_dockicon(Dockicon *))); // delete iconize dockicon and update dockbar size
+    }
+}
+
+void Dockbar::unmap(Frame *frm)
+{
+    if (dock_icons.contains(frm->winId())) // iconize Dockicon if present
+    {
+        Dockicon *d_icon = dock_icons.value(frm->winId());
+        d_icon->set_state("Iconize");
+    }
+}
+
+void Dockbar::remove(Frame *frm)
+{
+    if (dock_icons.contains(frm->winId())) // remove Dockicon if present
+    {
+        Dockicon *d_icon = dock_icons.value(frm->winId());
+        remove_dockicon(d_icon);
+    }
+}
+
+void Dockbar::map(Frame *frm)
+{
+    if (dock_icons.contains(frm->winId())) // map Dockicon if present
+    {
+        Dockicon *d_icon = dock_icons.value(frm->winId());
+        d_icon->set_state("Normal");
     }
 }
 
@@ -161,8 +189,8 @@ void Dockbar::update_dockicon_size()
         qDebug() << "Dockicon num:" << num;
         d_length = d_icon_widget->width()/num;
 
-        if (d_length >= d_icon_widget->width()/4) // max dockicon size = d_icon_widget size/4
-            d_length = d_icon_widget->width()/4;
+        if (d_length >= d_icon_widget->width()/3) // max dockicon size = d_icon_widget size/3
+            d_length = d_icon_widget->width()/3;
 
         qDebug() << "Dockicon length:" << d_length;
 

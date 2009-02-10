@@ -11,6 +11,10 @@ if [ -d /etc/X11/sessions ]; then
     cp antico-gdm.desktop /etc/X11/sessions/
 fi
 
+if [ -d /usr/share/xsessions ]; then
+    cp antico-kdm.desktop /usr/share/xsessions/
+fi
+
 if [ -d /usr/share/apps/kdm/sessions ]; then
     cp antico-kdm.desktop /usr/share/apps/kdm/sessions/
 fi

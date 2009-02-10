@@ -316,8 +316,16 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
         {
-            frm->unmap();
-            qDebug() << "UnmapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+            if (event->xunmap.send_event)
+            {
+                frm->withdraw();
+                qDebug() << "Withdraw for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+            }
+            else
+            {
+                frm->unmap();
+                qDebug() << "Unmap for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+            }
             return true;
         }
         if (event->xunmap.event != event->xunmap.window)
@@ -477,7 +485,7 @@ bool Antico::x11EventFilter(XEvent *event)
         if (mev->message_type == wm_change_state && event->xclient.format == 32 &&
                 event->xclient.data.l[0] == IconicState && (frm = mapping_clients.value(event->xclient.window)) != NULL)
         {
-            qDebug() << "---> wm_change_state";
+            qDebug() << "---> wm_change_state: IconicState";
             frm->iconify();
         }
         return false;
@@ -710,7 +718,7 @@ void Antico::wm_quit()
     {
         foreach(Frame *frm, mapping_clients)
         {
-            qDebug() << "Quit process:" << frm->cl_win();
+            qDebug() << "Quit process:" << frm->cl_win() << "- Name:" << frm->cl_name();
             XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
             XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
             frm->destroy();
