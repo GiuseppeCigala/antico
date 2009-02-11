@@ -71,7 +71,7 @@ private:
     QString devel_pix;
     QString system_pix;
     QString audiovideo_pix;
-    QString cmd_arguments;
+    QStringList cmd_arguments;
     QHash<QString, QMenu *> cat_menu;
 };
 

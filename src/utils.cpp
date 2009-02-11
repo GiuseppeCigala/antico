@@ -237,10 +237,10 @@ void Categorymenu::run_menu(QAction *act)
     QString cmd = act->data().toString();
     qDebug() << "Command arguments on run:" << cmd_arguments;
 
-    if (cmd_arguments == "")
+    if (cmd_arguments.isEmpty())
         QProcess::startDetached(cmd); // start Application from Category menu
     else
-        QProcess::startDetached(cmd + " " + cmd_arguments); //start Application + arguments from Category menu
+        QProcess::startDetached(cmd, cmd_arguments); //start Application + arguments from Category menu
     
     cmd.clear();
     cmd_arguments.clear();
@@ -249,7 +249,7 @@ void Categorymenu::run_menu(QAction *act)
 void Categorymenu::set_cmd_arguments(const QString &arg) // add arguments after application name on run
 {
     qDebug() << "Command arguments on run:" << arg;
-    cmd_arguments = arg;
+    cmd_arguments << arg;
 }
 
 void Categorymenu::update_style()
