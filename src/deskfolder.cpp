@@ -17,6 +17,7 @@ Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_
     dir_name = dir_nm;
     dir_path = dir_pth;
     geometry = geom;
+    setToolTip(dir_path);
     show();
 }
 

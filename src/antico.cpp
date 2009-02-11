@@ -878,7 +878,9 @@ void Antico::set_settings()
         antico->sync();
     }
     if (antico->status() == QSettings::AccessError)
+    {
         qDebug () << "Error on setting antico.cfg";
+    }
 
     style = new QSettings(QCoreApplication::applicationDirPath() + "/theme/default/default.stl", QSettings::IniFormat, this);
     // set default icon on first installation, if no "/default.stl" is set
@@ -980,6 +982,7 @@ void Antico::set_settings()
         style->sync();
     }
     if (style->status() == QSettings::AccessError)
+    {
         qDebug () << "Error on setting default.stl";
-
+    }
 }

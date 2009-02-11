@@ -8,11 +8,11 @@
 
 ////////////////////////////////////////
 
-Dockapp::Dockapp(const QString &app_nm, const QString &app_pth, const QString &app_pix, QWidget *parent) : QLabel(parent)
+Dockapp::Dockapp(const QString &app_nm, const QString &app_exe, const QString &app_pix, QWidget *parent) : QLabel(parent)
 {
     read_settings();
     app_name = app_nm;
-    app_path = app_pth;
+    app_exec = app_exe;
     setToolTip(app_name);
     d_app_pix = app_pix;
     setPixmap(QPixmap(d_app_pix).scaled(dock_height-10, dock_height-10, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -22,7 +22,7 @@ Dockapp::Dockapp(const QString &app_nm, const QString &app_pth, const QString &a
 Dockapp::~Dockapp()
 {
     delete &app_name;
-    delete &app_path;
+    delete &app_exec;
     delete &delete_link_pix;
 }
 
@@ -59,7 +59,7 @@ void Dockapp::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        QProcess::startDetached(app_path + app_name); //launch the application
+        QProcess::startDetached(app_exec + app_name); //launch the application
     }
 }
 

@@ -66,12 +66,12 @@ void Dockicon::set_state(QString state)
     if (state == "Normal")
     {
         iconize = false;
-        qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
+        qDebug() << "Dockicon (change state):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
     }
     if (state == "Iconize")
     {
         iconize = true;
-        qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
+        qDebug() << "Dockicon (change state):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
     }
 }
 
@@ -83,13 +83,13 @@ void Dockicon::mousePressEvent(QMouseEvent *event)
         {
             frm->raise();
             iconize = false;
-            qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
+            qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
         }
         else
         {
             frm->iconify();
             iconize = true;
-            qDebug() << "Dockicon:" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
+            qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
         }
     }
     if (event->button() == Qt::RightButton)

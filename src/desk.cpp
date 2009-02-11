@@ -121,10 +121,10 @@ void Desk::set_desk_icons()
         antico->beginGroup(antico->childGroups().value(i)); // App name
 
         QString name = antico->value("name").toString();
-        QString path = antico->value("path").toString();
+        QString exec = antico->value("exec").toString();
         QString pix = antico->value("pix").toString();
         QPoint pos = antico->value("pos").value<QPoint>();
-        Deskapp *d_app = new Deskapp(name, path, pix, this);
+        Deskapp *d_app = new Deskapp(name, exec, pix, this);
         desk_apps << d_app; // save the deskapp
         d_app->move(pos);
 
@@ -329,11 +329,11 @@ void Desk::remove_deskfile(Deskfile *d_file) // remove from "Delete link" right 
     d_file->close();
 }
 
-void Desk::create_desk_app(const QString &name, const QString &path, const QPoint &pos, QWidget *parent)
+void Desk::create_desk_app(const QString &name, const QString &exec, const QPoint &pos, QWidget *parent)
 {
     Appicon app_icon; // get application icon
     QString icon = app_icon.get_app_icon(name);
-    d_app = new Deskapp(name, path, icon, parent); // new desktop application
+    d_app = new Deskapp(name, exec, icon, parent); // new desktop application
     desk_apps << d_app; // save the new deskapp
     d_app->move(pos.x(), pos.y());
     connect(d_app, SIGNAL(destroy_deskapp(Deskapp *)), this, SLOT(remove_deskapp(Deskapp *))); // delete deskapp from list
@@ -342,7 +342,7 @@ void Desk::create_desk_app(const QString &name, const QString &path, const QPoin
     antico->beginGroup("App");
     antico->beginGroup(name);
     antico->setValue("name", name);
-    antico->setValue("exec", path + name);
+    antico->setValue("exec", exec);
     antico->setValue("pix", icon);
     antico->setValue("pos", pos);
     antico->endGroup(); //name

@@ -41,7 +41,7 @@ public slots:
 private:
     QMenu *menu;
     QString app_name;
-    QString app_path;
+    QString app_exec;
     QString delete_link_pix;
     QString d_app_pix;
     QPoint mousepos;

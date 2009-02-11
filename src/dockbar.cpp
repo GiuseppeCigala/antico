@@ -235,9 +235,9 @@ void Dockbar::set_dockapp()
         antico->beginGroup(antico->childGroups().value(i)); // App name
 
         QString name = antico->value("name").toString();
-        QString path = antico->value("path").toString();
+        QString exec = antico->value("exec").toString();
         QString pix = antico->value("pix").toString();
-        Dockapp *d_app = new Dockapp(name, path, pix, this);
+        Dockapp *d_app = new Dockapp(name, exec, pix, this);
         dock_apps << d_app; // save the dockapp
 
         d_app->setFixedSize(dock_height-2, dock_height-2);
@@ -303,18 +303,18 @@ void Dockbar::dropEvent(QDropEvent *event) // add apps on Dockbar by drag&drop f
     }
 }
 
-void Dockbar::create_dock_app(const QString &name, const QString &path, QWidget *parent)
+void Dockbar::create_dock_app(const QString &name, const QString &exec, QWidget *parent)
 {
     Appicon app_icon; // get application icon
     QString pix = app_icon.get_app_icon(name);
-    Dockapp *d_app = new Dockapp(name, path, pix, parent); // new dockbar application
+    Dockapp *d_app = new Dockapp(name, exec, pix, parent); // new dockbar application
     dock_apps << d_app; // save the new dockapp
     // save new dockapp name, path and pix
     antico->beginGroup("Dockbar");
     antico->beginGroup("App");
     antico->beginGroup(name);
     antico->setValue("name", name);
-    antico->setValue("exec", path + name);
+    antico->setValue("exec", exec);
     antico->setValue("pix", pix);
     antico->endGroup(); //name
     antico->endGroup(); //App
