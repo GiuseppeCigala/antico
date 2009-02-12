@@ -39,13 +39,13 @@ void Deskfile::init()
     main_menu = new QMenu(this);
     // show the Category apps list for open the file
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
-    
+
     QList <QMenu *> menu_list = cat_menu->get_menus();
     for (int i = 0; i <  menu_list.size(); ++i)
     {
         open_menu->addMenu(menu_list.at(i));
     }
-   
+
     QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
     connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
@@ -115,6 +115,29 @@ void Deskfile::mouseReleaseEvent(QMouseEvent *event)
     antico->endGroup(); // Desktop
 }
 
+void Deskfile::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        antico->beginGroup("Desktop");
+        antico->beginGroup("File");
+        antico->beginGroup(file_name); // File name
+        QString path = antico->value("path").toString();
+        QString name = antico->value("name").toString();
+        QString exec = antico->value("exec").toString();
+        antico->endGroup(); // File name
+        antico->endGroup(); // File
+        antico->endGroup(); // Desktop
+
+        if (! exec.isEmpty()) // if the preferred app is set
+        {
+            QStringList param;
+            param << path + name;
+            QProcess::startDetached(exec, param); //open the file with the preferred application
+        }
+    }
+}
+
 void Deskfile::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
@@ -142,8 +165,33 @@ void Deskfile::del_file()
 
 void Deskfile::contextMenuEvent(QContextMenuEvent *event)
 {
-    cat_menu->set_cmd_arguments(file_path + file_name); // set the file path+name as argument
-    main_menu->exec(event->globalPos());
+    cat_menu->set_cmd_arguments(file_path + file_name); // pass the file path+name as argument
+    QAction *act = main_menu->exec(event->globalPos());
+
+    if (act != 0)
+    {
+        QString app_path = act->data().toString(); // application path
+        QFileInfo info(app_path);
+        QString app = info.baseName(); // only the app name without path
+
+        if (app.contains("-"))
+        {
+            app = app.section('-', 0, 0); // (gimp-2.6 -> gimp)
+        }
+        Appicon ico;
+        QString icon = ico.get_app_icon(app); // application icon
+        qDebug() << "App path:" << app << "App icon:" << icon;
+        d_file_pix = icon;
+        update(); // update the Deskfile icon
+        antico->beginGroup("Desktop");
+        antico->beginGroup("File");
+        antico->beginGroup(file_name); // File name
+        antico->setValue("exec", app_path); // set the favorite application path
+        antico->setValue("pix", icon); // replace the default pixmap
+        antico->endGroup(); // File name
+        antico->endGroup(); // File
+        antico->endGroup(); // Desktop
+    }
 }
 
 void Deskfile::update_style()

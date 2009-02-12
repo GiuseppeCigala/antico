@@ -309,13 +309,14 @@ void Desk::create_desk_file(const QString &name, const QString &path, const QStr
     desk_files << d_file; // save the new deskfile
     d_file->move(pos.x(), pos.y());
     connect(d_file, SIGNAL(destroy_deskfile(Deskfile *)), this, SLOT(remove_deskfile(Deskfile *))); // delete deskfile from list
-    // save new deskfile name, path, icon and pos
+    // save new deskfile name, path, icon, exec and position
     antico->beginGroup("Desktop");
     antico->beginGroup("File");
     antico->beginGroup(name);
     antico->setValue("name", name);
     antico->setValue("path", path);
     antico->setValue("pix", icon);
+    antico->setValue("exec", ""); // for future association with favorite app to run
     antico->setValue("pos", pos);
     antico->endGroup(); //name
     antico->endGroup(); //File

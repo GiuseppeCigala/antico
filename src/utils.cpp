@@ -14,35 +14,29 @@ Appicon::Appicon(QObject *parent) : QObject(parent)
 {}
 
 Appicon::~Appicon()
-{
-   
-}
+{}
 
-QString Appicon::get_app_icon(const QString &app) // select the application icon
+QString Appicon::get_app_icon(const QString &icon) // select the application icon
 {
-    QString app_icon = "";
+    QString app_icon = icon;
 
-    // if not defined, set default application icon
-    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
-    antico->beginGroup("Style");
-    QString stl_name = antico->value("name").toString();
-    QString stl_path = antico->value("path").toString();
-    antico->endGroup(); //Style
-    // get style values
-    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
-    style->beginGroup("Launcher");
-    style->beginGroup("Icon");
-    app_icon = stl_path + style->value("application_pix").toString();
-    style->endGroup(); // Icon
-    style->endGroup(); // Launcher
+    if (app_icon.startsWith('/')) // full icon path already set
+    {
+        return app_icon;
+    }
+    // remove the extension (.png/.xpm)
+    if (app_icon.endsWith(".png"))
+        app_icon.remove(".png");
+    else if (app_icon.endsWith(".xpm"))
+        app_icon.remove(".xpm");
 
     QDirIterator pix_iter("/usr/share/pixmaps/", QDirIterator::Subdirectories);
     while (pix_iter.hasNext())
     {
         pix_iter.next(); // move to child directory
         QFileInfo pix_file(pix_iter.fileInfo());
-                
-        if (pix_file.baseName().compare(app) == 0)
+
+        if (pix_file.baseName().compare(app_icon) == 0)
         {
             qDebug() << "File name:" << pix_file.fileName();
             app_icon = pix_file.absoluteFilePath();
@@ -56,13 +50,27 @@ QString Appicon::get_app_icon(const QString &app) // select the application icon
         icon_iter.next(); // move to child directory
         QFileInfo icon_file(icon_iter.fileInfo());
 
-        if (icon_file.baseName().compare(app) == 0)
+        if (icon_file.baseName().compare(app_icon) == 0)
         {
             qDebug() << "File name:" << icon_file.fileName();
             app_icon = icon_file.absoluteFilePath();
             return app_icon;
         }
     }
+    
+    // if not defined, set default application icon
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico->beginGroup("Style");
+    QString stl_name = antico->value("name").toString();
+    QString stl_path = antico->value("path").toString();
+    antico->endGroup(); //Style
+    // get style values
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    style->beginGroup("Launcher");
+    style->beginGroup("Icon");
+    app_icon = stl_path + style->value("application_pix").toString();
+    style->endGroup(); // Icon
+    style->endGroup(); // Launcher
     return app_icon; // if not defined, set default application icon
 }
 
@@ -154,7 +162,7 @@ void Categorymenu::update_menu()
     cat_menu.insert("Utility", utility_menu);
 
     // update Category menu
-    utility_menu->clear(); 
+    utility_menu->clear();
     office_menu->clear();
     network_menu->clear();
     graphics_menu->clear();
@@ -221,7 +229,7 @@ QList <QMenu *> Categorymenu::get_menus()
     menu_list.append(development_menu);
     menu_list.append(system_menu);
     menu_list.append(audiovideo_menu);
- 
+
     return menu_list;
 }
 
@@ -234,14 +242,14 @@ void Categorymenu::add_app(QMenu *category_menu, const QString &name, const QStr
 
 void Categorymenu::run_menu(QAction *act)
 {
-    QString cmd = act->data().toString();
+    QString cmd = act->data().toString(); // get Application name from menu
     qDebug() << "Command arguments on run:" << cmd_arguments;
 
     if (cmd_arguments.isEmpty())
         QProcess::startDetached(cmd); // start Application from Category menu
     else
         QProcess::startDetached(cmd, cmd_arguments); //start Application + arguments from Category menu
-    
+
     cmd.clear();
     cmd_arguments.clear();
 }
@@ -375,18 +383,8 @@ void Categorymenu::parse_desktop_file()
             qDebug() << "App_name:" << app_name;
             qDebug() << "---------------------------------------------";
 
-            if (! icon_name.startsWith('/')) // full icon path not already set
-            {
-                // remove the extension (.png/.xpm)
-                if (icon_name.endsWith(".png"))
-                    icon_name.remove(".png");
-                else if (icon_name.endsWith(".xpm"))
-                    icon_name.remove(".xpm");
-                Appicon *app_ico = new Appicon(); // get application icon path
-                icon_path = app_ico->get_app_icon(icon_name); // icon_name without extension
-            }
-            else
-                icon_path = icon_name; // full icon path already set
+            Appicon *app_ico = new Appicon(); // get application icon path
+            icon_path = app_ico->get_app_icon(icon_name);
 
             if (! cat_list.contains(categories))
                 categories = "Utility";

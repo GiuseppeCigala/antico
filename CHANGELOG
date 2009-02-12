@@ -38,6 +38,7 @@ CHANGELOG
 04/02/09: code optimization - "Open with" on Deskfolder/Deskdev - ".desktop" search on subdir.
 08/02/09: add Dockapps on Dockbar (also with Drag&Drop).
 10/02/09: Dialog frame pager fix - colored debug msg - add installation scripts with XSession .desktop file (KDM/GDM).
+12/02/09: Deskfile app/icon association after "Open with.." menu selection - Double click open the preferred app.
 
 ***********
 TO DO
