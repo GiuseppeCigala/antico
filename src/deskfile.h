@@ -56,6 +56,7 @@ private:
     QPixmap d_file_pix;
     QSettings *style;
     QSettings *antico;
+    QAction *delete_file;
     bool zoom;
     Categorymenu *cat_menu;
 };

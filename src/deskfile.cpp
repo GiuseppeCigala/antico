@@ -46,8 +46,8 @@ void Deskfile::init()
         open_menu->addMenu(menu_list.at(i));
     }
 
-    QAction *del_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
-    connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
+    delete_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
+    connect(delete_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
 
 void Deskfile::read_settings()
@@ -168,7 +168,7 @@ void Deskfile::contextMenuEvent(QContextMenuEvent *event)
     cat_menu->set_cmd_arguments(file_path + file_name); // pass the file path+name as argument
     QAction *act = main_menu->exec(event->globalPos());
 
-    if (act != 0)
+    if (act != 0 && act != delete_file)
     {
         QString app_path = act->data().toString(); // application path
         QFileInfo info(app_path);

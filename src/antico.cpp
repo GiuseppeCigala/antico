@@ -716,6 +716,8 @@ void Antico::wm_quit()
 
     if (ret == QMessageBox::Ok)
     {
+        qDebug() << "Quit Antico WM ...";
+        
         foreach(Frame *frm, mapping_clients)
         {
             qDebug() << "Quit process:" << frm->cl_win() << "- Name:" << frm->cl_name();
@@ -724,8 +726,10 @@ void Antico::wm_quit()
             frm->destroy();
         }
         mapping_clients.clear();
+        mapping_frames.clear();
         XSync(QX11Info::display(), FALSE);
         flush();
+        closeAllWindows();
         quit(); // quit the WM
     }
 }
@@ -759,21 +763,12 @@ void Antico::wm_shutdown()
 
     if (ret == QMessageBox::Ok)
     {
-        qDebug() << "Shutdown ...";
+        qDebug() << "Shutdown the PC ...";
+        
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Shutdown");
-        foreach(Frame *frm, mapping_clients)
-        {
-            qDebug() << "Quit process:" << frm->cl_win();
-            XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
-            XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
-            frm->destroy();
-        }
-        mapping_clients.clear();
-        XSync(QX11Info::display(), FALSE);
-        flush();
-        quit(); // quit the WM
+        wm_quit(); // quit the WM
     }
 }
 
@@ -791,21 +786,12 @@ void Antico::wm_restart()
 
     if (ret == QMessageBox::Ok)
     {
-        qDebug() << "Restart ...";
+        qDebug() << "Restart the PC ...";
+        
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Reboot");
-        foreach(Frame *frm, mapping_clients)
-        {
-            qDebug() << "Quit process:" << frm->cl_win();
-            XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
-            XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
-            frm->destroy();
-        }
-        mapping_clients.clear();
-        XSync(QX11Info::display(), FALSE);
-        flush();
-        quit(); // quit the WM
+        wm_quit(); // quit the WM
     }
 }
 

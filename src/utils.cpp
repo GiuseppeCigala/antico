@@ -57,7 +57,7 @@ QString Appicon::get_app_icon(const QString &icon) // select the application ico
             return app_icon;
         }
     }
-    
+
     // if not defined, set default application icon
     QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");

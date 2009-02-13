@@ -50,6 +50,7 @@ public slots:
     void update_add_tree(const QModelIndex &);
     void path_completer();
     void select_style();
+    void changeSection(QListWidgetItem *, QListWidgetItem *);
 
 protected:
     void mouseMoveEvent(QMouseEvent *);
@@ -164,8 +165,27 @@ private:
     QVBoxLayout *rem_layout;
     QVBoxLayout *run_layout;
     QVBoxLayout *style_layout;
-    QGridLayout *rem_grid;
-    QGridLayout *run_grid;
+    QHBoxLayout *ok_quit_layout;
+    QHBoxLayout *rem_quit_layout;
+    QVBoxLayout *dockbar_layout;
+    QVBoxLayout *deskset_layout;
+    QListWidget *sectionsWidget;
+    QStackedWidget *paramsWidget;
+    QGroupBox *frame_box;
+    QGroupBox *dockbar_box;
+    QGroupBox *dockicon_box;
+    QGroupBox *deskfolder_box;
+    QGroupBox *deskfile_box;
+    QGroupBox *deskapp_box;
+    QGroupBox *deskdev_box;
+    QGroupBox *sysicon_box;
+    QGroupBox *dateclock_box;
+    QGroupBox *desktop_box;
+    QGroupBox *launcher_box;
+    QGroupBox *category_box;
+    QGroupBox *other_box;
+    QWidget *dockbar_widget;
+    QWidget *deskset_widget;
     QGridLayout *style_grid;
     QGridLayout *frame_grid;
     QGridLayout *dockbar_grid;
@@ -178,8 +198,8 @@ private:
     QGridLayout *dateclock_grid;
     QGridLayout *desktop_grid;
     QGridLayout *launcher_grid;
+    QGridLayout *category_grid;
     QGridLayout *other_grid;
-    QGridLayout *ok_quit_grid;
     QDirModel *dir_model;
     QCompleter *completer;
     QHBoxLayout *category_lay;

@@ -74,7 +74,7 @@ void Desk::set_geometry()
 
 void Desk::set_desk_icons()
 {
-    // read deskfolder name, path, pos and restore on desktop
+    // read deskfolder name, path, pix, pos and restore on desktop
     antico->beginGroup("Desktop");
     antico->beginGroup("Folder");
 
@@ -94,7 +94,7 @@ void Desk::set_desk_icons()
     }
     antico->endGroup(); //Folder
 
-    // read deskfile name, path, pixmap, pos and restore on desktop
+    // read deskfile name, path, pix, pos and restore on desktop
     antico->beginGroup("File");
 
     for (int i = 0; i < antico->childGroups().size(); i++)
@@ -185,7 +185,7 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
             QString path = dir_model->filePath(selection);
             qDebug() << "Selected path:" << path;
             QRect geometry = tree_view->geometry(); // get the dimension of TreeView
-
+            
             if (! name.isEmpty())
             {
                 create_desk_folder(name, path, geometry, pos, this);
@@ -229,9 +229,10 @@ void Desk::run_menu(QAction *act)
         {
             QString path = file_dialog->get_selected_path();
             QString name = file_dialog->get_selected_name();
+            QString icon = file_dialog->get_selected_icon();
             QRect geometry = file_dialog->geometry(); // get the dimension of Filedialog
             QPoint pos = menu->pos();
-
+            
             if (! name.isEmpty() && ! path.endsWith("/")) // is a directory
             {
                 create_desk_folder(name, path, geometry, pos, this);
@@ -289,6 +290,7 @@ void Desk::create_desk_folder(const QString &name, const QString &path, const QR
     antico->beginGroup(name);
     antico->setValue("name", name);
     antico->setValue("path", path);
+    antico->setValue("exec", ""); // for future association with favorite app to open
     antico->setValue("pos", pos);
     antico->setValue("geometry", geometry);
     antico->endGroup(); //name

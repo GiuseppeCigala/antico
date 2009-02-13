@@ -75,6 +75,7 @@
 #include <QTextCodec>
 #include <QByteArray>
 #include <QSizeGrip>
+#include <QStackedWidget>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

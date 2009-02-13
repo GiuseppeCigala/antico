@@ -59,6 +59,7 @@ private:
     QPixmap pix;
     QSettings *style;
     QSettings *antico;
+    QAction *delete_folder;
     bool zoom;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;

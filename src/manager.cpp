@@ -31,8 +31,6 @@ Manager::~Manager()
     delete rem_layout;
     delete run_layout;
     delete style_layout;
-    delete rem_grid;
-    delete run_grid;
     delete style_grid;
     delete frame_grid;
     delete dockbar_grid;
@@ -45,8 +43,8 @@ Manager::~Manager()
     delete dateclock_grid;
     delete desktop_grid;
     delete launcher_grid;
+    delete category_grid;
     delete other_grid;
-    delete ok_quit_grid;
     delete dir_model;
     delete completer;
     delete category_lay;
@@ -343,6 +341,7 @@ void Manager::add_app_tab()
     cat_map.insert(tr("AudioVideo"), "AudioVideo");
     QPushButton *add_but = new QPushButton(tr("Add"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
+    category_lay->addStretch(1);
     category_lay->addWidget(category_lab);
     category_lay->addWidget(category_combo);
     category_lay->addWidget(add_but);
@@ -368,14 +367,15 @@ void Manager::remove_app_tab()
     app_tree->setHeaderLabel(tr("Category/Applications"));
     update_remove_list();
 
-    rem_grid = new QGridLayout();
+    QHBoxLayout *rem_quit_layout = new QHBoxLayout();
     QPushButton *rem_but = new QPushButton(tr("Remove"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
-    rem_grid->addWidget(rem_but, 0, 0);
-    rem_grid->addWidget(quit_but, 0, 1);
+    rem_quit_layout->addStretch(1);
+    rem_quit_layout->addWidget(rem_but);
+    rem_quit_layout->addWidget(quit_but);
 
     rem_layout->addWidget(app_tree);
-    rem_layout->addLayout(rem_grid);
+    rem_layout->addLayout(rem_quit_layout);
 
     connect(rem_but, SIGNAL(pressed()), this, SLOT(remove_app_pressed()));
     connect(quit_but, SIGNAL(pressed()), this, SLOT(quit_pressed()));
@@ -392,16 +392,18 @@ void Manager::run_app_tab()
     run_list = new QListWidget(this);
     update_run_list();
 
-    run_grid = new QGridLayout();
+    QHBoxLayout *add_rem_layout = new QHBoxLayout();
     QPushButton *add_but = new QPushButton(tr("Add"), this);
     QPushButton *rem_but = new QPushButton(tr("Remove"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
-    run_grid->addWidget(add_but, 0, 0);
-    run_grid->addWidget(rem_but, 0, 1);
-    run_grid->addWidget(quit_but, 0, 2);
+    
+    add_rem_layout->addStretch(1);
+    add_rem_layout->addWidget(add_but);
+    add_rem_layout->addWidget(rem_but);
+    add_rem_layout->addWidget(quit_but);
 
     run_layout->addWidget(run_list);
-    run_layout->addLayout(run_grid);
+    run_layout->addLayout(add_rem_layout);
 
     connect(add_but, SIGNAL(pressed()), this, SLOT(add_run_app_pressed()));
     connect(rem_but, SIGNAL(pressed()), this, SLOT(remove_run_app_pressed()));
@@ -427,11 +429,31 @@ void Manager::style_tab()
     style_grid->addWidget(style_sel_tx, 0, 1);
     style_grid->addWidget(style_sel_but, 0, 2);
     connect(style_sel_but, SIGNAL(clicked()), this, SLOT(select_style()));
-    /////////////////////////
-    QToolBox *tool_box = new QToolBox(this);
-    style_layout->addWidget(tool_box);
+    /////////////////////////////////////////////////////
+    sectionsWidget = new QListWidget(this);
+    sectionsWidget->setMaximumWidth(200);
+    sectionsWidget->setCurrentRow(0);
+    QListWidgetItem *frame_section = new QListWidgetItem(sectionsWidget);
+    frame_section->setText(tr("Frame"));
+    QListWidgetItem *dockbar_section = new QListWidgetItem(sectionsWidget);
+    dockbar_section->setText(tr("Dockbar"));
+    QListWidgetItem *desktop_section = new QListWidgetItem(sectionsWidget);
+    desktop_section->setText(tr("Desktop"));
+    QListWidgetItem *wallpaper_section = new QListWidgetItem(sectionsWidget);
+    wallpaper_section->setText(tr("Wallpaper"));
+    QListWidgetItem *launcher_section = new QListWidgetItem(sectionsWidget);
+    launcher_section->setText(tr("Launcher"));
+    QListWidgetItem *category_section = new QListWidgetItem(sectionsWidget);
+    category_section->setText(tr("Category"));
+    QListWidgetItem *other_section = new QListWidgetItem(sectionsWidget);
+    other_section->setText(tr("Other"));
+    paramsWidget = new QStackedWidget(this);
+    QHBoxLayout *sections_layout = new QHBoxLayout();
+    style_layout->addLayout(sections_layout);
+    sections_layout->addWidget(sectionsWidget);
+    sections_layout->addWidget(paramsWidget);
     ///////// FRAME /////////
-    QGroupBox *frame_box = new QGroupBox(this);
+    frame_box = new QGroupBox(tr("Frame"), this);
     frame_grid = new QGridLayout();
     frame_box->setLayout(frame_grid);
     frame_grid->setColumnMinimumWidth(0, 50);
@@ -498,7 +520,10 @@ void Manager::style_tab()
     frame_grid->addWidget(minmax_pix_but, 6, 2);
     frame_grid->addWidget(close_pix_but, 7, 2);
     ///////// DOCKBAR /////////
-    QGroupBox *dockbar_box = new QGroupBox(this);
+    dockbar_widget = new QWidget(this);
+    dockbar_layout = new QVBoxLayout();
+    dockbar_widget->setLayout(dockbar_layout);
+    dockbar_box = new QGroupBox(tr("Dockbar"), this);
     dockbar_grid = new QGridLayout();
     dockbar_box->setLayout(dockbar_grid);
     dockbar_grid->setColumnMinimumWidth(0, 50);
@@ -519,7 +544,7 @@ void Manager::style_tab()
     dockbar_grid->addWidget(dockbar_pix, 1, 1);
     dockbar_grid->addWidget(dockbar_pix_but, 1, 2);
     ///////// DOCKICON /////////
-    QGroupBox *dockicon_box = new QGroupBox(this);
+    dockicon_box = new QGroupBox(tr("Dockbar icon"), this);
     dockicon_grid = new QGridLayout();
     dockicon_box->setLayout(dockicon_grid);
     dockicon_grid->setColumnMinimumWidth(0, 50);
@@ -543,8 +568,57 @@ void Manager::style_tab()
     dockicon_grid->addWidget(dockicon_color, 1, 0);
     dockicon_grid->addWidget(dockicon_col_lab, 1, 1);
     dockicon_grid->addWidget(dockicon_col_but, 1, 2);
+    ///////// SYSICON /////////
+    sysicon_box = new QGroupBox(tr("System Tray icon"), this);
+    sysicon_grid = new QGridLayout();
+    sysicon_box->setLayout(sysicon_grid);
+    sysicon_grid->setColumnMinimumWidth(0, 50);
+    sysicon_grid->setColumnMinimumWidth(1, 75);
+    sysicon_grid->setColumnMinimumWidth(2, 75);
+    QLabel *sysicon_pix_lb = new QLabel(tr("Pixmap:"), this);
+    sysicon_pix = new QLabel(this);
+    sysicon_pix->setMaximumSize(32, 32);
+    sysicon_pix->setScaledContents(true);
+    QPushButton *sysicon_pix_but = new QPushButton("...", this);
+    sysicon_pix_but->setMaximumWidth(50);
+    sysicon_grid->addWidget(sysicon_pix_lb, 0, 0);
+    sysicon_grid->addWidget(sysicon_pix, 0, 1);
+    sysicon_grid->addWidget(sysicon_pix_but, 0, 2);
+    ///////// DATECLOCK /////////
+    dateclock_box = new QGroupBox(tr("Clock/Date"), this);
+    dateclock_grid = new QGridLayout();
+    dateclock_box->setLayout(dateclock_grid);
+    dateclock_grid->setColumnMinimumWidth(0, 50);
+    dateclock_grid->setColumnMinimumWidth(1, 75);
+    dateclock_grid->setColumnMinimumWidth(2, 75);
+    QLabel *date_color = new QLabel(tr("Date color:"), this);
+    QLabel *clock_color = new QLabel(tr("Clock color:"), this);
+    date_col_lab = new QLabel(this);
+    clock_col_lab = new QLabel(this);
+    date_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    clock_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    date_col_lab->setMaximumWidth(32);
+    clock_col_lab->setMaximumWidth(32);
+    QPushButton *date_col_but = new QPushButton("...", this);
+    QPushButton *clock_col_but = new QPushButton("...", this);
+    date_col_but->setMaximumWidth(50);
+    clock_col_but->setMaximumWidth(50);
+    dateclock_grid->addWidget(date_color, 1, 0);
+    dateclock_grid->addWidget(date_col_lab, 1, 1);
+    dateclock_grid->addWidget(date_col_but, 1, 2);
+    dateclock_grid->addWidget(clock_color, 0, 0);
+    dateclock_grid->addWidget(clock_col_lab, 0, 1);
+    dateclock_grid->addWidget(clock_col_but, 0, 2);
+    /////////////////////////////////////////////////
+    dockbar_layout->addWidget(dockbar_box);
+    dockbar_layout->addWidget(dockicon_box);
+    dockbar_layout->addWidget(sysicon_box);
+    dockbar_layout->addWidget(dateclock_box);
     ///////// DESKFOLDER /////////
-    QGroupBox *deskfolder_box = new QGroupBox(this);
+    deskset_widget = new QWidget(this);
+    deskset_layout = new QVBoxLayout();
+    deskset_widget->setLayout(deskset_layout);
+    deskfolder_box = new QGroupBox(tr("Desktop folder"), this);
     deskfolder_grid = new QGridLayout();
     deskfolder_box->setLayout(deskfolder_grid);
     deskfolder_grid->setColumnMinimumWidth(0, 50);
@@ -569,7 +643,7 @@ void Manager::style_tab()
     deskfolder_grid->addWidget(deskfolder_col_lab, 1, 1);
     deskfolder_grid->addWidget(deskfolder_col_but, 1, 2);
     ///////// DESKFILE /////////
-    QGroupBox *deskfile_box = new QGroupBox(this);
+    deskfile_box = new QGroupBox(tr("Desktop file"), this);
     deskfile_grid = new QGridLayout();
     deskfile_box->setLayout(deskfile_grid);
     deskfile_grid->setColumnMinimumWidth(0, 50);
@@ -584,8 +658,24 @@ void Manager::style_tab()
     deskfile_grid->addWidget(deskfile_color, 0, 0);
     deskfile_grid->addWidget(deskfile_col_lab, 0, 1);
     deskfile_grid->addWidget(deskfile_col_but, 0, 2);
+    ///////// DESKAPP /////////
+    deskapp_box = new QGroupBox(tr("Desktop application"), this);
+    deskapp_grid = new QGridLayout();
+    deskapp_box->setLayout(deskapp_grid);
+    deskapp_grid->setColumnMinimumWidth(0, 50);
+    deskapp_grid->setColumnMinimumWidth(1, 75);
+    deskapp_grid->setColumnMinimumWidth(2, 75);
+    QLabel *deskapp_color = new QLabel(tr("Name color:"), this);
+    deskapp_col_lab = new QLabel(this);
+    deskapp_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    deskapp_col_lab->setMaximumWidth(32);
+    QPushButton *deskapp_col_but = new QPushButton("...", this);
+    deskapp_col_but->setMaximumWidth(50);
+    deskapp_grid->addWidget(deskapp_color, 0, 0);
+    deskapp_grid->addWidget(deskapp_col_lab, 0, 1);
+    deskapp_grid->addWidget(deskapp_col_but, 0, 2);
     ///////// DESKDEV /////////
-    QGroupBox *deskdev_box = new QGroupBox(this);
+    deskdev_box = new QGroupBox(tr("Desktop device"), this);
     deskdev_grid = new QGridLayout();
     deskdev_box->setLayout(deskdev_grid);
     deskdev_grid->setColumnMinimumWidth(0, 50);
@@ -618,70 +708,18 @@ void Manager::style_tab()
     deskdev_grid->addWidget(deskdev_color, 2, 0);
     deskdev_grid->addWidget(deskdev_col_lab, 2, 1);
     deskdev_grid->addWidget(deskdev_col_but, 2, 2);
-    ///////// SYSICON /////////
-    QGroupBox *sysicon_box = new QGroupBox(this);
-    sysicon_grid = new QGridLayout();
-    sysicon_box->setLayout(sysicon_grid);
-    sysicon_grid->setColumnMinimumWidth(0, 50);
-    sysicon_grid->setColumnMinimumWidth(1, 75);
-    sysicon_grid->setColumnMinimumWidth(2, 75);
-    QLabel *sysicon_pix_lb = new QLabel(tr("Pixmap:"), this);
-    sysicon_pix = new QLabel(this);
-    sysicon_pix->setMaximumSize(32, 32);
-    sysicon_pix->setScaledContents(true);
-    QPushButton *sysicon_pix_but = new QPushButton("...", this);
-    sysicon_pix_but->setMaximumWidth(50);
-    sysicon_grid->addWidget(sysicon_pix_lb, 0, 0);
-    sysicon_grid->addWidget(sysicon_pix, 0, 1);
-    sysicon_grid->addWidget(sysicon_pix_but, 0, 2);
-    ///////// DESKAPP /////////
-    QGroupBox *deskapp_box = new QGroupBox(this);
-    deskapp_grid = new QGridLayout();
-    deskapp_box->setLayout(deskapp_grid);
-    deskapp_grid->setColumnMinimumWidth(0, 50);
-    deskapp_grid->setColumnMinimumWidth(1, 75);
-    deskapp_grid->setColumnMinimumWidth(2, 75);
-    QLabel *deskapp_color = new QLabel(tr("Name color:"), this);
-    deskapp_col_lab = new QLabel(this);
-    deskapp_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    deskapp_col_lab->setMaximumWidth(32);
-    QPushButton *deskapp_col_but = new QPushButton("...", this);
-    deskapp_col_but->setMaximumWidth(50);
-    deskapp_grid->addWidget(deskapp_color, 0, 0);
-    deskapp_grid->addWidget(deskapp_col_lab, 0, 1);
-    deskapp_grid->addWidget(deskapp_col_but, 0, 2);
-    ///////// DATECLOCK /////////
-    QGroupBox *dateclock_box = new QGroupBox(this);
-    dateclock_grid = new QGridLayout();
-    dateclock_box->setLayout(dateclock_grid);
-    dateclock_grid->setColumnMinimumWidth(0, 50);
-    dateclock_grid->setColumnMinimumWidth(1, 75);
-    dateclock_grid->setColumnMinimumWidth(2, 75);
-    QLabel *date_color = new QLabel(tr("Date color:"), this);
-    QLabel *clock_color = new QLabel(tr("Clock color:"), this);
-    date_col_lab = new QLabel(this);
-    clock_col_lab = new QLabel(this);
-    date_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    clock_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    date_col_lab->setMaximumWidth(32);
-    clock_col_lab->setMaximumWidth(32);
-    QPushButton *date_col_but = new QPushButton("...", this);
-    QPushButton *clock_col_but = new QPushButton("...", this);
-    date_col_but->setMaximumWidth(50);
-    clock_col_but->setMaximumWidth(50);
-    dateclock_grid->addWidget(date_color, 1, 0);
-    dateclock_grid->addWidget(date_col_lab, 1, 1);
-    dateclock_grid->addWidget(date_col_but, 1, 2);
-    dateclock_grid->addWidget(clock_color, 0, 0);
-    dateclock_grid->addWidget(clock_col_lab, 0, 1);
-    dateclock_grid->addWidget(clock_col_but, 0, 2);
+    /////////////////////////////////////////////////
+    deskset_layout->addWidget(deskfolder_box);
+    deskset_layout->addWidget(deskfile_box);
+    deskset_layout->addWidget(deskapp_box);
+    deskset_layout->addWidget(deskdev_box);
     ///////// DESKTOP /////////
-    QGroupBox *desktop_box = new QGroupBox(this);
+    desktop_box = new QGroupBox(tr("Desktop wallpaper"), this);
     desktop_grid = new QGridLayout();
     desktop_box->setLayout(desktop_grid);
     QLabel *desktop_pix_lb = new QLabel(tr("Wallpaper:"), this);
     desktop_pix = new QLabel(this);
-    desktop_pix->setMinimumSize(100, 100);
+    desktop_pix->setMaximumSize(200, 150);
     desktop_pix->setScaledContents(true);
     QPushButton *desktop_pix_but = new QPushButton("...", this);
     desktop_pix_but->setMaximumWidth(50);
@@ -689,7 +727,7 @@ void Manager::style_tab()
     desktop_grid->addWidget(desktop_pix, 0, 1);
     desktop_grid->addWidget(desktop_pix_but, 0, 2);
     ///////// LAUNCHER /////////
-    QGroupBox *launcher_box = new QGroupBox(this);
+    launcher_box = new QGroupBox(tr("Launcher"), this);
     launcher_grid = new QGridLayout();
     launcher_box->setLayout(launcher_grid);
     launcher_grid->setColumnMinimumWidth(0, 50);
@@ -704,13 +742,6 @@ void Manager::style_tab()
     QLabel *run_pix_lb = new QLabel(tr("Run pixmap:"), this);
     QLabel *show_pix_lb = new QLabel(tr("Show Desktop pixmap:"), this);
     QLabel *manager_pix_lb = new QLabel(tr("Manager pixmap:"), this);
-    QLabel *utility_pix_lb = new QLabel(tr("Utility pixmap:"), this);
-    QLabel *office_pix_lb = new QLabel(tr("Office pixmap:"), this);
-    QLabel *network_pix_lb = new QLabel(tr("Network pixmap:"), this);
-    QLabel *graphics_pix_lb = new QLabel(tr("Graphics pixmap:"), this);
-    QLabel *development_pix_lb = new QLabel(tr("Development pixmap:"), this);
-    QLabel *system_pix_lb = new QLabel(tr("System pixmap:"), this);
-    QLabel *audiovideo_pix_lb = new QLabel(tr("AudioVideo pixmap:"), this);
     launcher_pix = new QLabel(this);
     application_pix = new QLabel(this);
     quit_pix = new QLabel(this);
@@ -720,13 +751,6 @@ void Manager::style_tab()
     run_pix = new QLabel(this);
     show_pix = new QLabel(this);
     manager_pix = new QLabel(this);
-    utility_pix = new QLabel(this);
-    office_pix = new QLabel(this);
-    network_pix = new QLabel(this);
-    graphics_pix = new QLabel(this);
-    development_pix = new QLabel(this);
-    system_pix = new QLabel(this);
-    audiovideo_pix = new QLabel(this);
     launcher_pix->setMaximumSize(32, 32);
     application_pix->setMaximumSize(32, 32);
     quit_pix->setMaximumSize(32, 32);
@@ -736,13 +760,6 @@ void Manager::style_tab()
     run_pix->setMaximumSize(32, 32);
     show_pix->setMaximumSize(32, 32);
     manager_pix->setMaximumSize(32, 32);
-    utility_pix->setMaximumSize(32, 32);
-    office_pix->setMaximumSize(32, 32);
-    network_pix->setMaximumSize(32, 32);
-    graphics_pix->setMaximumSize(32, 32);
-    development_pix->setMaximumSize(32, 32);
-    system_pix->setMaximumSize(32, 32);
-    audiovideo_pix->setMaximumSize(32, 32);
     launcher_pix->setScaledContents(true);
     application_pix->setScaledContents(true);
     quit_pix->setScaledContents(true);
@@ -752,13 +769,6 @@ void Manager::style_tab()
     run_pix->setScaledContents(true);
     show_pix->setScaledContents(true);
     manager_pix->setScaledContents(true);
-    utility_pix->setScaledContents(true);
-    office_pix->setScaledContents(true);
-    network_pix->setScaledContents(true);
-    graphics_pix->setScaledContents(true);
-    development_pix->setScaledContents(true);
-    system_pix->setScaledContents(true);
-    audiovideo_pix->setScaledContents(true);
     QPushButton *launcher_pix_but = new QPushButton("...", this);
     QPushButton *application_pix_but = new QPushButton("...", this);
     QPushButton *quit_pix_but = new QPushButton("...", this);
@@ -768,13 +778,6 @@ void Manager::style_tab()
     QPushButton *run_pix_but = new QPushButton("...", this);
     QPushButton *show_pix_but = new QPushButton("...", this);
     QPushButton *manager_pix_but = new QPushButton("...", this);
-    QPushButton *utility_pix_but = new QPushButton("...", this);
-    QPushButton *office_pix_but = new QPushButton("...", this);
-    QPushButton *network_pix_but = new QPushButton("...", this);
-    QPushButton *graphics_pix_but = new QPushButton("...", this);
-    QPushButton *development_pix_but = new QPushButton("...", this);
-    QPushButton *system_pix_but = new QPushButton("...", this);
-    QPushButton *audiovideo_pix_but = new QPushButton("...", this);
     launcher_pix_but->setMaximumWidth(50);
     application_pix_but->setMaximumWidth(50);
     quit_pix_but->setMaximumWidth(50);
@@ -784,13 +787,6 @@ void Manager::style_tab()
     run_pix_but->setMaximumWidth(50);
     show_pix_but->setMaximumWidth(50);
     manager_pix_but->setMaximumWidth(50);
-    utility_pix_but->setMaximumWidth(50);
-    office_pix_but->setMaximumWidth(50);
-    network_pix_but->setMaximumWidth(50);
-    graphics_pix_but->setMaximumWidth(50);
-    development_pix_but->setMaximumWidth(50);
-    system_pix_but->setMaximumWidth(50);
-    audiovideo_pix_but->setMaximumWidth(50);
     launcher_grid->addWidget(launcher_pix_lb, 0, 0);
     launcher_grid->addWidget(application_pix_lb, 1, 0);
     launcher_grid->addWidget(quit_pix_lb, 2, 0);
@@ -800,13 +796,6 @@ void Manager::style_tab()
     launcher_grid->addWidget(run_pix_lb, 6, 0);
     launcher_grid->addWidget(show_pix_lb, 7, 0);
     launcher_grid->addWidget(manager_pix_lb, 8, 0);
-    launcher_grid->addWidget(utility_pix_lb, 9, 0);
-    launcher_grid->addWidget(office_pix_lb, 10, 0);
-    launcher_grid->addWidget(network_pix_lb, 11, 0);
-    launcher_grid->addWidget(graphics_pix_lb, 12, 0);
-    launcher_grid->addWidget(development_pix_lb, 13, 0);
-    launcher_grid->addWidget(system_pix_lb, 14, 0);
-    launcher_grid->addWidget(audiovideo_pix_lb, 15, 0);
     launcher_grid->addWidget(launcher_pix, 0, 1);
     launcher_grid->addWidget(application_pix, 1, 1);
     launcher_grid->addWidget(quit_pix, 2, 1);
@@ -816,13 +805,6 @@ void Manager::style_tab()
     launcher_grid->addWidget(run_pix, 6, 1);
     launcher_grid->addWidget(show_pix, 7, 1);
     launcher_grid->addWidget(manager_pix, 8, 1);
-    launcher_grid->addWidget(utility_pix, 9, 1);
-    launcher_grid->addWidget(office_pix, 10, 1);
-    launcher_grid->addWidget(network_pix, 11, 1);
-    launcher_grid->addWidget(graphics_pix, 12, 1);
-    launcher_grid->addWidget(development_pix, 13, 1);
-    launcher_grid->addWidget(system_pix, 14, 1);
-    launcher_grid->addWidget(audiovideo_pix, 15, 1);
     launcher_grid->addWidget(launcher_pix_but, 0, 2);
     launcher_grid->addWidget(application_pix_but, 1, 2);
     launcher_grid->addWidget(quit_pix_but, 2, 2);
@@ -832,15 +814,79 @@ void Manager::style_tab()
     launcher_grid->addWidget(run_pix_but, 6, 2);
     launcher_grid->addWidget(show_pix_but, 7, 2);
     launcher_grid->addWidget(manager_pix_but, 8, 2);
-    launcher_grid->addWidget(utility_pix_but, 9, 2);
-    launcher_grid->addWidget(office_pix_but, 10, 2);
-    launcher_grid->addWidget(network_pix_but, 11, 2);
-    launcher_grid->addWidget(graphics_pix_but, 12, 2);
-    launcher_grid->addWidget(development_pix_but, 13, 2);
-    launcher_grid->addWidget(system_pix_but, 14, 2);
-    launcher_grid->addWidget(audiovideo_pix_but, 15, 2);
+    ///////// CATEGORY /////////
+    category_box = new QGroupBox(tr("Category"), this);
+    category_grid = new QGridLayout();
+    category_box->setLayout(category_grid);
+    category_grid->setColumnMinimumWidth(0, 50);
+    category_grid->setColumnMinimumWidth(1, 75);
+    category_grid->setColumnMinimumWidth(2, 75);
+    QLabel *utility_pix_lb = new QLabel(tr("Utility pixmap:"), this);
+    QLabel *office_pix_lb = new QLabel(tr("Office pixmap:"), this);
+    QLabel *network_pix_lb = new QLabel(tr("Network pixmap:"), this);
+    QLabel *graphics_pix_lb = new QLabel(tr("Graphics pixmap:"), this);
+    QLabel *development_pix_lb = new QLabel(tr("Development pixmap:"), this);
+    QLabel *system_pix_lb = new QLabel(tr("System pixmap:"), this);
+    QLabel *audiovideo_pix_lb = new QLabel(tr("AudioVideo pixmap:"), this);
+    utility_pix = new QLabel(this);
+    office_pix = new QLabel(this);
+    network_pix = new QLabel(this);
+    graphics_pix = new QLabel(this);
+    development_pix = new QLabel(this);
+    system_pix = new QLabel(this);
+    audiovideo_pix = new QLabel(this);
+    manager_pix->setMaximumSize(32, 32);
+    utility_pix->setMaximumSize(32, 32);
+    office_pix->setMaximumSize(32, 32);
+    network_pix->setMaximumSize(32, 32);
+    graphics_pix->setMaximumSize(32, 32);
+    development_pix->setMaximumSize(32, 32);
+    system_pix->setMaximumSize(32, 32);
+    audiovideo_pix->setMaximumSize(32, 32);
+    utility_pix->setScaledContents(true);
+    office_pix->setScaledContents(true);
+    network_pix->setScaledContents(true);
+    graphics_pix->setScaledContents(true);
+    development_pix->setScaledContents(true);
+    system_pix->setScaledContents(true);
+    audiovideo_pix->setScaledContents(true);
+    QPushButton *utility_pix_but = new QPushButton("...", this);
+    QPushButton *office_pix_but = new QPushButton("...", this);
+    QPushButton *network_pix_but = new QPushButton("...", this);
+    QPushButton *graphics_pix_but = new QPushButton("...", this);
+    QPushButton *development_pix_but = new QPushButton("...", this);
+    QPushButton *system_pix_but = new QPushButton("...", this);
+    QPushButton *audiovideo_pix_but = new QPushButton("...", this);
+    utility_pix_but->setMaximumWidth(50);
+    office_pix_but->setMaximumWidth(50);
+    network_pix_but->setMaximumWidth(50);
+    graphics_pix_but->setMaximumWidth(50);
+    development_pix_but->setMaximumWidth(50);
+    system_pix_but->setMaximumWidth(50);
+    audiovideo_pix_but->setMaximumWidth(50);
+    category_grid->addWidget(utility_pix_lb, 0, 0);
+    category_grid->addWidget(office_pix_lb, 1, 0);
+    category_grid->addWidget(network_pix_lb, 2, 0);
+    category_grid->addWidget(graphics_pix_lb, 3, 0);
+    category_grid->addWidget(development_pix_lb, 4, 0);
+    category_grid->addWidget(system_pix_lb, 5, 0);
+    category_grid->addWidget(audiovideo_pix_lb, 6, 0);
+    category_grid->addWidget(utility_pix, 0, 1);
+    category_grid->addWidget(office_pix, 1, 1);
+    category_grid->addWidget(network_pix, 2, 1);
+    category_grid->addWidget(graphics_pix, 3, 1);
+    category_grid->addWidget(development_pix, 4, 1);
+    category_grid->addWidget(system_pix, 5, 1);
+    category_grid->addWidget(audiovideo_pix, 6, 1);
+    category_grid->addWidget(utility_pix_but, 0, 2);
+    category_grid->addWidget(office_pix_but, 1, 2);
+    category_grid->addWidget(network_pix_but, 2, 2);
+    category_grid->addWidget(graphics_pix_but, 3, 2);
+    category_grid->addWidget(development_pix_but, 4, 2);
+    category_grid->addWidget(system_pix_but, 5, 2);
+    category_grid->addWidget(audiovideo_pix_but, 6, 2);
     ///////// OTHER /////////
-    QGroupBox *other_box = new QGroupBox(this);
+    other_box = new QGroupBox(tr("Other"), this);
     other_grid = new QGridLayout();
     other_box->setLayout(other_grid);
     other_grid->setColumnMinimumWidth(0, 50);
@@ -921,29 +967,24 @@ void Manager::style_tab()
     ///////// OK-QUIT /////////
     QGroupBox *ok_quit_box = new QGroupBox(this);
     style_layout->addWidget(ok_quit_box);
-    ok_quit_grid = new QGridLayout();
-    ok_quit_box->setLayout(ok_quit_grid);
+    QHBoxLayout *ok_quit_layout = new QHBoxLayout();
+    ok_quit_box->setLayout(ok_quit_layout);
     QPushButton *ok_but = new QPushButton(tr("OK"), this);
     QPushButton* quit_but = new QPushButton(tr("Quit"), this);
-    ok_but->setMaximumWidth(75);
-    quit_but->setMaximumWidth(75);
-    ok_quit_grid->addWidget(ok_but, 0, 0);
-    ok_quit_grid->addWidget(quit_but, 0, 1);
+    ok_quit_layout->addStretch(1);
+    ok_quit_layout->addWidget(ok_but);
+    ok_quit_layout->addWidget(quit_but);
     /////////////////////////////////////////////////////////
-    tool_box->addItem(frame_box, tr("Frame settings"));
-    tool_box->addItem(dockbar_box, tr("Dockbar settings"));
-    tool_box->addItem(dockicon_box, tr("Dockbar icon"));
-    tool_box->addItem(desktop_box, tr("Desktop wallpaper"));
-    tool_box->addItem(deskfolder_box, tr("Desktop folder"));
-    tool_box->addItem(deskfile_box, tr("Desktop file"));
-    tool_box->addItem(deskapp_box, tr("Desktop application"));
-    tool_box->addItem(deskdev_box, tr("Desktop device"));
-    tool_box->addItem(sysicon_box, tr("System Tray icon"));
-    tool_box->addItem(dateclock_box, tr("Clock/Date"));
-    tool_box->addItem(launcher_box, tr("Launcher"));
-    tool_box->addItem(other_box, tr("Other"));
+    paramsWidget->addWidget(frame_box);
+    paramsWidget->addWidget(dockbar_widget);
+    paramsWidget->addWidget(deskset_widget);
+    paramsWidget->addWidget(desktop_box);
+    paramsWidget->addWidget(launcher_box);
+    paramsWidget->addWidget(category_box);
+    paramsWidget->addWidget(other_box);
     /////////////////////////////////////////////////////////
-
+    connect(sectionsWidget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+            this, SLOT(changeSection(QListWidgetItem *, QListWidgetItem *)));
     connect(ok_but, SIGNAL(clicked()), this, SLOT(ok_frame_pressed()));
     connect(quit_but, SIGNAL(clicked()), this, SLOT(quit_pressed()));
 
@@ -1046,6 +1087,15 @@ void Manager::style_tab()
     connect(date_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(clock_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(colorMapper, SIGNAL(mapped(QWidget *)), this, SLOT(select_color(QWidget *)));
+}
+
+void Manager::changeSection(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (!current)
+        current = previous;
+
+    paramsWidget->setCurrentIndex(sectionsWidget->row(current));
+    qDebug() << "Current:" << current;
 }
 
 void Manager::update_add_tree(const QModelIndex &index)
