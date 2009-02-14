@@ -717,20 +717,8 @@ void Antico::wm_quit()
     if (ret == QMessageBox::Ok)
     {
         qDebug() << "Quit Antico WM ...";
-        
-        foreach(Frame *frm, mapping_clients)
-        {
-            qDebug() << "Quit process:" << frm->cl_win() << "- Name:" << frm->cl_name();
-            XRemoveFromSaveSet(QX11Info::display(), frm->cl_win());
-            XReparentWindow(QX11Info::display(), frm->cl_win(), QX11Info::appRootWindow(QX11Info::appScreen()), frm->cl_x(), frm->cl_y());
-            frm->destroy();
-        }
-        mapping_clients.clear();
-        mapping_frames.clear();
-        XSync(QX11Info::display(), FALSE);
-        flush();
-        closeAllWindows();
-        quit(); // quit the WM
+        XCloseDisplay(QX11Info::display());
+        quit();
     }
 }
 
