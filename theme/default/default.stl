@@ -59,6 +59,16 @@ name_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
 date_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
 clock_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
 
+[Message]
+ok_button_pix=ok_but.png
+close_button_pix=close_but.png
+add_button_pix=add_but.png
+remove_button_pix=remove_but.png
+question_pix=question.png
+information_pix=information.png
+warning_pix=warning.png
+critical_pix=critical.png
+
 [Other]
 folder_link_pix=folder_link.png
 file_link_pix=file_link.png

@@ -8,13 +8,81 @@
 
 ////////////////////////////////////////
 
-Msgbox::Msgbox(QWidget *parent) : QMessageBox(parent)
+Msgbox::Msgbox(QWidget *parent) : QDialog(parent)
 {
+    setSizeGripEnabled(true);
+    read_settings();
+    init();
     setWindowModality(Qt::WindowModal);
 }
 
 Msgbox::~Msgbox()
-{}
+{
+}
+
+void Msgbox::init()
+{
+    QGridLayout *layout = new QGridLayout(this);
+    setLayout(layout);
+    msg_header = new QLabel(this);
+    msg_header->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    msg_info = new QLabel(this);
+    msg_info->setWordWrap(true);
+    msg_icon = new QLabel(this);
+    QPushButton *ok_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"), this);
+    QPushButton* close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
+    layout->addWidget(msg_header, 0, 0, 1, 0);
+    layout->addWidget(msg_icon, 1, 0, Qt::AlignCenter);
+    layout->addWidget(msg_info, 1, 1, Qt::AlignCenter);
+    layout->addWidget(ok_but, 2, 0);
+    layout->addWidget(close_but, 2, 1);
+
+    connect(ok_but, SIGNAL(pressed()), this, SLOT(accept()));
+    connect(close_but, SIGNAL(pressed()), this, SLOT(reject()));
+}
+
+void Msgbox::read_settings()
+{
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico->beginGroup("Style");
+    QString stl_name = antico->value("name").toString();
+    QString stl_path = antico->value("path").toString();
+    antico->endGroup(); //Style
+    // get style values
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    style->beginGroup("Message");
+    ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
+    close_button_pix_path = stl_path + style->value("close_button_pix").toString();
+    add_button_pix_path = stl_path + style->value("add_button_pix").toString();
+    remove_button_pix_path = stl_path + style->value("remove_button_pix").toString();
+    question_pix_path = stl_path + style->value("question_pix").toString();
+    information_pix_path = stl_path + style->value("information_pix").toString();
+    warning_pix_path = stl_path + style->value("warning_pix").toString();
+    critical_pix_path = stl_path + style->value("critical_pix").toString();
+    style->endGroup(); // Message
+}
+
+void Msgbox::set_header(const QString &header)
+{
+    msg_header->setText(header);
+}
+
+void Msgbox::set_info(const QString &info)
+{
+    msg_info->setText(info);
+}
+
+void Msgbox::set_icon(const QString &type)
+{
+    if (type == "Information")
+        msg_icon->setPixmap(QPixmap(information_pix_path));
+    if (type == "Warning")
+        msg_icon->setPixmap(QPixmap(warning_pix_path));
+    if (type == "Critical")
+        msg_icon->setPixmap(QPixmap(critical_pix_path));
+    if (type == "Question")
+        msg_icon->setPixmap(QPixmap(question_pix_path));
+}
 
 void Msgbox::paintEvent(QPaintEvent *)
 {

@@ -3,42 +3,37 @@
 <context>
     <name>Antico</name>
     <message>
-        <location filename="../src/antico.cpp" line="709"/>
+        <location filename="../src/antico.cpp" line="708"/>
         <source>&lt;b&gt;Quit the WM&lt;/b&gt;</source>
         <translation>&lt;b&gt;Ukončit správce oken&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="710"/>
+        <location filename="../src/antico.cpp" line="709"/>
         <source>Are you sure to quit the WM ?</source>
         <translation>Opravdu chcete ukončit správce oken?</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="790"/>
-        <source>Ok</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/antico.cpp" line="791"/>
+        <location filename="../src/antico.cpp" line="770"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation type="obsolete">Storno</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="754"/>
+        <location filename="../src/antico.cpp" line="740"/>
         <source>&lt;b&gt;Shutdown the PC&lt;/b&gt;</source>
         <translation>&lt;b&gt;Vypnout počítač&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="755"/>
+        <location filename="../src/antico.cpp" line="741"/>
         <source>Are you sure to shutdown the PC ?</source>
         <translation>Opravdu si přejete vypnout počítač?</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="787"/>
+        <location filename="../src/antico.cpp" line="759"/>
         <source>&lt;b&gt;Restart the PC&lt;/b&gt;</source>
         <translation>&lt;b&gt;Restartovat počítač&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="788"/>
+        <location filename="../src/antico.cpp" line="760"/>
         <source>Are you sure to restart the PC ?</source>
         <translation>Opravdu si přejete restartovat počítač?</translation>
     </message>
@@ -261,39 +256,44 @@
 <context>
     <name>Filedialog</name>
     <message>
-        <location filename="../src/filedialog.cpp" line="78"/>
+        <location filename="../src/filedialog.cpp" line="82"/>
         <source>Show hidden files</source>
         <translation>Zobrazit skryté soubory</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="87"/>
+        <location filename="../src/filedialog.cpp" line="91"/>
         <source>Ok</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../src/filedialog.cpp" line="88"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation type="obsolete">Storno</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="89"/>
+        <location filename="../src/filedialog.cpp" line="92"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="120"/>
+        <location filename="../src/filedialog.cpp" line="123"/>
         <source>Open with</source>
         <translation>Otevřít pomocí</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="128"/>
+        <location filename="../src/filedialog.cpp" line="131"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="169"/>
+        <location filename="../src/filedialog.cpp" line="172"/>
         <source> deleted</source>
         <translation>smazán</translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="171"/>
+        <source>INFORMATION</source>
+        <translation type="unfinished">INFORMACE</translation>
     </message>
 </context>
 <context>
@@ -350,27 +350,27 @@
 <context>
     <name>Manager</name>
     <message>
-        <location filename="../src/manager.cpp" line="106"/>
+        <location filename="../src/manager.cpp" line="114"/>
         <source>&lt;b&gt;MANAGER&lt;/b&gt;</source>
         <translation>&lt;b&gt;Správce&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="304"/>
+        <location filename="../src/manager.cpp" line="339"/>
         <source>Add application</source>
         <translation>Přidat aplikaci</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="320"/>
+        <location filename="../src/manager.cpp" line="355"/>
         <source>Select the category:</source>
         <translation>Vybrat kategorii:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="335"/>
+        <location filename="../src/manager.cpp" line="370"/>
         <source>Utility</source>
         <translation>Nástroje</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="336"/>
+        <location filename="../src/manager.cpp" line="371"/>
         <source>Office</source>
         <translation>Kancelář</translation>
     </message>
@@ -380,187 +380,187 @@
         <translation type="obsolete">Grafika</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="339"/>
+        <location filename="../src/manager.cpp" line="374"/>
         <source>Development</source>
         <translation>Vývoj</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="340"/>
+        <location filename="../src/manager.cpp" line="375"/>
         <source>System</source>
         <translation>Systém</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="396"/>
+        <location filename="../src/manager.cpp" line="436"/>
         <source>Add</source>
         <translation>Přidat</translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="973"/>
         <source>Quit</source>
-        <translation>Ukončit</translation>
+        <translation type="obsolete">Ukončit</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="361"/>
+        <location filename="../src/manager.cpp" line="398"/>
         <source>Remove application</source>
         <translation>Odebrat aplikaci</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="367"/>
+        <location filename="../src/manager.cpp" line="404"/>
         <source>Category/Applications</source>
         <translation>Kategorie/Aplikace</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="397"/>
+        <location filename="../src/manager.cpp" line="437"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="388"/>
+        <location filename="../src/manager.cpp" line="427"/>
         <source>Run at startup</source>
         <translation>Po spuštění</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="416"/>
+        <location filename="../src/manager.cpp" line="457"/>
         <source>Style</source>
         <translation>Styl</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="423"/>
+        <location filename="../src/manager.cpp" line="465"/>
         <source>Actual style:</source>
         <translation>Současný styl:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="462"/>
+        <location filename="../src/manager.cpp" line="507"/>
         <source>Top border height:</source>
         <translation>Výška horního okraje:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="463"/>
+        <location filename="../src/manager.cpp" line="508"/>
         <source>Lateral border width:</source>
         <translation>Šířka bočního okraje:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="464"/>
+        <location filename="../src/manager.cpp" line="509"/>
         <source>Bottom border height:</source>
         <translation>Výška spodního okraje:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="465"/>
+        <location filename="../src/manager.cpp" line="510"/>
         <source>Header active pixmap:</source>
         <translation>Obrázek titulku aktivního okna:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="466"/>
+        <location filename="../src/manager.cpp" line="511"/>
         <source>Header inactive pixmap:</source>
         <translation>Obrázek titulku neaktivního okna:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="557"/>
+        <location filename="../src/manager.cpp" line="604"/>
         <source>Title color:</source>
         <translation>Barva titulku:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="468"/>
+        <location filename="../src/manager.cpp" line="513"/>
         <source>Minimize/Maximize pixmap:</source>
         <translation>Obrázek maximalizace/minimalizace:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="469"/>
+        <location filename="../src/manager.cpp" line="514"/>
         <source>Close pixmap:</source>
         <translation>Obrázek zavření:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="532"/>
+        <location filename="../src/manager.cpp" line="578"/>
         <source>Height:</source>
         <translation>Výška:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="627"/>
+        <location filename="../src/manager.cpp" line="677"/>
         <source>Pixmap:</source>
         <translation>Obrázek:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="692"/>
+        <location filename="../src/manager.cpp" line="745"/>
         <source>Name color:</source>
         <translation>Barva názvu:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="684"/>
+        <location filename="../src/manager.cpp" line="737"/>
         <source>Disk pixmap:</source>
         <translation>Obrázek disku:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="688"/>
+        <location filename="../src/manager.cpp" line="741"/>
         <source>CDRom pixmap:</source>
         <translation>Obrázek CDRom:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="594"/>
+        <location filename="../src/manager.cpp" line="643"/>
         <source>Date color:</source>
         <translation>Barva data:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="595"/>
+        <location filename="../src/manager.cpp" line="644"/>
         <source>Clock color:</source>
         <translation>Barva hodin:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="720"/>
+        <location filename="../src/manager.cpp" line="774"/>
         <source>Wallpaper:</source>
         <translation>Obrázek na pozadí plochy:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="736"/>
+        <location filename="../src/manager.cpp" line="791"/>
         <source>Launcher pixmap:</source>
         <translation>spouštěče:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="737"/>
+        <location filename="../src/manager.cpp" line="792"/>
         <source>Application pixmap:</source>
         <translation>aplikace:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="738"/>
+        <location filename="../src/manager.cpp" line="793"/>
         <source>Quit pixmap:</source>
         <translation>Ukončení:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="739"/>
+        <location filename="../src/manager.cpp" line="794"/>
         <source>Shutdown pixmap:</source>
         <translation>Vypnutí:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="740"/>
+        <location filename="../src/manager.cpp" line="795"/>
         <source>Restart pixmap:</source>
         <translation>Restart:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="741"/>
+        <location filename="../src/manager.cpp" line="796"/>
         <source>Refresh pixmap:</source>
         <translation>Obnovení:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="742"/>
+        <location filename="../src/manager.cpp" line="797"/>
         <source>Run pixmap:</source>
         <translation>Spuštění:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="743"/>
+        <location filename="../src/manager.cpp" line="798"/>
         <source>Show Desktop pixmap:</source>
         <translation>Zobrazení plochy:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="744"/>
+        <location filename="../src/manager.cpp" line="799"/>
         <source>Manager pixmap:</source>
         <translation>Správce:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="824"/>
+        <location filename="../src/manager.cpp" line="880"/>
         <source>Utility pixmap:</source>
         <translation>Nástroje:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="825"/>
+        <location filename="../src/manager.cpp" line="881"/>
         <source>Office pixmap:</source>
         <translation>Kancelář:</translation>
     </message>
@@ -575,12 +575,12 @@
         <translation type="obsolete">Grafika:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="828"/>
+        <location filename="../src/manager.cpp" line="884"/>
         <source>Development pixmap:</source>
         <translation>Vývoj:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="829"/>
+        <location filename="../src/manager.cpp" line="885"/>
         <source>System pixmap:</source>
         <translation>Systém:</translation>
     </message>
@@ -595,49 +595,44 @@
         <translation type="obsolete">Video:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="895"/>
+        <location filename="../src/manager.cpp" line="1032"/>
         <source>Folder link pixmap:</source>
         <translation>Odkaz na složku:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="896"/>
+        <location filename="../src/manager.cpp" line="1033"/>
         <source>File link pixmap:</source>
         <translation>Odkaz na soubor:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="897"/>
+        <location filename="../src/manager.cpp" line="1034"/>
         <source>Application link pixmap:</source>
         <translation>Odkaz na aplikaci:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="898"/>
+        <location filename="../src/manager.cpp" line="1035"/>
         <source>Delete link pixmap:</source>
         <translation>Smazat odkaz:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="899"/>
+        <location filename="../src/manager.cpp" line="1036"/>
         <source>Delete file pixmap:</source>
         <translation>Smazat soubor:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="900"/>
+        <location filename="../src/manager.cpp" line="1037"/>
         <source>Close Dock pixmap:</source>
         <translation>Zavřít dok:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="901"/>
+        <location filename="../src/manager.cpp" line="1038"/>
         <source>Add to SysTray pixmap:</source>
         <translation>Přidat do SysTray:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="902"/>
+        <location filename="../src/manager.cpp" line="1039"/>
         <source>Open with pixmap:</source>
         <translation>Otevřít pomocí:</translation>
-    </message>
-    <message>
-        <location filename="../src/manager.cpp" line="972"/>
-        <source>OK</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="933"/>
@@ -650,72 +645,72 @@
         <translation type="obsolete">Nastavení Dockbar</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="547"/>
+        <location filename="../src/manager.cpp" line="593"/>
         <source>Dockbar icon</source>
         <translation>Ikona pro Dockbar</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="717"/>
+        <location filename="../src/manager.cpp" line="770"/>
         <source>Desktop wallpaper</source>
         <translation>Pozadí plochy</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="621"/>
+        <location filename="../src/manager.cpp" line="670"/>
         <source>Desktop folder</source>
         <translation>Složka na ploše</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="646"/>
+        <location filename="../src/manager.cpp" line="696"/>
         <source>Desktop file</source>
         <translation>Soubor na ploše</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="662"/>
+        <location filename="../src/manager.cpp" line="713"/>
         <source>Desktop application</source>
         <translation>Aplikace na ploš</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="678"/>
+        <location filename="../src/manager.cpp" line="730"/>
         <source>Desktop device</source>
         <translation>Zařízení na ploše</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="572"/>
+        <location filename="../src/manager.cpp" line="619"/>
         <source>System Tray icon</source>
         <translation>System Tray ikona</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="588"/>
+        <location filename="../src/manager.cpp" line="636"/>
         <source>Clock/Date</source>
         <translation>Hodiny/Datum</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="730"/>
+        <location filename="../src/manager.cpp" line="784"/>
         <source>Launcher</source>
         <translation>Spouštěč</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="889"/>
+        <location filename="../src/manager.cpp" line="1025"/>
         <source>Other</source>
         <translation>Ostatní</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1129"/>
+        <location filename="../src/manager.cpp" line="1287"/>
         <source>Select the style</source>
         <translation>Vybrat styl</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1156"/>
+        <location filename="../src/manager.cpp" line="1314"/>
         <source>Select the pixmap</source>
         <translation>Vybrat obrázek</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1285"/>
+        <location filename="../src/manager.cpp" line="1454"/>
         <source>&lt;b&gt;Antico style settings updated&lt;/b&gt;</source>
         <translation>&lt;b&gt;Nastavení stylu pro Antiko aktualizováno&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1395"/>
+        <location filename="../src/manager.cpp" line="1564"/>
         <source>To apply the modify, select &lt;b&gt;Refresh WM&lt;/b&gt; on Launcher menu</source>
         <translation>Pro aplikaci změn vyberte &lt;b&gt;Obnovit správce oken&lt;/b&gt; ze spouštěcího menu</translation>
     </message>
@@ -725,7 +720,7 @@
         <translation type="obsolete">přidáno k</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1329"/>
+        <location filename="../src/manager.cpp" line="1498"/>
         <source>Add application to run at startup:</source>
         <translation>Přidat program, který se má spustit při startu</translation>
     </message>
@@ -745,112 +740,190 @@
         <translation type="obsolete">odebráno z</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="337"/>
+        <location filename="../src/manager.cpp" line="372"/>
         <source>Network</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="338"/>
+        <location filename="../src/manager.cpp" line="373"/>
         <source>Graphics</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="341"/>
+        <location filename="../src/manager.cpp" line="376"/>
         <source>AudioVideo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="826"/>
+        <location filename="../src/manager.cpp" line="882"/>
         <source>Network pixmap:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="827"/>
+        <location filename="../src/manager.cpp" line="883"/>
         <source>Graphics pixmap:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="830"/>
+        <location filename="../src/manager.cpp" line="886"/>
         <source>AudioVideo pixmap:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1318"/>
+        <location filename="../src/manager.cpp" line="1487"/>
         <source>&lt;b&gt;Application added&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1351"/>
+        <location filename="../src/manager.cpp" line="1520"/>
         <source>&lt;b&gt;Application added to run list&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1394"/>
+        <location filename="../src/manager.cpp" line="1563"/>
         <source>&lt;b&gt;Application removed&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1370"/>
+        <location filename="../src/manager.cpp" line="1539"/>
         <source>&lt;b&gt;Application removed from run list&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="456"/>
+        <location filename="../src/manager.cpp" line="500"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="526"/>
+        <location filename="../src/manager.cpp" line="571"/>
         <source>Dockbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="441"/>
+        <location filename="../src/manager.cpp" line="483"/>
         <source>Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="443"/>
+        <location filename="../src/manager.cpp" line="485"/>
         <source>Wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="818"/>
+        <location filename="../src/manager.cpp" line="873"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="489"/>
+        <source>Categories</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="1111"/>
+        <source>Close</source>
+        <translation type="unfinished">Zavřít</translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="945"/>
+        <source>Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="952"/>
+        <source>Ok button pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="953"/>
+        <source>Close button pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="954"/>
+        <source>Add button pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="955"/>
+        <source>Remove button pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="956"/>
+        <source>Question pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="957"/>
+        <source>Information pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="958"/>
+        <source>Warning pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="959"/>
+        <source>Critical pixmap:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="1110"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Msgbox</name>
+    <message>
+        <location filename="../src/msgbox.cpp" line="32"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/msgbox.cpp" line="33"/>
+        <source>Close</source>
+        <translation type="unfinished">Zavřít</translation>
     </message>
 </context>
 <context>
     <name>Runner</name>
     <message>
-        <location filename="../src/runner.cpp" line="27"/>
+        <location filename="../src/runner.cpp" line="46"/>
         <source>&lt;b&gt;RUNNER&lt;/b&gt;</source>
         <translation>&lt;b&gt;Spuštění&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/runner.cpp" line="29"/>
+        <location filename="../src/runner.cpp" line="48"/>
         <source>Type command line:</source>
         <translation>Napište zde příkaz:</translation>
     </message>
     <message>
-        <location filename="../src/runner.cpp" line="31"/>
+        <location filename="../src/runner.cpp" line="50"/>
         <source>Run</source>
         <translation>Spustit</translation>
     </message>
     <message>
         <location filename="../src/runner.cpp" line="32"/>
         <source>Quit</source>
-        <translation>Ukončit</translation>
+        <translation type="obsolete">Ukončit</translation>
     </message>
     <message>
-        <location filename="../src/runner.cpp" line="81"/>
+        <location filename="../src/runner.cpp" line="100"/>
         <source>&lt;b&gt;COMMAND INCORRECT&lt;/b&gt;</source>
         <translation>&lt;b&gt;Nesprávný příkaz&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/runner.cpp" line="82"/>
+        <location filename="../src/runner.cpp" line="101"/>
         <source>Check the command syntax. If the app is not in your $PATH, type the absolute app path.</source>
         <translation>Zkontrolujte zápis příkazu. Jestliže program není v adresáři proměnné $PATH, zadejte absolutní cestu.</translation>
+    </message>
+    <message>
+        <location filename="../src/runner.cpp" line="51"/>
+        <source>Close</source>
+        <translation type="unfinished">Zavřít</translation>
     </message>
 </context>
 </TS>

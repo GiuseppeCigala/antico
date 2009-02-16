@@ -461,18 +461,18 @@ void Desk::mount_device(const QString &uuid, const QString &block_device, const 
     if (mnt_cmd)
     {
         Msgbox info;
-        info.setText(tr("WARNING"));
-        info.setInformativeText(tr("<b>Problem to mount the device</b>"));
-        info.setIcon(QMessageBox::Warning);
+        info.set_header(tr("WARNING"));
+        info.set_info(tr("<b>Problem to mount the device</b>"));
+        info.set_icon("Warning");
         info.exec();
     }
     else
     {
         QDBusReply<QString> mnt_point = uuid_interface.call("GetProperty", "volume.mount_point");
         Msgbox info;
-        info.setText(tr("Device mounted in:"));
-        info.setInformativeText("<b>" + mnt_dir + "</b>");
-        info.setIcon(QMessageBox::Information);
+        info.set_header(tr("Device mounted in:"));
+        info.set_info("<b>" + mnt_dir + "</b>");
+        info.set_icon("Information");
         info.exec();
     }
 }
@@ -503,17 +503,17 @@ void Desk::unmount_device(const QString &uuid)
     if (unmnt_cmd)
     {
         Msgbox info;
-        info.setText(tr("WARNING"));
-        info.setInformativeText(tr("<b>Problem to unmount the device</b>"));
-        info.setIcon(QMessageBox::Warning);
+        info.set_header(tr("WARNING"));
+        info.set_info(tr("<b>Problem to unmount the device</b>"));
+        info.set_icon("Warning");
         info.exec();
     }
     else
     {
         Msgbox info;
-        info.setText(tr("INFORMATION"));
-        info.setInformativeText(tr("<b>Device correctly unmounted</b>"));
-        info.setIcon(QMessageBox::Information);
+        info.set_header(tr("INFORMATION"));
+        info.set_info(tr("<b>Device correctly unmounted</b>"));
+        info.set_icon("Information");
         info.exec();
     }
 }

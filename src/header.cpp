@@ -50,7 +50,7 @@ void Header::set_active()
     update();
 }
 
-void Header::update_name(const QString nm)
+void Header::update_name(const QString &nm)
 {
     name = nm;
     update();

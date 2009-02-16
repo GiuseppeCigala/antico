@@ -57,6 +57,10 @@ void Filedialog::read_settings()
     delete_file_pix = stl_path + style->value("delete_file_pix").toString();
     open_with_pix = stl_path + style->value("open_with_pix").toString();
     style->endGroup(); //Other
+    style->beginGroup("Message");
+    ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
+    close_button_pix_path = stl_path + style->value("close_button_pix").toString();
+    style->endGroup(); // Message
 }
 
 void Filedialog::paintEvent(QPaintEvent *)
@@ -84,9 +88,8 @@ void Filedialog::init()
     dir_model->setSupportedDragActions(Qt::LinkAction);
 
     button_box = new QDialogButtonBox(this);
-    ok = new QPushButton(tr("Ok"));
-    cancel = new QPushButton(tr("Cancel"));
-    close = new QPushButton(tr("Close"));
+    ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
+    close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
 
     completer = new QCompleter();
     completer->setModel(dir_model);
@@ -136,15 +139,13 @@ void Filedialog::set_type(const QString &text, const QString &button_type) // se
 
     if (button_type.compare("OK_Cancel") == 0)
     {
-        button_box->removeButton(close);
         button_box->addButton(ok, QDialogButtonBox::AcceptRole);
-        button_box->addButton(cancel, QDialogButtonBox::RejectRole);
+        button_box->addButton(close, QDialogButtonBox::RejectRole);
 
     }
     if (button_type.compare("Close") == 0)
     {
         button_box->removeButton(ok);
-        button_box->removeButton(cancel);
         button_box->addButton(close, QDialogButtonBox::RejectRole);
     }
 }
@@ -159,15 +160,17 @@ void Filedialog::del_file()
         if (dir_model->rmdir(selection))
         {
             Msgbox msg;
-            msg.setText("<b>" + name + "</b>" + tr(" deleted"));
-            msg.setIcon(QMessageBox::Information);
+            msg.set_header(tr("INFORMATION"));
+            msg.set_info("<b>" + name + "</b>" + tr(" deleted"));
+            msg.set_icon("Information");
         }
     }
     else if (dir_model->remove(selection)) // else is a file
     {
         Msgbox msg;
-        msg.setText("<b>" + name + "</b>" + tr(" deleted"));
-        msg.setIcon(QMessageBox::Information);
+        msg.set_header(tr("INFORMATION"));
+        msg.set_info("<b>" + name + "</b>" + tr(" deleted"));
+        msg.set_icon("Information");
     }
 }
 

@@ -26,7 +26,7 @@ public:
     void set_pixmap(const QPixmap &, const QPixmap &, const QColor &);
     void set_active();
     void set_inactive();
-    void update_name(const QString nm);
+    void update_name(const QString &);
 
 signals:
     void mouse_release(QMouseEvent *);

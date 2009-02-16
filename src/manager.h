@@ -35,7 +35,7 @@ public:
     void run_app_tab();
     void remove_app_tab();
     void update_remove_list();
-    void update_run_list(); 
+    void update_run_list();
 
 public slots:
     void ok_frame_pressed();
@@ -43,7 +43,7 @@ public slots:
     void add_run_app_pressed();
     void remove_app_pressed();
     void remove_run_app_pressed(); 
-    void quit_pressed();
+    void close_pressed();
     void select_pixmap(QWidget *);
     void select_color(QWidget *);
     void show_path(const QModelIndex &);
@@ -91,6 +91,15 @@ private:
     QLabel *development_pix;
     QLabel *system_pix;
     QLabel *audiovideo_pix;
+    /// Message ///
+    QLabel *ok_button_pix;
+    QLabel *close_button_pix;
+    QLabel *add_button_pix;
+    QLabel *remove_button_pix;
+    QLabel *question_pix;
+    QLabel *information_pix;
+    QLabel *warning_pix;
+    QLabel *critical_pix;
     /// Other ///
     QLabel *folder_link_pix;
     QLabel *file_link_pix;
@@ -129,6 +138,15 @@ private:
     QString development_pix_path;
     QString system_pix_path;
     QString audiovideo_pix_path;
+    /// Message ///
+    QString ok_button_pix_path;
+    QString close_button_pix_path;
+    QString add_button_pix_path;
+    QString remove_button_pix_path;
+    QString question_pix_path;
+    QString information_pix_path;
+    QString warning_pix_path;
+    QString critical_pix_path;
     /// Other ///
     QString folder_link_pix_path;
     QString file_link_pix_path;
@@ -183,6 +201,7 @@ private:
     QGroupBox *desktop_box;
     QGroupBox *launcher_box;
     QGroupBox *category_box;
+    QGroupBox *message_box;
     QGroupBox *other_box;
     QWidget *dockbar_widget;
     QWidget *deskset_widget;
@@ -199,6 +218,7 @@ private:
     QGridLayout *desktop_grid;
     QGridLayout *launcher_grid;
     QGridLayout *category_grid;
+    QGridLayout *message_grid;
     QGridLayout *other_grid;
     QDirModel *dir_model;
     QCompleter *completer;

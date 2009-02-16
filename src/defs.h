@@ -57,6 +57,7 @@
 #include <QSpacerItem>
 #include <QDialogButtonBox>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QTimer>
 #include <QDateTime>
 #include <QStyleFactory>

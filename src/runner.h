@@ -23,6 +23,7 @@ class Runner : public QDialog
 public:
     Runner(QWidget *parent=0);
     ~Runner();
+    void read_settings();
     void init();
 
 protected:
@@ -34,12 +35,14 @@ protected:
 signals:
 
 public slots:
-    void run();
-    void quit();
+    void run_pressed();
+    void close_pressed();
 
 private:
     QPoint mousepos;
     QLineEdit *command;
+    QString ok_button_pix_path;
+    QString close_button_pix_path;
 };
 
 

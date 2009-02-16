@@ -66,6 +66,8 @@ private:
     QString win_text;
     QString delete_file_pix;
     QString open_with_pix;
+    QString ok_button_pix_path;
+    QString close_button_pix_path;
     QLabel *win_label;
     QLabel *preview_label;
     QRadioButton *hidden_files;

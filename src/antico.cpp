@@ -358,7 +358,6 @@ bool Antico::x11EventFilter(XEvent *event)
         {
             frm->set_focus(event->xcrossing.time);
             qDebug() << "Enter in map frame:" << frm->winId();
-            return true;
         }
         else
         {
@@ -706,15 +705,12 @@ void Antico::send_configurenotify(Frame *frm)
 void Antico::wm_quit()
 {
     Msgbox msg;
-    msg.setText(tr("<b>Quit the WM</b>"));
-    msg.setInformativeText(tr("Are you sure to quit the WM ?"));
-    msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg.setButtonText(QMessageBox::Ok, tr("Ok"));
-    msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
-    msg.setIcon(QMessageBox::Warning);
+    msg.set_header(tr("<b>Quit the WM</b>"));
+    msg.set_info(tr("Are you sure to quit the WM ?"));
+    msg.set_icon("Question");
     int ret = msg.exec();
 
-    if (ret == QMessageBox::Ok)
+    if (ret == QDialog::Accepted)
     {
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
@@ -741,15 +737,12 @@ void Antico::wm_refresh()
 void Antico::wm_shutdown()
 {
     Msgbox msg;
-    msg.setText(tr("<b>Shutdown the PC</b>"));
-    msg.setInformativeText(tr("Are you sure to shutdown the PC ?"));
-    msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg.setButtonText(QMessageBox::Ok, tr("Ok"));
-    msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
-    msg.setIcon(QMessageBox::Warning);
+    msg.set_header(tr("<b>Shutdown the PC</b>"));
+    msg.set_info(tr("Are you sure to shutdown the PC ?"));
+    msg.set_icon("Question");
     int ret = msg.exec();
 
-    if (ret == QMessageBox::Ok)
+    if (ret == QDialog::Accepted)
     {
         qDebug() << "Shutdown the PC ...";
         
@@ -763,16 +756,13 @@ void Antico::wm_shutdown()
 void Antico::wm_restart()
 {
     Msgbox msg;
-    msg.setText(tr("<b>Restart the PC</b>"));
-    msg.setInformativeText(tr("Are you sure to restart the PC ?"));
-    msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg.setButtonText(QMessageBox::Ok, tr("Ok"));
-    msg.setButtonText(QMessageBox::Cancel, tr("Cancel"));
-    msg.setIcon(QMessageBox::Warning);
+    msg.set_header(tr("<b>Restart the PC</b>"));
+    msg.set_info(tr("Are you sure to restart the PC ?"));
+    msg.set_icon("Question");
 
     int ret = msg.exec();
 
-    if (ret == QMessageBox::Ok)
+    if (ret == QDialog::Accepted)
     {
         qDebug() << "Restart the PC ...";
         
@@ -941,6 +931,17 @@ void Antico::set_settings()
         style->setValue("date_color", QColor(Qt::white));
         style->setValue("clock_color", QColor(Qt::white));
         style->endGroup(); //DateClock
+        /////////////////////////////////////////////////////////////////////////
+        style->beginGroup("Message");
+        style->setValue("ok_button_pix", "ok_but.png");
+        style->setValue("close_button_pix", "close_but.png");
+        style->setValue("add_button_pix", "add_but.png");
+        style->setValue("remove_button_pix", "remove_but.png");
+        style->setValue("question_pix", "question.png");
+        style->setValue("information_pix", "information.png");
+        style->setValue("warning_pix", "warning.png");
+        style->setValue("critical_pix", "critical.png");
+        style->endGroup(); //Message
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Other");
         style->setValue("folder_link_pix", "folder_link.png");

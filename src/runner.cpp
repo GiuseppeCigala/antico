@@ -13,12 +13,31 @@ Runner::Runner(QWidget *parent) : QDialog(parent)
     setSizeGripEnabled(true);
     setContentsMargins(0, 10, 0, 0);
     setWindowModality(Qt::WindowModal);
+    read_settings();
     init();
     show();
 }
 
 Runner::~Runner()
-{}
+{
+    delete &ok_button_pix_path;
+    delete &close_button_pix_path;
+}
+
+void Runner::read_settings()
+{
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    antico->beginGroup("Style");
+    QString stl_name = antico->value("name").toString();
+    QString stl_path = antico->value("path").toString();
+    antico->endGroup(); //Style
+    // get style values
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    style->beginGroup("Message");
+    ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
+    close_button_pix_path = stl_path + style->value("close_button_pix").toString();
+    style->endGroup(); // Message
+}
 
 void Runner::init()
 {
@@ -28,16 +47,16 @@ void Runner::init()
     win_lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     QLabel *text = new QLabel(tr("Type command line:"), this);
     command = new QLineEdit("", this);
-    QPushButton *run = new QPushButton(tr("Run"), this);
-    QPushButton *quit = new QPushButton(tr("Quit"), this);
+    QPushButton *run_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Run"), this);
+    QPushButton *close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
     layout->addWidget(win_lab, 0, 0, 1, 0);
     layout->addWidget(text, 1, 0, 1, 0);
     layout->addWidget(command, 2, 0, 1, 0);
-    layout->addWidget(run, 3, 0);
-    layout->addWidget(quit, 3, 1);
+    layout->addWidget(run_but, 3, 0);
+    layout->addWidget(close_but, 3, 1);
 
-    connect(run, SIGNAL(clicked()), this, SLOT(run()));
-    connect(quit, SIGNAL(clicked()), this, SLOT(quit()));
+    connect(run_but, SIGNAL(pressed()), this, SLOT(run_pressed()));
+    connect(close_but, SIGNAL(pressed()), this, SLOT(close_pressed()));
 }
 
 void Runner::paintEvent(QPaintEvent *)
@@ -67,7 +86,7 @@ void Runner::mouseReleaseEvent(QMouseEvent *event)
     releaseMouse();
 }
 
-void Runner::run()
+void Runner::run_pressed()
 {
     QString cmd = command->text();
 
@@ -78,15 +97,15 @@ void Runner::run()
         else
         {
             Msgbox msg;
-            msg.setText(tr("<b>COMMAND INCORRECT</b>"));
-            msg.setInformativeText(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
-            msg.setIcon(QMessageBox::Critical);
+            msg.set_header(tr("<b>COMMAND INCORRECT</b>"));
+            msg.set_info(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
+            msg.set_icon("Critical");
             msg.exec();
         }
     }
 }
 
-void Runner::quit()
+void Runner::close_pressed()
 {
     close();
 }
