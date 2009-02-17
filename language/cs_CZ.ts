@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="cs_CZ">
+<defaultcodec></defaultcodec>
 <context>
     <name>Antico</name>
     <message>
@@ -162,7 +163,7 @@
     <message>
         <location filename="../src/deskapp.cpp" line="72"/>
         <source>Delete link</source>
-        <translation type="unfinished">Smazat odkaz</translation>
+        <translation>Smazat odkaz</translation>
     </message>
 </context>
 <context>
@@ -180,7 +181,7 @@
     <message>
         <location filename="../src/deskdev.cpp" line="70"/>
         <source>Open with</source>
-        <translation type="unfinished">Otevřít pomocí</translation>
+        <translation>Otevřít pomocí</translation>
     </message>
 </context>
 <context>
@@ -198,7 +199,7 @@
     <message>
         <location filename="../src/deskfile.cpp" line="49"/>
         <source>Delete link</source>
-        <translation type="unfinished">Smazat odkaz</translation>
+        <translation>Smazat odkaz</translation>
     </message>
 </context>
 <context>
@@ -216,7 +217,7 @@
     <message>
         <location filename="../src/deskfolder.cpp" line="48"/>
         <source>Open with</source>
-        <translation type="unfinished">Otevřít pomocí</translation>
+        <translation>Otevřít pomocí</translation>
     </message>
 </context>
 <context>
@@ -224,7 +225,7 @@
     <message>
         <location filename="../src/dockapp.cpp" line="52"/>
         <source>Delete link</source>
-        <translation type="unfinished">Smazat odkaz</translation>
+        <translation>Smazat odkaz</translation>
     </message>
 </context>
 <context>
@@ -232,12 +233,12 @@
     <message>
         <location filename="../src/dockbar.cpp" line="207"/>
         <source>New link to application</source>
-        <translation type="unfinished">Nový odkaz na aplikaci</translation>
+        <translation>Nový odkaz na aplikaci</translation>
     </message>
     <message>
         <location filename="../src/dockbar.cpp" line="210"/>
         <source>New link to application:</source>
-        <translation type="unfinished">Nový odkaz na aplikaci:</translation>
+        <translation>Nový odkaz na aplikaci:</translation>
     </message>
 </context>
 <context>
@@ -293,7 +294,7 @@
     <message>
         <location filename="../src/filedialog.cpp" line="171"/>
         <source>INFORMATION</source>
-        <translation type="unfinished">INFORMACE</translation>
+        <translation>INFORMACE</translation>
     </message>
 </context>
 <context>
@@ -772,107 +773,107 @@
     <message>
         <location filename="../src/manager.cpp" line="1487"/>
         <source>&lt;b&gt;Application added&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="1520"/>
         <source>&lt;b&gt;Application added to run list&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="1563"/>
         <source>&lt;b&gt;Application removed&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="1539"/>
         <source>&lt;b&gt;Application removed from run list&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="500"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="571"/>
         <source>Dockbar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="483"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="485"/>
         <source>Wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="873"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="489"/>
         <source>Categories</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="1111"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="945"/>
         <source>Message</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="952"/>
         <source>Ok button pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="953"/>
         <source>Close button pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="954"/>
         <source>Add button pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="955"/>
         <source>Remove button pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="956"/>
         <source>Question pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="957"/>
         <source>Information pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="958"/>
         <source>Warning pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="959"/>
         <source>Critical pixmap:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/manager.cpp" line="1110"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -880,12 +881,12 @@
     <message>
         <location filename="../src/msgbox.cpp" line="32"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/msgbox.cpp" line="33"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
 </context>
 <context>
@@ -923,7 +924,7 @@
     <message>
         <location filename="../src/runner.cpp" line="51"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
 </context>
 </TS>
