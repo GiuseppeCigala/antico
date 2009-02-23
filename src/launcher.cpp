@@ -97,6 +97,9 @@ void Launcher::read_settings()
     manager_pix = stl_path + style->value("manager_pix").toString();
     style->endGroup(); // Icon
     style->endGroup(); // Launcher
+    style->beginGroup("Dockbar");
+    dock_position = style->value("dock_position").toInt();
+    style->endGroup(); //Dockbar
 }
 
 void Launcher::run_command(QAction *act)
@@ -123,9 +126,11 @@ void Launcher::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        QPoint p = mapToGlobal(QPoint(0, 0));
-        QSize s(main_menu->sizeHint());
-        p.setY(p.y()-s.height());
+        QPoint p = mapToGlobal(pos());
+        if (dock_position == 0) // 0 = bottom / 1 = top
+            p.setY(p.y()-main_menu->sizeHint().height());
+        else
+            p.setY(p.y()+height());
         main_menu->exec(p);
     }
 }

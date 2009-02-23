@@ -66,6 +66,8 @@ Dockbar::~Dockbar()
     delete &dock_icons;
     delete &dock_pix;
     delete &dock_height;
+    delete &dock_width;
+    delete &dock_position;
 }
 
 void Dockbar::read_settings()
@@ -81,6 +83,8 @@ void Dockbar::read_settings()
     style->beginGroup("Dockbar");
     dock_pix = stl_path + style->value("dock_pix").toString();
     dock_height = style->value("dock_height").toInt();
+    dock_width = style->value("dock_width").toInt();
+    dock_position = style->value("dock_position").toInt();
     style->endGroup(); //Dockbar
     style->beginGroup("Other");
     app_link_pix = stl_path + style->value("app_link_pix").toString();
@@ -98,7 +102,11 @@ void Dockbar::set_geometry()
 {
     setPixmap(dock_pix);
     setScaledContents(true);
-    setGeometry(0, QApplication::desktop()->height()-dock_height, QApplication::desktop()->width(), dock_height);
+    int space_dock = (QApplication::desktop()->width()-dock_width)/2; // space left on right/left side of Dockbar
+    if (dock_position == 0) // 0 = bottom / 1 = top
+        setGeometry(space_dock, QApplication::desktop()->height()-dock_height, dock_width, dock_height);
+    else // top
+        setGeometry(space_dock, 0, dock_width, dock_height);
 }
 
 void Dockbar::update_dockicon_name(const QString &name, Frame *frm)

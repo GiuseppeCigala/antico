@@ -63,6 +63,8 @@ private:
     QSpinBox *lateral_bdr_spinBox;
     QSpinBox *bottom_bdr_spinBox;
     QSpinBox *dockbar_height_spinBox;
+    QSpinBox *dockbar_width_spinBox;
+    QComboBox *dockbar_position_comboBox;
     QLabel *dockbar_pix;
     QLabel *deskfolder_pix;
     QLabel *deskdev_disk_pix;

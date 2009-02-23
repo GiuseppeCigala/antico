@@ -69,7 +69,7 @@ void Desk::set_geometry()
 {
     setPixmap(wall_pix);
     setScaledContents(true);
-    setGeometry(0, 0, QApplication::desktop()->width(), QApplication::desktop()->height()-dock_height);
+    setGeometry(0, 0, QApplication::desktop()->width(), QApplication::desktop()->height());
 }
 
 void Desk::set_desk_icons()

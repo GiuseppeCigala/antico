@@ -75,6 +75,8 @@ private:
     QList<Dockapp *> dock_apps;
     int d_length; 	//dockicon lenght
     int dock_height;
+    int dock_width;
+    int dock_position;
     QString dock_pix;
     QString arrow_pix;
     QString app_link_pix;

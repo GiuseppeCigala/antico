@@ -32,6 +32,8 @@ Wallpaper\wall_pix=wallpaper.png
 [Dockbar]
 dock_pix=dockbar.png
 dock_height=40
+dock_width=800
+dock_position=1
 
 [Dockicon]
 d_icon_pix=dockicon.png

@@ -62,6 +62,7 @@ void Frame::read_settings()
     ////// Dockbar //////
     style->beginGroup("Dockbar");
     dock_height = style->value("dock_height").toInt();
+    dock_position = style->value("dock_position").toInt();
     style->endGroup(); //Dockbar
     ////// Launcher //////
     style->beginGroup("Launcher");
@@ -760,10 +761,13 @@ void Frame::maximize()
         n_py = y();
         n_pw = width();
         n_ph = height();
-        // maximize parent with (0,0) vertex and screen dimension-dockbar height
+        // maximize parent with vertex and screen dimension-dockbar height
         m_pw = desk->width();
         m_ph = desk->height()-dock_height;
-        move(desk->x(), desk->y());
+        if (dock_position == 0) // bottom
+            move(desk->x(), desk->y());
+        else // top
+            move(desk->x(), desk->y()+dock_height);
         resize(m_pw, m_ph);
         raise();
         // maximize client

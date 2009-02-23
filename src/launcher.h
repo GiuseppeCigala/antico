@@ -62,6 +62,7 @@ private:
     QString refresh_pix;
     QString run_pix;
     QString manager_pix;
+    int dock_position;
     Antico *app;
 };
 

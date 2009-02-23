@@ -155,6 +155,8 @@ void Manager::read_settings()
     dockbar_pix->setToolTip(style->value("dock_pix").toString());
     dockbar_pix->setPixmap(QPixmap(dockbar_pix_path));
     dockbar_height_spinBox->setValue(style->value("dock_height").toInt());
+    dockbar_width_spinBox->setValue(style->value("dock_width").toInt());
+    dockbar_position_comboBox->setCurrentIndex(style->value("dock_position").toInt());
     style->endGroup(); // Dockbar
     /////////////////////////////////////////////////////////////////////////
     style->beginGroup("Dockicon");
@@ -437,7 +439,7 @@ void Manager::run_app_tab()
     QPushButton *rem_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("remove_button_pix").toString())), tr("Remove"), this);
     QPushButton* close_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("close_button_pix").toString())), tr("Close"), this);
     style->endGroup(); // Message
-   
+
     add_rem_layout->addStretch(1);
     add_rem_layout->addWidget(add_but);
     add_rem_layout->addWidget(rem_but);
@@ -577,7 +579,16 @@ void Manager::style_tab()
     dockbar_grid->setColumnMinimumWidth(2, 75);
     QLabel *dockbar_height_lb = new QLabel(tr("Height:"), this);
     dockbar_height_spinBox = new QSpinBox(this);
-    dockbar_height_spinBox->setMaximumWidth(50);
+    dockbar_height_spinBox->setMaximumWidth(55);
+    QLabel *dockbar_width_lb = new QLabel(tr("Width:"), this);
+    dockbar_width_spinBox = new QSpinBox(this);
+    dockbar_width_spinBox->setMaximumWidth(55);
+    dockbar_width_spinBox->setMaximum(QApplication::desktop()->width());
+    dockbar_width_spinBox->setMinimum(300);
+    QLabel *dockbar_position_lb = new QLabel(tr("Position:"), this);
+    dockbar_position_comboBox = new QComboBox(this);
+    dockbar_position_comboBox->addItem(tr("Bottom"));
+    dockbar_position_comboBox->addItem(tr("Top"));
     QLabel *dockbar_pix_lb = new QLabel(tr("Pixmap:"), this);
     dockbar_pix = new QLabel(this);
     dockbar_pix->setMaximumSize(32, 32);
@@ -586,9 +597,13 @@ void Manager::style_tab()
     dockbar_pix_but->setMaximumWidth(50);
     dockbar_grid->addWidget(dockbar_height_lb, 0, 0);
     dockbar_grid->addWidget(dockbar_height_spinBox, 0, 1);
-    dockbar_grid->addWidget(dockbar_pix_lb, 1, 0);
-    dockbar_grid->addWidget(dockbar_pix, 1, 1);
-    dockbar_grid->addWidget(dockbar_pix_but, 1, 2);
+    dockbar_grid->addWidget(dockbar_width_lb, 1, 0);
+    dockbar_grid->addWidget(dockbar_width_spinBox, 1, 1);
+    dockbar_grid->addWidget(dockbar_position_lb, 2, 0);
+    dockbar_grid->addWidget(dockbar_position_comboBox, 2, 1);
+    dockbar_grid->addWidget(dockbar_pix_lb, 3, 0);
+    dockbar_grid->addWidget(dockbar_pix, 3, 1);
+    dockbar_grid->addWidget(dockbar_pix_but, 3, 2);
     ///////// DOCKICON /////////
     dockicon_box = new QGroupBox(tr("Dockbar icon"), this);
     dockicon_grid = new QGridLayout();
@@ -1109,6 +1124,7 @@ void Manager::style_tab()
     style->beginGroup("Message");
     QPushButton *ok_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("ok_button_pix").toString())), tr("Ok"), this);
     QPushButton* close_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("close_button_pix").toString())), tr("Close"), this);
+    ok_but->setDefault(true); // default button for this Dialog
     style->endGroup(); // Message
     ok_close_layout->addStretch(1);
     ok_close_layout->addWidget(ok_but);
@@ -1365,6 +1381,8 @@ void Manager::ok_frame_pressed()
     style->beginGroup("Dockbar");
     style->setValue("dock_pix", dockbar_pix->toolTip());
     style->setValue("dock_height", dockbar_height_spinBox->value());
+    style->setValue("dock_width", dockbar_width_spinBox->value());
+    style->setValue("dock_position", dockbar_position_comboBox->currentIndex());
     style->endGroup(); //Dockbar
     //////////////////////////////////////////////////////////////////
     style->beginGroup("Dockicon");

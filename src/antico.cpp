@@ -712,6 +712,16 @@ void Antico::wm_quit()
 
     if (ret == QDialog::Accepted)
     {
+        foreach(Frame *frm, mapping_clients)
+        {
+            qDebug() << "Quit process:" << frm->cl_win();
+            frm->destroy();
+        }
+        mapping_clients.clear();
+        mapping_frames.clear();
+        dock->close();
+        dsk->close();
+        XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
         quit();
@@ -745,7 +755,7 @@ void Antico::wm_shutdown()
     if (ret == QDialog::Accepted)
     {
         qDebug() << "Shutdown the PC ...";
-        
+
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Shutdown");
@@ -765,7 +775,7 @@ void Antico::wm_restart()
     if (ret == QDialog::Accepted)
     {
         qDebug() << "Restart the PC ...";
-        
+
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Reboot");
@@ -811,10 +821,10 @@ void Antico::create_gui()
     cat_menu = new Categorymenu();
     cat_menu->update_menu();
     file_dialog = new Filedialog(cat_menu);
-    // create dockbar
-    dock = new Dockbar(this);
     //create desk
     dsk = new Desk(this);
+    // create dockbar
+    dock = new Dockbar(this);
 }
 
 Filedialog * Antico::get_file_dialog()
@@ -897,6 +907,8 @@ void Antico::set_settings()
         style->beginGroup("Dockbar");
         style->setValue("dock_pix", "dockbar.png");
         style->setValue("dock_height", 40);
+        style->setValue("dock_width", QApplication::desktop()->width());
+        style->setValue("dock_position", 0); // 0 = bottom / 1 = top
         style->endGroup(); //Dockbar
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Dockicon");

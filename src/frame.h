@@ -128,6 +128,7 @@ private:
     bool prot_take_focus;       // client has take focus WM protocol
     QPixmap wicon;              // window icon
     int dock_height;            // dockbar height
+    int dock_position;          // dockbar position (top, bottom)
     QString wm_name;            // WM_NAME property or res_name
     QString res_name;           // ClassHint
     QString res_class;          // ClassHint
