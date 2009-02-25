@@ -521,7 +521,7 @@ void Frame::update_style()
     read_settings();
     tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
-    tm_bdr->set_pixmap(header_active_pix, header_inactive_pix, title_color);
+    tm_bdr->set_pixmap(QPixmap(header_active_pix), QPixmap(header_inactive_pix), title_color);
     tm_bdr->setFixedHeight(top_bdr_height);
     bm_bdr->setFixedHeight(bottom_bdr_height);
     bl_bdr->setFixedSize(top_bdr_height, bottom_bdr_height);
@@ -562,7 +562,7 @@ void Frame::create_border()
     layout->addWidget(tr_bdr, 0, 2);
     // top mid header border (header frame)
     tm_bdr = new Header(cl_icon(), cl_name(), this);
-    tm_bdr->set_pixmap(header_active_pix, header_inactive_pix, title_color);
+    tm_bdr->set_pixmap(QPixmap(header_active_pix), QPixmap(header_inactive_pix), title_color);
     tm_bdr->setFixedHeight(top_bdr_height);
     layout->addWidget(tm_bdr, 0, 1);
     // bottom mid border

@@ -102,7 +102,12 @@ void Dockbar::set_geometry()
 {
     setPixmap(dock_pix);
     setScaledContents(true);
+
+    if (dock_width >= QApplication::desktop()->width())
+        dock_width = QApplication::desktop()->width();
+        
     int space_dock = (QApplication::desktop()->width()-dock_width)/2; // space left on right/left side of Dockbar
+
     if (dock_position == 0) // 0 = bottom / 1 = top
         setGeometry(space_dock, QApplication::desktop()->height()-dock_height, dock_width, dock_height);
     else // top
@@ -214,7 +219,6 @@ void Dockbar::run_menu(QAction *act)
 {
     if (act->text().compare(tr("New link to application")) == 0)
     {
-        file_dialog->clear();
         file_dialog->set_type(tr("New link to application:"), "OK_Cancel");
 
         if (file_dialog->exec() == QDialog::Accepted)

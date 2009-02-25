@@ -296,6 +296,7 @@ bool Antico::x11EventFilter(XEvent *event)
         break;
 
         /////////////////// NOTIFY EVENTS ///////////////////
+               
     case MapNotify:
         qDebug() << "[MapNotify]";
 
@@ -705,7 +706,7 @@ void Antico::send_configurenotify(Frame *frm)
 void Antico::wm_quit()
 {
     Msgbox msg;
-    msg.set_header(tr("<b>Quit the WM</b>"));
+    msg.set_header(tr("QUIT THE WM"));
     msg.set_info(tr("Are you sure to quit the WM ?"));
     msg.set_icon("Question");
     int ret = msg.exec();
@@ -747,7 +748,7 @@ void Antico::wm_refresh()
 void Antico::wm_shutdown()
 {
     Msgbox msg;
-    msg.set_header(tr("<b>Shutdown the PC</b>"));
+    msg.set_header(tr("SHUTDOWN THE PC"));
     msg.set_info(tr("Are you sure to shutdown the PC ?"));
     msg.set_icon("Question");
     int ret = msg.exec();
@@ -766,7 +767,7 @@ void Antico::wm_shutdown()
 void Antico::wm_restart()
 {
     Msgbox msg;
-    msg.set_header(tr("<b>Restart the PC</b>"));
+    msg.set_header(tr("RESTART THE PC"));
     msg.set_info(tr("Are you sure to restart the PC ?"));
     msg.set_icon("Question");
 
@@ -939,6 +940,11 @@ void Antico::set_settings()
         style->setValue("name_color", QColor(Qt::white));
         style->endGroup(); //Deskapp
         /////////////////////////////////////////////////////////////////////////
+        style->beginGroup("Trash");
+        style->setValue("trash_pix", "trash.png");
+        style->setValue("name_color", QColor(Qt::white));
+        style->endGroup(); //Trash
+        /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Dateclock");
         style->setValue("date_color", QColor(Qt::white));
         style->setValue("clock_color", QColor(Qt::white));
@@ -949,6 +955,7 @@ void Antico::set_settings()
         style->setValue("close_button_pix", "close_but.png");
         style->setValue("add_button_pix", "add_but.png");
         style->setValue("remove_button_pix", "remove_but.png");
+        style->setValue("restore_button_pix", "restore_but.png");
         style->setValue("question_pix", "question.png");
         style->setValue("information_pix", "information.png");
         style->setValue("warning_pix", "warning.png");

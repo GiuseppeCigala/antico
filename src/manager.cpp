@@ -21,7 +21,6 @@ Manager::Manager(QWidget *parent) : QDialog(parent)
     init(); // before that read_settings
     read_settings();
     setSizeGripEnabled(true);
-    setContentsMargins(0, 10, 0, 0);
     show();
 }
 
@@ -38,6 +37,7 @@ Manager::~Manager()
     delete deskfolder_grid;
     delete deskfile_grid;
     delete deskdev_grid;
+    delete trash_grid;
     delete sysicon_grid;
     delete deskapp_grid;
     delete dateclock_grid;
@@ -71,6 +71,7 @@ Manager::~Manager()
     delete &deskfolder_pix_path;
     delete &deskdev_disk_pix_path;
     delete &deskdev_cdrom_pix_path;
+    delete &trash_pix_path;
     delete &launcher_pix_path;
     delete &application_pix_path;
     delete &quit_pix_path;
@@ -111,7 +112,7 @@ void Manager::init()
     tab = new QTabWidget(this);
     main_layout = new QVBoxLayout(this);
     setLayout(main_layout);
-    QLabel *lab = new QLabel(tr("<b>MANAGER</b>"), this);
+    QLabel *lab = new QLabel(tr("MANAGER"), this);
     lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     file_dialog = new Filedialog();
     main_layout->addWidget(lab);
@@ -194,6 +195,14 @@ void Manager::read_settings()
     deskfolder_col_lab->setAutoFillBackground(true);
     style->endGroup(); // Deskfolder
     /////////////////////////////////////////////////////////////////////////
+    style->beginGroup("Trash");
+    trash_pix_path = stl_path + style->value("trash_pix").toString();
+    trash_pix->setToolTip(style->value("trash_pix").toString());
+    trash_pix->setPixmap(QPixmap(trash_pix_path));
+    trash_col_lab->setPalette(QPalette(style->value("name_color").value<QColor>()));
+    trash_col_lab->setAutoFillBackground(true);
+    style->endGroup(); // Trash
+    /////////////////////////////////////////////////////////////////////////
     style->beginGroup("Deskfile");
     deskfile_col_lab->setPalette(QPalette(style->value("name_color").value<QColor>()));
     deskfile_col_lab->setAutoFillBackground(true);
@@ -275,6 +284,7 @@ void Manager::read_settings()
     close_button_pix_path = stl_path + style->value("close_button_pix").toString();
     add_button_pix_path = stl_path + style->value("add_button_pix").toString();
     remove_button_pix_path = stl_path + style->value("remove_button_pix").toString();
+    restore_button_pix_path = stl_path + style->value("restore_button_pix").toString();
     question_pix_path = stl_path + style->value("question_pix").toString();
     information_pix_path = stl_path + style->value("information_pix").toString();
     warning_pix_path = stl_path + style->value("warning_pix").toString();
@@ -283,6 +293,7 @@ void Manager::read_settings()
     close_button_pix->setToolTip(style->value("close_button_pix").toString());
     add_button_pix->setToolTip(style->value("add_button_pix").toString());
     remove_button_pix->setToolTip(style->value("remove_button_pix").toString());
+    restore_button_pix->setToolTip(style->value("restore_button_pix").toString());
     question_pix->setToolTip(style->value("question_pix").toString());
     information_pix->setToolTip(style->value("information_pix").toString());
     warning_pix->setToolTip(style->value("warning_pix").toString());
@@ -291,6 +302,7 @@ void Manager::read_settings()
     close_button_pix->setPixmap(QPixmap(close_button_pix_path));
     add_button_pix->setPixmap(QPixmap(add_button_pix_path));
     remove_button_pix->setPixmap(QPixmap(remove_button_pix_path));
+    restore_button_pix->setPixmap(QPixmap(restore_button_pix_path));
     question_pix->setPixmap(QPixmap(question_pix_path));
     information_pix->setPixmap(QPixmap(information_pix_path));
     warning_pix->setPixmap(QPixmap(warning_pix_path));
@@ -579,10 +591,10 @@ void Manager::style_tab()
     dockbar_grid->setColumnMinimumWidth(2, 75);
     QLabel *dockbar_height_lb = new QLabel(tr("Height:"), this);
     dockbar_height_spinBox = new QSpinBox(this);
-    dockbar_height_spinBox->setMaximumWidth(55);
+    dockbar_height_spinBox->setMaximumWidth(60);
     QLabel *dockbar_width_lb = new QLabel(tr("Width:"), this);
     dockbar_width_spinBox = new QSpinBox(this);
-    dockbar_width_spinBox->setMaximumWidth(55);
+    dockbar_width_spinBox->setMaximumWidth(60);
     dockbar_width_spinBox->setMaximum(QApplication::desktop()->width());
     dockbar_width_spinBox->setMinimum(300);
     QLabel *dockbar_position_lb = new QLabel(tr("Position:"), this);
@@ -678,10 +690,11 @@ void Manager::style_tab()
     dockbar_layout->addWidget(dockicon_box);
     dockbar_layout->addWidget(sysicon_box);
     dockbar_layout->addWidget(dateclock_box);
-    ///////// DESKFOLDER /////////
+    ///////// DESKTSET WIDGETS //////////////////////
     deskset_widget = new QWidget(this);
     deskset_layout = new QVBoxLayout();
     deskset_widget->setLayout(deskset_layout);
+    ///////// DESKFOLDER ////////////////////////////
     deskfolder_box = new QGroupBox(tr("Desktop folder"), this);
     deskfolder_grid = new QGridLayout();
     deskfolder_grid->setSpacing(2);
@@ -776,11 +789,38 @@ void Manager::style_tab()
     deskdev_grid->addWidget(deskdev_color, 2, 0);
     deskdev_grid->addWidget(deskdev_col_lab, 2, 1);
     deskdev_grid->addWidget(deskdev_col_but, 2, 2);
+    ///////// TRASH ////////////////////////////
+    trash_box = new QGroupBox(tr("Trash"), this);
+    trash_grid = new QGridLayout();
+    trash_grid->setSpacing(2);
+    trash_box->setLayout(trash_grid);
+    trash_grid->setColumnMinimumWidth(0, 50);
+    trash_grid->setColumnMinimumWidth(1, 75);
+    trash_grid->setColumnMinimumWidth(2, 75);
+    QLabel *trash_pix_lb = new QLabel(tr("Pixmap:"), this);
+    trash_pix = new QLabel(this);
+    trash_pix->setMaximumSize(32, 32);
+    trash_pix->setScaledContents(true);
+    QLabel *trash_color = new QLabel(tr("Name color:"), this);
+    trash_col_lab = new QLabel(this);
+    trash_col_lab->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    trash_col_lab->setMaximumWidth(32);
+    QPushButton *trash_pix_but = new QPushButton("...", this);
+    trash_pix_but->setMaximumWidth(50);
+    QPushButton *trash_col_but = new QPushButton("...", this);
+    trash_col_but->setMaximumWidth(50);
+    trash_grid->addWidget(trash_pix_lb, 0, 0);
+    trash_grid->addWidget(trash_pix, 0, 1);
+    trash_grid->addWidget(trash_pix_but, 0, 2);
+    trash_grid->addWidget(trash_color, 1, 0);
+    trash_grid->addWidget(trash_col_lab, 1, 1);
+    trash_grid->addWidget(trash_col_but, 1, 2);
     /////////////////////////////////////////////////
     deskset_layout->addWidget(deskfolder_box);
     deskset_layout->addWidget(deskfile_box);
     deskset_layout->addWidget(deskapp_box);
     deskset_layout->addWidget(deskdev_box);
+    deskset_layout->addWidget(trash_box);
     ///////// DESKTOP /////////
     desktop_box = new QGroupBox(tr("Desktop wallpaper"), this);
     desktop_grid = new QGridLayout();
@@ -968,6 +1008,7 @@ void Manager::style_tab()
     QLabel *close_button_pix_lb = new QLabel(tr("Close button pixmap:"), this);
     QLabel *add_button_pix_lb = new QLabel(tr("Add button pixmap:"), this);
     QLabel *remove_button_pix_lb = new QLabel(tr("Remove button pixmap:"), this);
+    QLabel *restore_button_pix_lb = new QLabel(tr("Restore button pixmap:"), this);
     QLabel *question_pix_lb = new QLabel(tr("Question pixmap:"), this);
     QLabel *information_pix_lb = new QLabel(tr("Information pixmap:"), this);
     QLabel *warning_pix_lb = new QLabel(tr("Warning pixmap:"), this);
@@ -976,6 +1017,7 @@ void Manager::style_tab()
     close_button_pix = new QLabel(this);
     add_button_pix = new QLabel(this);
     remove_button_pix = new QLabel(this);
+    restore_button_pix = new QLabel(this);
     question_pix = new QLabel(this);
     information_pix = new QLabel(this);
     warning_pix = new QLabel(this);
@@ -984,6 +1026,7 @@ void Manager::style_tab()
     close_button_pix->setMaximumSize(32, 32);
     add_button_pix->setMaximumSize(32, 32);
     remove_button_pix->setMaximumSize(32, 32);
+    restore_button_pix->setMaximumSize(32, 32);
     question_pix->setMaximumSize(32, 32);
     information_pix->setMaximumSize(32, 32);
     warning_pix->setMaximumSize(32, 32);
@@ -992,6 +1035,7 @@ void Manager::style_tab()
     close_button_pix->setScaledContents(true);
     add_button_pix->setScaledContents(true);
     remove_button_pix->setScaledContents(true);
+    restore_button_pix->setScaledContents(true);
     question_pix->setScaledContents(true);
     information_pix->setScaledContents(true);
     warning_pix->setScaledContents(true);
@@ -1000,6 +1044,7 @@ void Manager::style_tab()
     QPushButton *close_button_pix_but = new QPushButton("...", this);
     QPushButton *add_button_pix_but = new QPushButton("...", this);
     QPushButton *remove_button_pix_but = new QPushButton("...", this);
+    QPushButton *restore_button_pix_but = new QPushButton("...", this);
     QPushButton *question_pix_but = new QPushButton("...", this);
     QPushButton *information_pix_but = new QPushButton("...", this);
     QPushButton *warning_pix_but = new QPushButton("...", this);
@@ -1008,6 +1053,7 @@ void Manager::style_tab()
     close_button_pix_but->setMaximumWidth(50);
     add_button_pix_but->setMaximumWidth(50);
     remove_button_pix_but->setMaximumWidth(50);
+    restore_button_pix_but->setMaximumWidth(50);
     question_pix_but->setMaximumWidth(50);
     information_pix_but->setMaximumWidth(50);
     warning_pix_but->setMaximumWidth(50);
@@ -1016,26 +1062,29 @@ void Manager::style_tab()
     message_grid ->addWidget(close_button_pix_lb , 1, 0);
     message_grid ->addWidget(add_button_pix_lb , 2, 0);
     message_grid ->addWidget(remove_button_pix_lb , 3, 0);
-    message_grid ->addWidget(question_pix_lb, 4, 0);
-    message_grid ->addWidget(information_pix_lb, 5, 0);
-    message_grid ->addWidget(warning_pix_lb, 6, 0);
-    message_grid ->addWidget(critical_pix_lb, 7, 0);
+    message_grid ->addWidget(restore_button_pix_lb , 4, 0);
+    message_grid ->addWidget(question_pix_lb, 5, 0);
+    message_grid ->addWidget(information_pix_lb, 6, 0);
+    message_grid ->addWidget(warning_pix_lb, 7, 0);
+    message_grid ->addWidget(critical_pix_lb, 8, 0);
     message_grid ->addWidget(ok_button_pix, 0, 1);
     message_grid ->addWidget(close_button_pix, 1, 1);
     message_grid ->addWidget(add_button_pix, 2, 1);
     message_grid ->addWidget(remove_button_pix, 3, 1);
-    message_grid ->addWidget(question_pix, 4, 1);
-    message_grid ->addWidget(information_pix, 5, 1);
-    message_grid ->addWidget(warning_pix, 6, 1);
-    message_grid ->addWidget(critical_pix, 7, 1);
+    message_grid ->addWidget(restore_button_pix, 4, 1);
+    message_grid ->addWidget(question_pix, 5, 1);
+    message_grid ->addWidget(information_pix, 6, 1);
+    message_grid ->addWidget(warning_pix, 7, 1);
+    message_grid ->addWidget(critical_pix, 8, 1);
     message_grid ->addWidget(ok_button_pix_but, 0, 2);
     message_grid ->addWidget(close_button_pix_but, 1, 2);
     message_grid ->addWidget(add_button_pix_but, 2, 2);
     message_grid ->addWidget(remove_button_pix_but, 3, 2);
-    message_grid ->addWidget(question_pix_but, 4, 2);
-    message_grid ->addWidget(information_pix_but, 5, 2);
-    message_grid ->addWidget(warning_pix_but, 6, 2);
-    message_grid ->addWidget(critical_pix_but, 7, 2);
+    message_grid ->addWidget(restore_button_pix_but, 4, 2);
+    message_grid ->addWidget(question_pix_but, 5, 2);
+    message_grid ->addWidget(information_pix_but, 6, 2);
+    message_grid ->addWidget(warning_pix_but, 7, 2);
+    message_grid ->addWidget(critical_pix_but, 8, 2);
     ///////// OTHER /////////
     other_box = new QGroupBox(tr("Other"), this);
     other_grid = new QGridLayout();
@@ -1144,7 +1193,7 @@ void Manager::style_tab()
     connect(ok_but, SIGNAL(clicked()), this, SLOT(ok_frame_pressed()));
     connect(close_but, SIGNAL(clicked()), this, SLOT(close_pressed()));
 
-    // mapper for pixmap selection (dockbar - dockicon - sysicon - deskfolder - deskdev - desktop - frame header active/inactive - frame button - all laucher button - message - other)
+    // mapper for pixmap selection (dockbar - dockicon - sysicon - deskfolder - deskdev - trash - desktop - frame header active/inactive - frame button - all laucher button - message - other)
     pixmapMapper = new QSignalMapper();
     pixmapMapper->setMapping(dockbar_pix_but, dockbar_pix);
     pixmapMapper->setMapping(desktop_pix_but, desktop_pix);
@@ -1153,6 +1202,7 @@ void Manager::style_tab()
     pixmapMapper->setMapping(deskfolder_pix_but, deskfolder_pix);
     pixmapMapper->setMapping(deskdev_disk_pix_but, deskdev_disk_pix);
     pixmapMapper->setMapping(deskdev_cdrom_pix_but, deskdev_cdrom_pix);
+    pixmapMapper->setMapping(trash_pix_but, trash_pix);
     pixmapMapper->setMapping(header_active_pix_but, header_active_pix);
     pixmapMapper->setMapping(header_inactive_pix_but, header_inactive_pix);
     pixmapMapper->setMapping(minmax_pix_but, minmax_pix);
@@ -1179,6 +1229,7 @@ void Manager::style_tab()
     pixmapMapper->setMapping(close_button_pix_but, close_button_pix);
     pixmapMapper->setMapping(add_button_pix_but, add_button_pix);
     pixmapMapper->setMapping(remove_button_pix_but, remove_button_pix);
+    pixmapMapper->setMapping(restore_button_pix_but, restore_button_pix);
     pixmapMapper->setMapping(question_pix_but, question_pix);
     pixmapMapper->setMapping(information_pix_but, information_pix);
     pixmapMapper->setMapping(warning_pix_but, warning_pix);
@@ -1200,6 +1251,7 @@ void Manager::style_tab()
     connect(deskfolder_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(deskdev_disk_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(deskdev_cdrom_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(trash_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(header_active_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(header_inactive_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(minmax_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
@@ -1226,6 +1278,7 @@ void Manager::style_tab()
     connect(close_button_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(add_button_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(remove_button_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(restore_button_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(question_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(information_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(warning_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
@@ -1242,13 +1295,14 @@ void Manager::style_tab()
 
     connect(pixmapMapper, SIGNAL(mapped(QWidget *)), this, SLOT(select_pixmap(QWidget *)));
 
-    // mapper for color selection (frame header text - dockicon text - deskfile name - deskfilder name - deskapp name - deskdev name - date/clock)
+    // mapper for color selection (frame header text - dockicon text - deskfile name - deskfolder name - deskapp name - deskdev name - trash name - date/clock)
     colorMapper = new QSignalMapper();
     colorMapper->setMapping(header_col_but, header_col_lab);
     colorMapper->setMapping(dockicon_col_but, dockicon_col_lab);
     colorMapper->setMapping(deskfolder_col_but, deskfolder_col_lab);
     colorMapper->setMapping(deskfile_col_but, deskfile_col_lab);
     colorMapper->setMapping(deskdev_col_but, deskdev_col_lab);
+    colorMapper->setMapping(trash_col_but, trash_col_lab);
     colorMapper->setMapping(deskapp_col_but, deskapp_col_lab);
     colorMapper->setMapping(date_col_but, date_col_lab);
     colorMapper->setMapping(clock_col_but, clock_col_lab);
@@ -1257,6 +1311,7 @@ void Manager::style_tab()
     connect(deskfolder_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(deskfile_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(deskdev_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
+    connect(trash_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(deskapp_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(date_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
     connect(clock_col_but, SIGNAL(clicked()), colorMapper, SLOT (map()));
@@ -1274,7 +1329,7 @@ void Manager::changeSection(QListWidgetItem *current, QListWidgetItem *previous)
 
 void Manager::update_add_tree(const QModelIndex &index)
 {
-    if (! index.isValid())
+    if (index.isValid())
     {
         QModelIndex id = dir_model->index(app_path->text());
         tree_view->scrollTo(id);
@@ -1284,6 +1339,7 @@ void Manager::update_add_tree(const QModelIndex &index)
     {
         tree_view->scrollTo(index);
         tree_view->setCurrentIndex(index);
+        tree_view->resizeColumnToContents(0);
     }
 }
 
@@ -1299,7 +1355,6 @@ void Manager::path_completer() // on user button press in line_path
 
 void Manager::select_style()
 {
-    file_dialog->clear();
     file_dialog->set_type(tr("Select the style"), "OK_Cancel");
     file_dialog->raise();
     QStringList filters;
@@ -1326,7 +1381,6 @@ void Manager::select_style()
 void Manager::select_pixmap(QWidget *pix)
 {
     pixmap = (QLabel *)pix;
-    file_dialog->clear();
     file_dialog->set_type(tr("Select the pixmap"), "OK_Cancel");
     file_dialog->set_path(stl_path);
     file_dialog->set_read_only(true);
@@ -1419,6 +1473,11 @@ void Manager::ok_frame_pressed()
     style->setValue("name_color", deskdev_col_lab->palette().color(QPalette::Window));
     style->endGroup(); //Deskdev
     //////////////////////////////////////////////////////////////////
+    style->beginGroup("Trash");
+    style->setValue("trash_pix", trash_pix->toolTip());
+    style->setValue("name_color", trash_col_lab->palette().color(QPalette::Window));
+    style->endGroup(); //Trash
+    //////////////////////////////////////////////////////////////////
     style->beginGroup("Dateclock");
     style->setValue("date_color", date_col_lab->palette().color(QPalette::Window));
     style->setValue("clock_color", clock_col_lab->palette().color(QPalette::Window));
@@ -1450,6 +1509,7 @@ void Manager::ok_frame_pressed()
     style->setValue("close_button_pix", close_button_pix->toolTip());
     style->setValue("add_button_pix", add_button_pix->toolTip());
     style->setValue("remove_button_pix", remove_button_pix->toolTip());
+    style->setValue("restore_button_pix", restore_button_pix->toolTip());
     style->setValue("question_pix", question_pix->toolTip());
     style->setValue("information_pix", information_pix->toolTip());
     style->setValue("warning_pix", warning_pix->toolTip());
@@ -1469,7 +1529,7 @@ void Manager::ok_frame_pressed()
     //////////////////////////////////////////////////////////////////
 
     Msgbox msg;
-    msg.set_header(tr("<b>Antico style settings updated</b>"));
+    msg.set_header(tr("ANTICO STYLE SETTINGS UPDATED"));
     msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
     msg.set_icon("Information");
     msg.exec();
@@ -1502,7 +1562,7 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
             antico->endGroup(); // Launcher
             update_remove_list();
             Msgbox msg;
-            msg.set_header(tr("<b>Application added</b>"));
+            msg.set_header(tr("APPLICATION ADDED"));
             msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
             msg.set_icon("Information");
             msg.exec();
@@ -1512,7 +1572,6 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
 
 void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
 {
-    file_dialog->clear();
     file_dialog->set_type(tr("Add application to run at startup:"), "OK_Cancel");
     file_dialog->raise();
 
@@ -1535,7 +1594,7 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
             antico->endGroup(); // Name
             antico->endGroup(); // Startup
             Msgbox msg;
-            msg.set_header(tr("<b>Application added to run list</b>"));
+            msg.set_header(tr("APPLICATION ADDED TO RUN LIST"));
             msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
             msg.set_icon("Information");
             msg.exec();
@@ -1554,7 +1613,7 @@ void Manager::remove_run_app_pressed() // remove selected app from "Run at start
         antico->endGroup(); // Startup
         update_run_list();
         Msgbox msg;
-        msg.set_header(tr("<b>Application removed from run list</b>"));
+        msg.set_header(tr("APPLICATION REMOVED FROM RUN LIST"));
         msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
         msg.set_icon("Information");
         msg.exec();
@@ -1578,7 +1637,7 @@ void Manager::remove_app_pressed() // remove selected app from Launcher menu
         antico->endGroup(); // Launcher
         update_remove_list();
         Msgbox msg;
-        msg.set_header(tr("<b>Application removed</b>"));
+        msg.set_header(tr("APPLICATION REMOVED"));
         msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
         msg.set_icon("Information");
         msg.exec();

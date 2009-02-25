@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     translator.load(QLocale::system().name(), QCoreApplication::applicationDirPath() + "/language/");
     a.installTranslator(&translator);
     
-    qDebug() << "GUI creation.";
+    qDebug() << "GUI creation...";
     a.create_gui();
     
     return a.exec();

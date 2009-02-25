@@ -32,8 +32,8 @@ Wallpaper\wall_pix=wallpaper.png
 [Dockbar]
 dock_pix=dockbar.png
 dock_height=40
-dock_width=800
-dock_position=1
+dock_width=1000
+dock_position=0
 
 [Dockicon]
 d_icon_pix=dockicon.png
@@ -57,6 +57,10 @@ d_disk_pix=disk.png
 d_cdrom_pix=cdrom.png
 name_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
 
+[Trash]
+trash_pix=trash.png
+name_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
+
 [Dateclock]
 date_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
 clock_color=@Variant(\0\0\0\x43\x1\xff\xff\xff\xff\xff\xff\xff\xff\0\0)
@@ -66,6 +70,7 @@ ok_button_pix=ok_but.png
 close_button_pix=close_but.png
 add_button_pix=add_but.png
 remove_button_pix=remove_but.png
+restore_button_pix=restore_but.png
 question_pix=question.png
 information_pix=information.png
 warning_pix=warning.png

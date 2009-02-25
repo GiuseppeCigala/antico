@@ -12,7 +12,6 @@ Filedialog::Filedialog(Categorymenu *menu, QWidget *parent) : QDialog(parent)
 {
     cat_menu = menu;
     setSizeGripEnabled(true);
-    setContentsMargins(0, 10, 0, 0);
     setWindowModality(Qt::WindowModal);
     read_settings();
     init();
@@ -23,7 +22,7 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
 {
     cat_menu = NULL;
     setSizeGripEnabled(true);
-    setContentsMargins(0, 10, 0, 0);
+    setWindowModality(Qt::WindowModal);
     read_settings();
     init();
 }
@@ -75,15 +74,15 @@ void Filedialog::init()
 {
     layout = new QVBoxLayout();
     setLayout(layout);
-    win_label = new QLabel(this); // show window text
-    win_label->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    message = new QLabel(this); // show message
+    message->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     hor_layout = new QHBoxLayout();
-    line_path = new QLineEdit(); // show selection path
+    line_path = new QLineEdit(this); // show selection path
     hidden_files = new QRadioButton(tr("Show hidden files"), this);
     preview_label = new QLabel(this); // show pixmap preview
     preview_label->setMaximumSize(32, 32);
     preview_label->setScaledContents(true);
-    dir_model = new QDirModel();
+    dir_model = new QDirModel(this);
     dir_model->setReadOnly(false);
     dir_model->setSupportedDragActions(Qt::LinkAction);
 
@@ -91,7 +90,7 @@ void Filedialog::init()
     ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
     close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
 
-    completer = new QCompleter();
+    completer = new QCompleter(this);
     completer->setModel(dir_model);
     line_path->setCompleter(completer);
     prov = new Fileicon(); // get the files icon
@@ -101,9 +100,9 @@ void Filedialog::init()
     tree_view->setDragEnabled(true);
     hor_layout->addWidget(preview_label);
     hor_layout->addWidget(line_path);
+    layout->addWidget(message);
     layout->addLayout(hor_layout);
     layout->addWidget(hidden_files);
-    layout->addWidget(win_label);
     layout->addWidget(tree_view);
     layout->addWidget(button_box);
 
@@ -134,8 +133,7 @@ void Filedialog::set_category_menu()
 
 void Filedialog::set_type(const QString &text, const QString &button_type) // set filedialog type
 {
-    win_text = text;
-    win_label->setText("<b>" + win_text + "</b>"); // show window text
+    message->setText(text); // show message
 
     if (button_type.compare("OK_Cancel") == 0)
     {
@@ -161,16 +159,18 @@ void Filedialog::del_file()
         {
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
-            msg.set_info("<b>" + name + "</b>" + tr(" deleted"));
+            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted"));
             msg.set_icon("Information");
+            msg.exec();
         }
     }
     else if (dir_model->remove(selection)) // else is a file
     {
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + name + "</b>" + tr(" deleted"));
+        msg.set_info("<b>" + name + "</b>" + " " + tr("deleted"));
         msg.set_icon("Information");
+        msg.exec();
     }
 }
 
@@ -208,7 +208,7 @@ void Filedialog::path_completer() // on user button press in line_path
 
 void Filedialog::update_tree(const QModelIndex &index) // update the tree on path completer
 {
-    if (! index.isValid())
+    if (index.isValid())
     {
         QModelIndex id = dir_model->index(line_path->text());
         tree_view->scrollTo(id);
@@ -218,6 +218,7 @@ void Filedialog::update_tree(const QModelIndex &index) // update the tree on pat
     {
         tree_view->scrollTo(index);
         tree_view->setCurrentIndex(index);
+        tree_view->resizeColumnToContents(0);
     }
 }
 
@@ -289,13 +290,6 @@ QString Filedialog::get_selected_icon() const
     return icon;
 }
 
-void Filedialog::clear()
-{
-    tree_view->setRootIndex(dir_model->index("/"));
-    tree_view->clearSelection();
-    line_path->clear();
-}
-
 void Filedialog::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
@@ -325,7 +319,6 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
     {
         cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
         main_menu->exec(event->globalPos());
-        reject(); // close the filedialog
     }
 }
 

@@ -69,6 +69,7 @@ private:
     QLabel *deskfolder_pix;
     QLabel *deskdev_disk_pix;
     QLabel *deskdev_cdrom_pix;
+    QLabel *trash_pix;
     QLabel *dockicon_pix;
     QLabel *sysicon_pix;
     QLabel *desktop_pix;
@@ -98,6 +99,7 @@ private:
     QLabel *close_button_pix;
     QLabel *add_button_pix;
     QLabel *remove_button_pix;
+    QLabel *restore_button_pix;
     QLabel *question_pix;
     QLabel *information_pix;
     QLabel *warning_pix;
@@ -116,6 +118,7 @@ private:
     QString deskfolder_pix_path;
     QString deskdev_disk_pix_path;
     QString deskdev_cdrom_pix_path;
+    QString trash_pix_path;
     QString dockicon_pix_path;
     QString sysicon_pix_path;
     QString desktop_pix_path;
@@ -145,6 +148,7 @@ private:
     QString close_button_pix_path;
     QString add_button_pix_path;
     QString remove_button_pix_path;
+    QString restore_button_pix_path;
     QString question_pix_path;
     QString information_pix_path;
     QString warning_pix_path;
@@ -166,6 +170,7 @@ private:
     QLabel *deskfolder_col_lab;
     QLabel *deskfile_col_lab;
     QLabel *deskdev_col_lab;
+    QLabel *trash_col_lab;
     QLabel *deskapp_col_lab;
     QLabel *date_col_lab;
     QLabel *clock_col_lab;
@@ -198,6 +203,7 @@ private:
     QGroupBox *deskfile_box;
     QGroupBox *deskapp_box;
     QGroupBox *deskdev_box;
+    QGroupBox *trash_box;
     QGroupBox *sysicon_box;
     QGroupBox *dateclock_box;
     QGroupBox *desktop_box;
@@ -214,6 +220,7 @@ private:
     QGridLayout *deskfolder_grid;
     QGridLayout *deskfile_grid;
     QGridLayout *deskdev_grid;
+    QGridLayout *trash_grid;
     QGridLayout *sysicon_grid;
     QGridLayout *deskapp_grid;
     QGridLayout *dateclock_grid;

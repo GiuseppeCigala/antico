@@ -19,6 +19,7 @@
 #include "msgbox.h"
 #include "antico.h"
 #include "filedialog.h"
+#include "trash.h"
 #include "utils.h"
 
 class Antico;
@@ -83,6 +84,7 @@ private:
     Deskfile *d_file;
     Deskapp *d_app;
     Appicon *app_icon;
+    Trash *trsh;
     
 };
 

@@ -21,7 +21,9 @@ SOURCES = src/main.cpp \
  src/deskdev.cpp \
  src/deskfile.cpp \
  src/deskfolder.cpp \
- src/dockapp.cpp
+ src/dockapp.cpp \
+ src/trash.cpp \
+ src/trashdialog.cpp
 HEADERS = src/defs.h \
  src/antico.h \
  src/frame.h \
@@ -45,7 +47,9 @@ HEADERS = src/defs.h \
  src/deskdev.h \
  src/deskfile.h \
  src/deskfolder.h \
- src/dockapp.h
+ src/dockapp.h \
+ src/trash.h \
+ src/trashdialog.h
 OBJECTS_DIR += build
 MOC_DIR += build
 QMAKE_INCDIR += /usr/include
@@ -53,5 +57,9 @@ QMAKE_CLEAN += antico
 TEMPLATE = app
 CONFIG += warn_on release
 QT += dbus
-TRANSLATIONS = language/it_IT.ts language/cs_CZ.ts language/ru_RU.ts language/pl_PL.ts language/de_DE.ts
+TRANSLATIONS = language/it_IT.ts \
+ language/cs_CZ.ts \
+ language/ru_RU.ts \
+ language/pl_PL.ts \
+ language/de_DE.ts
 //DEFINES = QT_NO_DEBUG_OUTPUT

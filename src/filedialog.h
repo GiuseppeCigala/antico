@@ -35,7 +35,6 @@ public:
     void set_filter(QDir::Filters);
     void set_name_filters(const QStringList &fltr);
     void set_read_only(bool);
-    void clear();
     void read_settings();
     void set_category_menu();
    
@@ -43,6 +42,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent *);
  
 signals:
 
@@ -53,7 +53,6 @@ public slots:
     void show_hidden(bool);
     void path_completer();
     void update_tree(const QModelIndex &);
-    void paintEvent(QPaintEvent *);
     void contextMenuEvent(QContextMenuEvent *);
 
 private:
@@ -63,12 +62,11 @@ private:
     QLineEdit *line_path;
     QMenu *main_menu;
     QMenu *open_menu;
-    QString win_text;
     QString delete_file_pix;
     QString open_with_pix;
     QString ok_button_pix_path;
     QString close_button_pix_path;
-    QLabel *win_label;
+    QLabel *message;
     QLabel *preview_label;
     QRadioButton *hidden_files;
     QVBoxLayout *layout;

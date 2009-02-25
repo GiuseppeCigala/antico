@@ -11,7 +11,6 @@
 Runner::Runner(QWidget *parent) : QDialog(parent)
 {
     setSizeGripEnabled(true);
-    setContentsMargins(0, 10, 0, 0);
     setWindowModality(Qt::WindowModal);
     read_settings();
     init();
@@ -41,15 +40,15 @@ void Runner::read_settings()
 
 void Runner::init()
 {
-    QGridLayout *layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout();
     setLayout(layout);
-    QLabel *win_lab = new QLabel(tr("<b>RUNNER</b>"), this);
-    win_lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    QLabel *name = new QLabel(tr("RUNNER"), this);
+    name->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     QLabel *text = new QLabel(tr("Type command line:"), this);
     command = new QLineEdit("", this);
     QPushButton *run_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Run"), this);
     QPushButton *close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
-    layout->addWidget(win_lab, 0, 0, 1, 0);
+    layout->addWidget(name, 0, 0, 1, 0);
     layout->addWidget(text, 1, 0, 1, 0);
     layout->addWidget(command, 2, 0, 1, 0);
     layout->addWidget(run_but, 3, 0);
@@ -97,7 +96,7 @@ void Runner::run_pressed()
         else
         {
             Msgbox msg;
-            msg.set_header(tr("<b>COMMAND INCORRECT</b>"));
+            msg.set_header(tr("COMMAND INCORRECT"));
             msg.set_info(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
             msg.set_icon("Critical");
             msg.exec();
