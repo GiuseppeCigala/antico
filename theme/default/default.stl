@@ -1,20 +1,19 @@
 [Launcher]
-Icon\launcher_pix=antico.png
-Icon\application_pix=application.png
-Icon\quit_pix=quit.png
-Icon\shutdown_pix=shutdown.png
-Icon\restart_pix=restart.png
-Icon\refresh_pix=refresh.png
-Icon\show_pix=show.png
-Icon\run_pix=run.png
-Icon\manager_pix=manager.png
-Icon\utility_pix=utility.png
-Icon\office_pix=office.png
-Icon\network_pix=network.png
-Icon\graphics_pix=graphics.png
-Icon\development_pix=development.png
-Icon\system_pix=system.png
-Icon\audiovideo_pix=audiovideo.png
+launcher_pix=antico.png
+quit_pix=quit.png
+shutdown_pix=shutdown.png
+restart_pix=restart.png
+refresh_pix=refresh.png
+show_pix=show.png
+run_pix=run.png
+manager_pix=manager.png
+utility_pix=utility.png
+office_pix=office.png
+network_pix=network.png
+graphics_pix=graphics.png
+development_pix=development.png
+system_pix=system.png
+audiovideo_pix=audiovideo.png
 
 [Frame]
 Border\lateral_bdr_width=3
@@ -27,12 +26,12 @@ Header\minmax_pix=minmax.png
 Header\close_pix=close.png
 
 [Desktop]
-Wallpaper\wall_pix=wallpaper.png
+wall_pix=wallpaper.png
 
 [Dockbar]
 dock_pix=dockbar.png
 dock_height=40
-dock_width=1000
+dock_width=1280
 dock_position=0
 
 [Dockicon]
@@ -77,6 +76,7 @@ warning_pix=warning.png
 critical_pix=critical.png
 
 [Other]
+application_pix=application.png
 folder_link_pix=folder_link.png
 file_link_pix=file_link.png
 app_link_pix=app_link.png

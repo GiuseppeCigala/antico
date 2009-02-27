@@ -51,6 +51,7 @@ public slots:
     void path_completer();
     void select_style();
     void changeSection(QListWidgetItem *, QListWidgetItem *);
+    void change_path(QListWidgetItem *, QListWidgetItem *);
 
 protected:
     void mouseMoveEvent(QMouseEvent *);
@@ -79,7 +80,6 @@ private:
     QLabel *close_pix;
     /// Launcher ///
     QLabel *launcher_pix;
-    QLabel *application_pix;
     QLabel *quit_pix;
     QLabel *shutdown_pix;
     QLabel *restart_pix;
@@ -105,6 +105,7 @@ private:
     QLabel *warning_pix;
     QLabel *critical_pix;
     /// Other ///
+    QLabel *application_pix;
     QLabel *folder_link_pix;
     QLabel *file_link_pix;
     QLabel *app_link_pix;
@@ -128,7 +129,6 @@ private:
     QString close_pix_path;
     /// Launcher ///
     QString launcher_pix_path;
-    QString application_pix_path;
     QString quit_pix_path;
     QString shutdown_pix_path;
     QString restart_pix_path;
@@ -154,6 +154,7 @@ private:
     QString warning_pix_path;
     QString critical_pix_path;
     /// Other ///
+    QString application_pix_path;
     QString folder_link_pix_path;
     QString file_link_pix_path;
     QString app_link_pix_path;
@@ -183,6 +184,10 @@ private:
     QTabWidget *tab;
     QVBoxLayout *main_layout;
     QLineEdit *app_path;
+    QListWidgetItem *root_item;
+    QListWidgetItem *bin_item;
+    QListWidgetItem *home_item;
+    QListWidget *path_widget;
     
     QSettings *style;
     QSettings *antico;
@@ -194,8 +199,8 @@ private:
     QHBoxLayout *rem_quit_layout;
     QVBoxLayout *dockbar_layout;
     QVBoxLayout *deskset_layout;
-    QListWidget *sectionsWidget;
-    QStackedWidget *paramsWidget;
+    QListWidget *sections_widget;
+    QStackedWidget *params_widget;
     QGroupBox *frame_box;
     QGroupBox *dockbar_box;
     QGroupBox *dockicon_box;

@@ -22,7 +22,7 @@ class Deskfile : public QWidget
     Q_OBJECT
 
 public:
-    Deskfile(Categorymenu *, const QString &, const QString &, QString, QWidget *parent=0);
+    Deskfile(Categorymenu *, const QString &, const QString &, const QString &, QWidget *parent=0);
     ~Deskfile();
     void read_settings();
     void init();

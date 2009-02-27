@@ -26,7 +26,6 @@ class Systray : public QLabel
 public:
     Systray(QWidget *parent=0);
     ~Systray();
-    void read_settings();
     void add(Frame *);
     void add(Window);
     void remove(Window);

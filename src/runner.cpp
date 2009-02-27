@@ -44,6 +44,7 @@ void Runner::init()
     setLayout(layout);
     QLabel *name = new QLabel(tr("RUNNER"), this);
     name->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    name->setMaximumHeight(20);
     QLabel *text = new QLabel(tr("Type command line:"), this);
     command = new QLineEdit("", this);
     QPushButton *run_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Run"), this);

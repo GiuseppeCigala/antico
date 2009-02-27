@@ -66,9 +66,7 @@ void Frame::read_settings()
     style->endGroup(); //Dockbar
     ////// Launcher //////
     style->beginGroup("Launcher");
-    style->beginGroup("Icon");
     app_icon = stl_path + style->value("application_pix").toString();
-    style->endGroup(); // Icon
     style->endGroup(); // Launcher
 }
 

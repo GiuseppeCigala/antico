@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &file_pth, QString pix, QWidget *parent) : QWidget(parent)
+Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &file_pth, const QString &pix, QWidget *parent) : QWidget(parent)
 {
     cat_menu = menu;
     file_name = file_nm;

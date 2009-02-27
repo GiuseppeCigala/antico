@@ -13,8 +13,7 @@ Launcher::Launcher(Antico *a, QWidget *parent) : QLabel(parent)
     app = a;
     read_settings();
     init();
-    setPixmap(QPixmap(launcher_pix));
-    setScaledContents(true);
+    setPixmap(QPixmap(launcher_pix).scaled(dock_height-5, dock_height-5, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     show();
 }
 
@@ -22,7 +21,6 @@ Launcher::~Launcher()
 {
     delete app;
     delete &launcher_pix;
-    delete &app_pix;
     delete &quit_pix;
     delete &shutdown_pix;
     delete &restart_pix;
@@ -30,6 +28,8 @@ Launcher::~Launcher()
     delete &show_pix;
     delete &run_pix;
     delete &manager_pix;
+    delete &dock_position;
+    delete &dock_height;
 }
 
 void Launcher::init()
@@ -85,9 +85,7 @@ void Launcher::read_settings()
     // get action icons
     style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Launcher");
-    style->beginGroup("Icon");
     launcher_pix = stl_path + style->value("launcher_pix").toString();
-    app_pix = stl_path + style->value("application_pix").toString();
     quit_pix = stl_path + style->value("quit_pix").toString();
     shutdown_pix = stl_path + style->value("shutdown_pix").toString();
     restart_pix = stl_path + style->value("restart_pix").toString();
@@ -95,9 +93,9 @@ void Launcher::read_settings()
     show_pix = stl_path + style->value("show_pix").toString();
     run_pix = stl_path + style->value("run_pix").toString();
     manager_pix = stl_path + style->value("manager_pix").toString();
-    style->endGroup(); // Icon
     style->endGroup(); // Launcher
     style->beginGroup("Dockbar");
+    dock_height = style->value("dock_height").toInt();
     dock_position = style->value("dock_position").toInt();
     style->endGroup(); //Dockbar
 }
@@ -138,20 +136,20 @@ void Launcher::mousePressEvent(QMouseEvent *event)
 void Launcher::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    setPixmap(QPixmap(launcher_pix).scaled(dock_height, dock_height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 }
 
 void Launcher::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setFrameStyle(QFrame::NoFrame);
+    setPixmap(QPixmap(launcher_pix).scaled(dock_height-5, dock_height-5, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+   // setFrameStyle(QFrame::NoFrame);
 }
 
 void Launcher::update_style()
 {
     read_settings();
-    setPixmap(QPixmap(launcher_pix));
-    setScaledContents(true);
+    setPixmap(QPixmap(launcher_pix).scaled(dock_height-5, dock_height-5, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     quit->setIcon(QIcon(quit_pix));
     shutdown->setIcon(QIcon(shutdown_pix));
     restart->setIcon(QIcon(restart_pix));

@@ -61,7 +61,12 @@ void Trashdialog::init()
     // get the $XDG_DATA_HOME environment variable
     QStringList env = QProcess::systemEnvironment();
     QStringList xdg_data_home = env.filter(QRegExp("XDG_DATA_HOME"));
-    trash_path = xdg_data_home.first().remove("XDG_DATA_HOME=");
+    
+    if (xdg_data_home.first().isEmpty()) // if XDG_DATA_HOME variable is not set (default is $HOME/.local/share)
+        trash_path = QDir::homePath() + "/.local/share";
+    else
+        trash_path = xdg_data_home.first().remove("XDG_DATA_HOME=");
+        
     line_path->setText(trash_path + "/Trash/files");
     tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
     QHBoxLayout *button_layout = new QHBoxLayout();
@@ -164,5 +169,6 @@ void Trashdialog::restore_pressed()
 
 void Trashdialog::update()
 {
+    tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
     dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
 }

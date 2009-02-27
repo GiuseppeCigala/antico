@@ -42,7 +42,7 @@ protected:
     void leaveEvent(QEvent *);
 
 private:
- 
+
     QAction *quit;
     QAction *shutdown;
     QAction *restart;
@@ -50,11 +50,10 @@ private:
     QAction *run;
     QAction *show_desk;
     QAction *manag;
-	QSettings *style;
+    QSettings *style;
     QSettings *antico;
-	QMenu *main_menu;
-	QString launcher_pix;
- 	QString app_pix;
+    QMenu *main_menu;
+    QString launcher_pix;
     QString quit_pix;
     QString shutdown_pix;
     QString restart_pix;
@@ -63,6 +62,7 @@ private:
     QString run_pix;
     QString manager_pix;
     int dock_position;
+    int dock_height;
     Antico *app;
 };
 

@@ -54,6 +54,7 @@ public slots:
     void path_completer();
     void update_tree(const QModelIndex &);
     void contextMenuEvent(QContextMenuEvent *);
+    void change_path(QListWidgetItem *, QListWidgetItem *);
 
 private:
     QPoint mousepos;
@@ -66,6 +67,7 @@ private:
     QString open_with_pix;
     QString ok_button_pix_path;
     QString close_button_pix_path;
+    QString folder_pix;
     QLabel *message;
     QLabel *preview_label;
     QRadioButton *hidden_files;
@@ -78,6 +80,11 @@ private:
     QSettings *antico;
     QSettings *style;
     QCompleter *completer;
+    QListWidgetItem *root_item;
+    QListWidgetItem *bin_item;
+    QListWidgetItem *home_item;
+    QListWidget *path_widget;
+    QString trash_path;
     Categorymenu *cat_menu;
     Fileicon *prov;
     QList <QMenu *> menu_list;

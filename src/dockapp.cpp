@@ -46,6 +46,11 @@ void Dockapp::read_settings()
 
 void Dockapp::mousePressEvent(QMouseEvent *event)
 {
+    if (event->button() == Qt::LeftButton)
+    {
+        QProcess::startDetached(app_exec + app_name); //launch the application
+    }
+    
     if (event->button() == Qt::RightButton)
     {
         menu = new QMenu(this);
@@ -55,25 +60,17 @@ void Dockapp::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void Dockapp::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        QProcess::startDetached(app_exec + app_name); //launch the application
-    }
-}
-
 void Dockapp::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    setPixmap(QPixmap(d_app_pix).scaled(dock_height-5, dock_height-5, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     update();
 }
 
 void Dockapp::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setFrameStyle(QFrame::NoFrame);
+    setPixmap(QPixmap(d_app_pix).scaled(dock_height-10, dock_height-10, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     update();
 }
 

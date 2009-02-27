@@ -30,7 +30,20 @@ QString Appicon::get_app_icon(const QString &icon) // select the application ico
     else if (app_icon.endsWith(".xpm"))
         app_icon.remove(".xpm");
 
-    QDirIterator pix_iter("/usr/share/pixmaps/", QDirIterator::Subdirectories);
+    // get the $XDG_DATA_DIRS environment variable
+    QStringList env = QProcess::systemEnvironment();
+    QStringList xdg_data_dirs = env.filter(QRegExp("XDG_DATA_DIRS"));
+
+    if (xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
+        data_path = "/usr/share";
+    else
+    {
+        QString data_paths = xdg_data_dirs.first(); // get the first entry
+        data_paths = data_paths.remove("XDG_DATA_DIRS=");
+        data_path = data_paths.section(':', 0, 0); // get only the first path (i.e. /usr/share:/usr/local/share -> /usr/share)
+    }
+
+    QDirIterator pix_iter(data_path + "/pixmaps/", QDirIterator::Subdirectories);
     while (pix_iter.hasNext())
     {
         pix_iter.next(); // move to child directory
@@ -44,7 +57,7 @@ QString Appicon::get_app_icon(const QString &icon) // select the application ico
         }
     }
     // else search in /icons directory
-    QDirIterator icon_iter("/usr/share/icons/hicolor/32x32/apps/", QDirIterator::Subdirectories);
+    QDirIterator icon_iter(data_path + "/icons/hicolor/32x32/apps/", QDirIterator::Subdirectories);
     while (icon_iter.hasNext())
     {
         icon_iter.next(); // move to child directory
@@ -66,11 +79,9 @@ QString Appicon::get_app_icon(const QString &icon) // select the application ico
     antico->endGroup(); //Style
     // get style values
     QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
-    style->beginGroup("Launcher");
-    style->beginGroup("Icon");
+    style->beginGroup("Other");
     app_icon = stl_path + style->value("application_pix").toString();
-    style->endGroup(); // Icon
-    style->endGroup(); // Launcher
+    style->endGroup(); // Other
     return app_icon; // if not defined, set default application icon
 }
 
@@ -139,7 +150,6 @@ void Categorymenu::read_settings()
     // get category menu icons
     style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Launcher");
-    style->beginGroup("Icon");
     utility_pix = stl_path + style->value("utility_pix").toString();
     office_pix = stl_path + style->value("office_pix").toString();
     network_pix = stl_path + style->value("network_pix").toString();
@@ -147,7 +157,6 @@ void Categorymenu::read_settings()
     devel_pix = stl_path + style->value("development_pix").toString();
     system_pix = stl_path + style->value("system_pix").toString();
     audiovideo_pix = stl_path + style->value("audiovideo_pix").toString();
-    style->endGroup(); // Icon
     style->endGroup(); // Launcher
 }
 
@@ -287,8 +296,21 @@ void Categorymenu::parse_desktop_file()
     QString lang = QLocale::system().name(); // (it_IT)
     QString country = lang.section('_', 0, 0); // (it_IT -> it)
     QString locale_name = QString("Name").append("[").append(country).append("]").append("="); // Name[it]
+    
+    // get the $XDG_DATA_DIRS environment variable
+    QStringList env = QProcess::systemEnvironment();
+    QStringList xdg_data_dirs = env.filter(QRegExp("XDG_DATA_DIRS"));
 
-    QDirIterator desktop_iter("/usr/share/applications/", QDirIterator::Subdirectories);
+    if (xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
+        data_path = "/usr/share";
+    else
+    {
+        QString data_paths = xdg_data_dirs.first(); // get the first entry
+        data_paths = data_paths.remove("XDG_DATA_DIRS=");
+        data_path = data_paths.section(':', 0, 0); // get only the first path (i.e. /usr/share:/usr/local/share -> /usr/share)
+    }
+
+    QDirIterator desktop_iter(data_path + "/applications/", QDirIterator::Subdirectories);
 
     while (desktop_iter.hasNext())
     {
@@ -415,10 +437,10 @@ void Categorymenu::parse_desktop_file()
 Fileicon::Fileicon() : QFileIconProvider()
 {
     read_settings();
-    // set the files extension
-    devel << "h" << "cpp" << "o" << "sh" << "py" << "rb";
+    // match the files extension with icons
+    devel << "h" << "cpp" << "o" << "sh" << "py" << "rb" << "conf";
     graphics << "png" << "jpg" << "svg";
-    system << "cfg" << "stl" << "pro" << "iso" << "img" << "bin" << "theme" << "conf";
+    system << "cfg" << "stl" << "pro" << "iso" << "img" << "bin" << "theme";
     office << "odt" << "odf" << "odp" << "od" << "txt" << "pdf";
     audiovideo << "wav" << "mp3" << "ogg" << "mpg" << "avi";
     network << "htm" << "html" << "xlm";
@@ -442,15 +464,24 @@ Fileicon::~Fileicon()
     delete &system_pix;
     delete &audiovideo_pix;
     delete &d_folder_pix;
+    delete &application_pix;
     delete antico;
     delete style;
 }
 
 QIcon Fileicon::icon(const QFileInfo &info) const
 {
+    QIcon default_ico(devel_pix); //default icon
+
     if (info.isDir())
     {
         QIcon ico(d_folder_pix);
+        return ico;
+    }
+
+    if (info.isExecutable())
+    {
+        QIcon ico(application_pix);
         return ico;
     }
 
@@ -467,7 +498,7 @@ QIcon Fileicon::icon(const QFileInfo &info) const
             return ico;
         }
     }
-    return QApplication::style()->standardIcon(QStyle::SP_FileIcon); //default icon
+    return default_ico; //default icon
 }
 
 QIcon Fileicon::icon()
@@ -476,7 +507,39 @@ QIcon Fileicon::icon()
     return ico;
 }
 
+
 QString Fileicon::type(const QFileInfo &info) const
+{
+    QString type;
+
+    if (info.isDir())
+    {
+        type = "Directory";
+        return type;
+    }
+    else if (info.isFile() && info.isExecutable())
+    {
+        type = "Executable";
+        return type;
+    }
+    else if (info.isFile() && info.isSymLink())
+    {
+        type = "SymLink";
+        return type;
+    }
+    else if (info.isFile())
+    {
+        type = "File";
+        return type;
+    }
+    else
+    {
+        type = "Unknown";
+        return type;
+    }
+}
+
+QString Fileicon::icon_type(const QFileInfo &info) const
 {
     QString suff = info.suffix(); // get the file extension
     QMapIterator<QString, QStringList> iter (cat_map); // (key = category pix path) (value = category file suffix list)
@@ -503,7 +566,6 @@ void Fileicon::read_settings()
     // get category menu icons
     style = new QSettings(stl_path + stl_name, QSettings::IniFormat);
     style->beginGroup("Launcher");
-    style->beginGroup("Icon");
     utility_pix = stl_path + style->value("utility_pix").toString();
     office_pix = stl_path + style->value("office_pix").toString();
     network_pix = stl_path + style->value("network_pix").toString();
@@ -511,9 +573,11 @@ void Fileicon::read_settings()
     devel_pix = stl_path + style->value("development_pix").toString();
     system_pix = stl_path + style->value("system_pix").toString();
     audiovideo_pix = stl_path + style->value("audiovideo_pix").toString();
-    style->endGroup(); // Icon
     style->endGroup(); // Launcher
     style->beginGroup("Deskfolder");
     d_folder_pix = stl_path + style->value("d_folder_pix").toString();
     style->endGroup(); // Deskfolder
+    style->beginGroup("Other");
+    application_pix = stl_path + style->value("application_pix").toString();
+    style->endGroup(); // Other
 }

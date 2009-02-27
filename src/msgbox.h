@@ -51,6 +51,9 @@ private:
     QString information_pix_path;
     QString warning_pix_path;
     QString critical_pix_path;
+    QDialogButtonBox *button_box;
+    QPushButton *ok_but;
+    QPushButton *close_but; 
 
 };
 

@@ -51,9 +51,7 @@ void Desk::read_settings()
     // get style values
     style = new QSettings(stl_path + stl_name, QSettings::IniFormat,this);
     style->beginGroup("Desktop");
-    style->beginGroup("Wallpaper");
     wall_pix = stl_path + style->value("wall_pix").toString();
-    style->endGroup(); //Wallpaper
     style->endGroup(); //Desktop
     style->beginGroup("Dockbar");
     dock_height = style->value("dock_height").toInt();
@@ -208,7 +206,7 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
 
             QFileInfo nameinfo(name);
             Fileicon *prov = (Fileicon *)dir_model->iconProvider();
-            QString icon = prov->type(nameinfo); // get the file icon
+            QString icon = prov->icon_type(nameinfo); // get the file icon
 
             if (! name.isEmpty())
             {

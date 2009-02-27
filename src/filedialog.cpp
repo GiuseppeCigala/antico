@@ -40,6 +40,10 @@ Filedialog::~Filedialog()
     delete &menu_list;
     delete &delete_file_pix;
     delete &open_with_pix;
+    delete &root_item;
+    delete &bin_item;
+    delete &home_item;
+    delete &path_widget;
 }
 
 void Filedialog::read_settings()
@@ -60,6 +64,9 @@ void Filedialog::read_settings()
     ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
     close_button_pix_path = stl_path + style->value("close_button_pix").toString();
     style->endGroup(); // Message
+    style->beginGroup("Deskfolder");
+    folder_pix = stl_path + style->value("d_folder_pix").toString();
+    style->endGroup(); //Deskfolder
 }
 
 void Filedialog::paintEvent(QPaintEvent *)
@@ -76,6 +83,7 @@ void Filedialog::init()
     setLayout(layout);
     message = new QLabel(this); // show message
     message->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    message->setMaximumHeight(20);
     hor_layout = new QHBoxLayout();
     line_path = new QLineEdit(this); // show selection path
     hidden_files = new QRadioButton(tr("Show hidden files"), this);
@@ -85,11 +93,6 @@ void Filedialog::init()
     dir_model = new QDirModel(this);
     dir_model->setReadOnly(false);
     dir_model->setSupportedDragActions(Qt::LinkAction);
-
-    button_box = new QDialogButtonBox(this);
-    ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
-    close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
-
     completer = new QCompleter(this);
     completer->setModel(dir_model);
     line_path->setCompleter(completer);
@@ -100,12 +103,32 @@ void Filedialog::init()
     tree_view->setDragEnabled(true);
     hor_layout->addWidget(preview_label);
     hor_layout->addWidget(line_path);
+    button_box = new QDialogButtonBox(this);
+    ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
+    close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
+    QSplitter *splitter = new QSplitter(this);
+    path_widget = new QListWidget();
+    path_widget->setMaximumWidth(150);
+    root_item = new QListWidgetItem(path_widget);
+    bin_item = new QListWidgetItem(path_widget);
+    home_item = new QListWidgetItem(path_widget);
+    root_item->setIcon(QIcon(folder_pix));
+    root_item->setText(tr("/"));
+    bin_item->setIcon(QIcon(folder_pix));
+    bin_item->setText(tr("/usr/bin/"));
+    home_item->setIcon(QIcon(folder_pix));
+    home_item->setText(tr("/home/"));
+    splitter->addWidget(path_widget);
+    splitter->addWidget(tree_view);
     layout->addWidget(message);
     layout->addLayout(hor_layout);
     layout->addWidget(hidden_files);
-    layout->addWidget(tree_view);
+    layout->addWidget(splitter);
     layout->addWidget(button_box);
 
+    connect(path_widget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+            this, SLOT(change_path(QListWidgetItem *, QListWidgetItem *)));
+    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
     connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_path(QModelIndex)));
     connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
     connect(hidden_files, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
@@ -113,6 +136,13 @@ void Filedialog::init()
     connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(update_tree(QModelIndex)));
     connect(button_box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(button_box, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+void Filedialog::change_path(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (!current)
+        current = previous;
+    set_path(current->text());
 }
 
 void Filedialog::set_category_menu()
@@ -152,25 +182,64 @@ void Filedialog::del_file()
 {
     QModelIndex selection = tree_view->currentIndex();
     QString name = get_selected_name();
+    QString path = get_selected_path();
+
+    // get the $XDG_DATA_HOME environment variable
+    QStringList env = QProcess::systemEnvironment();
+    QStringList xdg_data_home = env.filter(QRegExp("XDG_DATA_HOME"));
+
+    if (xdg_data_home.first().isEmpty()) // if XDG_DATA_HOME variable is not set (default is $HOME/.local/share)
+        trash_path = QDir::homePath() + "/.local/share";
+    else
+        trash_path = xdg_data_home.first().remove("XDG_DATA_HOME=");
 
     if (dir_model->isDir(selection)) // test if is a directory
     {
-        if (dir_model->rmdir(selection))
+        // create the .trashinfo file
+        QString trash_info = name + ".trashinfo";
+        QSettings settings(trash_path + "/Trash/info/" + trash_info, QSettings::IniFormat);
+        settings.beginGroup("Trash Info");
+        settings.setValue("Path", path);
+        settings.setValue("DeletionDate", QDateTime::currentDateTime().toString(Qt::ISODate));
+        settings.endGroup(); // Trash Info
+
+        QStringList rem_info_args;
+        rem_info_args <<  path << trash_path + "/Trash/files/";
+
+        if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the directory
         {
+            dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
-            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted"));
+            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted and moved in") + " " + trash_path + "/Trash/files/");
             msg.set_icon("Information");
             msg.exec();
         }
     }
-    else if (dir_model->remove(selection)) // else is a file
+    else // else is a file
     {
-        Msgbox msg;
-        msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + name + "</b>" + " " + tr("deleted"));
-        msg.set_icon("Information");
-        msg.exec();
+        // create the .trashinfo file
+        QString trash_info = name + ".trashinfo";
+        QSettings settings(trash_path + "/Trash/info/" + trash_info, QSettings::IniFormat);
+        settings.beginGroup("Trash Info");
+        settings.setValue("Path", path + name);
+        settings.setValue("DeletionDate", QDateTime::currentDateTime().toString(Qt::ISODate));
+        settings.endGroup(); // Trash Info
+
+        QStringList rem_info_args;
+        rem_info_args <<  path + name << trash_path + "/Trash/files/";
+
+        if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the file
+        {
+            dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+
+            Msgbox msg;
+            msg.set_header(tr("INFORMATION"));
+            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted and moved in") + " " + trash_path + "/Trash/files/");
+            msg.set_icon("Information");
+            msg.exec();
+        }
     }
 }
 
@@ -179,6 +248,7 @@ void Filedialog::set_path(const QString &pth) // for folder navigation from desk
     tree_view->setRootIndex(dir_model->index(pth));
     tree_view->collapseAll();
     line_path->setText(pth);
+    dir_model->refresh(dir_model->index(pth)); // update the TreeView
 }
 
 void Filedialog::show_path(const QModelIndex &index)
@@ -286,7 +356,7 @@ QString Filedialog::get_selected_icon() const
     QString file = get_selected_name();
     QFileInfo fileinfo(file);
     Fileicon *prov = (Fileicon *)dir_model->iconProvider();
-    QString icon = prov->type(fileinfo); // get the file icon
+    QString icon = prov->icon_type(fileinfo); // get the file icon
     return icon;
 }
 
@@ -315,7 +385,7 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 {
     if (tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos())
-            && !dir_model->isDir(tree_view->currentIndex()) && cat_menu != NULL)
+            && cat_menu != NULL)
     {
         cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
         main_menu->exec(event->globalPos());

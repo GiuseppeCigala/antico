@@ -33,7 +33,7 @@ DOWNLOAD
 INSTALLATION
 *************
 To compile, enter in "Antico" dir (where is the antico.pro) and type on shell:
-"qmake" (this create the Makefile)
+"qmake" (or qmake-qt4)
 "make"
 ---------------------------------------------------
 To install, type on shell (as root):
@@ -70,6 +70,11 @@ Run "linguistic" and make your language translation;
 Type on shell "lrelease antico.pro".
 Your language.qm (e.g. it_IT.qm) should be in /language dir.
 Check debug msg. at startup for control.
+
+***********
+STYLE
+***********
+Use "qtconfig" to select your preferred style (Oxygen, Plastique), fonts, effects, etc.
 
 ***********
 THANKS

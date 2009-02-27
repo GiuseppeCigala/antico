@@ -39,9 +39,9 @@ Deskfolder::~Deskfolder()
 void Deskfolder::init()
 {
     setFixedSize(100, 50);
-    pix = QPixmap(d_folder_pix); // set default pixmap
     zoom = false;
     setToolTip(dir_path);
+    pix = QPixmap(d_folder_pix); // set default pixmap
     main_menu = new QMenu(this);
     // show the Category apps list for open the file
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
@@ -210,5 +210,6 @@ void Deskfolder::del_folder()
 void Deskfolder::update_style()
 {
     read_settings();
+    pix = QPixmap(d_folder_pix); // set default pixmap
     update();
 }

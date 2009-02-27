@@ -59,7 +59,7 @@ void Deskdev::read_settings()
 }
 
 void Deskdev::init()
-{         
+{   
     if (device_type == "disk") // select the right pixmap (cdrom-disk)
         dev_pix = QPixmap(d_disk_pix);
     else // is cdrom
@@ -147,6 +147,10 @@ void Deskdev::contextMenuEvent(QContextMenuEvent *event)
 void Deskdev::update_style()
 {
     read_settings();
+    if (device_type == "disk") // select the right pixmap (cdrom-disk)
+        dev_pix = QPixmap(d_disk_pix);
+    else // is cdrom
+        dev_pix = QPixmap(d_cdrom_pix);
     update();
 }
 

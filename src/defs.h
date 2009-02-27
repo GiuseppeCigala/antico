@@ -77,6 +77,7 @@
 #include <QByteArray>
 #include <QSizeGrip>
 #include <QStackedWidget>
+#include <QSplitter>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

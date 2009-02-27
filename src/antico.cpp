@@ -296,7 +296,7 @@ bool Antico::x11EventFilter(XEvent *event)
         break;
 
         /////////////////// NOTIFY EVENTS ///////////////////
-               
+
     case MapNotify:
         qDebug() << "[MapNotify]";
 
@@ -703,6 +703,22 @@ void Antico::send_configurenotify(Frame *frm)
     XSendEvent(QX11Info::display(), ce.window, False, StructureNotifyMask, (XEvent *)&ce);
 }
 
+void Antico::wm_refresh()
+{
+    qDebug() << "Refreshing Antico WM ...";
+
+    dsk->update_style(); //update desktop, all deskicons and all deskapps
+    dock->update_style(); //update dockbar and all dockicons
+
+    foreach(Frame *frm, mapping_clients) //update all map apps
+    {
+        frm->update_style();
+    }
+
+    XSync(QX11Info::display(), FALSE);
+    flush();
+}
+
 void Antico::wm_quit()
 {
     Msgbox msg;
@@ -729,22 +745,6 @@ void Antico::wm_quit()
     }
 }
 
-void Antico::wm_refresh()
-{
-    qDebug() << "Refreshing Antico WM ...";
-
-    dsk->update_style(); //update desktop, all deskicons and all deskapps
-    dock->update_style(); //update dockbar and all dockicons
-
-    foreach(Frame *frm, mapping_clients) //update all map apps
-    {
-        frm->update_style();
-    }
-
-    XSync(QX11Info::display(), FALSE);
-    flush();
-}
-
 void Antico::wm_shutdown()
 {
     Msgbox msg;
@@ -760,7 +760,20 @@ void Antico::wm_shutdown()
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Shutdown");
-        wm_quit(); // quit the WM
+
+        foreach(Frame *frm, mapping_clients)
+        {
+            qDebug() << "Quit process:" << frm->cl_win();
+            frm->destroy();
+        }
+        mapping_clients.clear();
+        mapping_frames.clear();
+        dock->close();
+        dsk->close();
+        XSync(QX11Info::display(), False);
+        qDebug() << "Quit Antico WM ...";
+        XCloseDisplay(QX11Info::display());
+        quit();
     }
 }
 
@@ -780,7 +793,20 @@ void Antico::wm_restart()
         QDBusConnection bus = QDBusConnection::systemBus();
         QDBusInterface hal("org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement", bus);
         hal.call("Reboot");
-        wm_quit(); // quit the WM
+
+        foreach(Frame *frm, mapping_clients)
+        {
+            qDebug() << "Quit process:" << frm->cl_win();
+            frm->destroy();
+        }
+        mapping_clients.clear();
+        mapping_frames.clear();
+        dock->close();
+        dsk->close();
+        XSync(QX11Info::display(), False);
+        qDebug() << "Quit Antico WM ...";
+        XCloseDisplay(QX11Info::display());
+        quit();
     }
 }
 
@@ -864,9 +890,7 @@ void Antico::set_settings()
         qDebug() << "Set style settings ...";
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Launcher");
-        style->beginGroup("Icon");
         style->setValue("launcher_pix", "antico.png");
-        style->setValue("application_pix", "application.png");
         style->setValue("quit_pix", "quit.png");
         style->setValue("shutdown_pix", "shutdown.png");
         style->setValue("restart_pix", "restart.png");
@@ -881,7 +905,6 @@ void Antico::set_settings()
         style->setValue("development_pix", "development.png");
         style->setValue("system_pix", "system.png");
         style->setValue("audiovideo_pix", "audiovideo.png");
-        style->endGroup(); //Icon
         style->endGroup(); //Launcher
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Frame");
@@ -900,9 +923,7 @@ void Antico::set_settings()
         style->endGroup(); //Frame
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Desktop");
-        style->beginGroup("Wallpaper");
         style->setValue("wall_pix", "wallpaper.png");
-        style->endGroup(); //Wallpaper
         style->endGroup(); //Desktop
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Dockbar");
@@ -963,6 +984,7 @@ void Antico::set_settings()
         style->endGroup(); //Message
         /////////////////////////////////////////////////////////////////////////
         style->beginGroup("Other");
+        style->setValue("application_pix", "application.png");
         style->setValue("folder_link_pix", "folder_link.png");
         style->setValue("file_link_pix", "file_link.png");
         style->setValue("app_link_pix", "app_link.png");

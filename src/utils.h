@@ -23,6 +23,9 @@ public:
     Appicon(QObject *parent=0);
     ~Appicon();
     QString get_app_icon(const QString &);
+    
+private:
+    QString data_path;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,7 +50,7 @@ public:
 
 public slots:
     void run_menu(QAction *);
-   
+
 private:
     QSettings *style;
     QSettings *antico;
@@ -72,6 +75,7 @@ private:
     QString system_pix;
     QString audiovideo_pix;
     QStringList cmd_arguments;
+    QString data_path;
     QHash<QString, QMenu *> cat_menu;
 };
 
@@ -81,13 +85,14 @@ private:
 
 class Fileicon : public QFileIconProvider
 {
- 
+
 public:
     Fileicon();
     ~Fileicon();
     QIcon icon(const QFileInfo &) const;
     QIcon icon();
-    QString type(const QFileInfo &) const; 
+    QString type(const QFileInfo &) const;
+    QString icon_type(const QFileInfo &) const;
     void read_settings();
 
 private:
@@ -101,7 +106,8 @@ private:
     QString system_pix;
     QString audiovideo_pix;
     QString d_folder_pix;
-    
+    QString application_pix;
+
     QStringList graphics;
     QStringList devel;
     QStringList system;
@@ -110,7 +116,7 @@ private:
     QStringList network;
     QStringList utility;
     QMap <QString, QStringList> cat_map; // (key = category pix path) (value = category file suffix list)
-   
+
 };
 
 
