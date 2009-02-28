@@ -34,8 +34,11 @@ QString Appicon::get_app_icon(const QString &icon) // select the application ico
     QStringList env = QProcess::systemEnvironment();
     QStringList xdg_data_dirs = env.filter(QRegExp("XDG_DATA_DIRS"));
 
-    if (xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
+    if (xdg_data_dirs.first().isEmpty() || xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
+    {
+        qDebug() << "XDG_DATA_DIRS is not set. Setting /usr/share as default";
         data_path = "/usr/share";
+    }
     else
     {
         QString data_paths = xdg_data_dirs.first(); // get the first entry
@@ -259,7 +262,6 @@ void Categorymenu::run_menu(QAction *act)
     else
         QProcess::startDetached(cmd, cmd_arguments); //start Application + arguments from Category menu
 
-    cmd.clear();
     cmd_arguments.clear();
 }
 
@@ -301,8 +303,11 @@ void Categorymenu::parse_desktop_file()
     QStringList env = QProcess::systemEnvironment();
     QStringList xdg_data_dirs = env.filter(QRegExp("XDG_DATA_DIRS"));
 
-    if (xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
+    if (xdg_data_dirs.first().isEmpty() || xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
+    {
+        qDebug() << "XDG_DATA_DIRS is not set. Setting /usr/share as default";
         data_path = "/usr/share";
+    }
     else
     {
         QString data_paths = xdg_data_dirs.first(); // get the first entry

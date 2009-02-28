@@ -143,7 +143,6 @@ void Launcher::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
     setPixmap(QPixmap(launcher_pix).scaled(dock_height-5, dock_height-5, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-   // setFrameStyle(QFrame::NoFrame);
 }
 
 void Launcher::update_style()

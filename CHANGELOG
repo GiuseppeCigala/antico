@@ -43,7 +43,7 @@ CHANGELOG
 16/02/09: new MsgBox layout - Manager/MsgBox icon selection - border mouse cursor fix (remove previous default.stl).
 23/02/09: add Dockbar width and position settings.
 25/02/09: add Trash on Desktop (freedesktop.org spec).
-27/02/09: add "path pointers" on Filedialog/Manager - file/dir removed from Filedialog on Trash
+27/02/09: add "path pointers" on Filedialog/Manager - file/dir removed from Filedialog on Trash.
 
 ***********
 TO DO

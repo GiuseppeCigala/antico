@@ -188,8 +188,11 @@ void Filedialog::del_file()
     QStringList env = QProcess::systemEnvironment();
     QStringList xdg_data_home = env.filter(QRegExp("XDG_DATA_HOME"));
 
-    if (xdg_data_home.first().isEmpty()) // if XDG_DATA_HOME variable is not set (default is $HOME/.local/share)
+    if (xdg_data_home.first().isEmpty() || xdg_data_home.isEmpty()) // if XDG_DATA_HOME variable is not set (default is $HOME/.local/share)
+    {
+        qDebug() << "XDG_DATA_HOME is not set. Setting $HOME/.local/share as default"; 
         trash_path = QDir::homePath() + "/.local/share";
+    }
     else
         trash_path = xdg_data_home.first().remove("XDG_DATA_HOME=");
 
