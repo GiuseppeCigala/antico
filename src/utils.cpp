@@ -30,22 +30,8 @@ QString Appicon::get_app_icon(const QString &icon) // select the application ico
     else if (app_icon.endsWith(".xpm"))
         app_icon.remove(".xpm");
 
-    // get the $XDG_DATA_DIRS environment variable
-    QStringList env = QProcess::systemEnvironment();
-    QStringList xdg_data_dirs = env.filter(QRegExp("XDG_DATA_DIRS"));
-
-    if (xdg_data_dirs.first().isEmpty() || xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
-    {
-        qDebug() << "XDG_DATA_DIRS is not set. Setting /usr/share as default";
-        data_path = "/usr/share";
-    }
-    else
-    {
-        QString data_paths = xdg_data_dirs.first(); // get the first entry
-        data_paths = data_paths.remove("XDG_DATA_DIRS=");
-        data_path = data_paths.section(':', 0, 0); // get only the first path (i.e. /usr/share:/usr/local/share -> /usr/share)
-    }
-
+    data_path = "/usr/share"; // search in default path directory
+  
     QDirIterator pix_iter(data_path + "/pixmaps/", QDirIterator::Subdirectories);
     while (pix_iter.hasNext())
     {
@@ -298,23 +284,9 @@ void Categorymenu::parse_desktop_file()
     QString lang = QLocale::system().name(); // (it_IT)
     QString country = lang.section('_', 0, 0); // (it_IT -> it)
     QString locale_name = QString("Name").append("[").append(country).append("]").append("="); // Name[it]
-    
-    // get the $XDG_DATA_DIRS environment variable
-    QStringList env = QProcess::systemEnvironment();
-    QStringList xdg_data_dirs = env.filter(QRegExp("XDG_DATA_DIRS"));
-
-    if (xdg_data_dirs.first().isEmpty() || xdg_data_dirs.isEmpty()) // if XDG_DATA_DIRS variable is not set (default is /usr/share)
-    {
-        qDebug() << "XDG_DATA_DIRS is not set. Setting /usr/share as default";
-        data_path = "/usr/share";
-    }
-    else
-    {
-        QString data_paths = xdg_data_dirs.first(); // get the first entry
-        data_paths = data_paths.remove("XDG_DATA_DIRS=");
-        data_path = data_paths.section(':', 0, 0); // get only the first path (i.e. /usr/share:/usr/local/share -> /usr/share)
-    }
-
+  
+    data_path = "/usr/share"; // search in default path directory
+  
     QDirIterator desktop_iter(data_path + "/applications/", QDirIterator::Subdirectories);
 
     while (desktop_iter.hasNext())
