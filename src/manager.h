@@ -197,8 +197,8 @@ private:
     QVBoxLayout *style_layout;
     QHBoxLayout *ok_quit_layout;
     QHBoxLayout *rem_quit_layout;
-    QVBoxLayout *dockbar_layout;
-    QVBoxLayout *deskset_layout;
+    QGridLayout *dockbar_layout;
+    QGridLayout *deskset_layout;
     QListWidget *sections_widget;
     QStackedWidget *params_widget;
     QGroupBox *frame_box;
@@ -229,7 +229,7 @@ private:
     QGridLayout *sysicon_grid;
     QGridLayout *deskapp_grid;
     QGridLayout *dateclock_grid;
-    QGridLayout *desktop_grid;
+    QGridLayout *desktop_layout;
     QGridLayout *launcher_grid;
     QGridLayout *category_grid;
     QGridLayout *message_grid;
