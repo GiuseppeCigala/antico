@@ -600,6 +600,7 @@ void Frame::create_border()
     // top mid (title bar)
     connect(tm_bdr, SIGNAL(mouse_double_click()), this, SLOT(iconify()));
     connect(tm_bdr, SIGNAL(mouse_left_press(QMouseEvent *)), this, SLOT(press_top_mid(QMouseEvent *)));
+    connect(tm_bdr, SIGNAL(mouse_right_press()), this, SLOT(maximize()));
     connect(tm_bdr, SIGNAL(mouse_move(QMouseEvent *)), this, SLOT(move_top_mid(QMouseEvent *)));
     // bottom left
     connect(bl_bdr, SIGNAL(mouse_left_press(QMouseEvent *)), this, SLOT(press_bottom_left(QMouseEvent *)));
@@ -788,6 +789,7 @@ void Frame::dragEnterEvent(QDragEnterEvent *event)
 {
     raise();
     qDebug() << "dragEnterEvent";
+    qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
     qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data();
 }
@@ -795,6 +797,7 @@ void Frame::dragEnterEvent(QDragEnterEvent *event)
 void Frame::dragMoveEvent(QDragMoveEvent *event)
 {
     qDebug() << "dragMoveEvent";
+    qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->accept();
     qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data();
 }
@@ -802,7 +805,9 @@ void Frame::dragMoveEvent(QDragMoveEvent *event)
 void Frame::dropEvent(QDropEvent *event)
 {
     qDebug() << "dropEvent";
+    qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
+    event->accept();
     qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data();
 }
 
