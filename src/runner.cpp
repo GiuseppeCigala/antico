@@ -47,6 +47,10 @@ void Runner::init()
     name->setMaximumHeight(20);
     QLabel *text = new QLabel(tr("Type command line:"), this);
     command = new QLineEdit("", this);
+    QDirModel *dir_model = new QDirModel(this);
+    QCompleter *completer = new QCompleter(this);
+    completer->setModel(dir_model);
+    command->setCompleter(completer);
     QPushButton *run_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Run"), this);
     QPushButton *close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
     layout->addWidget(name, 0, 0, 1, 0);

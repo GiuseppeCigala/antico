@@ -82,11 +82,13 @@ void Desk::set_desk_icons()
 
         QString name = antico->value("name").toString();
         QString path = antico->value("path").toString();
-        QPoint pos = antico->value("pos").value<QPoint>();
         QRect geom = antico->value("geometry").value<QRect>();
-        Deskfolder *d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geom, this);
-        desk_folders << d_folder; // save the deskfolder
-        d_folder->move(pos);
+        QPoint pos = antico->value("pos").value<QPoint>();
+
+        d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geom, this);
+        desk_folders << d_folder; // save the new deskfolder
+        d_folder->move(pos.x(), pos.y());
+        connect(d_folder, SIGNAL(destroy_deskfolder(Deskfolder *)), this, SLOT(remove_deskfolder(Deskfolder *))); // delete deskfolder from list
 
         antico->endGroup(); // Folder name
     }
@@ -103,15 +105,17 @@ void Desk::set_desk_icons()
         QString path = antico->value("path").toString();
         QString pix = antico->value("pix").toString();
         QPoint pos = antico->value("pos").value<QPoint>();
-        Deskfile *d_file = new Deskfile(cat_menu, name, path, pix, this);
-        desk_files << d_file; // save the deskfile
-        d_file->move(pos);
+
+        d_file = new Deskfile(cat_menu, name, path, pix, this);
+        desk_files << d_file; // save the new deskfile
+        d_file->move(pos.x(), pos.y());
+        connect(d_file, SIGNAL(destroy_deskfile(Deskfile *)), this, SLOT(remove_deskfile(Deskfile *))); // delete deskfile from list
 
         antico->endGroup(); // File name
     }
     antico->endGroup(); //File
 
-    // read deskapp name, path, pixmap, pos and restore on desktop
+    // read deskapp name, exec, pix, pos and restore on desktop
     antico->beginGroup("App");
 
     for (int i = 0; i < antico->childGroups().size(); i++)
@@ -122,15 +126,17 @@ void Desk::set_desk_icons()
         QString exec = antico->value("exec").toString();
         QString pix = antico->value("pix").toString();
         QPoint pos = antico->value("pos").value<QPoint>();
-        Deskapp *d_app = new Deskapp(name, exec, pix, this);
-        desk_apps << d_app; // save the deskapp
-        d_app->move(pos);
+
+        d_app = new Deskapp(name, exec, pix, this); // new desktop application
+        desk_apps << d_app; // save the new deskapp
+        d_app->move(pos.x(), pos.y());
+        connect(d_app, SIGNAL(destroy_deskapp(Deskapp *)), this, SLOT(remove_deskapp(Deskapp *))); // delete deskapp from list
 
         antico->endGroup(); // App name
     }
     antico->endGroup(); //App
     antico->endGroup(); //Desktop
-    
+
     // read Trash and restore on desktop
     antico->beginGroup("Trash");
     QPoint pos = antico->value("pos").value<QPoint>();
@@ -190,7 +196,7 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
             QString path = dir_model->filePath(selection);
             qDebug() << "Selected path:" << path;
             QRect geometry = tree_view->geometry(); // get the dimension of TreeView
-            
+
             if (! name.isEmpty())
             {
                 create_desk_folder(name, path, geometry, pos, this);
@@ -212,7 +218,9 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
             {
                 if (pathinfo.isExecutable()) // is an application
                 {
-                    create_desk_app(name, path, pos, this);
+                    Appicon app_icon; // get application icon
+                    QString icon = app_icon.get_app_icon(name);
+                    create_desk_app(name, path, icon, pos, this);
                 }
                 else // is a file
                 {
@@ -236,7 +244,7 @@ void Desk::run_menu(QAction *act)
             QString icon = file_dialog->get_selected_icon();
             QRect geometry = file_dialog->geometry(); // get the dimension of Filedialog
             QPoint pos = menu->pos();
-            
+
             if (! name.isEmpty() && ! path.endsWith("/")) // is a directory
             {
                 create_desk_folder(name, path, geometry, pos, this);
@@ -274,7 +282,9 @@ void Desk::run_menu(QAction *act)
 
             if (! name.isEmpty() && pathinfo.isExecutable())
             {
-                create_desk_app(name, path, pos, this);
+                Appicon app_icon; // get application icon
+                QString icon = app_icon.get_app_icon(name);
+                create_desk_app(name, path, icon, pos, this);
             }
         }
     }
@@ -334,10 +344,8 @@ void Desk::remove_deskfile(Deskfile *d_file) // remove from "Delete link" right 
     d_file->close();
 }
 
-void Desk::create_desk_app(const QString &name, const QString &exec, const QPoint &pos, QWidget *parent)
+void Desk::create_desk_app(const QString &name, const QString &exec, const QString &icon, const QPoint &pos, QWidget *parent)
 {
-    Appicon app_icon; // get application icon
-    QString icon = app_icon.get_app_icon(name);
     d_app = new Deskapp(name, exec, icon, parent); // new desktop application
     desk_apps << d_app; // save the new deskapp
     d_app->move(pos.x(), pos.y());

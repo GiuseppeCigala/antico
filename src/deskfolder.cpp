@@ -82,6 +82,8 @@ void Deskfolder::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
+    painter.setPen(d_folder_col);
+    
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), pix, QRect(0, 0, pix.width(), pix.height()));// deskfolder pix
@@ -90,8 +92,8 @@ void Deskfolder::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), pix, QRect(0, 0, pix.width(), pix.height()));// deskfolder pix
     }
-    painter.setPen(d_folder_col);
-    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, dir_name); // deskfolder name
+    QString name = QApplication::fontMetrics().elidedText(dir_name, Qt::ElideRight, 90); // if dir_name is too long, add ... at the end
+    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfolder name
 }
 
 void Deskfolder::mousePressEvent(QMouseEvent *event)

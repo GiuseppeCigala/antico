@@ -45,7 +45,7 @@ void Deskfile::init()
     {
         open_menu->addMenu(menu_list.at(i));
     }
-
+    
     delete_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
     connect(delete_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
@@ -73,7 +73,9 @@ void Deskfile::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(d_file_col);
     painter.setWindow(-50, -50, 100, 50);
+
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
@@ -82,8 +84,9 @@ void Deskfile::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
     }
-    painter.setPen(d_file_col);
-    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, file_name); // deskfile name
+    
+    QString name = QApplication::fontMetrics().elidedText(file_name, Qt::ElideRight, 90); // if file_name is too long, add ... at the end
+    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfile name
 }
 
 void Deskfile::mousePressEvent(QMouseEvent *event)

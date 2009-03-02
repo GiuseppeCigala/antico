@@ -53,7 +53,7 @@ void Dateclock::paintEvent(QPaintEvent *)
     painter.setWindow(0, 0, width(), height());
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QColor(clock_col)); //clock color
-    QFont time_font("Helvetica", 12);
+    QFont time_font(QApplication::font().family(), 12);
     QFontMetrics time_fm(time_font);
     QString string_time = time.toString().left(5);
     int time_h = time_fm.height();
@@ -61,8 +61,8 @@ void Dateclock::paintEvent(QPaintEvent *)
     painter.setFont(time_font);
     painter.drawText(0, 2, width(), height()/2, Qt::AlignCenter, string_time); //clock
     painter.setPen(QColor(date_col)); //date color
-    QFont date_font = font();
-    QFontMetrics date_fm = fontMetrics();
+    QFont date_font (QApplication::font().family(), 12);
+    QFontMetrics date_fm(date_font);
     QString string_date = date.toString("dd.MM.yy");
     int date_h = date_fm.height();
     date_font.setPixelSize(height()*5/date_h);

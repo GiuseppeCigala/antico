@@ -42,7 +42,7 @@ public:
     void read_settings();
     void set_geometry();
     void set_desk_icons();
-    void create_desk_app(const QString &, const QString &, const QPoint &, QWidget *);
+    void create_desk_app(const QString &, const QString &, const QString &, const QPoint &, QWidget *);
     void create_desk_file(const QString &, const QString &, const QString &, const QPoint &, QWidget *);
     void create_desk_folder(const QString &, const QString &, const QRect &, const QPoint &, QWidget *);
     void update_style();

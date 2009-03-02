@@ -44,6 +44,7 @@ CHANGELOG
 23/02/09: add Dockbar width and position settings.
 25/02/09: add Trash on Desktop (freedesktop.org spec).
 27/02/09: add "path pointers" on Filedialog/Manager - file/dir removed from Filedialog on Trash.
+01/03/09: new Manager layout - right mouse but. on Header for frame max/min.
 
 ***********
 TO DO
