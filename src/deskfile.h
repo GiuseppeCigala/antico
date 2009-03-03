@@ -27,6 +27,8 @@ public:
     void read_settings();
     void init();
     void update_style();
+    QString get_file_name();
+    void set_selected(bool);
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -58,6 +60,7 @@ private:
     QSettings *antico;
     QAction *delete_file;
     bool zoom;
+    bool selected;
     Categorymenu *cat_menu;
 };
 

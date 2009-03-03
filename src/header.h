@@ -49,7 +49,7 @@ private:
     QPixmap inactive_back;
     QPixmap icon;
     QPixmap back;
-    QString name;
+    QString app_name;
     QColor title_color;
     bool active_state;
 };

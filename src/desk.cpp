@@ -35,8 +35,11 @@ Desk::~Desk()
     delete &folder_link_pix;
     delete &app_link_pix;
     delete &desk_folders;
+    delete &desk_folders_selected;
     delete &desk_files;
+    delete &desk_files_selected;
     delete &desk_apps;
+    delete &desk_apps_selected;
     delete &desk_dev;
 }
 
@@ -147,6 +150,7 @@ void Desk::set_desk_icons()
 
 void Desk::init()
 {
+    rubber_band = new QRubberBand(QRubberBand::Rectangle, this); // to deskfolder/file/app selection
     menu = new QMenu(this);
     menu->addAction(QIcon(folder_link_pix), tr("New link to folder"));
     menu->addAction(QIcon(file_link_pix), tr("New link to file"));
@@ -162,7 +166,99 @@ void Desk::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton)
     {
-        menu->exec(event->globalPos());
+        menu->exec(event->pos());
+    }
+    if (event->button() == Qt::LeftButton)
+    {
+        foreach(Deskfolder *folder, desk_folders_selected) // unselected previous selected deskfolders
+        {
+            folder->set_selected(false);
+        }
+        desk_folders_selected.clear(); // clear previous selected deskfolders
+
+        foreach(Deskfile *file, desk_files_selected) // unselected previous selected deskfiles
+        {
+            file->set_selected(false);
+        }
+        desk_files_selected.clear(); // clear previous selected deskfiles
+
+        foreach(Deskapp *app, desk_apps_selected) // unselected previous selected deskapps
+        {
+            app->set_selected(false);
+        }
+        desk_apps_selected.clear(); // clear previous selected deskapps
+
+        rubber_press = event->globalPos();
+        rubber_band->setGeometry(QRect(rubber_press, QSize()));
+        rubber_band->show();
+    }
+}
+
+void Desk::mouseMoveEvent(QMouseEvent *event)
+{
+    rubber_band->setGeometry(QRect(rubber_press, event->pos()).normalized());
+}
+
+void Desk::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+
+    foreach(Deskfolder *folder, desk_folders) // search selected deskfolders
+    {
+        if (rubber_band->geometry().intersects(folder->geometry()))
+        {
+            desk_folders_selected << folder;
+            folder->set_selected(true);
+        }
+    }
+    qDebug() << "Deskfolders selected:" << desk_folders_selected.size();
+
+    foreach(Deskfile *file, desk_files) // search selected deskfiles
+    {
+        if (rubber_band->geometry().intersects(file->geometry()))
+        {
+            desk_files_selected << file;
+            file->set_selected(true);
+        }
+    }
+    qDebug() << "Deskfiles selected:" << desk_files_selected.size();
+
+    foreach(Deskapp *app, desk_apps) // search selected deskapps
+    {
+        if (rubber_band->geometry().intersects(app->geometry()))
+        {
+            desk_apps_selected << app;
+            app->set_selected(true);
+        }
+    }
+    qDebug() << "Deskapps selected:" << desk_apps_selected.size();
+
+    rubber_band->hide(); // clear rubberband selection
+}
+
+void Desk::keyPressEvent(QKeyEvent *event)
+{
+    if (desk_folders_selected.size() >0 || desk_files_selected.size() >0 || desk_apps_selected.size() >0)
+    {
+        if (event->key() == Qt::Key_Delete)
+        {
+            Msgbox msg;
+            msg.set_header(tr("DELETE SELECTED ICONS"));
+            msg.set_info(tr("Are you sure to delete the selected icons ?"));
+            msg.set_icon("Question");
+
+            int ret = msg.exec();
+
+            if (ret == QDialog::Accepted)
+            {
+                foreach(Deskfolder *folder, desk_folders_selected)
+                remove_deskfolder(folder); // remove selected deskfolder
+                foreach(Deskfile *file, desk_files_selected)
+                remove_deskfile(file); // remove selected deskfile
+                foreach(Deskapp *app, desk_apps_selected)
+                remove_deskapp(app); // remove selected deskapp
+            }
+        }
     }
 }
 
@@ -310,8 +406,14 @@ void Desk::create_desk_folder(const QString &name, const QString &path, const QR
     antico->endGroup(); //Desktop
 }
 
-void Desk::remove_deskfolder(Deskfolder *d_folder) // remove from "Delete link" right button mouse on Desktop
+void Desk::remove_deskfolder(Deskfolder *d_folder) // remove from "Delete link" right button mouse on Desktop and from rubberband selection
 {
+    // remove the deskfolder from desk and from antico.cfg
+    antico->beginGroup("Desktop");
+    antico->beginGroup("Folder");
+    antico->remove(d_folder->get_dir_name());
+    antico->endGroup(); // Folder
+    antico->endGroup(); // Desktop
     desk_folders.removeOne(d_folder);
     qDebug() << "Deskfolder remove. Num. after deletion:" << desk_folders.size();
     d_folder->close();
@@ -337,8 +439,14 @@ void Desk::create_desk_file(const QString &name, const QString &path, const QStr
     antico->endGroup(); //Desktop
 }
 
-void Desk::remove_deskfile(Deskfile *d_file) // remove from "Delete link" right button mouse on Desktop
+void Desk::remove_deskfile(Deskfile *d_file) // remove from "Delete link" right button mouse on Desktop and from rubberband selection
 {
+    // remove the deskicon from desk and from antico.cfg
+    antico->beginGroup("Desktop");
+    antico->beginGroup("File");
+    antico->remove(d_file->get_file_name());
+    antico->endGroup(); // File
+    antico->endGroup(); // Desktop
     desk_files.removeOne(d_file);
     qDebug() << "Deskfile remove. Num. after deletion:" << desk_files.size();
     d_file->close();
@@ -363,8 +471,14 @@ void Desk::create_desk_app(const QString &name, const QString &exec, const QStri
     antico->endGroup(); //Desktop
 }
 
-void Desk::remove_deskapp(Deskapp *d_app) // remove from "Delete link" right button mouse on Desktop
+void Desk::remove_deskapp(Deskapp *d_app) // remove from "Delete link" right button mouse on Desktop and from rubberband selection
 {
+    // remove the deskapp from desk and from Antico.conf
+    antico->beginGroup("Desktop");
+    antico->beginGroup("App");
+    antico->remove(d_app->get_app_name());
+    antico->endGroup(); // App
+    antico->endGroup(); // Desktop
     desk_apps.removeOne(d_app);
     qDebug() << "Deskapp remove. Num. after deletion:" << desk_apps.size();
     d_app->close();

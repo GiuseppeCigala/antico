@@ -14,7 +14,6 @@ Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &fi
     file_name = file_nm;
     file_path = file_pth;
     d_file_pix = QPixmap(pix);
-    zoom = false;
     read_settings();
     init();
     show();
@@ -35,6 +34,8 @@ Deskfile::~Deskfile()
 void Deskfile::init()
 {
     setFixedSize(100, 50);
+    zoom = false;
+    selected = false;
     setToolTip(file_path + file_name);
     main_menu = new QMenu(this);
     // show the Category apps list for open the file
@@ -84,9 +85,19 @@ void Deskfile::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
     }
+    if (selected)
+    {
+        painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
+    }
     
     QString name = QApplication::fontMetrics().elidedText(file_name, Qt::ElideRight, 90); // if file_name is too long, add ... at the end
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfile name
+}
+
+void Deskfile::set_selected(bool select)
+{
+    selected = select;
+    update();
 }
 
 void Deskfile::mousePressEvent(QMouseEvent *event)
@@ -158,12 +169,11 @@ void Deskfile::leaveEvent(QEvent *event)
 void Deskfile::del_file()
 {
     emit destroy_deskfile(this);
-    // remove the deskicon from desk and from antico.cfg
-    antico->beginGroup("Desktop");
-    antico->beginGroup("File");
-    antico->remove(file_name);
-    antico->endGroup(); // File
-    antico->endGroup(); // Desktop
+}
+
+QString Deskfile::get_file_name()
+{
+    return file_name;
 }
 
 void Deskfile::contextMenuEvent(QContextMenuEvent *event)

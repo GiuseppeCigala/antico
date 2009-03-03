@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 
-Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_nm, const QString &dir_pth, const QRect &geom, QWidget *parent) : QWidget(parent)
+Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_nm, const QString &dir_pth, const QRect &geo, QWidget *parent) : QWidget(parent)
 {
     file_dialog = dial;
     cat_menu = menu;
@@ -16,7 +16,7 @@ Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_
     init();
     dir_name = dir_nm;
     dir_path = dir_pth;
-    geometry = geom;
+    geom = geo;
     show();
 }
 
@@ -27,10 +27,9 @@ Deskfolder::~Deskfolder()
     delete &open_menu;
     delete &dir_name;
     delete &dir_path;
-    delete &geometry;
+    delete &geom;
     delete &d_folder_pix;
     delete &d_folder_col;
-    delete &geometry;
     delete &delete_link_pix;
     delete &open_with_pix;
     delete &pix;
@@ -40,6 +39,7 @@ void Deskfolder::init()
 {
     setFixedSize(100, 50);
     zoom = false;
+    selected = false;
     setToolTip(dir_path);
     pix = QPixmap(d_folder_pix); // set default pixmap
     main_menu = new QMenu(this);
@@ -69,7 +69,7 @@ void Deskfolder::read_settings()
     style->beginGroup("Deskfolder");
     d_folder_pix = stl_path + style->value("d_folder_pix").toString();
     d_folder_col = style->value("name_color").value<QColor>();
-    geometry = style->value("geometry").value<QRect>();
+    geom = style->value("geometry").value<QRect>();
     style->endGroup(); //Deskfolder
     style->beginGroup("Other");
     delete_link_pix = stl_path + style->value("delete_link_pix").toString();
@@ -83,7 +83,7 @@ void Deskfolder::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
     painter.setPen(d_folder_col);
-    
+
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), pix, QRect(0, 0, pix.width(), pix.height()));// deskfolder pix
@@ -92,8 +92,18 @@ void Deskfolder::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), pix, QRect(0, 0, pix.width(), pix.height()));// deskfolder pix
     }
+    if (selected)
+    {
+        painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
+    }
     QString name = QApplication::fontMetrics().elidedText(dir_name, Qt::ElideRight, 90); // if dir_name is too long, add ... at the end
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfolder name
+}
+
+void Deskfolder::set_selected(bool select)
+{
+    selected = select;
+    update();
 }
 
 void Deskfolder::mousePressEvent(QMouseEvent *event)
@@ -147,7 +157,7 @@ void Deskfolder::mouseDoubleClickEvent(QMouseEvent *event)
         else
         {
             file_dialog->set_type(tr("Folder contents:"), "Close");
-            file_dialog->setGeometry(geometry);
+            file_dialog->setGeometry(geom);
             file_dialog->set_path(dir_path);
 
             if (file_dialog->exec() == QDialog::Rejected) // on close button
@@ -160,7 +170,7 @@ void Deskfolder::mouseDoubleClickEvent(QMouseEvent *event)
                 antico->endGroup(); //name
                 antico->endGroup(); //Folder
                 antico->endGroup(); //Desktop
-                geometry = file_dialog->geometry(); // update geometry
+                geom = file_dialog->geometry(); // update geometry
             }
         }
     }
@@ -201,12 +211,11 @@ void Deskfolder::contextMenuEvent(QContextMenuEvent *event)
 void Deskfolder::del_folder()
 {
     emit destroy_deskfolder(this);
-    // remove the deskfolder from desk and from antico.cfg
-    antico->beginGroup("Desktop");
-    antico->beginGroup("Folder");
-    antico->remove(dir_name);
-    antico->endGroup(); // Folder
-    antico->endGroup(); // Desktop
+}
+
+QString Deskfolder::get_dir_name()
+{
+    return dir_name;
 }
 
 void Deskfolder::update_style()

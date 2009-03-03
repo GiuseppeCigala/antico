@@ -59,6 +59,9 @@ public slots:
 
 protected:
     void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+    void keyPressEvent(QKeyEvent *);
     void dragEnterEvent(QDragEnterEvent *);
     void dragMoveEvent(QDragMoveEvent *);
     void dropEvent(QDropEvent *);
@@ -69,14 +72,19 @@ private:
     QSettings *antico;
     int dock_height;
     QList<Deskfolder *> desk_folders;
+    QList<Deskfolder *> desk_folders_selected;
     QList<Deskfile *> desk_files;
+    QList<Deskfile *> desk_files_selected;
     QList<Deskapp *> desk_apps;
+    QList<Deskapp *> desk_apps_selected;
     QHash<QString, Deskdev *> desk_dev;
     QDBusInterface *dbus_interface;
     QString wall_pix;
     QString folder_link_pix;
     QString file_link_pix;
     QString app_link_pix;
+    QPoint rubber_press;
+    QRubberBand *rubber_band;
     Antico *app;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;

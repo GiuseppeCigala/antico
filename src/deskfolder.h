@@ -28,6 +28,8 @@ public:
     void read_settings();
     void update_style();
     void init();
+    QString get_dir_name();
+    void set_selected(bool);
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -50,7 +52,7 @@ private:
     QMenu *open_menu;
     QString dir_name;
     QString dir_path;
-    QRect geometry;
+    QRect geom;
     QPoint mousepos;
     QString d_folder_pix;
     QString delete_link_pix;
@@ -61,6 +63,7 @@ private:
     QSettings *antico;
     QAction *delete_folder;
     bool zoom;
+    bool selected;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;
 };

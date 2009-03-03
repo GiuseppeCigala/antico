@@ -17,6 +17,7 @@ Deskapp::Deskapp(const QString &app_nm, const QString &app_exe, const QString &a
     setToolTip(app_exec + app_name);
     d_app_pix = QPixmap(app_pix);
     zoom = false;
+    selected = false;
     show();
 }
 
@@ -62,9 +63,19 @@ void Deskapp::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
     }
+    if (selected)
+    {
+        painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
+    }
     
     QString name = QApplication::fontMetrics().elidedText(app_name, Qt::ElideRight, 90); // if app_name is too long, add ... at the end
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskapp name
+}
+
+void Deskapp::set_selected(bool select)
+{
+    selected = select;
+    update();
 }
 
 void Deskapp::mousePressEvent(QMouseEvent *event)
@@ -128,12 +139,11 @@ void Deskapp::leaveEvent(QEvent *event)
 void Deskapp::del_app()
 {
     emit destroy_deskapp(this);
-    // remove the deskapp from desk and from Antico.conf
-    antico->beginGroup("Desktop");
-    antico->beginGroup("App");
-    antico->remove(app_name);
-    antico->endGroup(); // App
-    antico->endGroup(); // Desktop
+}
+
+QString Deskapp::get_app_name()
+{
+    return app_name;
 }
 
 void Deskapp::update_style()

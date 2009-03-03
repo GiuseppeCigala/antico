@@ -12,13 +12,13 @@ Header::Header(const QPixmap &icn, const QString &nm, QWidget *parent) : QWidget
 {
     setContentsMargins(0, 0, 0, 0);
     icon =  icn;
-    name = nm;
+    app_name = nm;
 }
 
 Header::~Header()
 {
     delete &icon;
-    delete &name;
+    delete &app_name;
 }
 
 void Header::paintEvent(QPaintEvent *)
@@ -27,7 +27,8 @@ void Header::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(title_color);// text color
     painter.drawPixmap(QRect(0, 0, width(), height()), back, QRect(0, 0, back.width(), back.height())); //background
-    painter.drawText(QRect(30, 0, width(), height()), Qt::AlignVCenter, name); //text
+    QString name = QApplication::fontMetrics().elidedText(app_name, Qt::ElideRight, width()-width()/3); // if app_name is too long, add ... at the end
+    painter.drawText(QRect(30, 0, width(), height()), Qt::AlignVCenter, name); //app_name
     painter.drawPixmap(QRect(5, 2, height()-4, height()-4), icon, QRect(0, 0, icon.width(), icon.height()));//icon
 }
 
@@ -36,6 +37,7 @@ void Header::set_pixmap(const QPixmap &active, const QPixmap &inactive, const QC
     active_back = active;
     inactive_back = inactive;
     title_color = clr;
+    
     if (active_state)
         back = active_back;
     else
@@ -52,7 +54,7 @@ void Header::set_active()
 
 void Header::update_name(const QString &nm)
 {
-    name = nm;
+    app_name = nm;
     update();
 }
 

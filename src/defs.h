@@ -78,6 +78,7 @@
 #include <QSizeGrip>
 #include <QStackedWidget>
 #include <QSplitter>
+#include <QRubberBand>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

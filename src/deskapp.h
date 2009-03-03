@@ -25,6 +25,8 @@ public:
     ~Deskapp();
     void read_settings();
     void update_style();
+    QString get_app_name();
+    void set_selected(bool);
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -52,6 +54,7 @@ private:
     QSettings *style;
     QSettings *antico;
     bool zoom;
+    bool selected;
 };
 
 #endif
