@@ -16,6 +16,7 @@ Frame::Frame(Window w, const QString &type, Dockbar *dkbr, QWidget *parent) : QF
     read_settings();
     init();
     setFrameStyle(QFrame::Panel|QFrame::Raised);
+    setAttribute(Qt::WA_AlwaysShowToolTips); 
     setAcceptDrops(true);
 }
 
@@ -78,7 +79,7 @@ void Frame::init()
 
     XSelectInput(QX11Info::display(), winId(), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
                  KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask |
-                 ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
+                 VisibilityChangeMask | ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
 
     XSetWindowAttributes at;
     at.event_mask = ColormapChangeMask|PropertyChangeMask;
@@ -543,15 +544,15 @@ void Frame::create_border()
     c_bdr = new Border(this);
     layout->addWidget(c_bdr, 1, 1);
     // top left border (icon)
-    tl_bdr = new Border(); // no this to show tooltip
-    tl_bdr->setToolTip(tr("Minimize/Maximize"));
+    tl_bdr = new Border(this); 
+    tl_bdr->setToolTip(tr("Minimize(L)/Maximize(R)"));
     tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tl_bdr->setPixmap(minmax_pix);
     tl_bdr->setScaledContents(true);
     tl_bdr->setAlignment(Qt::AlignCenter);
     layout->addWidget(tl_bdr, 0, 0);
     // top right border (icon)
-    tr_bdr = new Border(); // no this to show tooltip
+    tr_bdr = new Border(this);
     tr_bdr->setToolTip(tr("Close"));
     tr_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tr_bdr->setPixmap(close_pix);

@@ -58,9 +58,8 @@ void Trashdialog::init()
     dir_model->setIconProvider(prov);
     tree_view = new QTreeView();
     tree_view->setModel(dir_model);
-    
+    tree_view->setSortingEnabled(true);
     trash_path = QDir::homePath() + "/.local/share"; // search in default path directory
-          
     line_path->setText(trash_path + "/Trash/files");
     tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
     QHBoxLayout *button_layout = new QHBoxLayout();
@@ -155,7 +154,7 @@ void Trashdialog::restore_pressed()
 
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("restored in") + " " "<b>" + restore_path + "</b>");
+        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("restored in") + " " + "<b>" + restore_path + "</b>");
         msg.set_icon("Information");
         msg.exec();
     }

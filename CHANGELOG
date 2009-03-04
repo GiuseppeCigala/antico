@@ -46,6 +46,7 @@ CHANGELOG
 27/02/09: add "path pointers" on Filedialog/Manager - file/dir removed from Filedialog on Trash.
 01/03/09: new Manager layout - right mouse but. on Header for frame max/min.
 03/03/09: Deskfolder/file/app selection with rubberband for deletion.
+04/03/09: add Cut/Copy/Paste on Filedialog.
 
 ***********
 TO DO

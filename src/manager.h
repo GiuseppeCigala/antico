@@ -111,6 +111,9 @@ private:
     QLabel *app_link_pix;
     QLabel *delete_link_pix;
     QLabel *delete_file_pix;
+    QLabel *cut_file_pix;
+    QLabel *copy_file_pix;
+    QLabel *paste_file_pix;
     QLabel *close_dock_pix;
     QLabel *add_to_sys_pix;
     QLabel *open_with_pix;
@@ -160,6 +163,9 @@ private:
     QString app_link_pix_path;
     QString delete_link_pix_path;
     QString delete_file_pix_path;
+    QString cut_file_pix_path;
+    QString copy_file_pix_path;
+    QString paste_file_pix_path;
     QString close_dock_pix_path;
     QString add_to_sys_pix_path;
     QString open_with_pix_path;

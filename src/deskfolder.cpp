@@ -13,10 +13,10 @@ Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_
     file_dialog = dial;
     cat_menu = menu;
     read_settings();
-    init();
     dir_name = dir_nm;
     dir_path = dir_pth;
     geom = geo;
+    init();
     show();
 }
 

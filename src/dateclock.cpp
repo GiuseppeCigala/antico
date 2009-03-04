@@ -59,7 +59,7 @@ void Dateclock::paintEvent(QPaintEvent *)
     int time_h = time_fm.height();
     time_font.setPixelSize(height()*8/time_h);
     painter.setFont(time_font);
-    painter.drawText(0, 2, width(), height()/2, Qt::AlignCenter, string_time); //clock
+    painter.drawText(0, 4, width(), height()/2, Qt::AlignCenter, string_time); //clock
     painter.setPen(QColor(date_col)); //date color
     QFont date_font (QApplication::font().family(), 12);
     QFontMetrics date_fm(date_font);

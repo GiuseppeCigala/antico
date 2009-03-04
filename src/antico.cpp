@@ -466,6 +466,12 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
+    case VisibilityNotify:
+        qDebug() << "[VisibilityNotify]";
+
+        return false;
+        break;
+
         /////////////////// OTHER EVENTS ///////////////////
     case ButtonPress:
         qDebug() << "[ButtonPress]";
@@ -508,8 +514,8 @@ bool Antico::x11EventFilter(XEvent *event)
     case Expose:
         qDebug() << "[Expose]";
         /*
-                if (event->xexpose.window == dock->winId()) // don't cover the dockbar by other apps
-                    XRaiseWindow(QX11Info::display(), event->xbutton.window);
+        if (event->xexpose.window == dock->winId()) // don't cover the dockbar by other apps
+           XRaiseWindow(QX11Info::display(), event->xexpose.window);
         */
         return false;
         break;
@@ -990,6 +996,9 @@ void Antico::set_settings()
         style->setValue("app_link_pix", "app_link.png");
         style->setValue("delete_link_pix", "delete_link.png");
         style->setValue("delete_file_pix", "delete_file.png");
+        style->setValue("cut_file_pix", "cut_file.png");
+        style->setValue("copy_file_pix", "copy_file.png");
+        style->setValue("paste_file_pix", "paste_file.png");
         style->setValue("close_dock_pix", "close_dock.png");
         style->setValue("add_to_sys_pix", "add_to_sys.png");
         style->setValue("open_with_pix", "open_with.png");

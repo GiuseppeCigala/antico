@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 {
     Antico a(argc, argv);
     XSelectInput(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
-                 KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask |
+                 KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask | VisibilityChangeMask |
                  ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
     XClearWindow(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()));
     XSync(QX11Info::display(), FALSE);

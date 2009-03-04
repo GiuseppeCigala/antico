@@ -39,11 +39,19 @@ Filedialog::~Filedialog()
     delete prov;
     delete &menu_list;
     delete &delete_file_pix;
+    delete &cut_file_pix;
+    delete &copy_file_pix;
+    delete &paste_file_pix;
     delete &open_with_pix;
     delete &root_item;
     delete &bin_item;
     delete &home_item;
     delete &path_widget;
+    delete &command;
+    delete &source_path;
+    delete &cut_act;
+    delete &copy_act;
+    delete &paste_act;
 }
 
 void Filedialog::read_settings()
@@ -58,6 +66,9 @@ void Filedialog::read_settings()
     style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Other");
     delete_file_pix = stl_path + style->value("delete_file_pix").toString();
+    cut_file_pix = stl_path + style->value("cut_file_pix").toString();
+    copy_file_pix = stl_path + style->value("copy_file_pix").toString();
+    paste_file_pix = stl_path + style->value("paste_file_pix").toString();
     open_with_pix = stl_path + style->value("open_with_pix").toString();
     style->endGroup(); //Other
     style->beginGroup("Message");
@@ -101,6 +112,7 @@ void Filedialog::init()
     tree_view = new QTreeView(this);
     tree_view->setModel(dir_model);
     tree_view->setDragEnabled(true);
+    tree_view->setSortingEnabled(true);
     hor_layout->addWidget(preview_label);
     hor_layout->addWidget(line_path);
     button_box = new QDialogButtonBox(this);
@@ -157,8 +169,27 @@ void Filedialog::set_category_menu()
         open_menu->addMenu(menu_list.at(i));
     }
 
-    QAction *del_file = main_menu->addAction(QIcon(delete_file_pix), tr("Delete"));
-    connect(del_file, SIGNAL(triggered()), this, SLOT(del_file()));
+    QAction *del_act = main_menu->addAction(QIcon(delete_file_pix), tr("Delete"));
+    cut_act = main_menu->addAction(QIcon(cut_file_pix), tr("Cut..."));
+    copy_act = main_menu->addAction(QIcon(copy_file_pix), tr("Copy..."));
+    paste_act = main_menu->addAction(QIcon(paste_file_pix), tr("Paste"));
+
+    cut_act->setEnabled(true);
+    copy_act->setEnabled(true);
+    paste_act->setEnabled(false);
+
+    connect(main_menu, SIGNAL(aboutToHide()), this, SLOT(reset_actions()));
+    connect(del_act, SIGNAL(triggered()), this, SLOT(del_file()));
+    connect(cut_act, SIGNAL(triggered()), this, SLOT(cut_file()));
+    connect(copy_act, SIGNAL(triggered()), this, SLOT(copy_file()));
+    connect(paste_act, SIGNAL(triggered()), this, SLOT(paste_file()));
+}
+
+void Filedialog::reset_actions() // reset copy/paste action buttons
+{
+    cut_act->setEnabled(true);
+    copy_act->setEnabled(true);
+    paste_act->setEnabled(false);
 }
 
 void Filedialog::set_type(const QString &text, const QString &button_type) // set filedialog type
@@ -185,7 +216,7 @@ void Filedialog::del_file()
     QString path = get_selected_path();
 
     trash_path = QDir::homePath() + "/.local/share"; // search in default path directory
- 
+
     if (dir_model->isDir(selection)) // test if is a directory
     {
         // create the .trashinfo file
@@ -201,11 +232,11 @@ void Filedialog::del_file()
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the directory
         {
-            dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+            dir_model->refresh(); // update the TreeView
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
-            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted and moved in") + " " + trash_path + "/Trash/files/");
+            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted and moved in") + " " + "<b>" + trash_path + "/Trash/files/" + "</b>");
             msg.set_icon("Information");
             msg.exec();
         }
@@ -225,7 +256,7 @@ void Filedialog::del_file()
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the file
         {
-            dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+            dir_model->refresh(); // update the TreeView
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -236,12 +267,85 @@ void Filedialog::del_file()
     }
 }
 
+void Filedialog::cut_file()
+{
+    QModelIndex selection = tree_view->currentIndex();
+    QString name = get_selected_name();
+    QString path = get_selected_path();
+
+    if (dir_model->isDir(selection)) // test if is a directory
+        source_path = path;
+    else // is a file
+        source_path = path + name;
+        
+    command = "/bin/mv"; // the same for file or directory
+    
+    cut_act->setEnabled(false);
+    copy_act->setEnabled(false);
+    paste_act->setEnabled(true);
+}
+
+void Filedialog::copy_file()
+{
+    QModelIndex selection = tree_view->currentIndex();
+    QString name = get_selected_name();
+    QString path = get_selected_path();
+
+    if (dir_model->isDir(selection)) // test if is a directory
+    {
+        command = "/bin/cp -R";
+        source_path = path; // add source
+    }
+    else // is a file
+    {
+        command = "/bin/cp";
+        source_path = path + name; // add source
+    }
+
+    cut_act->setEnabled(false);
+    copy_act->setEnabled(false);
+    paste_act->setEnabled(true);
+}
+
+void Filedialog::paste_file()
+{
+    QModelIndex selection = tree_view->currentIndex();
+    QString name = get_selected_name();
+    QString path = get_selected_path();
+
+    if (dir_model->isDir(selection)) // test if is a directory
+    {
+        QString destination_path = path + "/";
+
+        command.append(" ").append(source_path).append(" ").append(destination_path); // add source + destination to command
+        
+        qDebug() << "Paste command:" << command;
+
+        if (QProcess::startDetached(command))
+        {
+            dir_model->refresh(); // update the TreeView
+
+            Msgbox msg;
+            msg.set_header(tr("INFORMATION"));
+            msg.set_info("<b>" + source_path + "</b>" + " " + tr("pasted in") + " " + "<b>" + destination_path + "</b>");
+            msg.set_icon("Information");
+            msg.exec();
+        }
+
+        source_path.clear();
+        command.clear();
+        cut_act->setEnabled(true);
+        copy_act->setEnabled(true);
+        paste_act->setEnabled(false);
+    }
+}
+
 void Filedialog::set_path(const QString &pth) // for folder navigation from deskfolder
 {
     tree_view->setRootIndex(dir_model->index(pth));
     tree_view->collapseAll();
     line_path->setText(pth);
-    dir_model->refresh(dir_model->index(pth)); // update the TreeView
+    dir_model->refresh(); // update the TreeView
 }
 
 void Filedialog::show_path(const QModelIndex &index)
@@ -377,10 +481,13 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 {
-    if (tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos())
-            && cat_menu != NULL)
+    if (tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos()) && cat_menu != NULL)
     {
-        cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
+        if (dir_model->isDir(tree_view->currentIndex()))
+            cat_menu->set_cmd_arguments(get_selected_path()); // set the dir path as argument
+        else
+            cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
+
         main_menu->exec(event->globalPos());
     }
 }

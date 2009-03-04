@@ -50,6 +50,10 @@ public slots:
     void show_path(const QModelIndex &);
     void show_preview(const QModelIndex &);
     void del_file();
+    void cut_file();
+    void copy_file();
+    void paste_file();
+    void reset_actions();
     void show_hidden(bool);
     void path_completer();
     void update_tree(const QModelIndex &);
@@ -64,6 +68,9 @@ private:
     QMenu *main_menu;
     QMenu *open_menu;
     QString delete_file_pix;
+    QString cut_file_pix;
+    QString copy_file_pix;
+    QString paste_file_pix;
     QString open_with_pix;
     QString ok_button_pix_path;
     QString close_button_pix_path;
@@ -85,6 +92,11 @@ private:
     QListWidgetItem *home_item;
     QListWidget *path_widget;
     QString trash_path;
+    QString command;
+    QString source_path;
+    QAction *cut_act;
+    QAction *copy_act;
+    QAction *paste_act;
     Categorymenu *cat_menu;
     Fileicon *prov;
     QList <QMenu *> menu_list;
