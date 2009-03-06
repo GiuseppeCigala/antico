@@ -53,8 +53,7 @@ void Deskapp::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
-    painter.setPen(d_app_col);
-    
+         
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
@@ -69,6 +68,12 @@ void Deskapp::paintEvent(QPaintEvent *)
     }
     
     QString name = QApplication::fontMetrics().elidedText(app_name, Qt::ElideRight, 90); // if app_name is too long, add ... at the end
+   
+    painter.setOpacity(0.5);
+    painter.setPen(Qt::black);
+    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskapp name
+    painter.setOpacity(1);
+    painter.setPen(d_app_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskapp name
 }
 

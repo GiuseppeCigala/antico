@@ -46,7 +46,7 @@ void Deskfile::init()
     {
         open_menu->addMenu(menu_list.at(i));
     }
-    
+
     delete_file = main_menu->addAction(QIcon(delete_link_pix), tr("Delete link"));
     connect(delete_file, SIGNAL(triggered()), this, SLOT(del_file()));
 }
@@ -89,8 +89,14 @@ void Deskfile::paintEvent(QPaintEvent *)
     {
         painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
     }
-    
+
     QString name = QApplication::fontMetrics().elidedText(file_name, Qt::ElideRight, 90); // if file_name is too long, add ... at the end
+
+    painter.setOpacity(0.5);
+    painter.setPen(Qt::black);
+    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskfile name
+    painter.setOpacity(1);
+    painter.setPen(d_file_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfile name
 }
 

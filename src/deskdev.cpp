@@ -59,16 +59,16 @@ void Deskdev::read_settings()
 }
 
 void Deskdev::init()
-{   
+{
     if (device_type == "disk") // select the right pixmap (cdrom-disk)
         dev_pix = QPixmap(d_disk_pix);
     else // is cdrom
         dev_pix = QPixmap(d_cdrom_pix);
-        
+
     main_menu = new QMenu(this);
     // show the Category apps list for open the device
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
-    
+
     QList <QMenu *> menu_list = cat_menu->get_menus();
     for (int i = 0; i <  menu_list.size(); ++i)
     {
@@ -82,7 +82,7 @@ void Deskdev::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
     painter.setPen(d_dev_col);
-    
+
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
@@ -91,8 +91,14 @@ void Deskdev::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
     }
-   
+
     QString name = QApplication::fontMetrics().elidedText(device_name, Qt::ElideRight, 90); // if device_name is too long, add ... at the end
+
+    painter.setOpacity(0.5);
+    painter.setPen(Qt::black);
+    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskdev name
+    painter.setOpacity(1);
+    painter.setPen(d_dev_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskdev name
 }
 

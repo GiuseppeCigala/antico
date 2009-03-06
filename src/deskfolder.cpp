@@ -97,6 +97,12 @@ void Deskfolder::paintEvent(QPaintEvent *)
         painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
     }
     QString name = QApplication::fontMetrics().elidedText(dir_name, Qt::ElideRight, 90); // if dir_name is too long, add ... at the end
+
+    painter.setOpacity(0.5);
+    painter.setPen(Qt::black);
+    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskfolder name
+    painter.setOpacity(1);
+    painter.setPen(d_folder_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfolder name
 }
 
