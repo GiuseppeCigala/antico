@@ -180,7 +180,7 @@
 <context>
     <name>Deskapp</name>
     <message>
-        <location filename="../src/deskapp.cpp" line="86"/>
+        <location filename="../src/deskapp.cpp" line="92"/>
         <source>Delete link</source>
         <translation>Usuń odnośnik</translation>
     </message>
@@ -198,7 +198,7 @@
         <translation>Otwórz w</translation>
     </message>
     <message>
-        <location filename="../src/deskdev.cpp" line="124"/>
+        <location filename="../src/deskdev.cpp" line="130"/>
         <source>Device contents:</source>
         <translation>Zawartość nośnika:</translation>
     </message>
@@ -229,7 +229,7 @@
         <translation>Usuń odnośnik</translation>
     </message>
     <message>
-        <location filename="../src/deskfolder.cpp" line="159"/>
+        <location filename="../src/deskfolder.cpp" line="165"/>
         <source>Folder contents:</source>
         <translation>Zawartość folderu:</translation>
     </message>
@@ -460,7 +460,7 @@
         <translation>Dźwięk i Wideo</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="480"/>
+        <location filename="../src/manager.cpp" line="483"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
@@ -480,7 +480,7 @@
         <translation>Kategoria/Aplikacje</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="481"/>
+        <location filename="../src/manager.cpp" line="484"/>
         <source>Remove</source>
         <translation>Usuń</translation>
     </message>
@@ -490,27 +490,27 @@
         <translation>Uruchom przy starcie</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="501"/>
+        <location filename="../src/manager.cpp" line="505"/>
         <source>Style</source>
         <translation>Styl</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="509"/>
+        <location filename="../src/manager.cpp" line="513"/>
         <source>Actual style:</source>
         <translation>Aktualny styl:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="548"/>
+        <location filename="../src/manager.cpp" line="552"/>
         <source>Top border height:</source>
         <translation>Grubość górnej ramki:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="549"/>
+        <location filename="../src/manager.cpp" line="553"/>
         <source>Lateral border width:</source>
         <translation>Grubość poprzecznej ramki:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="550"/>
+        <location filename="../src/manager.cpp" line="554"/>
         <source>Bottom border height:</source>
         <translation>Grubość dolnej ramki:</translation>
     </message>
@@ -525,7 +525,7 @@
         <translation type="obsolete">Ikona nieaktywnego nagłówka okna:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="652"/>
+        <location filename="../src/manager.cpp" line="656"/>
         <source>Title color:</source>
         <translation>Kolor tytułu okna:</translation>
     </message>
@@ -540,17 +540,17 @@
         <translation type="obsolete">Ikona zamykania:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="616"/>
+        <location filename="../src/manager.cpp" line="620"/>
         <source>Height:</source>
         <translation>Wysokość:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="800"/>
+        <location filename="../src/manager.cpp" line="804"/>
         <source>Pixmap:</source>
         <translation>Ikona:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="804"/>
+        <location filename="../src/manager.cpp" line="808"/>
         <source>Name color:</source>
         <translation>Kolor nazwy:</translation>
     </message>
@@ -565,12 +565,12 @@
         <translation type="obsolete">Ikona CD-ROMu:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="685"/>
+        <location filename="../src/manager.cpp" line="689"/>
         <source>Date color:</source>
         <translation>Kolor daty:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="686"/>
+        <location filename="../src/manager.cpp" line="690"/>
         <source>Clock color:</source>
         <translation>Kolor zegara:</translation>
     </message>
@@ -710,62 +710,62 @@
         <translation type="obsolete">Ustawienia docka</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="644"/>
+        <location filename="../src/manager.cpp" line="648"/>
         <source>Dockbar icon</source>
         <translation>Ikona docka</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="825"/>
+        <location filename="../src/manager.cpp" line="829"/>
         <source>Desktop wallpaper</source>
         <translation>Tapeta pulpitu</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="713"/>
+        <location filename="../src/manager.cpp" line="717"/>
         <source>Desktop folder</source>
         <translation>Folder na pulpicie</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="736"/>
+        <location filename="../src/manager.cpp" line="740"/>
         <source>Desktop file</source>
         <translation>Plik na pulpicie</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="750"/>
+        <location filename="../src/manager.cpp" line="754"/>
         <source>Desktop application</source>
         <translation>Aplikacja na pulpicie</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="764"/>
+        <location filename="../src/manager.cpp" line="768"/>
         <source>Desktop device</source>
         <translation>Nośnik na pulpicie</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="667"/>
+        <location filename="../src/manager.cpp" line="671"/>
         <source>System Tray icon</source>
         <translation>Ikona tacki systemowej</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="681"/>
+        <location filename="../src/manager.cpp" line="685"/>
         <source>Clock/Date</source>
         <translation>Zegar/Data</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="836"/>
+        <location filename="../src/manager.cpp" line="840"/>
         <source>Launcher</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1068"/>
+        <location filename="../src/manager.cpp" line="1072"/>
         <source>Other</source>
         <translation>Inne</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1386"/>
+        <location filename="../src/manager.cpp" line="1400"/>
         <source>Select the style</source>
         <translation>Wybierz styl</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1412"/>
+        <location filename="../src/manager.cpp" line="1426"/>
         <source>Select the pixmap</source>
         <translation>Wybierz ikonę</translation>
     </message>
@@ -775,7 +775,7 @@
         <translation type="obsolete">&lt;b&gt;Ustawienia stylów Antico zaktualizowane&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1668"/>
+        <location filename="../src/manager.cpp" line="1682"/>
         <source>To apply the modify, select &lt;b&gt;Refresh WM&lt;/b&gt; on Launcher menu</source>
         <translation>Żeby zapisać zmiany, wybierz &lt;b&gt;Odśwież menedżer okien&lt;/b&gt; z menu Launchera</translation>
     </message>
@@ -785,7 +785,7 @@
         <translation type="obsolete">&lt;b&gt;Aplikacja dodana&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1602"/>
+        <location filename="../src/manager.cpp" line="1616"/>
         <source>Add application to run at startup:</source>
         <translation>Dodaj aplikację do autostartu:</translation>
     </message>
@@ -805,62 +805,62 @@
         <translation type="obsolete">&lt;b&gt;Aplikacjca usunięta&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="544"/>
+        <location filename="../src/manager.cpp" line="548"/>
         <source>Frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="612"/>
+        <location filename="../src/manager.cpp" line="616"/>
         <source>Dockbar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="527"/>
+        <location filename="../src/manager.cpp" line="531"/>
         <source>Desktop</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="529"/>
+        <location filename="../src/manager.cpp" line="533"/>
         <source>Wallpaper</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="913"/>
+        <location filename="../src/manager.cpp" line="917"/>
         <source>Categories</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1187"/>
+        <location filename="../src/manager.cpp" line="1191"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="982"/>
+        <location filename="../src/manager.cpp" line="986"/>
         <source>Message</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1186"/>
+        <location filename="../src/manager.cpp" line="1190"/>
         <source>Ok</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="619"/>
+        <location filename="../src/manager.cpp" line="623"/>
         <source>Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="624"/>
+        <location filename="../src/manager.cpp" line="628"/>
         <source>Position:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="626"/>
+        <location filename="../src/manager.cpp" line="630"/>
         <source>Bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="627"/>
+        <location filename="../src/manager.cpp" line="631"/>
         <source>Top</source>
         <translation type="unfinished"></translation>
     </message>
@@ -870,32 +870,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="796"/>
+        <location filename="../src/manager.cpp" line="800"/>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1559"/>
+        <location filename="../src/manager.cpp" line="1573"/>
         <source>ANTICO STYLE SETTINGS UPDATED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1592"/>
+        <location filename="../src/manager.cpp" line="1606"/>
         <source>APPLICATION ADDED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1624"/>
-        <source>APPLICATION ADDED TO RUN LIST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/manager.cpp" line="1643"/>
-        <source>APPLICATION REMOVED FROM RUN LIST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/manager.cpp" line="1667"/>
+        <location filename="../src/manager.cpp" line="1681"/>
         <source>APPLICATION REMOVED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -915,208 +905,223 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="551"/>
+        <location filename="../src/manager.cpp" line="555"/>
         <source>Header active:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="552"/>
+        <location filename="../src/manager.cpp" line="556"/>
         <source>Header inactive:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="554"/>
+        <location filename="../src/manager.cpp" line="558"/>
         <source>Minimize/Maximize:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="987"/>
+        <location filename="../src/manager.cpp" line="991"/>
         <source>Close:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="768"/>
+        <location filename="../src/manager.cpp" line="772"/>
         <source>Disk:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="772"/>
+        <location filename="../src/manager.cpp" line="776"/>
         <source>CDRom:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="840"/>
+        <location filename="../src/manager.cpp" line="844"/>
         <source>Launcher:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="841"/>
+        <location filename="../src/manager.cpp" line="845"/>
         <source>Quit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="842"/>
+        <location filename="../src/manager.cpp" line="846"/>
         <source>Shutdown:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="843"/>
+        <location filename="../src/manager.cpp" line="847"/>
         <source>Restart:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="844"/>
+        <location filename="../src/manager.cpp" line="848"/>
         <source>Refresh:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="845"/>
+        <location filename="../src/manager.cpp" line="849"/>
         <source>Run:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="846"/>
+        <location filename="../src/manager.cpp" line="850"/>
         <source>Show Desktop:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="847"/>
+        <location filename="../src/manager.cpp" line="851"/>
         <source>Manager:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="917"/>
+        <location filename="../src/manager.cpp" line="921"/>
         <source>Utility:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="918"/>
+        <location filename="../src/manager.cpp" line="922"/>
         <source>Office:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="919"/>
+        <location filename="../src/manager.cpp" line="923"/>
         <source>Network:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="920"/>
+        <location filename="../src/manager.cpp" line="924"/>
         <source>Graphics:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="921"/>
+        <location filename="../src/manager.cpp" line="925"/>
         <source>Development:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="922"/>
+        <location filename="../src/manager.cpp" line="926"/>
         <source>System:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="923"/>
+        <location filename="../src/manager.cpp" line="927"/>
         <source>AudioVideo:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="986"/>
+        <location filename="../src/manager.cpp" line="990"/>
         <source>Ok:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="988"/>
+        <location filename="../src/manager.cpp" line="992"/>
         <source>Add:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="989"/>
+        <location filename="../src/manager.cpp" line="993"/>
         <source>Remove:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="990"/>
+        <location filename="../src/manager.cpp" line="994"/>
         <source>Restore:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="991"/>
+        <location filename="../src/manager.cpp" line="995"/>
         <source>Question:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="992"/>
+        <location filename="../src/manager.cpp" line="996"/>
         <source>Information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="993"/>
+        <location filename="../src/manager.cpp" line="997"/>
         <source>Warning:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="994"/>
+        <location filename="../src/manager.cpp" line="998"/>
         <source>Critical:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1072"/>
+        <location filename="../src/manager.cpp" line="1076"/>
         <source>Application:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1073"/>
+        <location filename="../src/manager.cpp" line="1077"/>
         <source>Folder link:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1074"/>
+        <location filename="../src/manager.cpp" line="1078"/>
         <source>File link:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1075"/>
+        <location filename="../src/manager.cpp" line="1079"/>
         <source>Application link:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1076"/>
+        <location filename="../src/manager.cpp" line="1080"/>
         <source>Delete link:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1077"/>
+        <location filename="../src/manager.cpp" line="1081"/>
         <source>Delete file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1078"/>
+        <location filename="../src/manager.cpp" line="1082"/>
         <source>Cut file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1079"/>
+        <location filename="../src/manager.cpp" line="1083"/>
         <source>Copy file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1080"/>
+        <location filename="../src/manager.cpp" line="1084"/>
         <source>Paste file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1081"/>
+        <location filename="../src/manager.cpp" line="1085"/>
         <source>Close Dock:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1082"/>
+        <location filename="../src/manager.cpp" line="1086"/>
         <source>Add to SysTray:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1083"/>
+        <location filename="../src/manager.cpp" line="1087"/>
         <source>Open with:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="477"/>
+        <source>Application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="477"/>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="477"/>
+        <source>Arguments</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1184,7 +1189,7 @@
 <context>
     <name>Trash</name>
     <message>
-        <location filename="../src/trash.cpp" line="59"/>
+        <location filename="../src/trash.cpp" line="64"/>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>

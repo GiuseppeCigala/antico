@@ -50,6 +50,7 @@
 #include <QStringList>
 #include <QListWidget>
 #include <QTreeWidget>
+#include <QTableWidget>
 #include <QSignalMapper>
 #include <QFileDialog>
 #include <QColorDialog>

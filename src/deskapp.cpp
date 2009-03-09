@@ -53,6 +53,7 @@ void Deskapp::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
+    painter.setPen(d_app_col);
          
     if (zoom)
     {

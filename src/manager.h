@@ -35,7 +35,7 @@ public:
     void run_app_tab();
     void remove_app_tab();
     void update_remove_list();
-    void update_run_list();
+    void update_run_table();
 
 public slots:
     void ok_frame_pressed();
@@ -52,6 +52,7 @@ public slots:
     void select_style();
     void changeSection(QListWidgetItem *, QListWidgetItem *);
     void change_path(QListWidgetItem *, QListWidgetItem *);
+    void set_run_args(QTableWidgetItem *);
 
 protected:
     void mouseMoveEvent(QMouseEvent *);
@@ -186,7 +187,7 @@ private:
     QPoint mousepos;
     QTreeView *tree_view;
     QTreeWidget *app_tree;
-    QListWidget *run_list;
+    QTableWidget *run_table;
     QTabWidget *tab;
     QVBoxLayout *main_layout;
     QLineEdit *app_path;

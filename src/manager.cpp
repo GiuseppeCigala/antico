@@ -472,8 +472,11 @@ void Manager::run_app_tab()
     run_layout = new QVBoxLayout();
     run_frm->setLayout(run_layout);
 
-    run_list = new QListWidget(this);
-    update_run_list();
+    run_table = new QTableWidget(0, 3, this);
+    QStringList header;
+    header << tr("Application") << tr("Path") << tr("Arguments");
+    run_table->setHorizontalHeaderLabels(header);
+    update_run_table();
 
     QHBoxLayout *add_rem_layout = new QHBoxLayout();
     style->beginGroup("Message");
@@ -487,9 +490,10 @@ void Manager::run_app_tab()
     add_rem_layout->addWidget(rem_but);
     add_rem_layout->addWidget(close_but);
 
-    run_layout->addWidget(run_list);
+    run_layout->addWidget(run_table);
     run_layout->addLayout(add_rem_layout);
 
+    connect(run_table, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(set_run_args(QTableWidgetItem *))); // to set run args for application
     connect(add_but, SIGNAL(pressed()), this, SLOT(add_run_app_pressed()));
     connect(rem_but, SIGNAL(pressed()), this, SLOT(remove_run_app_pressed()));
     connect(close_but, SIGNAL(pressed()), this, SLOT(close_pressed()));
@@ -1355,6 +1359,16 @@ void Manager::change_path(QListWidgetItem *current, QListWidgetItem *previous)
     app_path->setText(current->text());
 }
 
+void Manager::set_run_args(QTableWidgetItem *item) // to set run arguments for startup applications
+{
+    QTableWidgetItem *name_item = run_table->item(item->row(), 0); // get the app name
+    antico->beginGroup("Startup");
+    antico->beginGroup(name_item->text()); // application name
+    antico->setValue("args", item->text()); // application args on startup
+    antico->endGroup(); // Name
+    antico->endGroup(); // Startup
+}
+
 void Manager::update_add_tree(const QModelIndex &index)
 {
     if (index.isValid())
@@ -1613,37 +1627,37 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
             qDebug() << "App:" << name << "Path:" << path;
             Appicon app_icon; // get application icon
             QString icon = app_icon.get_app_icon(name);
-            new QListWidgetItem(QIcon(icon), name, run_list); // add app on run list
+            QTableWidgetItem *name_item = new QTableWidgetItem(QIcon(icon), name); // add app name on run table
+            QTableWidgetItem *path_item = new QTableWidgetItem(path); // add app path on run table
+            QTableWidgetItem *args_item = new QTableWidgetItem(""); // add app args on run table
+            name_item->setFlags(Qt::ItemIsEnabled);
+            path_item->setFlags(Qt::ItemIsEnabled);
+            run_table->insertRow(run_table->rowCount());
+            run_table->setItem(run_table->rowCount()-1, 0, name_item);
+            run_table->setItem(run_table->rowCount()-1, 1, path_item);
+            run_table->setItem(run_table->rowCount()-1, 2, args_item);
             antico->beginGroup("Startup");
             antico->beginGroup(name);
             antico->setValue("name", name);
             antico->setValue("path", path);
+            antico->setValue("args", ""); // for future settings
             antico->endGroup(); // Name
             antico->endGroup(); // Startup
-            Msgbox msg;
-            msg.set_header(tr("APPLICATION ADDED TO RUN LIST"));
-            msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
-            msg.set_icon("Information");
-            msg.exec();
         }
     }
 }
 
 void Manager::remove_run_app_pressed() // remove selected app from "Run at startup" list
-{
-    if (run_list->currentItem() != NULL)
+{    
+    int current_row = run_table->currentRow();
+    
+    if(current_row >= 0) // if some row is selected
     {
-        QString app_name = run_list->currentItem()->text();
-        run_list->removeItemWidget(run_list->currentItem());
+        QTableWidgetItem *name_item = run_table->item(current_row, 0); // get the app name
         antico->beginGroup("Startup");
-        antico->remove(app_name); // remove the application
+        antico->remove(name_item->text()); // remove the application
         antico->endGroup(); // Startup
-        update_run_list();
-        Msgbox msg;
-        msg.set_header(tr("APPLICATION REMOVED FROM RUN LIST"));
-        msg.set_info(tr("To apply the modify, select <b>Refresh WM</b> on Launcher menu"));
-        msg.set_icon("Information");
-        msg.exec();
+        run_table->removeRow(current_row); // remove the application from run list
     }
 }
 
@@ -1700,18 +1714,29 @@ void Manager::update_remove_list() // update the Category/Apps list on remove ta
     antico->endGroup();// Launcher
 }
 
-void Manager::update_run_list() // update the "Run at startup" list
+void Manager::update_run_table() // update the "Run at startup" list
 {
-    run_list->clear();
+    run_table->clearContents();
+
     antico->beginGroup("Startup");
 
     for (int i = 0; i < antico->childGroups().size(); i++)
     {
         QString app_name = antico->childGroups().value(i);
         antico->beginGroup(app_name); // App group
+        QString path = antico->value("path").toString(); // App path
+        QString args = antico->value("args").toString(); // App arguments
         Appicon app_icon; // get application icon
         QString icon = app_icon.get_app_icon(app_name);
-        new QListWidgetItem(QIcon(icon), app_name, run_list); // add app on run list
+        QTableWidgetItem *name_item = new QTableWidgetItem(QIcon(icon), app_name); // add app on run table
+        QTableWidgetItem *path_item = new QTableWidgetItem(path); // add app path on run table
+        QTableWidgetItem *args_item = new QTableWidgetItem(args); // add app args on run table
+        name_item->setFlags(Qt::ItemIsEnabled);
+        path_item->setFlags(Qt::ItemIsEnabled);
+        run_table->insertRow(run_table->rowCount());
+        run_table->setItem(run_table->rowCount()-1, 0, name_item);
+        run_table->setItem(run_table->rowCount()-1, 1, path_item);
+        run_table->setItem(run_table->rowCount()-1, 2, args_item);
         antico->endGroup(); // Name
     }
     antico->endGroup(); // Startup

@@ -74,8 +74,8 @@ void Deskfile::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(d_file_col);
     painter.setWindow(-50, -50, 100, 50);
+    painter.setPen(d_file_col);
 
     if (zoom)
     {

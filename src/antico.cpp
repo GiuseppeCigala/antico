@@ -839,11 +839,13 @@ void Antico::run_app_at_startup()
 
     for (int i = 0; i < antico->childGroups().size(); i++)
     {
+        QStringList args;
         QString app_name = antico->childGroups().value(i);
         antico->beginGroup(app_name); // App group
         QString name = antico->value("name").toString();
         QString path = antico->value("path").toString();
-        QProcess::startDetached(path + name); // run the application
+        args << antico->value("args").toString();
+        QProcess::startDetached(path + name, args); // run the application + args
         antico->endGroup(); // Name
     }
     antico->endGroup(); // Startup
