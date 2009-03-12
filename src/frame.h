@@ -40,6 +40,8 @@ public:
     void withdraw();
     void map();
     void raise();
+    void reshape();
+    bool query_shape();
     void get_wm_name();
     void update_name();
     void get_wm_protocols();
@@ -123,6 +125,7 @@ private:
     int diff_border_w;          // width space between parent frame (qt) and client frame
     bool maximized;             // maximize window
     bool splash;                // splash window
+    bool shaped;                // nonrectangular window
     QString state;              // window state (Normal, Iconic, Withdrawn)
     bool prot_delete;           // client has delete WM protocol
     bool prot_take_focus;       // client has take focus WM protocol

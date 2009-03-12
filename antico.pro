@@ -57,6 +57,7 @@ QMAKE_CLEAN += antico
 TEMPLATE = app
 CONFIG += warn_on release
 QT += dbus
+LIBS += -lXcomposite -lXrender -lXdamage
 TRANSLATIONS = language/it_IT.ts \
  language/cs_CZ.ts \
  language/ru_RU.ts \

@@ -68,6 +68,8 @@ private:
     QStringList frame_type;
     QSettings *antico;
     QSettings *style;
+    int servershapes; // server supports shapes
+    int ShapeEventBase; // event base for shape extension
     // get WM protocols required by ICCCM
     Atom wm_protocols;
     Atom wm_delete_window;

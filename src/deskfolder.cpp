@@ -83,7 +83,7 @@ void Deskfolder::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
     painter.setPen(d_folder_col);
-
+      
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), pix, QRect(0, 0, pix.width(), pix.height()));// deskfolder pix

@@ -29,6 +29,9 @@ Antico::Antico(int &argc, char **argv) : QApplication(argc, argv)
     send_supported_hints();
     // run application from startup list
     run_app_at_startup();
+    // check if server supports nonrectangular windows
+    int err;
+    servershapes = XShapeQueryExtension(QX11Info::display(), &ShapeEventBase, &err);
 }
 
 Antico::~Antico()
@@ -357,7 +360,6 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_frames.value(event->xcrossing.window)) != NULL)
         {
-            frm->set_focus(event->xcrossing.time);
             qDebug() << "Enter in map frame:" << frm->winId();
         }
         else
@@ -439,6 +441,7 @@ bool Antico::x11EventFilter(XEvent *event)
             {
                 qDebug() << "---> _net_wm_user_time";
                 set_active_frame(frm); // activation of selected frame and unactivation of others
+                frm->set_focus(event->xproperty.time);
             }
             return true;
         }
@@ -488,11 +491,12 @@ bool Antico::x11EventFilter(XEvent *event)
         qDebug() << "[ClientMessage]";
         mev = &event->xclient;
 
-        if (mev->message_type == wm_change_state && event->xclient.format == 32 &&
-                event->xclient.data.l[0] == IconicState && (frm = mapping_clients.value(event->xclient.window)) != NULL)
+        if (mev->message_type == wm_change_state && event->xclient.format == 32 && event->xclient.data.l[0] == IconicState)
         {
             qDebug() << "---> wm_change_state: IconicState";
-            frm->iconify();
+            
+            if ((frm = mapping_clients.value(event->xclient.window)) != NULL)
+                frm->iconify();
         }
         return false;
         break;
@@ -521,6 +525,19 @@ bool Antico::x11EventFilter(XEvent *event)
         break;
 
     default:
+
+        if (servershapes && event->type == (ShapeEventBase + ShapeNotify))
+        {
+            qDebug() << "[ShapeNotify]";
+            XShapeEvent *sev = (XShapeEvent *)event;
+
+            if ((frm = mapping_clients.value(sev->window)) != NULL)
+            {
+                qDebug() << "ShapeNotify for frame:" << frm->winId() << " - Name:" << frm->cl_name() << " - Client:" << sev->window;
+                frm->reshape();
+                return true;
+            }
+        }
         return false;
         break;
     }
@@ -540,11 +557,19 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
 
     /////// MAP THE NEW CLIENT ////////
     qDebug() << "Mapping window type:" << frame_type.at(0);
-    frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
-    mapping_clients.insert(c_win, frm); // save the client winId/frame
-    mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
 
-    if (frame_type.at(0) != "Dialog") // no Dockbar for Dialog frames
+    if (frame_type.at(0) != "Splash")
+    {
+        frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
+        mapping_clients.insert(c_win, frm); // save the client winId/frame
+        mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
+    }
+    else
+    {
+        XMapRaised(QX11Info::display(), c_win);
+    }
+
+    if (frame_type.at(0) != "Dialog" && frame_type.at(0) != "Splash") // no Dockbar for Dialog/Splash frames
         dock->add(frm); // add frame to dockbar (pager)
 
     frame_type.clear(); // clear the window type list
@@ -609,14 +634,14 @@ void Antico::check_window_type(Window c_win) // chech the window type before map
             else
             {
                 /// DEFAULT WINDOW TYPE ///
-                frame_type << "Normal";
-                qDebug() << "Window type: UNKNOWN TYPE. SET AS NORMAL";
+                frame_type << "Splash";
+                qDebug() << "Window type: UNKNOWN TYPE. SET AS SPLASH";
             }
         }
     }
     /// IF PROPERY NOT SET ///
-    frame_type << "Normal";
-    qDebug() << "Window type: UNKNOWN TYPE. SET AS NORMAL";
+    frame_type << "Splash";
+    qDebug() << "Window type: UNKNOWN TYPE. SET AS SPLASH";
 
     XFree(data);
 }

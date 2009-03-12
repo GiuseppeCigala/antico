@@ -16,7 +16,7 @@ Frame::Frame(Window w, const QString &type, Dockbar *dkbr, QWidget *parent) : QF
     read_settings();
     init();
     setFrameStyle(QFrame::Panel|QFrame::Raised);
-    setAttribute(Qt::WA_AlwaysShowToolTips); 
+    setAttribute(Qt::WA_AlwaysShowToolTips);
     setAcceptDrops(true);
 }
 
@@ -76,6 +76,7 @@ void Frame::init()
     desk = QApplication::desktop();
     maximized = false;
     state = "NormalState";
+    shaped = false;
 
     XSelectInput(QX11Info::display(), winId(), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
                  KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask |
@@ -101,6 +102,10 @@ void Frame::init()
     get_wm_name();
     // set the frame geometry
     set_frame_geometry();
+
+    shaped = query_shape();
+    if (shaped)
+        reshape();
 
     XSetWindowBorderWidth(QX11Info::display(), c_win, 0);  //client
     XSetWindowBorderWidth(QX11Info::display(), winId(), 0);  //frame
@@ -301,7 +306,7 @@ void Frame::unmap()
     qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 
     if (frame_type != "Dialog")
-        dock->unmap(this);  // unmap Dockicon on Dockbar (pager)
+        dock->unmap(this);  // unmap Dockicon on Dockbar
 }
 
 void Frame::withdraw()
@@ -313,7 +318,7 @@ void Frame::withdraw()
     qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 
     if (frame_type != "Dialog")
-        dock->remove(this);  // remove Dockicon from Dockbar (pager)
+        dock->remove(this);  // remove Dockicon from Dockbar
 }
 
 void Frame::iconify()
@@ -325,7 +330,7 @@ void Frame::iconify()
         set_state(IconicState);
         state = "IconicState";
         qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-        dock->unmap(this);  // unmap Dockicon on Dockbar (pager)
+        dock->unmap(this);  // unmap Dockicon on Dockbar
     }
 }
 
@@ -336,7 +341,7 @@ void Frame::map()
     set_state(NormalState);
     state = "NormalState";
     qDebug() << "Frame mapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-    dock->map(this);  // map Dockicon on Dockbar (pager)
+    dock->map(this);  // map Dockicon on Dockbar
 }
 
 void Frame::raise()
@@ -348,7 +353,38 @@ void Frame::raise()
     qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 
     if (frame_type != "Dialog")
-        dock->add(this);  // add frame to dockbar (pager)
+        dock->add(this);  // add frame to Dockbar
+}
+
+bool Frame::query_shape()
+{
+    int ns, order;
+
+    XFree(XShapeGetRectangles(QX11Info::display(), c_win, ShapeBounding, &ns, &order));
+    XShapeSelectInput(QX11Info::display(), c_win, ShapeNotifyMask);
+
+    if (ns > 1)
+    {
+        qDebug() << "Frame is shape:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+        return true;
+    }
+    return false;
+}
+
+void Frame::reshape()
+{
+    qDebug() << "Frame reshaped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+
+    shaped = true;
+    XShapeCombineShape(QX11Info::display(), winId(), ShapeBounding, 0, bottom_bdr_height, c_win, ShapeBounding, ShapeSet);
+
+    XRectangle tr;
+
+    tr.x = 0;
+    tr.y = 0;
+    tr.width = width();
+    tr.height = bottom_bdr_height;
+    XShapeCombineRectangles(QX11Info::display(), winId(), ShapeBounding, 0, 0, &tr, 1, ShapeUnion, Unsorted);
 }
 
 void Frame::get_wm_name()  // get WM_NAME
@@ -544,7 +580,7 @@ void Frame::create_border()
     c_bdr = new Border(this);
     layout->addWidget(c_bdr, 1, 1);
     // top left border (icon)
-    tl_bdr = new Border(this); 
+    tl_bdr = new Border(this);
     tl_bdr->setToolTip(tr("Minimize(L)/Maximize(R)"));
     tl_bdr->setFixedSize(top_bdr_height, top_bdr_height);
     tl_bdr->setPixmap(minmax_pix);
