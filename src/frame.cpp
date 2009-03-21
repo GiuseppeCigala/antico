@@ -8,9 +8,10 @@
 
 ////////////////////////////////////////
 
-Frame::Frame(Window w, const QString &type, Dockbar *dkbr, QWidget *parent) : QFrame(parent)
+Frame::Frame(Window w, const QString &type, Dockbar *dock, Desk *desk, QWidget *parent) : QFrame(parent)
 {
-    dock = dkbr;
+    dockbar = dock;
+    desktop = desk;
     frame_type = type;
     c_win = w;
     read_settings();
@@ -23,6 +24,8 @@ Frame::Frame(Window w, const QString &type, Dockbar *dkbr, QWidget *parent) : QF
 Frame::~Frame()
 {
     delete desk;
+    delete dockbar;
+    delete desktop;
     delete &title_color;
     delete &lateral_bdr_width;
     delete &top_bdr_height;
@@ -304,33 +307,33 @@ void Frame::unmap()
     XUnmapWindow(QX11Info::display(), winId());
     XUnmapWindow(QX11Info::display(), c_win);
     qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-
-    if (frame_type != "Dialog")
-        dock->unmap(this);  // unmap Dockicon on Dockbar
 }
 
 void Frame::withdraw()
 {
+    if (frame_type != "Dialog")
+    {
+        dockbar->remove(this); // remove Dockicon from Dockbar
+        desktop->remove_deskicon(this);  // remove Application icon from Desktop
+    }
     XUnmapWindow(QX11Info::display(), winId());
     XUnmapWindow(QX11Info::display(), c_win);
     set_state(WithdrawnState);
     state = "WithdrawnState";
     qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-
-    if (frame_type != "Dialog")
-        dock->remove(this);  // remove Dockicon from Dockbar
 }
 
 void Frame::iconify()
 {
     if (frame_type != "Dialog") // no iconify on Dialog frames
     {
+        desktop->add_deskicon(this);  // add Application icon on Desktop
         XUnmapWindow(QX11Info::display(), winId());
         XUnmapWindow(QX11Info::display(), c_win);
         set_state(IconicState);
         state = "IconicState";
         qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-        dock->unmap(this);  // unmap Dockicon on Dockbar
+        dockbar->remove(this);  // remove Dockicon from Dockbar
     }
 }
 
@@ -341,19 +344,21 @@ void Frame::map()
     set_state(NormalState);
     state = "NormalState";
     qDebug() << "Frame mapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-    dock->map(this);  // map Dockicon on Dockbar
 }
 
 void Frame::raise()
 {
+    if (frame_type != "Dialog")
+    {
+        dockbar->add(this);  // add frame to Dockbar
+        desktop->remove_deskicon(this);  // remove Application icon from Desktop
+    }
+        
     XMapRaised(QX11Info::display(), winId());
     XMapRaised(QX11Info::display(), c_win);
     set_state(NormalState);
     state = "NormalState";
     qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
-
-    if (frame_type != "Dialog")
-        dock->add(this);  // add frame to Dockbar
 }
 
 bool Frame::query_shape()
@@ -436,7 +441,7 @@ void Frame::get_wm_name()  // get WM_NAME
 void Frame::update_name()
 {
     tm_bdr->update_name(wm_name); // update header name
-    dock->update_dockicon_name(wm_name, this); // update Dockicon name
+    dockbar->update_dockicon_name(wm_name, this); // update Dockicon name
 }
 
 void Frame::get_wm_protocols()
@@ -847,4 +852,5 @@ void Frame::dropEvent(QDropEvent *event)
     event->accept();
     qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data();
 }
+
 

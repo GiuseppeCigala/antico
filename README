@@ -1,6 +1,6 @@
 Antico is a Qt4/X11 Desktop/Window Manager.
 The goal is to create a Window/Desktop manager simple and fast. All parameters must be configured from few files, avoiding unnecessary complications, following the K.I.S.S. philosophy.
-The whole project should be based only on Qt4 libraries, without any other external dependencies (e.g. kdelibs ...). 
+The whole project is be based only on Qt4 libraries, without any other external dependencies (e.g. kdelibs ...). 
 
 ***********
 FEATURES

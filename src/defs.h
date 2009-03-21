@@ -21,6 +21,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QMouseEvent>
+#include <QWheelEvent>
 #include <QResizeEvent>
 #include <QHash>
 #include <QSizePolicy>

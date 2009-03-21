@@ -345,7 +345,7 @@ void Filedialog::set_path(const QString &pth) // for folder navigation from desk
     tree_view->setRootIndex(dir_model->index(pth));
     tree_view->collapseAll();
     line_path->setText(pth);
-    dir_model->refresh(); // update the TreeView
+   // dir_model->refresh(); // update the TreeView
 }
 
 void Filedialog::show_path(const QModelIndex &index)

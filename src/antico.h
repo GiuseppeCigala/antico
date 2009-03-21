@@ -37,7 +37,7 @@ protected:
 public:
     Antico(int &argc, char **argv);
     ~Antico();
-    void create_frame(Window, Dockbar *);
+    void create_frame(Window, Dockbar *, Desk *);
     void raise_next_frame();
     void set_active_frame(Frame *);
     void send_configurenotify(Frame *);

@@ -15,8 +15,10 @@
 #include "defs.h"
 #include "border.h"
 #include "header.h"
+#include "desk.h"
 #include "dockbar.h"
 
+class Desk;
 class Dockbar;
 class Header;
 
@@ -27,7 +29,7 @@ class Frame : public QFrame
     Q_OBJECT
 
 public:
-    Frame(Window, const QString &, Dockbar *, QWidget *parent=0);
+    Frame(Window, const QString &, Dockbar *, Desk *, QWidget *parent=0);
     ~Frame();
     void init();
     void update_style();
@@ -95,7 +97,8 @@ public:
 private:
     QDesktopWidget *desk;       // root window
     WId c_win;                  // client window
-    Dockbar *dock;              // dockbar
+    Desk *desktop;              // desktop
+    Dockbar *dockbar;           // dockbar
     QString frame_type;         // frame type (Normal, Splash, Dialog, Desktop..)
     QString app_icon;           // default header icon used if no icon is find
     QPoint mousepos;            // mouse position at button press
@@ -123,6 +126,8 @@ private:
     QColor title_color;         // frame title color
     int diff_border_h;          // height space between parent frame (qt) and client frame
     int diff_border_w;          // width space between parent frame (qt) and client frame
+    int dock_height;            // dockbar height
+    int dock_position;          // dockbar position (top, bottom)
     bool maximized;             // maximize window
     bool splash;                // splash window
     bool shaped;                // nonrectangular window
@@ -130,8 +135,6 @@ private:
     bool prot_delete;           // client has delete WM protocol
     bool prot_take_focus;       // client has take focus WM protocol
     QPixmap wicon;              // window icon
-    int dock_height;            // dockbar height
-    int dock_position;          // dockbar position (top, bottom)
     QString wm_name;            // WM_NAME property or res_name
     QString res_name;           // ClassHint
     QString res_class;          // ClassHint
@@ -169,6 +172,5 @@ public slots:
     void dragEnterEvent(QDragEnterEvent *);
     void dragMoveEvent(QDragMoveEvent *);
     void dropEvent(QDropEvent *);
-
 };
 #endif

@@ -214,7 +214,7 @@ bool Antico::x11EventFilter(XEvent *event)
         else
         {
             qDebug() << "--> Map new Client:" << event->xmaprequest.window;
-            create_frame(event->xmaprequest.window, dock); // create new Frame for Client
+            create_frame(event->xmaprequest.window, dock, dsk); // create new Frame for Client
         }
         return false;
         break;
@@ -346,7 +346,7 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "--> Destroy frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xdestroywindow.window;
             mapping_clients.remove(event->xdestroywindow.window);
             mapping_frames.remove(frm->winId());
-            dock->remove_dockicon(frm->winId()); // remove eventually Dockicon or Sysicon still mapped
+            dsk->remove_deskicon(frm->winId()); // remove eventually Deskicon still mapped
             return true;
         }
         if (event->xdestroywindow.event != event->xdestroywindow.window)
@@ -481,7 +481,7 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_frames.value(event->xbutton.window)) != NULL) // get the frame from his winId
         {
-            qDebug() << "Button press for map frame:" << event->xbutton.window;
+            qDebug() << "Button press:" <<  event->xbutton.button << "for map frame:" << event->xbutton.window;
             set_active_frame(frm);
         }
         return false;
@@ -543,7 +543,7 @@ bool Antico::x11EventFilter(XEvent *event)
     }
 }
 
-void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame around the client app
+void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new frame around the client app
 {
     print_window_prop(c_win);
 
@@ -560,7 +560,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
 
     if (frame_type.at(0) != "Splash")
     {
-        frm = new Frame(c_win, frame_type.at(0), dock); // select always the first type in list (preferred)
+        frm = new Frame(c_win, frame_type.at(0), dock, desk); // select always the first type in list (preferred)
         mapping_clients.insert(c_win, frm); // save the client winId/frame
         mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
     }
@@ -570,8 +570,8 @@ void Antico::create_frame(Window c_win, Dockbar *dock) // create new frame aroun
     }
 
     if (frame_type.at(0) != "Dialog" && frame_type.at(0) != "Splash") // no Dockbar for Dialog/Splash frames
-        dock->add(frm); // add frame to dockbar (pager)
-
+        dock->add(frm); // add frame to dockbar
+        
     frame_type.clear(); // clear the window type list
 }
 

@@ -1,16 +1,16 @@
 ////////////////////////////////////////
-//  File      : dockbar.h             //
-//  Written by: g_cigala@virgilio.it  //
-//  Copyright : GPL                   //
+// File : dockbar.h                   //
+// Written by: g_cigala@virgilio.it   //
+// Copyright : GPL                    //
 ////////////////////////////////////////
-
+ 
 // create the dockbar on bottom of the screen
-
+ 
 ////////////////////////////////////////
-
+ 
 #ifndef DOCKBAR_H
 #define DOCKBAR_H
-
+ 
 #include "defs.h"
 #include "launcher.h"
 #include "systray.h"
@@ -18,7 +18,7 @@
 #include "dockapp.h"
 #include "dateclock.h"
 #include "filedialog.h"
-
+ 
 class Frame;
 class Dockapp;
 class Dockicon;
@@ -26,20 +26,18 @@ class Systray;
 class Antico;
 class Launcher;
 class Filedialog;
-
+ 
 ////////////////////////////////////////
-
+ 
 class Dockbar : public QLabel
 {
     Q_OBJECT
-
+ 
 public:
     Dockbar(Antico *, QWidget *parent=0);
     ~Dockbar();
     void add(Frame *);
     void remove(Frame *);
-    void unmap(Frame *);
-    void map(Frame *);
     void update_dockicon_size();
     void read_settings();
     void init();
@@ -53,12 +51,12 @@ public:
     {
         return sys;
     }
-
+ 
 public slots:
     void remove_dockicon(Dockicon *);
     void remove_dockapp(Dockapp *);
     void run_menu(QAction *);
-
+ 
 protected:
     void mousePressEvent(QMouseEvent *);
     void dragEnterEvent(QDragEnterEvent *);
@@ -73,7 +71,7 @@ private:
     QWidget *d_icon_widget;
     QHash<int, Dockicon *> dock_icons; // mapping Frame and Dockicon (key=frame win_id value=Dockicon)
     QList<Dockapp *> dock_apps;
-    int d_length; 	//dockicon lenght
+    int d_length;   //dockicon lenght
     int dock_height;
     int dock_width;
     int dock_position;
@@ -89,6 +87,6 @@ private:
     Dateclock *clk;
     Antico *app;
     Filedialog *file_dialog;
-
+ 
 };
 #endif

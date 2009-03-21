@@ -16,18 +16,22 @@
 #include "deskfile.h"
 #include "deskapp.h"
 #include "deskdev.h"
+#include "deskicon.h"
 #include "msgbox.h"
 #include "antico.h"
 #include "filedialog.h"
 #include "trash.h"
 #include "utils.h"
+#include "frame.h"
 
 class Antico;
 class Deskapp;
 class Deskdev;
 class Deskfile;
 class Deskfolder;
+class Deskicon;
 class Filedialog;
+class Frame;
 
 ////////////////////////////////////////
 
@@ -45,6 +49,11 @@ public:
     void create_desk_app(const QString &, const QString &, const QString &, const QPoint &, QWidget *);
     void create_desk_file(const QString &, const QString &, const QString &, const QPoint &, QWidget *);
     void create_desk_folder(const QString &, const QString &, const QRect &, const QPoint &, QWidget *);
+    void add_deskicon(Frame *);
+    void remove_deskicon(Frame *);
+    void remove_deskicon(Window);
+    void map_deskicon(Frame *);
+    void unmap_deskicon(Frame *);
     void update_style();
     void mount_device(const QString &, const QString &, const QString &, const QString &, const QString &);
     void unmount_device(const QString &);
@@ -54,6 +63,7 @@ public slots:
     void remove_deskfolder(Deskfolder *);
     void remove_deskfile(Deskfile *);
     void remove_deskapp(Deskapp *);
+    void remove_deskicon(Deskicon *);
     void device_added( const QString &);
     void device_removed(const QString &);
 
@@ -78,6 +88,7 @@ private:
     QList<Deskapp *> desk_apps;
     QList<Deskapp *> desk_apps_selected;
     QHash<QString, Deskdev *> desk_dev;
+    QHash<int, Deskicon *> desk_icons; // mapping Frame and Deskicon (key=frame win_id value=Deskicon)
     QDBusInterface *dbus_interface;
     QString wall_pix;
     QString folder_link_pix;
@@ -91,6 +102,7 @@ private:
     Deskfolder *d_folder;
     Deskfile *d_file;
     Deskapp *d_app;
+    Deskicon *d_icon;
     Appicon *app_icon;
     Trash *trsh;
     

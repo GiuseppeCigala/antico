@@ -41,6 +41,8 @@ Desk::~Desk()
     delete &desk_apps;
     delete &desk_apps_selected;
     delete &desk_dev;
+    delete d_icon;
+    delete &desk_icons;
 }
 
 void Desk::read_settings()
@@ -482,6 +484,45 @@ void Desk::remove_deskapp(Deskapp *d_app) // remove from "Delete link" right but
     desk_apps.removeOne(d_app);
     qDebug() << "Deskapp remove. Num. after deletion:" << desk_apps.size();
     d_app->close();
+}
+
+void Desk::add_deskicon(Frame *frm)
+{
+    if (! desk_icons.contains(frm->winId())) // if not already present
+    {
+        d_icon = new Deskicon(frm);
+        desk_icons.insert(frm->winId(), d_icon); // save the Frame winId/Dockicon
+        d_icon->move(frm->cl_x(), frm->cl_x());
+        qDebug() << "Deskicon added to Desktop. Frame:" << frm->winId();
+        connect(d_icon, SIGNAL(destroy_deskicon(Deskicon *)), this, SLOT(remove_deskicon(Deskicon *))); // delete deskicon
+    }
+}
+
+void Desk::remove_deskicon(Frame *frm)
+{
+    if (desk_icons.contains(frm->winId())) // remove Deskicon if present
+    {
+        Deskicon *d_icon = desk_icons.value(frm->winId());
+        remove_deskicon(d_icon);
+    }
+}
+
+void Desk::remove_deskicon(Deskicon *d_icon) // remove from "Close" right button mouse on Desktop
+{
+    desk_icons.remove(desk_icons.key(d_icon));
+    qDebug() << "Deskicon remove. Num. after deletion:" << desk_icons.size();
+    d_icon->close();
+}
+ 
+void Desk::remove_deskicon(Window win_id) //remove from "Close" cmd on Systray (_NET_SYSTEM_TRAY protocol) if Dockicon is still mapped
+{
+    if (desk_icons.contains(win_id))
+    {
+        Deskicon *d_icon = desk_icons.value(win_id);
+        desk_icons.remove(win_id);
+        qDebug() << "Deskicon remove from Systray cmd. Num. after deletion:" << desk_icons.size();
+        d_icon->close();
+    }
 }
 
 void Desk::update_style()

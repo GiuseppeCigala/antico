@@ -1,23 +1,22 @@
 ////////////////////////////////////////
-//  File      : dockicon.cpp          //
-//  Written by: g_cigala@virgilio.it  //
-//  Copyright : GPL                   //
+// File : dockicon.cpp                //
+// Written by: g_cigala@virgilio.it   //
+// Copyright : GPL                    //
 ////////////////////////////////////////
-
+ 
 #include "dockicon.h"
-
+ 
 ////////////////////////////////////////
-
+ 
 Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(parent)
 {
     frm = frame;
     title = frm->cl_name();
     sys = sys_tr;
     read_settings();
-    iconize = false;
     bdr_width = 1;
 }
-
+ 
 Dockicon::~Dockicon()
 {
     delete frm;
@@ -28,7 +27,7 @@ Dockicon::~Dockicon()
     delete &close_dock_pix;
     delete &add_to_sys_pix;
 }
-
+ 
 void Dockicon::read_settings()
 {
     // get style path
@@ -49,7 +48,7 @@ void Dockicon::read_settings()
     style->endGroup(); //Other
     pix = QPixmap(d_icon_pix);
 }
-
+ 
 void Dockicon::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -62,36 +61,12 @@ void Dockicon::paintEvent(QPaintEvent *)
     painter.drawPixmap(QRect(3, 3, height()-6, height()-6), frm->cl_icon(), QRect(0, 0, frm->cl_icon().width(), frm->cl_icon().height()));// dock icon
 }
 
-void Dockicon::set_state(QString state)
-{
-    if (state == "Normal")
-    {
-        iconize = false;
-        qDebug() << "Dockicon (change state):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
-    }
-    if (state == "Iconize")
-    {
-        iconize = true;
-        qDebug() << "Dockicon (change state):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
-    }
-}
-
 void Dockicon::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        if (iconize)
-        {
-            frm->raise();
-            iconize = false;
-            qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
-        }
-        else
-        {
-            frm->iconify();
-            iconize = true;
-            qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- Iconize:" << iconize;
-        }
+       frm->raise();
+       qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name();
     }
     if (event->button() == Qt::RightButton)
     {
@@ -102,21 +77,21 @@ void Dockicon::mousePressEvent(QMouseEvent *event)
         connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
     }
 }
-
+ 
 void Dockicon::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
     bdr_width = 2;
     update();
 }
-
+ 
 void Dockicon::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
     bdr_width = 1;
     update();
 }
-
+ 
 void Dockicon::run_menu(QAction *act)
 {
     if (act->text() == tr("Close"))
@@ -134,13 +109,13 @@ void Dockicon::run_menu(QAction *act)
         close();
     }
 }
-
+ 
 void Dockicon::update_name(const QString &name)
 {
     title = name;
     update();
 }
-
+ 
 void Dockicon::update_style()
 {
     read_settings();
