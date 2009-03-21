@@ -492,7 +492,7 @@ void Desk::add_deskicon(Frame *frm)
     {
         d_icon = new Deskicon(frm);
         desk_icons.insert(frm->winId(), d_icon); // save the Frame winId/Dockicon
-        d_icon->move(frm->cl_x(), frm->cl_x());
+        d_icon->move(frm->cl_x(), frm->cl_y());
         qDebug() << "Deskicon added to Desktop. Frame:" << frm->winId();
         connect(d_icon, SIGNAL(destroy_deskicon(Deskicon *)), this, SLOT(remove_deskicon(Deskicon *))); // delete deskicon
     }
