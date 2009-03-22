@@ -25,6 +25,8 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
     // add launcher to dockbar
     lchr = new Launcher(a, this);
     lchr->setFixedSize(dock_height-1, dock_height-1);
+    // for set category menu on dockbar
+    d_menu_widget = new QWidget(this);
     // for set dockapp on dockbar
     d_app_widget = new QWidget(this);
     // for set dockicon on dockbar
@@ -35,6 +37,12 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
     clk = new Dateclock(this);
     clk->setFixedSize(dock_height*2, dock_height-1);
  
+    menu_layout = new QHBoxLayout();
+    d_menu_widget->setLayout(menu_layout);
+    menu_layout->setAlignment(Qt::AlignLeft);
+    menu_layout->setContentsMargins(0, 0, 0, 0);
+    menu_layout->setSpacing(1);
+
     icon_layout = new QHBoxLayout();
     d_icon_widget->setLayout(icon_layout);
     icon_layout->setAlignment(Qt::AlignLeft);
@@ -48,11 +56,13 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
     app_layout->setSpacing(1);
  
     dock_layout->insertWidget(0, lchr);
-    dock_layout->insertWidget(1, d_app_widget, 1);
-    dock_layout->insertWidget(2, d_icon_widget, 6); // max stretch factor
-    dock_layout->insertWidget(3, sys, 3);
-    dock_layout->insertWidget(4, clk);
+    dock_layout->insertWidget(1, d_menu_widget, 1);
+    dock_layout->insertWidget(2, d_app_widget, 1);
+    dock_layout->insertWidget(3, d_icon_widget, 6); // max stretch factor
+    dock_layout->insertWidget(4, sys, 3);
+    dock_layout->insertWidget(5, clk);
  
+    set_dockmenu(); // at startup, restore category menu on dockbar
     set_dockapp(); // at startup, restore dockapps on dockbar
  
     show();
@@ -64,6 +74,8 @@ Dockbar::~Dockbar()
     delete icon_layout;
     delete d_icon;
     delete &dock_icons;
+    delete &dock_apps;
+    delete &dock_menus;
     delete &dock_pix;
     delete &dock_height;
     delete &dock_width;
@@ -244,6 +256,20 @@ void Dockbar::set_dockapp()
     antico->endGroup(); //Dockapp
 }
  
+void Dockbar::set_dockmenu()
+{ 
+    // add category menu on Dockbar
+    QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
+    for (int i = 0; i <  menu_list.size(); ++i)
+    {
+       Dockmenu *cat_menu = new Dockmenu(menu_list.at(i));
+       dock_menus << cat_menu; // save the category menu
+       cat_menu->setFixedSize(dock_height-2, dock_height-2);
+       qDebug() << "Add category menu on Dockbar:" << menu_list.at(i)->title() << menu_list.at(i)->icon();
+       menu_layout->addWidget(cat_menu);
+    }
+}
+    
 void Dockbar::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton)
@@ -330,6 +356,12 @@ void Dockbar::update_style()
     // update dockicons
     foreach(Dockicon *d_icon, dock_icons)
     d_icon->update_style();
+    // update category menus
+    foreach(Dockmenu *d_menu, dock_menus)
+    {
+        d_menu->update_style();
+        d_menu->setFixedSize(dock_height-2, dock_height-2);
+    }
     // update dockapps
     foreach(Dockapp *d_app, dock_apps)
     {

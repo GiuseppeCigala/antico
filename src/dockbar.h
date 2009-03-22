@@ -16,6 +16,7 @@
 #include "systray.h"
 #include "dockicon.h"
 #include "dockapp.h"
+#include "dockmenu.h"
 #include "dateclock.h"
 #include "filedialog.h"
  
@@ -47,6 +48,7 @@ public:
     void update_dockicon_name(const QString &, Frame *);
     void create_dock_app(const QString &, const QString &, QWidget *parent);
     void set_dockapp();
+    void set_dockmenu();
     Systray *system_tray() const
     {
         return sys;
@@ -67,10 +69,13 @@ private:
     QHBoxLayout *dock_layout;
     QHBoxLayout *icon_layout;
     QHBoxLayout *app_layout;
+    QHBoxLayout *menu_layout;
     QWidget *d_app_widget;
     QWidget *d_icon_widget;
+    QWidget *d_menu_widget;
     QHash<int, Dockicon *> dock_icons; // mapping Frame and Dockicon (key=frame win_id value=Dockicon)
     QList<Dockapp *> dock_apps;
+    QList<Dockmenu *> dock_menus;
     int d_length;   //dockicon lenght
     int dock_height;
     int dock_width;

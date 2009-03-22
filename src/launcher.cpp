@@ -62,7 +62,7 @@ void Launcher::init()
     QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
     for (int i = 0; i <  menu_list.size(); ++i)
     {
-        main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
+        // main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
     }
     main_menu->addSeparator();
     main_menu->addAction(manag);
@@ -124,12 +124,14 @@ void Launcher::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        QPoint p = mapToGlobal(pos());
+        QPoint p = mapToGlobal(QPoint(0, 0));
+        
         if (dock_position == 0) // 0 = bottom / 1 = top
             p.setY(p.y()-main_menu->sizeHint().height());
         else
             p.setY(p.y()+height());
-        main_menu->exec(p);
+            
+        main_menu->popup(p);
     }
 }
 

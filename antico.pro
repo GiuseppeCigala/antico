@@ -24,7 +24,8 @@ SOURCES = src/main.cpp \
  src/dockapp.cpp \
  src/trash.cpp \
  src/trashdialog.cpp \
- src/deskicon.cpp
+ src/deskicon.cpp \
+ src/dockmenu.cpp
 HEADERS = src/defs.h \
  src/antico.h \
  src/frame.h \
@@ -51,7 +52,8 @@ HEADERS = src/defs.h \
  src/dockapp.h \
  src/trash.h \
  src/trashdialog.h \
- src/deskicon.h
+ src/deskicon.h \
+ src/dockmenu.h
 OBJECTS_DIR += build
 MOC_DIR += build
 QMAKE_INCDIR += /usr/include

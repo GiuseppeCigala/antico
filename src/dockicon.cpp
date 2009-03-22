@@ -22,7 +22,6 @@ Dockicon::~Dockicon()
     delete frm;
     delete sys;
     delete &pix;
-    delete &d_icon_pix;
     delete &title_color;
     delete &close_dock_pix;
     delete &add_to_sys_pix;
@@ -31,15 +30,15 @@ Dockicon::~Dockicon()
 void Dockicon::read_settings()
 {
     // get style path
-    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Dockicon");
-    d_icon_pix = stl_path + style->value("d_icon_pix").toString();
+    QString d_icon_pix = stl_path + style->value("d_icon_pix").toString();
     title_color = style->value("title_color").value<QColor>();
     style->endGroup(); //Dockicon
     style->beginGroup("Other");
