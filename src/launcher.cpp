@@ -36,7 +36,7 @@ void Launcher::init()
 {
     main_menu = new QMenu(this);
     connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
-
+ 
     quit = new QAction(tr("Quit WM"), this);
     shutdown = new QAction(tr("Shutdown PC"), this);
     restart = new QAction(tr("Restart PC"), this);
@@ -44,26 +44,31 @@ void Launcher::init()
     run = new QAction(tr("Run..."), this);
     manag = new QAction(tr("Manager"), this);
     show_desk = new QAction(tr("Show Desktop"), this);
+       
     quit->setIcon(QIcon(quit_pix));
-    quit->setData("quit");
     shutdown->setIcon(QIcon(shutdown_pix));
-    shutdown->setData("shutdown");
     restart->setIcon(QIcon(restart_pix));
-    restart->setData("restart");
     refresh->setIcon(QIcon(refresh_pix));
-    refresh->setData("refresh");
-    show_desk->setIcon(QIcon(show_pix));
-    show_desk->setData("show");
     run->setIcon(QIcon(run_pix));
-    run->setData("run");
     manag->setIcon(QIcon(manager_pix));
+    show_desk->setIcon(QIcon(show_pix));
+    
+    quit->setData("quit");
+    shutdown->setData("shutdown");
+    restart->setData("restart");
+    refresh->setData("refresh");
+    run->setData("run");
     manag->setData("manager");
-    ////////////
-    QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
-    for (int i = 0; i <  menu_list.size(); ++i)
-    {
-        // main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
-    }
+    show_desk->setData("show");
+    
+    quit->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Q));
+    shutdown->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
+    restart->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
+    refresh->setShortcut(QKeySequence(Qt::ALT + Qt::Key_U));
+    run->setShortcut(QKeySequence(Qt::ALT + Qt::Key_F2));
+    manag->setShortcut(QKeySequence(Qt::ALT + Qt::Key_M));
+    show_desk->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D));
+      
     main_menu->addSeparator();
     main_menu->addAction(manag);
     main_menu->addAction(run);
@@ -159,6 +164,7 @@ void Launcher::update_style()
     run->setIcon(QIcon(run_pix));
     manag->setIcon(QIcon(manager_pix));
     app->get_category_menu()->update_menu(); // update .desktop/user menu entry
+    app->get_category_menu()->update_style(); // update category menu pixmap
 }
 
 

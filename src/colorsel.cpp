@@ -160,7 +160,7 @@ void Colorsel::paintValue()
     QRectF opRect(120, 165, 20, 15);
     painter.drawRect(opRect);
 
-    QFont valFont("SanSerif", 7, QFont::Bold);
+    QFont valFont("Sans Serif", 7, QFont::Bold);
     painter.setFont(valFont);
     painter.setPen(Qt::yellow);
 
@@ -188,7 +188,7 @@ void Colorsel::paintText()
     QRectF B(90, 15, 20, 15);
     QRectF A(120, 15, 20, 15);
     painter.setPen(QPen(Qt::white));
-    QFont labFont("Helvetica", 8, QFont::Normal);
+    QFont labFont("Sans Serif", 8, QFont::Normal);
     painter.setFont(labFont);
     painter.drawText(R, Qt::AlignCenter, "R");
     painter.drawText(G, Qt::AlignCenter, "G");

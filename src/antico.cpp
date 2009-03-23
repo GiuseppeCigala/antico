@@ -512,6 +512,41 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "Press [Alt+Tab] - Scroll active apps";
             raise_next_frame();
         }
+        if (sym == XK_F2 && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+F2] - Start Runner";
+            new Runner();
+        }
+        if (sym == XK_q && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+q] - Quit the WM";
+            wm_quit();
+        }
+        if (sym == XK_s && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+s] - Shutdown the PC";
+            wm_shutdown();
+        }
+        if (sym == XK_r && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+r] - Restart the PC";
+            wm_restart();
+        }
+        if (sym == XK_u && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+u] - Refresh the WM";
+            wm_refresh();
+        }
+        if (sym == XK_m && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+m] - Start Manager";
+            new Manager();
+        }
+        if (sym == XK_d && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+d] - Show Desktop";
+            show_desktop();
+        }
         return false;
         break;
 

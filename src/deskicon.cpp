@@ -11,7 +11,7 @@
 Deskicon::Deskicon(Frame *frame, QWidget *parent) : QLabel(parent)
 {
     frm = frame;
-    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     grab_pix = QPixmap::grabWindow(frm->winId(), 0, 0, frm->width(), frm->height()).scaled(frm->width()/4, frm->height()/4, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     setPixmap(grab_pix);
     setToolTip(frm->cl_name());

@@ -35,7 +35,9 @@ public:
 
 public slots:
     void run_command(QAction *);
-
+    
+signals:
+ 
 protected:
     void mousePressEvent(QMouseEvent *);
     void enterEvent(QEvent *);

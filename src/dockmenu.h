@@ -43,7 +43,6 @@ private:
     QPixmap cat_pix;
     int bdr_width;
     int dock_position;
-    int dock_height;
     bool zoom;
 };
  

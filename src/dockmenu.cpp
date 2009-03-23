@@ -19,8 +19,14 @@ Dockmenu::Dockmenu(QMenu *menu, QWidget *parent) : QWidget(parent)
 
 Dockmenu::~Dockmenu()
 {
+    delete &cat_menu;
+    delete &d_menu_pix;
+    delete &title_color;
+    delete &back_pix;
+    delete &cat_pix;
+    delete &bdr_width;
     delete &dock_position;
-    delete &dock_height;
+    delete &zoom;
 }
 
 void Dockmenu::read_settings()
@@ -38,7 +44,6 @@ void Dockmenu::read_settings()
     title_color = style->value("title_color").value<QColor>();
     style->endGroup(); //Dockicon
     style->beginGroup("Dockbar");
-    dock_height = style->value("dock_height").toInt();
     dock_position = style->value("dock_position").toInt();
     style->endGroup(); //Dockbar
     back_pix = QPixmap(d_menu_pix);
@@ -77,6 +82,7 @@ void Dockmenu::mousePressEvent(QMouseEvent *event)
         cat_menu->popup(p);
     }
 }
+
 void Dockmenu::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
