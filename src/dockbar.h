@@ -37,8 +37,8 @@ class Dockbar : public QLabel
 public:
     Dockbar(Antico *, QWidget *parent=0);
     ~Dockbar();
-    void add(Frame *);
-    void remove(Frame *);
+    void add_dockicon(Frame *);
+    void remove_dockicon(Frame *);
     void update_dockicon_size();
     void read_settings();
     void init();

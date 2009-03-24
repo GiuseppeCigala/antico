@@ -26,13 +26,13 @@ class Systray : public QLabel
 public:
     Systray(QWidget *parent=0);
     ~Systray();
-    void add(Frame *);
-    void add(Window);
-    void remove(Window);
+    void add_sysicon(Frame *);
+    void add_embed(Window);
+    void remove_sysicon(Window);
     void update_style();
  
 public slots:
-    void remove(Sysicon *);
+    void remove_sysicon(Sysicon *);
     
 protected:
     virtual bool x11Event (XEvent *);

@@ -57,7 +57,7 @@ Systray::~Systray()
     delete emb_cont;
 }
 
-void Systray::add(Frame *frm)
+void Systray::add_sysicon(Frame *frm)
 {
     s_icon = new Sysicon(frm, this);
     sys_icons.insert(frm->winId(), s_icon); // save the Frame winId/Sysicon
@@ -66,7 +66,7 @@ void Systray::add(Frame *frm)
     connect(s_icon, SIGNAL(destroy_sys(Sysicon *)), this, SLOT(remove(Sysicon *)));
 }
 
-void Systray::add(Window win_id)
+void Systray::add_embed(Window win_id)
 {
     emb_cont = new QX11EmbedContainer(this);
     emb_cont->setPalette(QPalette(QPalette::Light));
@@ -81,7 +81,7 @@ void Systray::add(Window win_id)
     connect(emb_cont, SIGNAL(clientClosed()), emb_cont, SLOT(close()));
 }
 
-void Systray::remove(Window win_id) // if Sysicon is on Systray together with equal icon from _NET_SYSTEM_TRAY protocol
+void Systray::remove_sysicon(Window win_id) // if Sysicon is on Systray together with equal icon from _NET_SYSTEM_TRAY protocol
 {
     if (sys_icons.contains(win_id))
     {
@@ -93,7 +93,7 @@ void Systray::remove(Window win_id) // if Sysicon is on Systray together with eq
      }
 }
 
-void Systray::remove(Sysicon *s_icon) // remove from "Close" right button mouse on SysTray
+void Systray::remove_sysicon(Sysicon *s_icon) // remove from "Close" right button mouse on SysTray
 {
     sys_icons.remove(sys_icons.key(s_icon));
     qDebug() << "Sysicon remove. Num. after deletion:" << sys_icons.size();
@@ -109,7 +109,7 @@ bool Systray::x11Event(XEvent *event)
         if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_REQUEST_DOCK)
         {
             qDebug() << "SYSTEM_TRAY_REQUEST_DOCK";
-            add(event->xclient.data.l[2]);
+            add_embed(event->xclient.data.l[2]);
         }
         else if (event->xclient.message_type == net_opcode_atom && event->xclient.data.l[1] == SYSTEM_TRAY_BEGIN_MESSAGE)
         {

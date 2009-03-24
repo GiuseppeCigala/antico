@@ -135,7 +135,7 @@ void Dockbar::update_dockicon_name(const QString &name, Frame *frm)
     }
 }
  
-void Dockbar::add(Frame *frm)
+void Dockbar::add_dockicon(Frame *frm)
 {
     if (! dock_icons.contains(frm->winId())) // if not already present
     {
@@ -147,12 +147,16 @@ void Dockbar::add(Frame *frm)
     }
 }
  
-void Dockbar::remove(Frame *frm)
+void Dockbar::remove_dockicon(Frame *frm)
 {
     if (dock_icons.contains(frm->winId())) // remove Dockicon if present
     {
         Dockicon *d_icon = dock_icons.value(frm->winId());
         remove_dockicon(d_icon);
+    }
+    else
+    {
+        sys->remove_sysicon(frm->winId()); // check in the System Tray eventually Sysicon still mapped
     }
 }
  
@@ -176,7 +180,7 @@ void Dockbar::remove_dockicon(Window win_id) //remove from "Close" cmd on Systra
     }
     else
     {
-        sys->remove(win_id); // check in the System Tray eventually Sysicon still mapped
+        sys->remove_sysicon(win_id); // check in the System Tray eventually Sysicon still mapped
     }
 }
  

@@ -101,7 +101,7 @@ void Dockicon::run_menu(QAction *act)
     }
     if (act->text() == tr("Add to System Tray"))
     {
-        sys->add(frm); // add Dockicon to System Tray
+        sys->add_sysicon(frm); // add Dockicon to System Tray
         qDebug() << "Dockicon add to System Tray";
         emit destroy_dockicon(this);
         frm->unmap();

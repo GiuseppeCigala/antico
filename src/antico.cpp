@@ -347,6 +347,7 @@ bool Antico::x11EventFilter(XEvent *event)
             mapping_clients.remove(event->xdestroywindow.window);
             mapping_frames.remove(frm->winId());
             dsk->remove_deskicon(frm->winId()); // remove eventually Deskicon still mapped
+            dock->remove_dockicon(frm); // remove eventually Dockicon or Sysicon still mapped
             return true;
         }
         if (event->xdestroywindow.event != event->xdestroywindow.window)
@@ -605,7 +606,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
     }
 
     if (frame_type.at(0) != "Dialog" && frame_type.at(0) != "Splash") // no Dockbar for Dialog/Splash frames
-        dock->add(frm); // add frame to dockbar
+        dock->add_dockicon(frm); // add frame to dockbar
         
     frame_type.clear(); // clear the window type list
 }
@@ -622,7 +623,7 @@ bool Antico::check_net_sys_tray_for(Window c_win)
                            AnyPropertyType, &type_ret, &format, &n, &extra, (unsigned char **)&data) == Success && data)
     {
         qDebug() << "_KDE_NET_WM_SYSTEM_TRAY_WINDOW_FOR: WINDOW ADD TO SYSTEM TRAY";
-        dock->system_tray()->add(c_win); // add to Systray
+        dock->system_tray()->add_embed(c_win); // add to Systray
         XFree(data);
         return true;
     }
@@ -669,14 +670,14 @@ void Antico::check_window_type(Window c_win) // chech the window type before map
             else
             {
                 /// DEFAULT WINDOW TYPE ///
-                frame_type << "Splash";
-                qDebug() << "Window type: UNKNOWN TYPE. SET AS SPLASH";
+                frame_type << "Normal";
+                qDebug() << "Window type: Normal";
             }
         }
     }
-    /// IF PROPERY NOT SET ///
+    /// IF PROPERTY NOT SET ///
     frame_type << "Splash";
-    qDebug() << "Window type: UNKNOWN TYPE. SET AS SPLASH";
+    qDebug() << "Window type not set: SET AS SPLASH";
 
     XFree(data);
 }
