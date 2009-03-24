@@ -76,15 +76,7 @@ void Deskfile::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
     painter.setPen(d_file_col);
-
-    if (zoom)
-    {
-        painter.drawPixmap(QRect(-18, -50, 36, 36), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
-    }
-    else
-    {
-        painter.drawPixmap(QRect(-16, -50, 32, 32), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
-    }
+    
     if (selected)
     {
         painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
@@ -98,6 +90,17 @@ void Deskfile::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     painter.setPen(d_file_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfile name
+    
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    
+    if (zoom)
+    {
+        painter.drawPixmap(QRect(-18, -50, 36, 36), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
+    }
+    else
+    {
+        painter.drawPixmap(QRect(-16, -50, 32, 32), d_file_pix, QRect(0, 0, d_file_pix.width(), d_file_pix.height()));// deskfile pix
+    }
 }
 
 void Deskfile::set_selected(bool select)

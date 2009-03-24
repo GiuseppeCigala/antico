@@ -83,15 +83,6 @@ void Deskdev::paintEvent(QPaintEvent *)
     painter.setWindow(-50, -50, 100, 50);
     painter.setPen(d_dev_col);
 
-    if (zoom)
-    {
-        painter.drawPixmap(QRect(-18, -50, 36, 36), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
-    }
-    else
-    {
-        painter.drawPixmap(QRect(-16, -50, 32, 32), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
-    }
-
     QString name = QApplication::fontMetrics().elidedText(device_name, Qt::ElideRight, 90); // if device_name is too long, add ... at the end
 
     painter.setOpacity(0.5);
@@ -100,6 +91,17 @@ void Deskdev::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     painter.setPen(d_dev_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskdev name
+    
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    
+    if (zoom)
+    {
+        painter.drawPixmap(QRect(-18, -50, 36, 36), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
+    }
+    else
+    {
+        painter.drawPixmap(QRect(-16, -50, 32, 32), dev_pix, QRect(0, 0, dev_pix.width(), dev_pix.height()));// deskdev pix
+    }
 }
 
 void Deskdev::mousePressEvent(QMouseEvent *event)

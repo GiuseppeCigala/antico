@@ -57,7 +57,9 @@ void Dockmenu::paintEvent(QPaintEvent *)
     painter.setPen(QPen(title_color, bdr_width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawRoundedRect(0, 0, width(), height(), 5, 5);
     painter.drawPixmap(QRect(0, 0, width(), height()), back_pix, QRect(0, 0, back_pix.width(), back_pix.height()));// dock pixmap
-
+    
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    
     if (zoom)
     {
         painter.drawPixmap(QRect(1, 1, height()-2, height()-2), cat_pix, QRect(0, 0, cat_pix.width(), cat_pix.height()));// category icon

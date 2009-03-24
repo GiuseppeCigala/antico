@@ -54,15 +54,7 @@ void Deskapp::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
     painter.setPen(d_app_col);
-         
-    if (zoom)
-    {
-        painter.drawPixmap(QRect(-18, -50, 36, 36), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
-    }
-    else
-    {
-        painter.drawPixmap(QRect(-16, -50, 32, 32), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
-    }
+   
     if (selected)
     {
         painter.drawRoundedRect(-50, -50, width(), height(), 5, 5);
@@ -76,6 +68,17 @@ void Deskapp::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     painter.setPen(d_app_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskapp name
+    
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+          
+    if (zoom)
+    {
+        painter.drawPixmap(QRect(-18, -50, 36, 36), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
+    }
+    else
+    {
+        painter.drawPixmap(QRect(-16, -50, 32, 32), d_app_pix, QRect(0, 0, d_app_pix.width(), d_app_pix.height()));// deskapp pix
+    }
 }
 
 void Deskapp::set_selected(bool select)

@@ -47,6 +47,15 @@ void Trash::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setWindow(-50, -50, 100, 50);
+    painter.setOpacity(0.5);
+    painter.setPen(Qt::black);
+    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, tr("Trash")); // shadow Trash name
+    painter.setOpacity(1);
+    painter.setPen(trash_col);
+    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, tr("Trash")); // Trash name
+    
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    
     if (zoom)
     {
         painter.drawPixmap(QRect(-18, -50, 36, 36), pix, QRect(0, 0, pix.width(), pix.height()));// Trash pix
@@ -55,13 +64,6 @@ void Trash::paintEvent(QPaintEvent *)
     {
         painter.drawPixmap(QRect(-16, -50, 32, 32), pix, QRect(0, 0, pix.width(), pix.height()));// Trash pix
     }
-
-    painter.setOpacity(0.5);
-    painter.setPen(Qt::black);
-    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, tr("Trash")); // shadow Trash name
-    painter.setOpacity(1);
-    painter.setPen(trash_col);
-    painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, tr("Trash")); // Trash name
 }
 
 void Trash::mousePressEvent(QMouseEvent *event)

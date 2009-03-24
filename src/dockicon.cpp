@@ -57,6 +57,7 @@ void Dockicon::paintEvent(QPaintEvent *)
     QString name = QApplication::fontMetrics().elidedText(title, Qt::ElideRight, width()-width()/3); // if dock title is too long, add ... at the end
     painter.drawText(QRect(height()+3, 0, width(), height()), Qt::AlignVCenter, name); // dock title
     painter.drawPixmap(QRect(0, 0, width(), height()), pix, QRect(0, 0, pix.width(), pix.height()));// dock pixmap
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.drawPixmap(QRect(3, 3, height()-6, height()-6), frm->cl_icon(), QRect(0, 0, frm->cl_icon().width(), frm->cl_icon().height()));// dock icon
 }
 
