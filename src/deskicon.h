@@ -43,7 +43,6 @@ private:
     QPoint mousepos;
     QPixmap grab_pix; 
     QString close_desk_pix;
- 
 };
 
 #endif

@@ -22,6 +22,9 @@ Deskicon::Deskicon(Frame *frame, QWidget *parent) : QLabel(parent)
 Deskicon::~Deskicon()
 {
     delete frm;
+    delete &mousepos;
+    delete &grab_pix; 
+    delete &close_desk_pix;
 }
 
 void Deskicon::read_settings()
@@ -38,7 +41,6 @@ void Deskicon::read_settings()
     close_desk_pix = stl_path + style->value("close_dock_pix").toString();
     style->endGroup(); //Other
 }
-
 
 void Deskicon::mouseDoubleClickEvent(QMouseEvent *event)
 {
