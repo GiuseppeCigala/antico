@@ -16,6 +16,7 @@ Filedialog::Filedialog(Categorymenu *menu, QWidget *parent) : QDialog(parent)
     read_settings();
     init();
     set_category_menu();
+    set_list_mode(true);
 }
 
 Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category menu
@@ -25,13 +26,13 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
     setWindowModality(Qt::WindowModal);
     read_settings();
     init();
+    set_list_mode(true);
 }
 
 Filedialog::~Filedialog()
 {
     delete cat_menu;
     delete layout;
-    delete hor_layout;
     delete dir_model;
     delete completer;
     delete main_menu;
@@ -90,71 +91,99 @@ void Filedialog::paintEvent(QPaintEvent *)
 
 void Filedialog::init()
 {
-    layout = new QVBoxLayout();
-    setLayout(layout);
     message = new QLabel(this); // show message
     message->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     message->setMaximumHeight(20);
-    hor_layout = new QHBoxLayout();
-    line_path = new QLineEdit(this); // show selection path
-    hidden_files = new QRadioButton(tr("Show hidden files"), this);
+
+    QHBoxLayout *path_layout = new QHBoxLayout();
     preview_label = new QLabel(this); // show pixmap preview
     preview_label->setMaximumSize(32, 32);
     preview_label->setScaledContents(true);
+    line_path = new QLineEdit(this); // show path selection
+    upper_dir_but = new QPushButton(tr("Upper Dir"));
+    path_layout->addWidget(preview_label);
+    path_layout->addWidget(line_path);
+    path_layout->addWidget(upper_dir_but);
+
+    QHBoxLayout *radio_layout = new QHBoxLayout();
+    QRadioButton *hidden_radio = new QRadioButton(tr("Show hidden files"), this);
+    QRadioButton *icon_radio = new QRadioButton(tr("Show as icons"), this);
+    QRadioButton *list_radio = new QRadioButton(tr("Show as list"), this);
+    list_radio->toggle(); // list view at startup
+    hidden_radio->setAutoExclusive(false);
+    radio_layout->addWidget(hidden_radio);
+    radio_layout->addWidget(list_radio);
+    radio_layout->addWidget(icon_radio);
+    radio_layout->addStretch(1);
+
     dir_model = new QDirModel(this);
-    dir_model->setReadOnly(false);
     dir_model->setSupportedDragActions(Qt::LinkAction);
+    
     completer = new QCompleter(this);
     completer->setModel(dir_model);
-    line_path->setCompleter(completer);
+    line_path->setCompleter(completer); // to complete the path
+    
     prov = new Fileicon(); // get the files icon
     dir_model->setIconProvider(prov);
+
     tree_view = new QTreeView(this);
     tree_view->setModel(dir_model);
     tree_view->setDragEnabled(true);
+    tree_view->setItemsExpandable(false);
+    tree_view->setRootIsDecorated(false);
     tree_view->setSortingEnabled(true);
-    hor_layout->addWidget(preview_label);
-    hor_layout->addWidget(line_path);
+    tree_view->setIconSize(QSize(16, 16));
+
+    list_view = new QListView(this);
+    list_view->setModel(dir_model);
+    list_view->setDragEnabled(true);
+    list_view->setViewMode(QListView::IconMode);
+    list_view->setGridSize(QSize(70, 70));
+    list_view->setSpacing(5);
+    list_view->setIconSize(QSize(32, 32));
+
     button_box = new QDialogButtonBox(this);
     ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
     close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
-    QSplitter *splitter = new QSplitter(this);
+
     path_widget = new QListWidget();
     path_widget->setMaximumWidth(150);
     root_item = new QListWidgetItem(path_widget);
     bin_item = new QListWidgetItem(path_widget);
     home_item = new QListWidgetItem(path_widget);
     root_item->setIcon(QIcon(folder_pix));
-    root_item->setText(tr("/"));
     bin_item->setIcon(QIcon(folder_pix));
-    bin_item->setText(tr("/usr/bin/"));
     home_item->setIcon(QIcon(folder_pix));
+    root_item->setText(tr("/"));
+    bin_item->setText(tr("/usr/bin/"));
     home_item->setText(tr("/home/"));
+
+    QSplitter *splitter = new QSplitter(this);
     splitter->addWidget(path_widget);
     splitter->addWidget(tree_view);
+    splitter->addWidget(list_view);
+
+    layout = new QVBoxLayout();
+    setLayout(layout);
     layout->addWidget(message);
-    layout->addLayout(hor_layout);
-    layout->addWidget(hidden_files);
+    layout->addLayout(radio_layout);
+    layout->addLayout(path_layout);
     layout->addWidget(splitter);
     layout->addWidget(button_box);
 
     connect(path_widget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
             this, SLOT(change_path(QListWidgetItem *, QListWidgetItem *)));
     connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
-    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_path(QModelIndex)));
-    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
-    connect(hidden_files, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
+    connect(tree_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_list(QModelIndex)));
+    connect(list_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
+    connect(list_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_list(QModelIndex)));
+    connect(hidden_radio, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
+    connect(icon_radio, SIGNAL(toggled(bool)), this, SLOT(set_icon_mode(bool)));
+    connect(list_radio, SIGNAL(toggled(bool)), this, SLOT(set_list_mode(bool)));
     connect(line_path, SIGNAL(returnPressed()), this, SLOT(path_completer()));
-    connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(update_tree(QModelIndex)));
+    connect(upper_dir_but, SIGNAL(pressed()), this, SLOT(upper_dir()));
     connect(button_box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(button_box, SIGNAL(rejected()), this, SLOT(reject()));
-}
-
-void Filedialog::change_path(QListWidgetItem *current, QListWidgetItem *previous)
-{
-    if (!current)
-        current = previous;
-    set_path(current->text());
 }
 
 void Filedialog::set_category_menu()
@@ -211,7 +240,7 @@ void Filedialog::set_type(const QString &text, const QString &button_type) // se
 
 void Filedialog::del_file()
 {
-    QModelIndex selection = tree_view->currentIndex();
+    QModelIndex selection = abstract_view->currentIndex();
     QString name = get_selected_name();
     QString path = get_selected_path();
 
@@ -232,7 +261,7 @@ void Filedialog::del_file()
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the directory
         {
-            dir_model->refresh(); // update the TreeView
+            dir_model->refresh(); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -256,7 +285,7 @@ void Filedialog::del_file()
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the file
         {
-            dir_model->refresh(); // update the TreeView
+            dir_model->refresh(); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -269,7 +298,7 @@ void Filedialog::del_file()
 
 void Filedialog::cut_file()
 {
-    QModelIndex selection = tree_view->currentIndex();
+    QModelIndex selection = abstract_view->currentIndex();
     QString name = get_selected_name();
     QString path = get_selected_path();
 
@@ -277,9 +306,9 @@ void Filedialog::cut_file()
         source_path = path;
     else // is a file
         source_path = path + name;
-        
+
     command = "/bin/mv"; // the same for file or directory
-    
+
     cut_act->setEnabled(false);
     copy_act->setEnabled(false);
     paste_act->setEnabled(true);
@@ -287,7 +316,7 @@ void Filedialog::cut_file()
 
 void Filedialog::copy_file()
 {
-    QModelIndex selection = tree_view->currentIndex();
+    QModelIndex selection = abstract_view->currentIndex();
     QString name = get_selected_name();
     QString path = get_selected_path();
 
@@ -309,7 +338,7 @@ void Filedialog::copy_file()
 
 void Filedialog::paste_file()
 {
-    QModelIndex selection = tree_view->currentIndex();
+    QModelIndex selection = abstract_view->currentIndex();
     QString name = get_selected_name();
     QString path = get_selected_path();
 
@@ -318,12 +347,12 @@ void Filedialog::paste_file()
         QString destination_path = path + "/";
 
         command.append(" ").append(source_path).append(" ").append(destination_path); // add source + destination to command
-        
+
         qDebug() << "Paste command:" << command;
 
         if (QProcess::startDetached(command))
         {
-            dir_model->refresh(); // update the TreeView
+            dir_model->refresh(); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -340,52 +369,34 @@ void Filedialog::paste_file()
     }
 }
 
+void Filedialog::change_path(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (!current)
+        current = previous;
+    set_path(current->text());
+}
+
 void Filedialog::set_path(const QString &pth) // for folder navigation from deskfolder
 {
-    tree_view->setRootIndex(dir_model->index(pth));
-    tree_view->collapseAll();
+    abstract_view->setRootIndex(dir_model->index(pth));
     line_path->setText(pth);
-   // dir_model->refresh(); // update the TreeView
-}
-
-void Filedialog::show_path(const QModelIndex &index)
-{
-    line_path->setText(dir_model->filePath(index));
-}
-
-void Filedialog::show_preview(const QModelIndex &index) // show file pixmap preview
-{
-    preview_label->setPixmap(QPixmap(dir_model->filePath(index)));
 }
 
 void Filedialog::path_completer() // on user button press in line_path
 {
-    qDebug() << "Path completer:" << line_path->text();
-    QModelIndex index = dir_model->index(line_path->text());
-
-    if (index.isValid())
-    {
-        tree_view->setCurrentIndex(index);
-    }
-    else
-    {
-        reject();
-    }
+    update_list(dir_model->index(line_path->text()));
 }
 
-void Filedialog::update_tree(const QModelIndex &index) // update the tree on path completer
+void Filedialog::upper_dir() // go to the upper directory
 {
-    if (index.isValid())
+    update_list(dir_model->index(line_path->text()).parent());
+}
+
+void Filedialog::update_list(const QModelIndex &index) // update the list on path completer
+{
+    if (index.isValid() && dir_model->isDir(index))
     {
-        QModelIndex id = dir_model->index(line_path->text());
-        tree_view->scrollTo(id);
-        tree_view->setCurrentIndex(id);
-    }
-    else
-    {
-        tree_view->scrollTo(index);
-        tree_view->setCurrentIndex(index);
-        tree_view->resizeColumnToContents(0);
+        set_path(dir_model->filePath(index));
     }
 }
 
@@ -404,6 +415,11 @@ void Filedialog::set_read_only(bool b)
     dir_model->setReadOnly(b);
 }
 
+void Filedialog::show_preview(const QModelIndex &index) // show file pixmap preview
+{
+    preview_label->setPixmap(QPixmap(dir_model->filePath(index)));
+}
+
 void Filedialog::show_hidden(bool select)
 {
     if (select)
@@ -412,11 +428,33 @@ void Filedialog::show_hidden(bool select)
         dir_model->setFilter(dir_model->filter() ^ QDir::Hidden); // remove hidden files from filter
 }
 
+void Filedialog::set_icon_mode(bool select)
+{
+    if (select)
+    {
+        list_view->show();
+        tree_view->hide();
+        abstract_view = list_view; // change the view
+        abstract_view->setRootIndex(dir_model->index(line_path->text()));
+    }
+}
+
+void Filedialog::set_list_mode(bool select)
+{
+    if (select)
+    {
+        list_view->hide();
+        tree_view->show();
+        abstract_view = tree_view; // change the view
+        abstract_view->setRootIndex(dir_model->index(line_path->text()));
+    }
+}
+
 QString Filedialog::get_selected_path() const
 {
-    if (tree_view->currentIndex().isValid())
+    if (abstract_view->currentIndex().isValid())
     {
-        QModelIndex selection = tree_view->currentIndex();
+        QModelIndex selection = abstract_view->currentIndex();
 
         if (dir_model->isDir(selection)) // is a directory
         {
@@ -439,9 +477,9 @@ QString Filedialog::get_selected_path() const
 
 QString Filedialog::get_selected_name() const
 {
-    if (tree_view->currentIndex().isValid())
+    if (abstract_view->currentIndex().isValid())
     {
-        QString name = dir_model->fileName(tree_view->currentIndex());
+        QString name = dir_model->fileName(abstract_view->currentIndex());
         qDebug() << "Selected name:" << name;
         return name;
     }
@@ -481,14 +519,15 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 {
-    if (tree_view->currentIndex().isValid() && tree_view->geometry().contains(event->pos()) && cat_menu != NULL)
+    if (abstract_view->currentIndex().isValid() && abstract_view->geometry().contains(event->pos()) && cat_menu != NULL)
     {
-        if (dir_model->isDir(tree_view->currentIndex()))
+        if (dir_model->isDir(abstract_view->currentIndex()))
             cat_menu->set_cmd_arguments(get_selected_path()); // set the dir path as argument
         else
             cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
 
         main_menu->exec(event->globalPos());
     }
+    abstract_view->clearSelection(); 
 }
 

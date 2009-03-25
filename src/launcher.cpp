@@ -36,7 +36,7 @@ void Launcher::init()
 {
     main_menu = new QMenu(this);
     connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
- 
+
     quit = new QAction(tr("Quit WM"), this);
     shutdown = new QAction(tr("Shutdown PC"), this);
     restart = new QAction(tr("Restart PC"), this);
@@ -44,7 +44,7 @@ void Launcher::init()
     run = new QAction(tr("Run..."), this);
     manag = new QAction(tr("Manager"), this);
     show_desk = new QAction(tr("Show Desktop"), this);
-       
+
     quit->setIcon(QIcon(quit_pix));
     shutdown->setIcon(QIcon(shutdown_pix));
     restart->setIcon(QIcon(restart_pix));
@@ -52,7 +52,7 @@ void Launcher::init()
     run->setIcon(QIcon(run_pix));
     manag->setIcon(QIcon(manager_pix));
     show_desk->setIcon(QIcon(show_pix));
-    
+
     quit->setData("quit");
     shutdown->setData("shutdown");
     restart->setData("restart");
@@ -60,7 +60,7 @@ void Launcher::init()
     run->setData("run");
     manag->setData("manager");
     show_desk->setData("show");
-    
+        
     quit->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Q));
     shutdown->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
     restart->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
@@ -68,7 +68,14 @@ void Launcher::init()
     run->setShortcut(QKeySequence(Qt::ALT + Qt::Key_F2));
     manag->setShortcut(QKeySequence(Qt::ALT + Qt::Key_M));
     show_desk->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D));
-      
+    
+    // add Category menu on Launcher
+    QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
+    for (int i = 0; i <  menu_list.size(); ++i)
+    {
+        main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
+    }
+
     main_menu->addSeparator();
     main_menu->addAction(manag);
     main_menu->addAction(run);
@@ -130,12 +137,12 @@ void Launcher::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         QPoint p = mapToGlobal(QPoint(0, 0));
-        
+
         if (dock_position == 0) // 0 = bottom / 1 = top
             p.setY(p.y()-main_menu->sizeHint().height());
         else
             p.setY(p.y()+height());
-            
+
         main_menu->popup(p);
     }
 }

@@ -47,7 +47,6 @@ protected:
 signals:
 
 public slots:
-    void show_path(const QModelIndex &);
     void show_preview(const QModelIndex &);
     void del_file();
     void cut_file();
@@ -56,15 +55,21 @@ public slots:
     void reset_actions();
     void show_hidden(bool);
     void path_completer();
-    void update_tree(const QModelIndex &);
+    void upper_dir();
+    void update_list(const QModelIndex &);
     void contextMenuEvent(QContextMenuEvent *);
     void change_path(QListWidgetItem *, QListWidgetItem *);
+    void set_icon_mode(bool);
+    void set_list_mode(bool);
 
 private:
     QPoint mousepos;
     QDirModel *dir_model;
+    QListView *list_view;
     QTreeView *tree_view;
+    QAbstractItemView *abstract_view;
     QLineEdit *line_path;
+    QPushButton *upper_dir_but;
     QMenu *main_menu;
     QMenu *open_menu;
     QString delete_file_pix;
@@ -77,9 +82,7 @@ private:
     QString folder_pix;
     QLabel *message;
     QLabel *preview_label;
-    QRadioButton *hidden_files;
     QVBoxLayout *layout;
-    QHBoxLayout *hor_layout;
     QDialogButtonBox *button_box;
     QPushButton *ok;
     QPushButton *cancel;

@@ -8,7 +8,7 @@
         <translation type="obsolete">&lt;b&gt;Zakończyć menedżer okien?&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="757"/>
+        <location filename="../src/antico.cpp" line="793"/>
         <source>Are you sure to quit the WM ?</source>
         <translation>Na pewno chcesz zamknąć menedżer okien?</translation>
     </message>
@@ -21,7 +21,7 @@
         <translation type="obsolete">&lt;b&gt;Wyłącz komputer&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="783"/>
+        <location filename="../src/antico.cpp" line="819"/>
         <source>Are you sure to shutdown the PC ?</source>
         <translation>Na pewno chcesz wyłączyć komputer?</translation>
     </message>
@@ -30,22 +30,22 @@
         <translation type="obsolete">&lt;b&gt;Uruchom komputer ponownie&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="815"/>
+        <location filename="../src/antico.cpp" line="851"/>
         <source>Are you sure to restart the PC ?</source>
         <translation>Na pewno chcesz uruchomić komputer ponownie?</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="756"/>
+        <location filename="../src/antico.cpp" line="792"/>
         <source>QUIT THE WM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="782"/>
+        <location filename="../src/antico.cpp" line="818"/>
         <source>SHUTDOWN THE PC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="814"/>
+        <location filename="../src/antico.cpp" line="850"/>
         <source>RESTART THE PC</source>
         <translation type="unfinished"></translation>
     </message>
@@ -181,7 +181,7 @@
 <context>
     <name>Deskapp</name>
     <message>
-        <location filename="../src/deskapp.cpp" line="92"/>
+        <location filename="../src/deskapp.cpp" line="95"/>
         <source>Delete link</source>
         <translation>Usuń odnośnik</translation>
     </message>
@@ -199,7 +199,7 @@
         <translation>Otwórz w</translation>
     </message>
     <message>
-        <location filename="../src/deskdev.cpp" line="130"/>
+        <location filename="../src/deskdev.cpp" line="132"/>
         <source>Device contents:</source>
         <translation>Zawartość nośnika:</translation>
     </message>
@@ -230,7 +230,7 @@
         <translation>Usuń odnośnik</translation>
     </message>
     <message>
-        <location filename="../src/deskfolder.cpp" line="165"/>
+        <location filename="../src/deskfolder.cpp" line="169"/>
         <source>Folder contents:</source>
         <translation>Zawartość folderu:</translation>
     </message>
@@ -238,8 +238,8 @@
 <context>
     <name>Deskicon</name>
     <message>
-        <location filename="../src/deskicon.cpp" line="62"/>
-        <location filename="../src/deskicon.cpp" line="82"/>
+        <location filename="../src/deskicon.cpp" line="64"/>
+        <location filename="../src/deskicon.cpp" line="84"/>
         <source>Close</source>
         <translation type="unfinished">Zamknij</translation>
     </message>
@@ -255,13 +255,13 @@
 <context>
     <name>Dockbar</name>
     <message>
-        <location filename="../src/dockbar.cpp" line="97"/>
-        <location filename="../src/dockbar.cpp" line="201"/>
+        <location filename="../src/dockbar.cpp" line="109"/>
+        <location filename="../src/dockbar.cpp" line="217"/>
         <source>New link to application</source>
         <translation>Nowy odnośnik do aplikacji</translation>
     </message>
     <message>
-        <location filename="../src/dockbar.cpp" line="203"/>
+        <location filename="../src/dockbar.cpp" line="219"/>
         <source>New link to application:</source>
         <translation>Nowy odnośnik do aplikacji:</translation>
     </message>
@@ -284,12 +284,12 @@
 <context>
     <name>Filedialog</name>
     <message>
-        <location filename="../src/filedialog.cpp" line="100"/>
+        <location filename="../src/filedialog.cpp" line="109"/>
         <source>Show hidden files</source>
         <translation>Pokaż ukryte pliki</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="119"/>
+        <location filename="../src/filedialog.cpp" line="146"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -298,17 +298,17 @@
         <translation type="obsolete">Anuluj</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="120"/>
+        <location filename="../src/filedialog.cpp" line="147"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="164"/>
+        <location filename="../src/filedialog.cpp" line="193"/>
         <source>Open with</source>
         <translation>Otwórz w</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="172"/>
+        <location filename="../src/filedialog.cpp" line="201"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
@@ -317,50 +317,65 @@
         <translation type="obsolete">usunięty</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="238"/>
-        <location filename="../src/filedialog.cpp" line="262"/>
-        <location filename="../src/filedialog.cpp" line="329"/>
+        <location filename="../src/filedialog.cpp" line="267"/>
+        <location filename="../src/filedialog.cpp" line="291"/>
+        <location filename="../src/filedialog.cpp" line="358"/>
         <source>INFORMATION</source>
         <translation>INFORMACJA</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="128"/>
+        <location filename="../src/filedialog.cpp" line="157"/>
         <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="130"/>
+        <location filename="../src/filedialog.cpp" line="103"/>
+        <source>Upper Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="111"/>
+        <source>Show as list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="158"/>
         <source>/usr/bin/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="132"/>
+        <location filename="../src/filedialog.cpp" line="159"/>
         <source>/home/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="239"/>
-        <location filename="../src/filedialog.cpp" line="263"/>
+        <location filename="../src/filedialog.cpp" line="268"/>
+        <location filename="../src/filedialog.cpp" line="292"/>
         <source>deleted and moved in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="173"/>
+        <location filename="../src/filedialog.cpp" line="202"/>
         <source>Cut...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="174"/>
+        <location filename="../src/filedialog.cpp" line="110"/>
+        <source>Show as icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="203"/>
         <source>Copy...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="175"/>
+        <location filename="../src/filedialog.cpp" line="204"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="330"/>
+        <location filename="../src/filedialog.cpp" line="359"/>
         <source>pasted in</source>
         <translation type="unfinished"></translation>
     </message>
@@ -372,12 +387,12 @@
         <translation type="obsolete">Minimalizuj/Maksymalizuj</translation>
     </message>
     <message>
-        <location filename="../src/frame.cpp" line="597"/>
+        <location filename="../src/frame.cpp" line="591"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../src/frame.cpp" line="589"/>
+        <location filename="../src/frame.cpp" line="583"/>
         <source>Minimize(L)/Maximize(R)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1189,8 +1204,8 @@
 <context>
     <name>Trash</name>
     <message>
-        <location filename="../src/trash.cpp" line="61"/>
-        <location filename="../src/trash.cpp" line="64"/>
+        <location filename="../src/trash.cpp" line="52"/>
+        <location filename="../src/trash.cpp" line="55"/>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>

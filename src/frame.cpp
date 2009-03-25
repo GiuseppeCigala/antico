@@ -123,8 +123,8 @@ void Frame::init()
     // move and resize client
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
 
-    //if the frame is too large, maximize
-    if (frame_w >= desk->width()-10 || frame_h >= desk->height()-20)
+    //if the frame is too large, maximize it
+    if (frame_w >= desk->width()-20 || frame_h >= desk->height()-40)
     {
         maximize();
     }
@@ -181,12 +181,6 @@ void Frame::get_client_geometry()
     client_y = attr.y;
     client_w = attr.width;
     client_h = attr.height;
-
-    if (client_w >= desk->width()-10)
-        client_w = desk->width()-10;
-
-    if (client_h >= desk->height()-dock_height-20)
-        client_h = desk->height()-dock_height-20;
 
     qDebug() << "Client_x:" << client_x << "Client_y:" << client_y << "Client_w:" << client_w << "Client_h:" << client_h;
 }
@@ -272,14 +266,8 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
                 client_h = xsizehints->base_height;
             qDebug() << "PBaseSize:" << client_w << client_h;
         }
-        if (client_w >= desk->width()-10)
-            client_w = desk->width()-10;
-
-        if (client_h >= desk->height()-dock_height-20)
-            client_h = desk->height()-dock_height-20;
-
+  
         qDebug() << "Final Client Size:" << client_w << client_h;
-
     }
 }
 
