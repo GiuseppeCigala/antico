@@ -59,8 +59,8 @@ public slots:
     void update_list(const QModelIndex &);
     void contextMenuEvent(QContextMenuEvent *);
     void change_path(QListWidgetItem *, QListWidgetItem *);
-    void set_icon_mode(bool);
-    void set_list_mode(bool);
+    void set_icon_mode();
+    void set_list_mode();
 
 private:
     QPoint mousepos;
@@ -77,6 +77,9 @@ private:
     QString copy_file_pix;
     QString paste_file_pix;
     QString open_with_pix;
+    QString list_view_pix;
+    QString icon_view_pix;
+    QString upper_dir_pix;
     QString ok_button_pix_path;
     QString close_button_pix_path;
     QString folder_pix;

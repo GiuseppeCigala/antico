@@ -82,6 +82,7 @@
 #include <QSplitter>
 #include <QRubberBand>
 #include <QShortcut>
+#include <QButtonGroup>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

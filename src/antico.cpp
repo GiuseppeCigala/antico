@@ -676,8 +676,8 @@ void Antico::check_window_type(Window c_win) // chech the window type before map
         }
     }
     /// IF PROPERTY NOT SET ///
-    frame_type << "Splash";
-    qDebug() << "Window type not set: SET AS SPLASH";
+    frame_type << "Normal";
+    qDebug() << "Window type not set: SET AS NORMAL";
 
     XFree(data);
 }
@@ -1065,6 +1065,9 @@ void Antico::set_settings()
         style->setValue("close_dock_pix", "close_dock.png");
         style->setValue("add_to_sys_pix", "add_to_sys.png");
         style->setValue("open_with_pix", "open_with.png");
+        style->setValue("list_view_pix", "list_view.png");
+        style->setValue("icon_view_pix", "icon_view.png");
+        style->setValue("upper_dir_pix", "upper_dir.png");
         style->endGroup(); //Other
         /////////////////////////////////////////////////////////////////////////
         style->sync();

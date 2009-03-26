@@ -118,6 +118,9 @@ private:
     QLabel *close_dock_pix;
     QLabel *add_to_sys_pix;
     QLabel *open_with_pix;
+    QLabel *list_view_pix;
+    QLabel *icon_view_pix;
+    QLabel *upper_dir_pix;
 
     QString dockbar_pix_path;
     QString deskfolder_pix_path;
@@ -170,6 +173,9 @@ private:
     QString close_dock_pix_path;
     QString add_to_sys_pix_path;
     QString open_with_pix_path;
+    QString list_view_pix_path;
+    QString icon_view_pix_path;
+    QString upper_dir_pix_path;
    
     QString stl_name;
     QString stl_path;

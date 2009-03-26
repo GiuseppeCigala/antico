@@ -99,6 +99,9 @@ Manager::~Manager()
     delete &close_dock_pix_path;
     delete &add_to_sys_pix_path;
     delete &open_with_pix_path;
+    delete &list_view_pix_path;
+    delete &icon_view_pix_path;
+    delete &upper_dir_pix_path;
     delete &ok_button_pix_path;
     delete &close_button_pix_path;
     delete &add_button_pix_path;
@@ -322,6 +325,9 @@ void Manager::read_settings()
     close_dock_pix_path = stl_path + style->value("close_dock_pix").toString();
     add_to_sys_pix_path = stl_path + style->value("add_to_sys_pix").toString();
     open_with_pix_path = stl_path + style->value("open_with_pix").toString();
+    list_view_pix_path = stl_path + style->value("list_view_pix").toString();
+    icon_view_pix_path = stl_path + style->value("icon_view_pix").toString();
+    upper_dir_pix_path = stl_path + style->value("upper_dir_pix").toString();
     application_pix->setToolTip(style->value("application_pix").toString());
     folder_link_pix->setToolTip(style->value("folder_link_pix").toString());
     file_link_pix->setToolTip(style->value("file_link_pix").toString());
@@ -334,6 +340,9 @@ void Manager::read_settings()
     close_dock_pix->setToolTip(style->value("close_dock_pix").toString());
     add_to_sys_pix->setToolTip(style->value("add_to_sys_pix").toString());
     open_with_pix->setToolTip(style->value("open_with_pix").toString());
+    list_view_pix->setToolTip(style->value("list_view_pix").toString());
+    icon_view_pix->setToolTip(style->value("icon_view_pix").toString());
+    upper_dir_pix->setToolTip(style->value("upper_dir_pix").toString());
     application_pix->setPixmap(QPixmap(application_pix_path));
     folder_link_pix->setPixmap(QPixmap(folder_link_pix_path));
     file_link_pix->setPixmap(QPixmap(file_link_pix_path));
@@ -346,6 +355,9 @@ void Manager::read_settings()
     close_dock_pix->setPixmap(QPixmap(close_dock_pix_path));
     add_to_sys_pix->setPixmap(QPixmap(add_to_sys_pix_path));
     open_with_pix->setPixmap(QPixmap(open_with_pix_path));
+    list_view_pix->setPixmap(QPixmap(list_view_pix_path));
+    icon_view_pix->setPixmap(QPixmap(icon_view_pix_path));
+    upper_dir_pix->setPixmap(QPixmap(upper_dir_pix_path));
     style->endGroup(); //Other
     /////////////////////////////////////////////////////////////////////////
 }
@@ -1085,6 +1097,9 @@ void Manager::style_tab()
     QLabel *close_dock_pix_lb = new QLabel(tr("Close Dock:"), this);
     QLabel *add_to_sys_pix_lb = new QLabel(tr("Add to SysTray:"), this);
     QLabel *open_with_pix_lb = new QLabel(tr("Open with:"), this);
+    QLabel *list_view_pix_lb = new QLabel(tr("List view:"), this);
+    QLabel *icon_view_pix_lb = new QLabel(tr("Icon view:"), this);
+    QLabel *upper_dir_pix_lb = new QLabel(tr("Upper dir:"), this);
     application_pix = new QLabel(this);
     folder_link_pix = new QLabel(this);
     file_link_pix = new QLabel(this);
@@ -1097,6 +1112,9 @@ void Manager::style_tab()
     close_dock_pix = new QLabel(this);
     add_to_sys_pix = new QLabel(this);
     open_with_pix = new QLabel(this);
+    list_view_pix = new QLabel(this);
+    icon_view_pix = new QLabel(this);
+    upper_dir_pix = new QLabel(this);
     application_pix->setMaximumSize(32, 32);
     folder_link_pix->setMaximumSize(32, 32);
     file_link_pix->setMaximumSize(32, 32);
@@ -1109,6 +1127,9 @@ void Manager::style_tab()
     close_dock_pix->setMaximumSize(32, 32);
     add_to_sys_pix->setMaximumSize(32, 32);
     open_with_pix->setMaximumSize(32, 32);
+    list_view_pix->setMaximumSize(32, 32);
+    icon_view_pix->setMaximumSize(32, 32);
+    upper_dir_pix->setMaximumSize(32, 32);
     application_pix->setScaledContents(true);
     folder_link_pix->setScaledContents(true);
     file_link_pix->setScaledContents(true);
@@ -1121,6 +1142,9 @@ void Manager::style_tab()
     close_dock_pix->setScaledContents(true);
     add_to_sys_pix->setScaledContents(true);
     open_with_pix->setScaledContents(true);
+    list_view_pix->setScaledContents(true);
+    icon_view_pix->setScaledContents(true);
+    upper_dir_pix->setScaledContents(true);
     QPushButton *application_pix_but = new QPushButton("...", this);
     QPushButton *folder_link_pix_but = new QPushButton("...", this);
     QPushButton *file_link_pix_but = new QPushButton("...", this);
@@ -1133,6 +1157,9 @@ void Manager::style_tab()
     QPushButton *close_dock_pix_but = new QPushButton("...", this);
     QPushButton *add_to_sys_pix_but = new QPushButton("...", this);
     QPushButton *open_with_pix_but = new QPushButton("...", this);
+    QPushButton *list_view_pix_but = new QPushButton("...", this);
+    QPushButton *icon_view_pix_but = new QPushButton("...", this);
+    QPushButton *upper_dir_pix_but = new QPushButton("...", this);
     application_pix_but->setMaximumWidth(50);
     folder_link_pix_but->setMaximumWidth(50);
     file_link_pix_but->setMaximumWidth(50);
@@ -1145,42 +1172,54 @@ void Manager::style_tab()
     close_dock_pix_but->setMaximumWidth(50);
     add_to_sys_pix_but->setMaximumWidth(50);
     open_with_pix_but->setMaximumWidth(50);
+    list_view_pix_but->setMaximumWidth(50);
+    icon_view_pix_but->setMaximumWidth(50);
+    upper_dir_pix_but->setMaximumWidth(50);
     other_grid->addWidget(application_pix_lb, 0, 0);
     other_grid->addWidget(folder_link_pix_lb, 1, 0);
     other_grid->addWidget(file_link_pix_lb, 2, 0);
     other_grid->addWidget(app_link_pix_lb, 3, 0);
     other_grid->addWidget(delete_link_pix_lb, 4, 0);
     other_grid->addWidget(delete_file_pix_lb, 5, 0);
-    other_grid->addWidget(cut_file_pix_lb, 0, 3);
-    other_grid->addWidget(copy_file_pix_lb, 1, 3);
-    other_grid->addWidget(paste_file_pix_lb, 2, 3);
-    other_grid->addWidget(close_dock_pix_lb, 3, 3);
-    other_grid->addWidget(add_to_sys_pix_lb, 4, 3);
-    other_grid->addWidget(open_with_pix_lb, 5, 3);
+    other_grid->addWidget(cut_file_pix_lb, 6, 0);
+    other_grid->addWidget(copy_file_pix_lb, 0, 3);
+    other_grid->addWidget(paste_file_pix_lb, 1, 3);
+    other_grid->addWidget(close_dock_pix_lb, 2, 3);
+    other_grid->addWidget(add_to_sys_pix_lb, 3, 3);
+    other_grid->addWidget(open_with_pix_lb, 4, 3);
+    other_grid->addWidget(list_view_pix_lb, 5, 3);
+    other_grid->addWidget(icon_view_pix_lb, 6, 3);
+    other_grid->addWidget(upper_dir_pix_lb, 7, 3);
     other_grid->addWidget(application_pix, 0, 1, Qt::AlignCenter);
     other_grid->addWidget(folder_link_pix, 1, 1, Qt::AlignCenter);
     other_grid->addWidget(file_link_pix, 2, 1, Qt::AlignCenter);
     other_grid->addWidget(app_link_pix, 3, 1, Qt::AlignCenter);
     other_grid->addWidget(delete_link_pix, 4, 1, Qt::AlignCenter);
     other_grid->addWidget(delete_file_pix, 5, 1, Qt::AlignCenter);
-    other_grid->addWidget(cut_file_pix, 0, 4, Qt::AlignCenter);
-    other_grid->addWidget(copy_file_pix, 1, 4, Qt::AlignCenter);
-    other_grid->addWidget(paste_file_pix, 2, 4, Qt::AlignCenter);
-    other_grid->addWidget(close_dock_pix, 3, 4, Qt::AlignCenter);
-    other_grid->addWidget(add_to_sys_pix, 4, 4, Qt::AlignCenter);
-    other_grid->addWidget(open_with_pix, 5, 4, Qt::AlignCenter);
+    other_grid->addWidget(cut_file_pix, 6, 1, Qt::AlignCenter);
+    other_grid->addWidget(copy_file_pix, 0, 4, Qt::AlignCenter);
+    other_grid->addWidget(paste_file_pix, 1, 4, Qt::AlignCenter);
+    other_grid->addWidget(close_dock_pix, 2, 4, Qt::AlignCenter);
+    other_grid->addWidget(add_to_sys_pix, 3, 4, Qt::AlignCenter);
+    other_grid->addWidget(open_with_pix, 4, 4, Qt::AlignCenter);
+    other_grid->addWidget(list_view_pix, 5, 4, Qt::AlignCenter);
+    other_grid->addWidget(icon_view_pix, 6, 4, Qt::AlignCenter);
+    other_grid->addWidget(upper_dir_pix, 7, 4, Qt::AlignCenter);
     other_grid->addWidget(application_pix_but, 0, 2);
     other_grid->addWidget(folder_link_pix_but, 1, 2);
     other_grid->addWidget(file_link_pix_but, 2, 2);
     other_grid->addWidget(app_link_pix_but, 3, 2);
     other_grid->addWidget(delete_link_pix_but, 4, 2);
     other_grid->addWidget(delete_file_pix_but, 5, 2);
-    other_grid->addWidget(cut_file_pix_but, 0, 5);
-    other_grid->addWidget(copy_file_pix_but, 1, 5);
-    other_grid->addWidget(paste_file_pix_but, 2, 5);
-    other_grid->addWidget(close_dock_pix_but, 3, 5);
-    other_grid->addWidget(add_to_sys_pix_but, 4, 5);
-    other_grid->addWidget(open_with_pix_but, 5, 5);
+    other_grid->addWidget(cut_file_pix_but, 6, 2);
+    other_grid->addWidget(copy_file_pix_but, 0, 5);
+    other_grid->addWidget(paste_file_pix_but, 1, 5);
+    other_grid->addWidget(close_dock_pix_but, 2, 5);
+    other_grid->addWidget(add_to_sys_pix_but, 3, 5);
+    other_grid->addWidget(open_with_pix_but, 4, 5);
+    other_grid->addWidget(list_view_pix_but, 5, 5);
+    other_grid->addWidget(icon_view_pix_but, 6, 5);
+    other_grid->addWidget(upper_dir_pix_but, 7, 5);
     ///////// OK-QUIT /////////
     QGroupBox *ok_close_box = new QGroupBox(this);
     style_layout->addWidget(ok_close_box);
@@ -1262,6 +1301,9 @@ void Manager::style_tab()
     pixmapMapper->setMapping(close_dock_pix_but, close_dock_pix);
     pixmapMapper->setMapping(add_to_sys_pix_but, add_to_sys_pix);
     pixmapMapper->setMapping(open_with_pix_but, open_with_pix);
+    pixmapMapper->setMapping(list_view_pix_but, list_view_pix);
+    pixmapMapper->setMapping(icon_view_pix_but, icon_view_pix);
+    pixmapMapper->setMapping(upper_dir_pix_but, upper_dir_pix);
     //////////////////////////////////////////////////////////////////////
     connect(dockbar_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(desktop_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
@@ -1314,6 +1356,9 @@ void Manager::style_tab()
     connect(close_dock_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(add_to_sys_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(open_with_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(list_view_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(icon_view_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(upper_dir_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
 
     connect(pixmapMapper, SIGNAL(mapped(QWidget *)), this, SLOT(select_pixmap(QWidget *)));
 
@@ -1566,6 +1611,9 @@ void Manager::ok_frame_pressed()
     style->setValue("close_dock_pix", close_dock_pix->toolTip());
     style->setValue("add_to_sys_pix", add_to_sys_pix->toolTip());
     style->setValue("open_with_pix", open_with_pix->toolTip());
+    style->setValue("list_view_pix", list_view_pix->toolTip());
+    style->setValue("icon_view_pix", icon_view_pix->toolTip());
+    style->setValue("upper_dir_pix", upper_dir_pix->toolTip());
     style->endGroup(); //Other
     //////////////////////////////////////////////////////////////////
 

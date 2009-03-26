@@ -13,10 +13,11 @@ Filedialog::Filedialog(Categorymenu *menu, QWidget *parent) : QDialog(parent)
     cat_menu = menu;
     setSizeGripEnabled(true);
     setWindowModality(Qt::WindowModal);
+    setAttribute(Qt::WA_AlwaysShowToolTips);
     read_settings();
     init();
     set_category_menu();
-    set_list_mode(true);
+    set_list_mode(); // list view at startup
 }
 
 Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category menu
@@ -26,7 +27,7 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
     setWindowModality(Qt::WindowModal);
     read_settings();
     init();
-    set_list_mode(true);
+    set_list_mode(); // list view at startup
 }
 
 Filedialog::~Filedialog()
@@ -44,6 +45,9 @@ Filedialog::~Filedialog()
     delete &copy_file_pix;
     delete &paste_file_pix;
     delete &open_with_pix;
+    delete &list_view_pix;
+    delete &icon_view_pix;
+    delete &upper_dir_pix;
     delete &root_item;
     delete &bin_item;
     delete &home_item;
@@ -71,6 +75,9 @@ void Filedialog::read_settings()
     copy_file_pix = stl_path + style->value("copy_file_pix").toString();
     paste_file_pix = stl_path + style->value("paste_file_pix").toString();
     open_with_pix = stl_path + style->value("open_with_pix").toString();
+    list_view_pix = stl_path + style->value("list_view_pix").toString();
+    icon_view_pix = stl_path + style->value("icon_view_pix").toString();
+    upper_dir_pix = stl_path + style->value("upper_dir_pix").toString();
     style->endGroup(); //Other
     style->beginGroup("Message");
     ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
@@ -100,29 +107,31 @@ void Filedialog::init()
     preview_label->setMaximumSize(32, 32);
     preview_label->setScaledContents(true);
     line_path = new QLineEdit(this); // show path selection
-    upper_dir_but = new QPushButton(tr("Upper Dir"));
+    upper_dir_but = new QPushButton(QIcon(upper_dir_pix), "", this);
+    upper_dir_but->setToolTip(tr("Upper directory"));
     path_layout->addWidget(preview_label);
     path_layout->addWidget(line_path);
     path_layout->addWidget(upper_dir_but);
 
-    QHBoxLayout *radio_layout = new QHBoxLayout();
+    QHBoxLayout *view_layout = new QHBoxLayout();
     QRadioButton *hidden_radio = new QRadioButton(tr("Show hidden files"), this);
-    QRadioButton *icon_radio = new QRadioButton(tr("Show as icons"), this);
-    QRadioButton *list_radio = new QRadioButton(tr("Show as list"), this);
-    list_radio->toggle(); // list view at startup
+    QPushButton *icon_but = new QPushButton(QIcon(icon_view_pix), tr("Icons"), this);
+    QPushButton *list_but = new QPushButton(QIcon(list_view_pix), tr("List"), this);
     hidden_radio->setAutoExclusive(false);
-    radio_layout->addWidget(hidden_radio);
-    radio_layout->addWidget(list_radio);
-    radio_layout->addWidget(icon_radio);
-    radio_layout->addStretch(1);
+    icon_but->setAutoExclusive(true);
+    list_but->setAutoExclusive(true);
+    view_layout->addWidget(hidden_radio);
+    view_layout->addWidget(icon_but);
+    view_layout->addWidget(list_but);
+    view_layout->addStretch(1);
 
     dir_model = new QDirModel(this);
     dir_model->setSupportedDragActions(Qt::LinkAction);
-    
+
     completer = new QCompleter(this);
     completer->setModel(dir_model);
     line_path->setCompleter(completer); // to complete the path
-    
+
     prov = new Fileicon(); // get the files icon
     dir_model->setIconProvider(prov);
 
@@ -137,7 +146,11 @@ void Filedialog::init()
     list_view = new QListView(this);
     list_view->setModel(dir_model);
     list_view->setDragEnabled(true);
+    list_view->setFlow(QListView::LeftToRight);
+    list_view->setWrapping(true);
+    list_view->setResizeMode(QListView::Adjust);
     list_view->setViewMode(QListView::IconMode);
+    list_view->setUniformItemSizes(true);
     list_view->setGridSize(QSize(70, 70));
     list_view->setSpacing(5);
     list_view->setIconSize(QSize(32, 32));
@@ -166,7 +179,7 @@ void Filedialog::init()
     layout = new QVBoxLayout();
     setLayout(layout);
     layout->addWidget(message);
-    layout->addLayout(radio_layout);
+    layout->addLayout(view_layout);
     layout->addLayout(path_layout);
     layout->addWidget(splitter);
     layout->addWidget(button_box);
@@ -178,8 +191,8 @@ void Filedialog::init()
     connect(list_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
     connect(list_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_list(QModelIndex)));
     connect(hidden_radio, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
-    connect(icon_radio, SIGNAL(toggled(bool)), this, SLOT(set_icon_mode(bool)));
-    connect(list_radio, SIGNAL(toggled(bool)), this, SLOT(set_list_mode(bool)));
+    connect(icon_but, SIGNAL(pressed()), this, SLOT(set_icon_mode()));
+    connect(list_but, SIGNAL(pressed()), this, SLOT(set_list_mode()));
     connect(line_path, SIGNAL(returnPressed()), this, SLOT(path_completer()));
     connect(upper_dir_but, SIGNAL(pressed()), this, SLOT(upper_dir()));
     connect(button_box, SIGNAL(accepted()), this, SLOT(accept()));
@@ -428,26 +441,20 @@ void Filedialog::show_hidden(bool select)
         dir_model->setFilter(dir_model->filter() ^ QDir::Hidden); // remove hidden files from filter
 }
 
-void Filedialog::set_icon_mode(bool select)
+void Filedialog::set_icon_mode()
 {
-    if (select)
-    {
-        list_view->show();
-        tree_view->hide();
-        abstract_view = list_view; // change the view
-        abstract_view->setRootIndex(dir_model->index(line_path->text()));
-    }
+    list_view->show();
+    tree_view->hide();
+    abstract_view = list_view; // change the view
+    abstract_view->setRootIndex(dir_model->index(line_path->text()));
 }
 
-void Filedialog::set_list_mode(bool select)
+void Filedialog::set_list_mode()
 {
-    if (select)
-    {
-        list_view->hide();
-        tree_view->show();
-        abstract_view = tree_view; // change the view
-        abstract_view->setRootIndex(dir_model->index(line_path->text()));
-    }
+    list_view->hide();
+    tree_view->show();
+    abstract_view = tree_view; // change the view
+    abstract_view->setRootIndex(dir_model->index(line_path->text()));
 }
 
 QString Filedialog::get_selected_path() const
@@ -519,7 +526,7 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 {
-    if (abstract_view->currentIndex().isValid() && abstract_view->geometry().contains(event->pos()) && cat_menu != NULL)
+    if (abstract_view->currentIndex().isValid() && abstract_view->geometry().contains(event->pos(), true) && cat_menu != NULL)
     {
         if (dir_model->isDir(abstract_view->currentIndex()))
             cat_menu->set_cmd_arguments(get_selected_path()); // set the dir path as argument
@@ -528,6 +535,7 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 
         main_menu->exec(event->globalPos());
     }
-    abstract_view->clearSelection(); 
+    abstract_view->clearSelection();
+    event->ignore();
 }
 
