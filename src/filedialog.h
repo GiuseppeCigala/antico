@@ -37,6 +37,7 @@ public:
     void set_read_only(bool);
     void read_settings();
     void set_category_menu();
+    void update_style();
    
 protected:
     void mouseMoveEvent(QMouseEvent *);
@@ -70,6 +71,8 @@ private:
     QAbstractItemView *abstract_view;
     QLineEdit *line_path;
     QPushButton *upper_dir_but;
+    QPushButton *icon_but;
+    QPushButton *list_but;
     QMenu *main_menu;
     QMenu *open_menu;
     QString delete_file_pix;

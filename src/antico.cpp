@@ -774,6 +774,7 @@ void Antico::wm_refresh()
 {
     qDebug() << "Refreshing Antico WM ...";
 
+    file_dialog->update_style();
     dsk->update_style(); //update desktop, all deskicons and all deskapps
     dock->update_style(); //update dockbar and all dockicons
 

@@ -54,9 +54,9 @@ DEVELOPMENT
 To test the window manager, type on shell:
 
 DISPLAY=:0
-Xephyr :1 -ac -screen 1000x800 & DISPLAY=:1; $HOME/antico/antico
+Xephyr :1 -ac -screen 1024x768 & DISPLAY=:1; $HOME/antico/antico
 
-(where 1000x800 is your preferred screen size and $HOME if you have download Antico in user home)
+(where 1024x768 is your preferred screen size and $HOME if you have download Antico in user home)
 ---------------------------------------------------
 To hide debug messages, uncomment in antico.pro
 //DEFINES = QT_NO_DEBUG_OUTPUT

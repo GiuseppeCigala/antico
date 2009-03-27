@@ -119,7 +119,7 @@ void Trashdialog::delete_pressed()
         QStringList rem_file_args;
         rem_file_args << "-rf" << selection_path;
         QProcess::startDetached("/bin/rm", rem_file_args); // remove the selected dir/file
-        dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+        update(); // update the TreeView
 
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));
@@ -150,7 +150,7 @@ void Trashdialog::restore_pressed()
         QStringList remove_args;
         remove_args <<  trash_path + "/Trash/info/" + trash_info;
         QProcess::startDetached("/bin/rm", remove_args); // remove the info file
-        dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+        update(); // update the TreeView
 
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));

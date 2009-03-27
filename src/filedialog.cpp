@@ -115,8 +115,8 @@ void Filedialog::init()
 
     QHBoxLayout *view_layout = new QHBoxLayout();
     QRadioButton *hidden_radio = new QRadioButton(tr("Show hidden files"), this);
-    QPushButton *icon_but = new QPushButton(QIcon(icon_view_pix), tr("Icons"), this);
-    QPushButton *list_but = new QPushButton(QIcon(list_view_pix), tr("List"), this);
+    icon_but = new QPushButton(QIcon(icon_view_pix), tr("Icons"), this);
+    list_but = new QPushButton(QIcon(list_view_pix), tr("List"), this);
     hidden_radio->setAutoExclusive(false);
     icon_but->setAutoExclusive(true);
     list_but->setAutoExclusive(true);
@@ -147,7 +147,6 @@ void Filedialog::init()
     list_view->setModel(dir_model);
     list_view->setDragEnabled(true);
     list_view->setFlow(QListView::LeftToRight);
-    list_view->setWrapping(true);
     list_view->setResizeMode(QListView::Adjust);
     list_view->setViewMode(QListView::IconMode);
     list_view->setUniformItemSizes(true);
@@ -539,3 +538,10 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
     event->ignore();
 }
 
+void Filedialog::update_style()
+{
+    read_settings();
+    icon_but->setIcon(QIcon(icon_view_pix));
+    list_but->setIcon(QIcon(list_view_pix));
+    upper_dir_but->setIcon(QIcon(upper_dir_pix));
+}
