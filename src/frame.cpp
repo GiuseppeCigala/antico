@@ -292,10 +292,6 @@ void Frame::set_focus(long timestamp) // set to focus to child
 
 void Frame::unmap()
 {
-    if (frame_type != "Dialog") // no iconify on Dialog frames
-    {
-        desktop->add_deskicon(this);  // add Application icon on Desktop
-    }
     XUnmapWindow(QX11Info::display(), winId());
     XUnmapWindow(QX11Info::display(), c_win);
     set_state(WithdrawnState);

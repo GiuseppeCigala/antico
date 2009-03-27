@@ -495,7 +495,7 @@ bool Antico::x11EventFilter(XEvent *event)
         if (mev->message_type == wm_change_state && event->xclient.format == 32 && event->xclient.data.l[0] == IconicState)
         {
             qDebug() << "---> wm_change_state: IconicState";
-            
+
             if ((frm = mapping_clients.value(event->xclient.window)) != NULL)
                 frm->iconify();
         }
@@ -607,7 +607,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
 
     if (frame_type.at(0) != "Dialog" && frame_type.at(0) != "Splash") // no Dockbar for Dialog/Splash frames
         dock->add_dockicon(frm); // add frame to dockbar
-        
+
     frame_type.clear(); // clear the window type list
 }
 
@@ -885,7 +885,10 @@ void Antico::show_desktop()
     foreach(Frame *frm, mapping_clients)
     {
         if ((frm->win_state().compare("IconicState") != 0 || frm->win_state().compare("WithdrawnState") != 0) && ! frm->is_splash()) // if not yet iconize/inactive
-            frm->iconify();
+        {
+            frm->raise(); // set in front
+            frm->iconify(); // catch the pixmap
+        }
     }
 
     XSync(QX11Info::display(), FALSE);
