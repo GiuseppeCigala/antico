@@ -19,14 +19,7 @@ Dockmenu::Dockmenu(QMenu *menu, QWidget *parent) : QWidget(parent)
 
 Dockmenu::~Dockmenu()
 {
-    delete &cat_menu;
-    delete &d_menu_pix;
-    delete &title_color;
-    delete &back_pix;
-    delete &cat_pix;
-    delete &bdr_width;
-    delete &dock_position;
-    delete &zoom;
+    delete cat_menu;
 }
 
 void Dockmenu::read_settings()

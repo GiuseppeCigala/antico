@@ -36,7 +36,6 @@ public slots:
 signals:
  
 private:
-    QMenu *cat_menu;
     QString d_menu_pix;
     QColor title_color;
     QPixmap back_pix;
@@ -44,6 +43,7 @@ private:
     int bdr_width;
     int dock_position;
     bool zoom;
+    QMenu *cat_menu;
 };
  
 #endif

@@ -46,16 +46,16 @@ private:
     QString close_button_pix;
     QString restore_button_pix;
     QString remove_button_pix;
+    QPoint mousepos;
+    QString trash_path;
+    QString stl_path;
+    QString stl_name;
     QSettings *style;
     QSettings *antico;
-    QPoint mousepos;
     QLineEdit *line_path;
-    QString trash_path;
     QDirModel *dir_model;
     QTreeView *tree_view;
     Fileicon *prov;
-    QString stl_path;
-    QString stl_name;
 };
 
 #endif

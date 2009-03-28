@@ -93,12 +93,30 @@ public:
     {
         return splash;
     }
- 
+
+public slots:
+    void press_top_mid(QMouseEvent *);          // top mid border press
+    void move_top_mid(QMouseEvent *);           // top mid border move
+    void press_bottom_left(QMouseEvent *);      // bottom left border press
+    void move_bottom_left(QMouseEvent *);       // bottom left border move
+    void press_bottom_right(QMouseEvent *);     // bottom right border press
+    void move_bottom_right(QMouseEvent *);      // bottom right border move
+    void press_bottom_mid(QMouseEvent *);       // bottom mid border press
+    void move_bottom_mid(QMouseEvent *);        // bottom mid border move
+    void press_right(QMouseEvent *);            // right border press
+    void move_right(QMouseEvent *);             // right border move
+    void press_left(QMouseEvent *);             // left border press
+    void move_left(QMouseEvent *);              // left border move
+    void destroy();                             // destroy client
+    void maximize();                            // maximize client
+    void iconify();                             // iconify client
+    void dragEnterEvent(QDragEnterEvent *);
+    void dragMoveEvent(QDragMoveEvent *);
+    void dropEvent(QDropEvent *);
+    
 private:
-    QDesktopWidget *desk;       // root window
+   
     WId c_win;                  // client window
-    Desk *desktop;              // desktop
-    Dockbar *dockbar;           // dockbar
     QString frame_type;         // frame type (Normal, Splash, Dialog, Desktop..)
     QString app_icon;           // default header icon used if no icon is find
     QPoint mousepos;            // mouse position at button press
@@ -140,6 +158,8 @@ private:
     QString res_class;          // ClassHint
     bool inputfield;            // WMHints
     Colormap cmap;              // colormap
+    Desk *desktop;              // desktop
+    Dockbar *dockbar;           // dockbar
     Header *tm_bdr;             // top mid window border (for window move)
     Border *tl_bdr;             // top left window border (icon)
     Border *tr_bdr;             // top right window border (icon)
@@ -149,28 +169,9 @@ private:
     Border *l_bdr;              // left window border
     Border *r_bdr;              // right window border
     Border *c_bdr;              // center window border (client apps)
+    QDesktopWidget *desk;       // root window
     QGridLayout *layout;
     QSettings *style;
     QSettings *antico;
-
-public slots:
-    void press_top_mid(QMouseEvent *);          // top mid border press
-    void move_top_mid(QMouseEvent *);           // top mid border move
-    void press_bottom_left(QMouseEvent *);      // bottom left border press
-    void move_bottom_left(QMouseEvent *);       // bottom left border move
-    void press_bottom_right(QMouseEvent *);     // bottom right border press
-    void move_bottom_right(QMouseEvent *);      // bottom right border move
-    void press_bottom_mid(QMouseEvent *);       // bottom mid border press
-    void move_bottom_mid(QMouseEvent *);        // bottom mid border move
-    void press_right(QMouseEvent *);            // right border press
-    void move_right(QMouseEvent *);             // right border move
-    void press_left(QMouseEvent *);             // left border press
-    void move_left(QMouseEvent *);              // left border move
-    void destroy();                             // destroy client
-    void maximize();                            // maximize client
-    void iconify();                             // iconify client
-    void dragEnterEvent(QDragEnterEvent *);
-    void dragMoveEvent(QDragMoveEvent *);
-    void dropEvent(QDropEvent *);
 };
 #endif

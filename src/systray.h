@@ -38,10 +38,7 @@ protected:
     virtual bool x11Event (XEvent *);
     
 private:
-    QHBoxLayout *layout;
     QHash<int, Sysicon *> sys_icons; // mapping frame id with Sysicon (key=frame_win_id value=Sysicon)
-    Sysicon *s_icon;
-    QX11EmbedContainer *emb_cont;
     QString sys_pix;
     // System tray properties
     Atom kde_systray_prop;
@@ -49,6 +46,9 @@ private:
     Atom net_selection_atom;
     Atom net_manager_atom;
     Atom net_message_data_atom;
+    QHBoxLayout *layout;
+    Sysicon *s_icon;
+    QX11EmbedContainer *emb_cont;
 };
 
 #endif

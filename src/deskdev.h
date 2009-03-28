@@ -44,8 +44,6 @@ signals:
 public slots:
  
 private:
-    QMenu *main_menu;
-    QMenu *open_menu;
     QString device_name;
     QString mount_path;
     QString device_label;
@@ -56,9 +54,11 @@ private:
     QString open_with_pix;
     QColor d_dev_col;
     QPixmap dev_pix;
+    bool zoom;
     QSettings *style;
     QSettings *antico;
-    bool zoom;
+    QMenu *main_menu;
+    QMenu *open_menu;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;
 };

@@ -20,6 +20,7 @@ Colordialog::Colordialog(const QColor &color, QWidget *parent) : QDialog(parent)
 
 Colordialog::~Colordialog()
 {
+    delete buttonBox;
     delete col_sel;
 }
 

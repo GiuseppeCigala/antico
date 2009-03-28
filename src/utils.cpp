@@ -86,20 +86,15 @@ Categorymenu::Categorymenu(QWidget *parent) : QWidget(parent)
 
 Categorymenu::~Categorymenu()
 {
-    delete &audiovideo_menu;
-    delete &system_menu;
-    delete &development_menu;
-    delete &graphics_menu;
-    delete &network_menu;
-    delete &office_menu;
-    delete &utility_menu;
-    delete &utility_pix;
-    delete &office_pix;
-    delete &network_pix;
-    delete &graphics_pix;
-    delete &devel_pix;
-    delete &system_pix;
-    delete &audiovideo_pix;
+    delete style;
+    delete antico;
+    delete audiovideo_menu;
+    delete system_menu;
+    delete development_menu;
+    delete graphics_menu;
+    delete network_menu;
+    delete office_menu;
+    delete utility_menu;
 }
 
 void Categorymenu::init()
@@ -433,17 +428,8 @@ Fileicon::Fileicon() : QFileIconProvider()
 
 Fileicon::~Fileicon()
 {
-    delete &utility_pix;
-    delete &office_pix;
-    delete &network_pix;
-    delete &graphics_pix;
-    delete &devel_pix;
-    delete &system_pix;
-    delete &audiovideo_pix;
-    delete &d_folder_pix;
-    delete &application_pix;
-    delete antico;
     delete style;
+    delete antico;
 }
 
 QIcon Fileicon::icon(const QFileInfo &info) const

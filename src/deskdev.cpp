@@ -26,16 +26,12 @@ Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, co
 
 Deskdev::~Deskdev()
 {
+    delete style;
+    delete antico;
+    delete main_menu;
+    delete open_menu;
     delete file_dialog;
     delete cat_menu;
-    delete &device_name;
-    delete &mount_path;
-    delete &device_label;
-    delete &device_type;
-    delete &d_disk_pix;
-    delete &d_cdrom_pix;
-    delete &open_with_pix;
-    delete &d_dev_col;
 }
 
 void Deskdev::read_settings()

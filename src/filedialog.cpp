@@ -32,31 +32,35 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
 
 Filedialog::~Filedialog()
 {
-    delete cat_menu;
+    delete message;
+    delete preview_label;
     delete layout;
-    delete dir_model;
+    delete button_box;
+    delete ok;
+    delete cancel;
+    delete close;
+    delete antico;
+    delete style;
     delete completer;
-    delete main_menu;
+    delete root_item;
+    delete bin_item;
+    delete home_item;
+    delete path_widget;
+    delete cut_act;
+    delete copy_act;
+    delete paste_act;
+    delete dir_model;
+    delete list_view;
+    delete tree_view;
+    delete abstract_view;
     delete line_path;
+    delete upper_dir_but;
+    delete icon_but;
+    delete list_but;
+    delete main_menu;
+    delete open_menu;
+    delete cat_menu;
     delete prov;
-    delete &menu_list;
-    delete &delete_file_pix;
-    delete &cut_file_pix;
-    delete &copy_file_pix;
-    delete &paste_file_pix;
-    delete &open_with_pix;
-    delete &list_view_pix;
-    delete &icon_view_pix;
-    delete &upper_dir_pix;
-    delete &root_item;
-    delete &bin_item;
-    delete &home_item;
-    delete &path_widget;
-    delete &command;
-    delete &source_path;
-    delete &cut_act;
-    delete &copy_act;
-    delete &paste_act;
 }
 
 void Filedialog::read_settings()

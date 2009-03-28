@@ -77,9 +77,6 @@ protected:
     void dropEvent(QDropEvent *);
 
 private:
-    QMenu *menu;
-    QSettings *style;
-    QSettings *antico;
     int dock_height;
     QList<Deskfolder *> desk_folders;
     QList<Deskfolder *> desk_folders_selected;
@@ -89,13 +86,16 @@ private:
     QList<Deskapp *> desk_apps_selected;
     QHash<QString, Deskdev *> desk_dev;
     QHash<int, Deskicon *> desk_icons; // mapping Frame and Deskicon (key=frame win_id value=Deskicon)
-    QDBusInterface *dbus_interface;
     QString wall_pix;
     QString folder_link_pix;
     QString file_link_pix;
     QString app_link_pix;
     QPoint rubber_press;
+    QDBusInterface *dbus_interface;
     QRubberBand *rubber_band;
+    QMenu *menu;
+    QSettings *style;
+    QSettings *antico;
     Antico *app;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;
@@ -105,7 +105,6 @@ private:
     Deskicon *d_icon;
     Appicon *app_icon;
     Trash *trsh;
-    
 };
 
 

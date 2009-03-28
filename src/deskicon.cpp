@@ -22,9 +22,6 @@ Deskicon::Deskicon(Frame *frame, QWidget *parent) : QLabel(parent)
 Deskicon::~Deskicon()
 {
     delete frm;
-    delete &mousepos;
-    delete &grab_pix; 
-    delete &close_desk_pix;
 }
 
 void Deskicon::read_settings()

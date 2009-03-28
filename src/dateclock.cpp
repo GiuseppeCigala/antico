@@ -18,10 +18,8 @@ Dateclock::Dateclock(QWidget *parent) : QLabel(parent)
 
 Dateclock::~Dateclock()
 {
-    delete &time;
-    delete &date;
-    delete &date_col;
-    delete &clock_col;
+    delete timer;
+    delete style;
 }
 
 void Dateclock::read_settings()

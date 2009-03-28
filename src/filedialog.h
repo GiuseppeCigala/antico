@@ -64,17 +64,8 @@ public slots:
     void set_list_mode();
 
 private:
+    QList <QMenu *> menu_list;
     QPoint mousepos;
-    QDirModel *dir_model;
-    QListView *list_view;
-    QTreeView *tree_view;
-    QAbstractItemView *abstract_view;
-    QLineEdit *line_path;
-    QPushButton *upper_dir_but;
-    QPushButton *icon_but;
-    QPushButton *list_but;
-    QMenu *main_menu;
-    QMenu *open_menu;
     QString delete_file_pix;
     QString cut_file_pix;
     QString copy_file_pix;
@@ -86,6 +77,9 @@ private:
     QString ok_button_pix_path;
     QString close_button_pix_path;
     QString folder_pix;
+    QString trash_path;
+    QString command;
+    QString source_path;
     QLabel *message;
     QLabel *preview_label;
     QVBoxLayout *layout;
@@ -100,15 +94,21 @@ private:
     QListWidgetItem *bin_item;
     QListWidgetItem *home_item;
     QListWidget *path_widget;
-    QString trash_path;
-    QString command;
-    QString source_path;
     QAction *cut_act;
     QAction *copy_act;
     QAction *paste_act;
+    QDirModel *dir_model;
+    QListView *list_view;
+    QTreeView *tree_view;
+    QAbstractItemView *abstract_view;
+    QLineEdit *line_path;
+    QPushButton *upper_dir_but;
+    QPushButton *icon_but;
+    QPushButton *list_but;
+    QMenu *main_menu;
+    QMenu *open_menu;
     Categorymenu *cat_menu;
     Fileicon *prov;
-    QList <QMenu *> menu_list;
 };
 
 

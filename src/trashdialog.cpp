@@ -17,7 +17,14 @@ Trashdialog::Trashdialog(QWidget *parent) : QDialog(parent)
 }
 
 Trashdialog::~Trashdialog()
-{}
+{
+    delete style;
+    delete antico;
+    delete line_path;
+    delete dir_model;
+    delete tree_view;
+    delete prov;
+}
 
 void Trashdialog::read_settings()
 {

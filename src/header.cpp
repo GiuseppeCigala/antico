@@ -17,8 +17,6 @@ Header::Header(const QPixmap &icn, const QString &nm, QWidget *parent) : QWidget
 
 Header::~Header()
 {
-    delete &icon;
-    delete &app_name;
 }
 
 void Header::paintEvent(QPaintEvent *)

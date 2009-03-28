@@ -41,11 +41,8 @@ Antico::~Antico()
     delete dock;
     delete cat_menu;
     delete file_dialog;
-    delete &frm_list;
-    delete &frm_list;
-    delete &event_names;
-    delete &mapping_clients;
-    delete &mapping_frames;
+    delete antico;
+    delete style;
 }
 
 void Antico::set_event_names()

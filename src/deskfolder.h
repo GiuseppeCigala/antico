@@ -48,8 +48,6 @@ public slots:
     void del_folder();
 
 private:
-    QMenu *main_menu;
-    QMenu *open_menu;
     QString dir_name;
     QString dir_path;
     QRect geom;
@@ -59,11 +57,13 @@ private:
     QString open_with_pix;
     QColor d_folder_col;
     QPixmap pix;
+    bool zoom;
+    bool selected;
     QSettings *style;
     QSettings *antico;
     QAction *delete_folder;
-    bool zoom;
-    bool selected;
+    QMenu *main_menu;
+    QMenu *open_menu;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;
 };

@@ -40,9 +40,6 @@ public slots:
 
 private:
     QPoint mousepos;
-    QLabel *msg_header;
-    QLabel *msg_info;
-    QLabel *msg_icon;
     QString ok_button_pix_path;
     QString close_button_pix_path;
     QString add_button_pix_path;
@@ -51,10 +48,12 @@ private:
     QString information_pix_path;
     QString warning_pix_path;
     QString critical_pix_path;
+    QLabel *msg_header;
+    QLabel *msg_info;
+    QLabel *msg_icon;
     QDialogButtonBox *button_box;
     QPushButton *ok_but;
     QPushButton *close_but; 
-
 };
 
 

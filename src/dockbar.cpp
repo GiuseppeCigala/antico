@@ -70,16 +70,22 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
  
 Dockbar::~Dockbar()
 {
-    delete app;
+    delete style;
+    delete antico;
+    delete menu;
+    delete dock_layout;
     delete icon_layout;
+    delete app_layout;
+    delete menu_layout;
+    delete d_app_widget;
+    delete d_icon_widget;
+    delete d_menu_widget;
+    delete lchr;
     delete d_icon;
-    delete &dock_icons;
-    delete &dock_apps;
-    delete &dock_menus;
-    delete &dock_pix;
-    delete &dock_height;
-    delete &dock_width;
-    delete &dock_position;
+    delete sys;
+    delete clk;
+    delete app;
+    delete file_dialog;
 }
  
 void Dockbar::read_settings()

@@ -22,17 +22,13 @@ Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_
 
 Deskfolder::~Deskfolder()
 {
+    delete style;
+    delete antico;
+    delete delete_folder;
+    delete main_menu;
+    delete open_menu;
     delete file_dialog;
     delete cat_menu;
-    delete &open_menu;
-    delete &dir_name;
-    delete &dir_path;
-    delete &geom;
-    delete &d_folder_pix;
-    delete &d_folder_col;
-    delete &delete_link_pix;
-    delete &open_with_pix;
-    delete &pix;
 }
 
 void Deskfolder::init()

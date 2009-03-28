@@ -23,11 +23,9 @@ Deskapp::Deskapp(const QString &app_nm, const QString &app_exe, const QString &a
 
 Deskapp::~Deskapp()
 {
-    delete &app_name;
-    delete &app_exec;
-    delete &d_app_pix;
-    delete &d_app_col;
-    delete &delete_link_pix;
+    delete style;
+    delete antico;
+    delete menu;
 }
 
 void Deskapp::read_settings()

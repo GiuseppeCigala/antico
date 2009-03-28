@@ -43,14 +43,14 @@ signals:
     void destroy_dockicon(Dockicon *);
  
 private:
-    Frame *frm;
-    Systray *sys;
     QColor title_color;
     QString title;
     QString close_dock_pix;
     QString add_to_sys_pix;
     QPixmap pix;
     int bdr_width;
+    Frame *frm;
+    Systray *sys;
 };
  
 #endif

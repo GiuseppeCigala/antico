@@ -21,9 +21,9 @@ Dockapp::Dockapp(const QString &app_nm, const QString &app_exe, const QString &a
 
 Dockapp::~Dockapp()
 {
-    delete &app_name;
-    delete &app_exec;
-    delete &delete_link_pix;
+    delete style;
+    delete antico;
+    delete menu;
 }
 
 void Dockapp::read_settings()

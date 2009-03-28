@@ -66,8 +66,6 @@ private:
     QList<Frame *> frm_list;
     int next_frame;
     QStringList frame_type;
-    QSettings *antico;
-    QSettings *style;
     int servershapes; // server supports shapes
     int ShapeEventBase; // event base for shape extension
     // get WM protocols required by ICCCM
@@ -95,6 +93,8 @@ private:
     Atom _net_wm_window_type_splash;
     Atom _kde_net_wm_system_tray_window_for;
     //////////////
+    QSettings *antico;
+    QSettings *style;
     Dockbar *dock;
     Desk *dsk;
     Frame *frm;

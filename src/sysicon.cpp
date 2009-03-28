@@ -20,10 +20,8 @@ Sysicon::Sysicon(Frame *frame, QWidget *parent) : QWidget(parent)
 
 Sysicon::~Sysicon()
 {
-    delete &pix;
-    delete &s_icon_pix;
-    delete &close_dock_pix;
-    delete &title_color;
+    delete frm;
+    delete style;
 }
 
 void Sysicon::read_settings()

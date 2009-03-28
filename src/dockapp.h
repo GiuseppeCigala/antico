@@ -38,15 +38,15 @@ public slots:
     void del_app();
 
 private:
-    QMenu *menu;
     QString app_name;
     QString app_exec;
     QString delete_link_pix;
     QString d_app_pix;
     QPoint mousepos;
+    int dock_height;
     QSettings *style;
     QSettings *antico;
-    int dock_height;
+    QMenu *menu;
 };
 
 #endif

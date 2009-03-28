@@ -39,10 +39,10 @@ signals:
     void destroy_deskicon(Deskicon *);
 
 private:
-    Frame *frm;
     QPoint mousepos;
     QPixmap grab_pix; 
     QString close_desk_pix;
+    Frame *frm;
 };
 
 #endif

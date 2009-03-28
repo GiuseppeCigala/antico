@@ -38,10 +38,9 @@ public slots:
 
 private:
     QPoint mousepos;
-    QDialogButtonBox *buttonBox;
     QColor actual_col;
+    QDialogButtonBox *buttonBox;
     Colorsel *col_sel;
-
 };
 
 

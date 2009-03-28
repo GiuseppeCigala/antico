@@ -24,18 +24,21 @@ Frame::Frame(Window w, const QString &type, Dockbar *dock, Desk *desk, QWidget *
 Frame::~Frame()
 {
     delete desk;
+    delete desktop;
     delete dockbar;
     delete desktop;
-    delete &title_color;
-    delete &lateral_bdr_width;
-    delete &top_bdr_height;
-    delete &bottom_bdr_height;
-    delete &header_active_pix;
-    delete &header_inactive_pix;
-    delete &minmax_pix;
-    delete &close_pix;
-    delete tr_bdr;
+    delete tm_bdr;
     delete tl_bdr;
+    delete tr_bdr;
+    delete bm_bdr;
+    delete bl_bdr;
+    delete br_bdr;
+    delete l_bdr;
+    delete r_bdr;
+    delete c_bdr;
+    delete layout;
+    delete style;
+    delete antico;
 }
 
 void Frame::read_settings()

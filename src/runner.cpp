@@ -19,8 +19,7 @@ Runner::Runner(QWidget *parent) : QDialog(parent)
 
 Runner::~Runner()
 {
-    delete &ok_button_pix_path;
-    delete &close_button_pix_path;
+    delete command;
 }
 
 void Runner::read_settings()

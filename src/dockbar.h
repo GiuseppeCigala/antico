@@ -66,13 +66,6 @@ protected:
     void dropEvent(QDropEvent *);
     
 private:
-    QHBoxLayout *dock_layout;
-    QHBoxLayout *icon_layout;
-    QHBoxLayout *app_layout;
-    QHBoxLayout *menu_layout;
-    QWidget *d_app_widget;
-    QWidget *d_icon_widget;
-    QWidget *d_menu_widget;
     QHash<int, Dockicon *> dock_icons; // mapping Frame and Dockicon (key=frame win_id value=Dockicon)
     QList<Dockapp *> dock_apps;
     QList<Dockmenu *> dock_menus;
@@ -86,6 +79,13 @@ private:
     QSettings *style;
     QSettings *antico;
     QMenu *menu;
+    QHBoxLayout *dock_layout;
+    QHBoxLayout *icon_layout;
+    QHBoxLayout *app_layout;
+    QHBoxLayout *menu_layout;
+    QWidget *d_app_widget;
+    QWidget *d_icon_widget;
+    QWidget *d_menu_widget;
     Launcher *lchr;
     Dockicon *d_icon;
     Systray *sys;

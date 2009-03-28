@@ -16,7 +16,11 @@ Trash::Trash(QWidget *parent) : QWidget(parent)
 }
 
 Trash::~Trash()
-{}
+{
+    delete style;
+    delete antico;
+    delete trash_dlg;
+}
 
 void Trash::init()
 {

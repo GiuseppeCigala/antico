@@ -17,7 +17,14 @@ Msgbox::Msgbox(QWidget *parent) : QDialog(parent)
 }
 
 Msgbox::~Msgbox()
-{}
+{
+    delete msg_header;
+    delete msg_info;
+    delete msg_icon;
+    delete button_box;
+    delete ok_but;
+    delete close_but; 
+}
 
 void Msgbox::init()
 {

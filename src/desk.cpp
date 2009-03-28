@@ -23,26 +23,20 @@ Desk::Desk(Antico *a, QWidget *parent) : QLabel(parent)
 
 Desk::~Desk()
 {
+    delete dbus_interface;
+    delete rubber_band;
+    delete menu;
+    delete style;
+    delete antico;
     delete app;
     delete file_dialog;
     delete cat_menu;
     delete d_folder;
     delete d_file;
     delete d_app;
-    delete &dock_height;
-    delete &wall_pix;
-    delete &file_link_pix;
-    delete &folder_link_pix;
-    delete &app_link_pix;
-    delete &desk_folders;
-    delete &desk_folders_selected;
-    delete &desk_files;
-    delete &desk_files_selected;
-    delete &desk_apps;
-    delete &desk_apps_selected;
-    delete &desk_dev;
     delete d_icon;
-    delete &desk_icons;
+    delete app_icon;
+    delete trsh;
 }
 
 void Desk::read_settings()

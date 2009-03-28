@@ -20,16 +20,16 @@ Launcher::Launcher(Antico *a, QWidget *parent) : QLabel(parent)
 Launcher::~Launcher()
 {
     delete app;
-    delete &launcher_pix;
-    delete &quit_pix;
-    delete &shutdown_pix;
-    delete &restart_pix;
-    delete &refresh_pix;
-    delete &show_pix;
-    delete &run_pix;
-    delete &manager_pix;
-    delete &dock_position;
-    delete &dock_height;
+    delete quit;
+    delete shutdown;
+    delete restart;
+    delete refresh;
+    delete run;
+    delete show_desk;
+    delete manag;
+    delete style;
+    delete antico;
+    delete main_menu;
 }
 
 void Launcher::init()

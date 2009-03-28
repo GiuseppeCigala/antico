@@ -21,10 +21,6 @@ Dockicon::~Dockicon()
 {
     delete frm;
     delete sys;
-    delete &pix;
-    delete &title_color;
-    delete &close_dock_pix;
-    delete &add_to_sys_pix;
 }
  
 void Dockicon::read_settings()

@@ -40,9 +40,9 @@ public slots:
 
 private:
     QPoint mousepos;
-    QLineEdit *command;
     QString ok_button_pix_path;
     QString close_button_pix_path;
+    QLineEdit *command;
 };
 
 

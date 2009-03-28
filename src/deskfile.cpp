@@ -21,14 +21,12 @@ Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &fi
 
 Deskfile::~Deskfile()
 {
-    delete cat_menu;
+    delete main_menu;
     delete open_menu;
-    delete &file_name;
-    delete &file_path;
-    delete &d_file_pix;
-    delete &d_file_col;
-    delete &delete_link_pix;
-    delete &open_with_pix;
+    delete antico;
+    delete style;
+    delete delete_file;
+    delete cat_menu;
 }
 
 void Deskfile::init()
