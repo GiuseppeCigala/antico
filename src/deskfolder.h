@@ -59,7 +59,6 @@ private:
     QPixmap pix;
     bool zoom;
     bool selected;
-    QSettings *style;
     QSettings *antico;
     QAction *delete_folder;
     QMenu *main_menu;

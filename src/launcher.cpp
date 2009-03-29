@@ -20,16 +20,7 @@ Launcher::Launcher(Antico *a, QWidget *parent) : QLabel(parent)
 Launcher::~Launcher()
 {
     delete app;
-    delete quit;
-    delete shutdown;
-    delete restart;
-    delete refresh;
-    delete run;
-    delete show_desk;
-    delete manag;
-    delete style;
     delete antico;
-    delete main_menu;
 }
 
 void Launcher::init()
@@ -95,7 +86,7 @@ void Launcher::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get action icons
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Launcher");
     launcher_pix = stl_path + style->value("launcher_pix").toString();
     quit_pix = stl_path + style->value("quit_pix").toString();

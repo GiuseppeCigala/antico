@@ -26,7 +26,7 @@ public:
     ~Trashdialog();
     void read_settings();
     void init();
-    void update();
+    void update_tree();
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -50,8 +50,6 @@ private:
     QString trash_path;
     QString stl_path;
     QString stl_name;
-    QSettings *style;
-    QSettings *antico;
     QLineEdit *line_path;
     QDirModel *dir_model;
     QTreeView *tree_view;

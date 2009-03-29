@@ -21,9 +21,7 @@ Dockapp::Dockapp(const QString &app_nm, const QString &app_exe, const QString &a
 
 Dockapp::~Dockapp()
 {
-    delete style;
     delete antico;
-    delete menu;
 }
 
 void Dockapp::read_settings()
@@ -35,7 +33,7 @@ void Dockapp::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat,this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat,this);
     style->beginGroup("Dockbar");
     dock_height = style->value("dock_height").toInt();
     style->endGroup(); //Dockbar

@@ -19,7 +19,6 @@ Runner::Runner(QWidget *parent) : QDialog(parent)
 
 Runner::~Runner()
 {
-    delete command;
 }
 
 void Runner::read_settings()

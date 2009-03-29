@@ -48,7 +48,6 @@ private:
     QColor title_color;
     int bdr_width;
     Frame *frm;
-    QSettings *style;
 };
 
 #endif

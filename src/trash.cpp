@@ -17,9 +17,7 @@ Trash::Trash(QWidget *parent) : QWidget(parent)
 
 Trash::~Trash()
 {
-    delete style;
     delete antico;
-    delete trash_dlg;
 }
 
 void Trash::init()
@@ -27,7 +25,7 @@ void Trash::init()
     setFixedSize(100, 50);
     pix = QPixmap(trash_pix); // set default pixmap
     zoom = false;
-    trash_dlg = new Trashdialog(); // create the Trashdialog
+    trash_dlg = new Trashdialog(this); // create the Trashdialog
 }
 
 void Trash::read_settings()
@@ -39,7 +37,7 @@ void Trash::read_settings()
     stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Trash");
     trash_pix = stl_path + style->value("trash_pix").toString();
     trash_col = style->value("name_color").value<QColor>();

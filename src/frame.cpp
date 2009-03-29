@@ -23,22 +23,6 @@ Frame::Frame(Window w, const QString &type, Dockbar *dock, Desk *desk, QWidget *
 
 Frame::~Frame()
 {
-    delete desk;
-    delete desktop;
-    delete dockbar;
-    delete desktop;
-    delete tm_bdr;
-    delete tl_bdr;
-    delete tr_bdr;
-    delete bm_bdr;
-    delete bl_bdr;
-    delete br_bdr;
-    delete l_bdr;
-    delete r_bdr;
-    delete c_bdr;
-    delete layout;
-    delete style;
-    delete antico;
 }
 
 void Frame::read_settings()
@@ -50,7 +34,7 @@ void Frame::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     ////// Frame //////
     style->beginGroup("Frame");
     style->beginGroup("Border");
@@ -79,7 +63,6 @@ void Frame::read_settings()
 
 void Frame::init()
 {
-    desk = QApplication::desktop();
     maximized = false;
     state = "NormalState";
     shaped = false;
@@ -127,14 +110,14 @@ void Frame::init()
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
 
     //if the frame is too large, maximize it
-    if (frame_w >= desk->width()-20 || frame_h >= desk->height()-40)
+    if (frame_w >= QApplication::desktop()->width()-20 || frame_h >= QApplication::desktop()->height()-40)
     {
         maximize();
     }
     else // normal size
     {
         // move the frame in desktop center and resize
-        move((desk->width()/2)-(frame_w/2), (desk->height()/2)-(frame_h/2));
+        move((QApplication::desktop()->width()/2)-(frame_w/2), (QApplication::desktop()->height()/2)-(frame_h/2));
         resize(frame_w, frame_h);
     }
     qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
@@ -796,12 +779,12 @@ void Frame::maximize()
         n_pw = width();
         n_ph = height();
         // maximize parent with vertex and screen dimension-dockbar height
-        m_pw = desk->width();
-        m_ph = desk->height()-dock_height;
+        m_pw = QApplication::desktop()->width();
+        m_ph = QApplication::desktop()->height()-dock_height;
         if (dock_position == 0) // bottom
-            move(desk->x(), desk->y());
+            move(QApplication::desktop()->x(), QApplication::desktop()->y());
         else // top
-            move(desk->x(), desk->y()+dock_height);
+            move(QApplication::desktop()->x(), QApplication::desktop()->y()+dock_height);
         resize(m_pw, m_ph);
         raise();
         // maximize client

@@ -62,7 +62,6 @@ private:
     QAction *run;
     QAction *show_desk;
     QAction *manag;
-    QSettings *style;
     QSettings *antico;
     QMenu *main_menu;
 };

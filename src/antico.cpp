@@ -36,13 +36,9 @@ Antico::Antico(int &argc, char **argv) : QApplication(argc, argv)
 
 Antico::~Antico()
 {
-    delete dsk;
-    delete frm;
-    delete dock;
     delete cat_menu;
     delete file_dialog;
     delete antico;
-    delete style;
 }
 
 void Antico::set_event_names()
@@ -345,6 +341,7 @@ bool Antico::x11EventFilter(XEvent *event)
             mapping_frames.remove(frm->winId());
             dsk->remove_deskicon(frm->winId()); // remove eventually Deskicon still mapped
             dock->remove_dockicon(frm); // remove eventually Dockicon or Sysicon still mapped
+            delete frm;
             return true;
         }
         if (event->xdestroywindow.event != event->xdestroywindow.window)
@@ -806,7 +803,7 @@ void Antico::wm_quit()
         XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
-        quit();
+        emit lastWindowClosed();
     }
 }
 
@@ -838,7 +835,7 @@ void Antico::wm_shutdown()
         XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
-        quit();
+        emit lastWindowClosed();
     }
 }
 
@@ -871,7 +868,7 @@ void Antico::wm_restart()
         XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
-        quit();
+        emit lastWindowClosed();
     }
 }
 
@@ -953,7 +950,7 @@ void Antico::set_settings()
         qDebug () << "Error on setting antico.cfg";
     }
 
-    style = new QSettings(QCoreApplication::applicationDirPath() + "/theme/default/default.stl", QSettings::IniFormat, this);
+    QSettings *style = new QSettings(QCoreApplication::applicationDirPath() + "/theme/default/default.stl", QSettings::IniFormat, this);
     // set default icon on first installation, if no "/default.stl" is set
     if (style->childGroups().isEmpty())
     {

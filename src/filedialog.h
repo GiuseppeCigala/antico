@@ -88,7 +88,6 @@ private:
     QPushButton *cancel;
     QPushButton *close;
     QSettings *antico;
-    QSettings *style;
     QCompleter *completer;
     QListWidgetItem *root_item;
     QListWidgetItem *bin_item;

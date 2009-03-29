@@ -15,7 +15,7 @@
 
 Systray::Systray(QWidget *parent) : QLabel(parent)
 {
-    layout = new QHBoxLayout(this);
+    layout = new QHBoxLayout();
     layout->setAlignment(Qt::AlignRight);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(1);
@@ -53,8 +53,6 @@ Systray::Systray(QWidget *parent) : QLabel(parent)
 Systray::~Systray()
 {
     delete layout;
-    delete s_icon;
-    delete emb_cont;
 }
 
 void Systray::add_sysicon(Frame *frm)

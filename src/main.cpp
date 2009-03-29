@@ -27,6 +27,7 @@ int main(int argc, char **argv)
     qDebug() << "GUI creation...";
     a.create_gui();
     
+    a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
     return a.exec();
 }
 

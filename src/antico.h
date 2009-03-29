@@ -94,7 +94,6 @@ private:
     Atom _kde_net_wm_system_tray_window_for;
     //////////////
     QSettings *antico;
-    QSettings *style;
     Dockbar *dock;
     Desk *dsk;
     Frame *frm;

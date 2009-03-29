@@ -94,7 +94,6 @@ private:
     QDBusInterface *dbus_interface;
     QRubberBand *rubber_band;
     QMenu *menu;
-    QSettings *style;
     QSettings *antico;
     Antico *app;
     Filedialog *file_dialog;

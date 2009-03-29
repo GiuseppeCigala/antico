@@ -55,8 +55,6 @@ private:
     QColor d_dev_col;
     QPixmap dev_pix;
     bool zoom;
-    QSettings *style;
-    QSettings *antico;
     QMenu *main_menu;
     QMenu *open_menu;
     Filedialog *file_dialog;

@@ -37,7 +37,6 @@ private:
     QColor date_col;
     QColor clock_col;
     QTimer *timer;
-    QSettings *style;
 };
 
 #endif

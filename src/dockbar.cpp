@@ -70,19 +70,12 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
  
 Dockbar::~Dockbar()
 {
-    delete style;
     delete antico;
-    delete menu;
     delete dock_layout;
     delete icon_layout;
     delete app_layout;
     delete menu_layout;
-    delete d_app_widget;
-    delete d_icon_widget;
-    delete d_menu_widget;
-    delete lchr;
     delete d_icon;
-    delete sys;
     delete clk;
     delete app;
     delete file_dialog;
@@ -97,7 +90,7 @@ void Dockbar::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Dockbar");
     dock_pix = stl_path + style->value("dock_pix").toString();
     dock_height = style->value("dock_height").toInt();

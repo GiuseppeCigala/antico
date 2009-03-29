@@ -26,9 +26,6 @@ Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, co
 
 Deskdev::~Deskdev()
 {
-    delete style;
-    delete antico;
-    delete main_menu;
     delete open_menu;
     delete file_dialog;
     delete cat_menu;
@@ -37,13 +34,13 @@ Deskdev::~Deskdev()
 void Deskdev::read_settings()
 {
     // get style path
-    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     QString stl_name = antico->value("name").toString();
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Deskdev");
     d_disk_pix = stl_path + style->value("d_disk_pix").toString();
     d_cdrom_pix = stl_path + style->value("d_cdrom_pix").toString();

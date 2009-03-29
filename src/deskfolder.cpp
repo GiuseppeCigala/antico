@@ -22,10 +22,8 @@ Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_
 
 Deskfolder::~Deskfolder()
 {
-    delete style;
     delete antico;
     delete delete_folder;
-    delete main_menu;
     delete open_menu;
     delete file_dialog;
     delete cat_menu;
@@ -61,7 +59,7 @@ void Deskfolder::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Deskfolder");
     d_folder_pix = stl_path + style->value("d_folder_pix").toString();
     d_folder_col = style->value("name_color").value<QColor>();

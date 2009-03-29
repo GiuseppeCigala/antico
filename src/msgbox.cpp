@@ -13,17 +13,10 @@ Msgbox::Msgbox(QWidget *parent) : QDialog(parent)
     setSizeGripEnabled(true);
     read_settings();
     init();
-    setWindowModality(Qt::WindowModal);
 }
 
 Msgbox::~Msgbox()
 {
-    delete msg_header;
-    delete msg_info;
-    delete msg_icon;
-    delete button_box;
-    delete ok_but;
-    delete close_but; 
 }
 
 void Msgbox::init()
@@ -34,7 +27,6 @@ void Msgbox::init()
     msg_header->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     msg_header->setMaximumHeight(20);
     msg_info = new QLabel(this);
-    msg_info->setWordWrap(true);
     msg_icon = new QLabel(this);
     button_box = new QDialogButtonBox(this);
     ok_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"), this);

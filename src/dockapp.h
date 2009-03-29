@@ -44,7 +44,6 @@ private:
     QString d_app_pix;
     QPoint mousepos;
     int dock_height;
-    QSettings *style;
     QSettings *antico;
     QMenu *menu;
 };

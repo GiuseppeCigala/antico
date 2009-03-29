@@ -21,10 +21,8 @@ Deskfile::Deskfile(Categorymenu *menu, const QString &file_nm, const QString &fi
 
 Deskfile::~Deskfile()
 {
-    delete main_menu;
     delete open_menu;
     delete antico;
-    delete style;
     delete delete_file;
     delete cat_menu;
 }
@@ -58,7 +56,7 @@ void Deskfile::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Deskfile");
     d_file_col = style->value("name_color").value<QColor>();
     style->endGroup(); //Deskfile

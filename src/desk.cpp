@@ -23,20 +23,10 @@ Desk::Desk(Antico *a, QWidget *parent) : QLabel(parent)
 
 Desk::~Desk()
 {
-    delete dbus_interface;
-    delete rubber_band;
-    delete menu;
-    delete style;
     delete antico;
     delete app;
     delete file_dialog;
     delete cat_menu;
-    delete d_folder;
-    delete d_file;
-    delete d_app;
-    delete d_icon;
-    delete app_icon;
-    delete trsh;
 }
 
 void Desk::read_settings()
@@ -48,7 +38,7 @@ void Desk::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat,this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat,this);
     style->beginGroup("Desktop");
     wall_pix = stl_path + style->value("wall_pix").toString();
     style->endGroup(); //Desktop

@@ -32,32 +32,19 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
 
 Filedialog::~Filedialog()
 {
-    delete message;
-    delete preview_label;
     delete layout;
-    delete button_box;
     delete ok;
     delete cancel;
     delete close;
     delete antico;
-    delete style;
     delete completer;
     delete root_item;
     delete bin_item;
     delete home_item;
-    delete path_widget;
     delete cut_act;
     delete copy_act;
     delete paste_act;
-    delete dir_model;
-    delete list_view;
-    delete tree_view;
     delete abstract_view;
-    delete line_path;
-    delete upper_dir_but;
-    delete icon_but;
-    delete list_but;
-    delete main_menu;
     delete open_menu;
     delete cat_menu;
     delete prov;
@@ -72,7 +59,7 @@ void Filedialog::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Other");
     delete_file_pix = stl_path + style->value("delete_file_pix").toString();
     cut_file_pix = stl_path + style->value("cut_file_pix").toString();
@@ -162,7 +149,7 @@ void Filedialog::init()
     ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
     close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
 
-    path_widget = new QListWidget();
+    path_widget = new QListWidget(this);
     path_widget->setMaximumWidth(150);
     root_item = new QListWidgetItem(path_widget);
     bin_item = new QListWidgetItem(path_widget);
@@ -205,7 +192,7 @@ void Filedialog::init()
 void Filedialog::set_category_menu()
 {
     // show the Category apps list for open the file
-    main_menu = new QMenu();
+    main_menu = new QMenu(this);
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
 
     menu_list = cat_menu->get_menus();

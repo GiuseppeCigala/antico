@@ -20,15 +20,13 @@ Colordialog::Colordialog(const QColor &color, QWidget *parent) : QDialog(parent)
 
 Colordialog::~Colordialog()
 {
-    delete buttonBox;
-    delete col_sel;
 }
 
 void Colordialog::init()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
-    col_sel = new Colorsel(actual_col); // update colorsel with actual color
+    col_sel = new Colorsel(actual_col, this); // update colorsel with actual color
     layout->addWidget(col_sel);
    
     buttonBox = new QDialogButtonBox(this);

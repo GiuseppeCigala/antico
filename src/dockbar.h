@@ -76,7 +76,6 @@ private:
     QString dock_pix;
     QString arrow_pix;
     QString app_link_pix;
-    QSettings *style;
     QSettings *antico;
     QMenu *menu;
     QHBoxLayout *dock_layout;

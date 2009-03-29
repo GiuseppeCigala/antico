@@ -18,24 +18,19 @@ Trashdialog::Trashdialog(QWidget *parent) : QDialog(parent)
 
 Trashdialog::~Trashdialog()
 {
-    delete style;
-    delete antico;
-    delete line_path;
-    delete dir_model;
-    delete tree_view;
     delete prov;
 }
 
 void Trashdialog::read_settings()
 {
     // get style path
-    antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
+    QSettings *antico = new QSettings(QCoreApplication::applicationDirPath() + "/antico.cfg", QSettings::IniFormat, this);
     antico->beginGroup("Style");
     stl_name = antico->value("name").toString();
     stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Message");
     ok_button_pix = stl_path + style->value("ok_button_pix").toString();
     close_button_pix = stl_path + style->value("close_button_pix").toString();
@@ -58,21 +53,21 @@ void Trashdialog::init()
     setLayout(trash_layout);
     QLabel *name = new QLabel(tr("TRASH"), this);
     name->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    line_path = new QLineEdit(); // show trash path
+    line_path = new QLineEdit(this); // show trash path
     line_path->setReadOnly(true);
-    dir_model = new QDirModel();
+    dir_model = new QDirModel(this);
     prov = new Fileicon(); // get the files icon
     dir_model->setIconProvider(prov);
-    tree_view = new QTreeView();
+    tree_view = new QTreeView(this);
     tree_view->setModel(dir_model);
     tree_view->setSortingEnabled(true);
     trash_path = QDir::homePath() + "/.local/share"; // search in default path directory
     line_path->setText(trash_path + "/Trash/files");
     tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
     QHBoxLayout *button_layout = new QHBoxLayout();
-    QPushButton* delete_but = new QPushButton(QIcon(remove_button_pix), tr("Delete"));
-    QPushButton* restore_but = new QPushButton(QIcon(restore_button_pix), tr("Restore"));
-    QPushButton* close_but = new QPushButton(QIcon(close_button_pix), tr("Close"));
+    QPushButton* delete_but = new QPushButton(QIcon(remove_button_pix), tr("Delete"), this);
+    QPushButton* restore_but = new QPushButton(QIcon(restore_button_pix), tr("Restore"), this);
+    QPushButton* close_but = new QPushButton(QIcon(close_button_pix), tr("Close"), this);
     button_layout->addWidget(delete_but);
     button_layout->addWidget(restore_but);
     button_layout->addWidget(close_but);
@@ -126,7 +121,7 @@ void Trashdialog::delete_pressed()
         QStringList rem_file_args;
         rem_file_args << "-rf" << selection_path;
         QProcess::startDetached("/bin/rm", rem_file_args); // remove the selected dir/file
-        update(); // update the TreeView
+        update_tree(); // update the TreeView
 
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));
@@ -167,7 +162,7 @@ void Trashdialog::restore_pressed()
     }
 }
 
-void Trashdialog::update()
+void Trashdialog::update_tree()
 {
     tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
     dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView

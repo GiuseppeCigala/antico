@@ -52,7 +52,6 @@ private:
     QPixmap d_app_pix;
     bool zoom;
     bool selected;
-    QSettings *style;
     QSettings *antico;
     QMenu *menu;
 };

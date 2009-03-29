@@ -169,9 +169,7 @@ private:
     Border *l_bdr;              // left window border
     Border *r_bdr;              // right window border
     Border *c_bdr;              // center window border (client apps)
-    QDesktopWidget *desk;       // root window
     QGridLayout *layout;
-    QSettings *style;
     QSettings *antico;
 };
 #endif

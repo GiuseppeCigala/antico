@@ -68,7 +68,6 @@ private:
     QString audiovideo_pix;
     QStringList cmd_arguments;
     QString data_path;
-    QSettings *style;
     QSettings *antico;
     QMenu *audiovideo_menu;
     QMenu *system_menu;
@@ -113,8 +112,6 @@ private:
     QStringList audiovideo;
     QStringList network;
     QStringList utility;
-    QSettings *style;
-    QSettings *antico;
 };
 
 

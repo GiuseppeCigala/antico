@@ -21,7 +21,6 @@ Sysicon::Sysicon(Frame *frame, QWidget *parent) : QWidget(parent)
 Sysicon::~Sysicon()
 {
     delete frm;
-    delete style;
 }
 
 void Sysicon::read_settings()
@@ -33,7 +32,7 @@ void Sysicon::read_settings()
     QString stl_path = antico->value("path").toString();
     antico->endGroup(); //Style
     // get style values
-    style = new QSettings(stl_path +stl_name, QSettings::IniFormat, this);
+    QSettings *style = new QSettings(stl_path +stl_name, QSettings::IniFormat, this);
     style->beginGroup("Sysicon");
     s_icon_pix = stl_path + style->value("s_icon_pix").toString();
     pix = QPixmap(s_icon_pix);

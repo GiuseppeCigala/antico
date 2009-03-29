@@ -59,7 +59,6 @@ private:
     QMenu *main_menu;
     QMenu *open_menu;
     QSettings *antico;
-    QSettings *style;
     QAction *delete_file;
     Categorymenu *cat_menu;
 };
