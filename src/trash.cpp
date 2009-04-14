@@ -51,7 +51,7 @@ void Trash::paintEvent(QPaintEvent *)
     painter.setWindow(-50, -50, 100, 50);
     painter.setOpacity(0.5);
     painter.setPen(Qt::black);
-    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, tr("Trash")); // shadow Trash name
+    painter.drawText(-49, -14, 100, 20, Qt::AlignHCenter, tr("Trash")); // shadow Trash name
     painter.setOpacity(1);
     painter.setPen(trash_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, tr("Trash")); // Trash name

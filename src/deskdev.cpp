@@ -80,7 +80,7 @@ void Deskdev::paintEvent(QPaintEvent *)
 
     painter.setOpacity(0.5);
     painter.setPen(Qt::black);
-    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskdev name
+    painter.drawText(-49, -14, 100, 20, Qt::AlignHCenter, name); // shadow deskdev name
     painter.setOpacity(1);
     painter.setPen(d_dev_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskdev name

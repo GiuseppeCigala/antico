@@ -61,7 +61,7 @@ void Deskapp::paintEvent(QPaintEvent *)
    
     painter.setOpacity(0.5);
     painter.setPen(Qt::black);
-    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskapp name
+    painter.drawText(-49, -14, 100, 20, Qt::AlignHCenter, name); // shadow deskapp name
     painter.setOpacity(1);
     painter.setPen(d_app_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskapp name

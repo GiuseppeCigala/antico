@@ -82,7 +82,7 @@ void Deskfile::paintEvent(QPaintEvent *)
 
     painter.setOpacity(0.5);
     painter.setPen(Qt::black);
-    painter.drawText(-48, -13, 100, 20, Qt::AlignHCenter, name); // shadow deskfile name
+    painter.drawText(-49, -14, 100, 20, Qt::AlignHCenter, name); // shadow deskfile name
     painter.setOpacity(1);
     painter.setPen(d_file_col);
     painter.drawText(-50, -15, 100, 20, Qt::AlignHCenter, name); // deskfile name
