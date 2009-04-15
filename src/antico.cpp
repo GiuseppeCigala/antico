@@ -27,8 +27,6 @@ Antico::Antico(int &argc, char **argv) : QApplication(argc, argv)
     set_settings();
     // send ClientMessage to root for supported hints
     send_supported_hints();
-    // run application from startup list
-    run_app_at_startup();
     // check if server supports nonrectangular windows
     int err;
     servershapes = XShapeQueryExtension(QX11Info::display(), &ShapeEventBase, &err);
@@ -430,7 +428,6 @@ bool Antico::x11EventFilter(XEvent *event)
             if (pev->atom == wm_transient_for)
             {
                 qDebug() << "---> wm_transient_for";
-                XGrabServer(QX11Info::display());
             }
             if (pev->atom == _net_wm_user_time)
             {
@@ -581,8 +578,8 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
         return;
     else
     {
-        check_window_type(c_win);
         check_wm_transient_for(c_win);
+        check_window_type(c_win);
     }
 
     /////// MAP THE NEW CLIENT ////////
@@ -646,28 +643,23 @@ void Antico::check_window_type(Window c_win) // chech the window type before map
                 frame_type << "Normal";
                 qDebug() << "Window type: NORMAL TYPE";
             }
-            else if (win_type[i] == _net_wm_window_type_dialog)
+            if (win_type[i] == _net_wm_window_type_dialog)
             {
                 frame_type << "Dialog";
                 qDebug() << "Window type: DIALOG TYPE";
             }
-            else if (win_type[i] == _net_wm_window_type_splash)
+            if (win_type[i] == _net_wm_window_type_splash)
             {
                 frame_type << "Splash";
                 qDebug() << "Window type: SPLASH TYPE";
             }
-            else if (win_type[i] == _net_wm_window_type_desktop)
+            if (win_type[i] == _net_wm_window_type_desktop)
             {
                 frame_type << "Desktop";
                 qDebug() << "Window type: DESKTOP TYPE";
             }
-            else
-            {
-                /// DEFAULT WINDOW TYPE ///
-                frame_type << "Normal";
-                qDebug() << "Window type: Normal";
-            }
         }
+        return;
     }
     /// IF PROPERTY NOT SET ///
     frame_type << "Normal";
@@ -679,6 +671,7 @@ void Antico::check_window_type(Window c_win) // chech the window type before map
 void Antico::check_wm_transient_for(Window c_win)
 {
     Atom type_ret = None;
+    Window prop_window_return;
     unsigned char *data = 0;
     int format = 0;
     unsigned long n = 0;
@@ -687,10 +680,15 @@ void Antico::check_wm_transient_for(Window c_win)
     if (XGetWindowProperty(QX11Info::display(), c_win, wm_transient_for, 0, 100, False,
                            AnyPropertyType, &type_ret, &format, &n, &extra, (unsigned char **)&data) == Success && data)
     {
-        frame_type << "Splash";
-        qDebug() << "Window type: WM_TRANSIENT_FOR. SET AS SPLASH";
-        XFree(data);
+        qDebug() << "Window type: WM_TRANSIENT_FOR. Set as DIALOG";
+
+        if (XGetTransientForHint(QX11Info::display(), c_win, &prop_window_return))
+        {
+            qDebug() << "Window return:" << prop_window_return;
+            frame_type << "Dialog";
+        }
     }
+    XFree(data);
 }
 
 void Antico::print_window_prop(Window c_win) // print the window properties
@@ -919,6 +917,8 @@ void Antico::create_gui()
     dsk = new Desk(this);
     // create dockbar
     dock = new Dockbar(this);
+    // run application from startup list
+    run_app_at_startup();
 }
 
 Filedialog * Antico::get_file_dialog()

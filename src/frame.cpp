@@ -99,7 +99,7 @@ void Frame::init()
     XSetWindowBorderWidth(QX11Info::display(), c_win, 0);  //client
     XSetWindowBorderWidth(QX11Info::display(), winId(), 0);  //frame
 
-    // ***THE MOST IMPORTANT FUNCTION*** // reparent client with frame
+     // ***THE MOST IMPORTANT FUNCTION*** // reparent client with frame
     XReparentWindow(QX11Info::display(), c_win, winId(), lateral_bdr_width, top_bdr_height);
     qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
     qDebug() << "Reparent Client:" << c_win << "with Frame:" << winId() << "- Name:" << cl_name();
@@ -108,7 +108,7 @@ void Frame::init()
     XAddToSaveSet(QX11Info::display(), c_win);
     // move and resize client
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
-
+    
     //if the frame is too large, maximize it
     if (frame_w >= QApplication::desktop()->width()-20 || frame_h >= QApplication::desktop()->height()-40)
     {

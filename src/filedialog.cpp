@@ -118,6 +118,7 @@ void Filedialog::init()
 
     dir_model = new QDirModel(this);
     dir_model->setSupportedDragActions(Qt::LinkAction);
+    dir_model->setReadOnly(false);
 
     completer = new QCompleter(this);
     completer->setModel(dir_model);
@@ -264,7 +265,7 @@ void Filedialog::del_file()
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the directory
         {
-            dir_model->refresh(); // update the View
+            update_view(); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -288,7 +289,7 @@ void Filedialog::del_file()
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the file
         {
-            dir_model->refresh(); // update the View
+            update_view(); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -355,7 +356,7 @@ void Filedialog::paste_file()
 
         if (QProcess::startDetached(command))
         {
-            dir_model->refresh(); // update the View
+            update_view(); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -527,6 +528,12 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
     }
     abstract_view->clearSelection();
     event->ignore();
+}
+
+void Filedialog::update_view()
+{
+    tree_view->setRootIndex(dir_model->index(line_path->text()));
+    dir_model->refresh(dir_model->index(line_path->text()));
 }
 
 void Filedialog::update_style()

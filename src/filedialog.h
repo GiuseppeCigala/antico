@@ -58,6 +58,7 @@ public slots:
     void path_completer();
     void upper_dir();
     void update_list(const QModelIndex &);
+    void update_view();
     void contextMenuEvent(QContextMenuEvent *);
     void change_path(QListWidgetItem *, QListWidgetItem *);
     void set_icon_mode();
