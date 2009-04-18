@@ -19,8 +19,7 @@ Colordialog::Colordialog(const QColor &color, QWidget *parent) : QDialog(parent)
 }
 
 Colordialog::~Colordialog()
-{
-}
+{}
 
 void Colordialog::init()
 {
@@ -28,7 +27,7 @@ void Colordialog::init()
     setLayout(layout);
     col_sel = new Colorsel(actual_col, this); // update colorsel with actual color
     layout->addWidget(col_sel);
-   
+
     buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(tr("Ok"), QDialogButtonBox::AcceptRole);
     buttonBox->addButton(tr("Cancel"), QDialogButtonBox::RejectRole);
@@ -40,10 +39,18 @@ void Colordialog::init()
 
 void Colordialog::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
+    QPixmap pixmap(size());
+    QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawRect(0, 0, width(), height());
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundRect(pixmap.rect(), 5, 5);
+    setMask(pixmap.createMaskFromColor(Qt::white));
+
+    QPainter painter1(this);
+    painter1.setRenderHint(QPainter::Antialiasing);
+    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter1.drawRoundedRect(0, 0, width(), height(), 5, 5, Qt::RelativeSize);
 }
 
 QColor Colordialog::get_color()

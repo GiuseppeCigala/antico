@@ -25,8 +25,7 @@ Manager::Manager(QWidget *parent) : QDialog(parent)
 }
 
 Manager::~Manager()
-{
-}
+{}
 
 void Manager::init()
 {
@@ -275,10 +274,18 @@ void Manager::read_settings()
 
 void Manager::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
+    QPixmap pixmap(size());
+    QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawRect(0, 0, width(), height());
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundRect(pixmap.rect(), 5, 5);
+    setMask(pixmap.createMaskFromColor(Qt::white));
+
+    QPainter painter1(this);
+    painter1.setRenderHint(QPainter::Antialiasing);
+    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter1.drawRoundedRect(0, 0, width(), height(), 5, 5, Qt::RelativeSize);
 }
 
 void Manager::add_app_tab()
@@ -287,7 +294,6 @@ void Manager::add_app_tab()
     deskfolder_pix_path = stl_path + style->value("d_folder_pix").toString();
     style->endGroup(); // Deskfolder
     QFrame *add_frm = new QFrame(this);
-    add_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(add_frm, tr("Add application"));
     add_layout = new QVBoxLayout();
     add_frm->setLayout(add_layout);
@@ -361,7 +367,6 @@ void Manager::add_app_tab()
 void Manager::remove_app_tab()
 {
     QFrame *rem_frm = new QFrame(this);
-    rem_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(rem_frm, tr("Remove application"));
     rem_layout = new QVBoxLayout();
     rem_frm->setLayout(rem_layout);
@@ -390,7 +395,6 @@ void Manager::remove_app_tab()
 void Manager::run_app_tab()
 {
     QFrame *run_frm = new QFrame(this);
-    run_frm->setFrameStyle(QFrame::Panel);
     tab->addTab(run_frm, tr("Run at startup"));
     run_layout = new QVBoxLayout();
     run_frm->setLayout(run_layout);
@@ -426,7 +430,6 @@ void Manager::style_tab()
 {
     QFrame *style_frm = new QFrame(this);
     tab->addTab(style_frm, tr("Style"));
-    style_frm->setFrameStyle(QFrame::Panel);
     style_layout = new QVBoxLayout();
     style_frm->setLayout(style_layout);
     ///////// STYLE SELECTION /////////
@@ -1607,10 +1610,10 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
 }
 
 void Manager::remove_run_app_pressed() // remove selected app from "Run at startup" list
-{    
+{
     int current_row = run_table->currentRow();
-    
-    if(current_row >= 0) // if some row is selected
+
+    if (current_row >= 0) // if some row is selected
     {
         QTableWidgetItem *name_item = run_table->item(current_row, 0); // get the app name
         antico->beginGroup("Startup");

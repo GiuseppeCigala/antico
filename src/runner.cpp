@@ -63,10 +63,18 @@ void Runner::init()
 
 void Runner::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
+    QPixmap pixmap(size());
+    QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawRect(0, 0, width(), height());
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundRect(pixmap.rect(), 10, 10);
+    setMask(pixmap.createMaskFromColor(Qt::white));
+
+    QPainter painter1(this);
+    painter1.setRenderHint(QPainter::Antialiasing);
+    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter1.drawRoundedRect(0, 0, width(), height(), 7, 7);
 }
 
 void Runner::mousePressEvent(QMouseEvent *event)

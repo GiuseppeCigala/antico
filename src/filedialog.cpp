@@ -69,6 +69,7 @@ void Filedialog::read_settings()
     list_view_pix = stl_path + style->value("list_view_pix").toString();
     icon_view_pix = stl_path + style->value("icon_view_pix").toString();
     upper_dir_pix = stl_path + style->value("upper_dir_pix").toString();
+    new_folder_pix = stl_path + style->value("folder_link_pix").toString();;
     style->endGroup(); //Other
     style->beginGroup("Message");
     ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
@@ -81,10 +82,18 @@ void Filedialog::read_settings()
 
 void Filedialog::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
+    QPixmap pixmap(size());
+    QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawRect(0, 0, width(), height());
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundRect(pixmap.rect(), 5, 5);
+    setMask(pixmap.createMaskFromColor(Qt::white));
+
+    QPainter painter1(this);
+    painter1.setRenderHint(QPainter::Antialiasing);
+    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter1.drawRoundedRect(0, 0, width(), height(), 5, 5, Qt::RelativeSize);
 }
 
 void Filedialog::init()
@@ -178,16 +187,16 @@ void Filedialog::init()
     connect(path_widget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
             this, SLOT(change_path(QListWidgetItem *, QListWidgetItem *)));
     connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
-    connect(tree_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_list(QModelIndex)));
+    connect(tree_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_view(QModelIndex)));
     connect(list_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
-    connect(list_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_list(QModelIndex)));
+    connect(list_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_view(QModelIndex)));
     connect(hidden_radio, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
     connect(icon_but, SIGNAL(pressed()), this, SLOT(set_icon_mode()));
     connect(list_but, SIGNAL(pressed()), this, SLOT(set_list_mode()));
     connect(line_path, SIGNAL(returnPressed()), this, SLOT(path_completer()));
     connect(upper_dir_but, SIGNAL(pressed()), this, SLOT(upper_dir()));
-    connect(button_box, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(button_box, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(button_box, SIGNAL(accepted()), this, SLOT(accepted()));
+    connect(button_box, SIGNAL(rejected()), this, SLOT(rejected()));
 }
 
 void Filedialog::set_category_menu()
@@ -197,15 +206,18 @@ void Filedialog::set_category_menu()
     open_menu = main_menu->addMenu(QIcon(open_with_pix), tr("Open with"));
 
     menu_list = cat_menu->get_menus();
-    for (int i = 0; i <  menu_list.size(); ++i)
+    for (int i = 0; i < menu_list.size(); ++i)
     {
         open_menu->addMenu(menu_list.at(i));
     }
-
+    
+    main_menu->addSeparator();
     QAction *del_act = main_menu->addAction(QIcon(delete_file_pix), tr("Delete"));
     cut_act = main_menu->addAction(QIcon(cut_file_pix), tr("Cut..."));
     copy_act = main_menu->addAction(QIcon(copy_file_pix), tr("Copy..."));
     paste_act = main_menu->addAction(QIcon(paste_file_pix), tr("Paste"));
+    main_menu->addSeparator();
+    QAction *new_folder_act = main_menu->addAction(QIcon(new_folder_pix), tr("New Folder"));
 
     cut_act->setEnabled(true);
     copy_act->setEnabled(true);
@@ -213,6 +225,7 @@ void Filedialog::set_category_menu()
 
     connect(main_menu, SIGNAL(aboutToHide()), this, SLOT(reset_actions()));
     connect(del_act, SIGNAL(triggered()), this, SLOT(del_file()));
+    connect(new_folder_act, SIGNAL(triggered()), this, SLOT(new_folder()));
     connect(cut_act, SIGNAL(triggered()), this, SLOT(cut_file()));
     connect(copy_act, SIGNAL(triggered()), this, SLOT(copy_file()));
     connect(paste_act, SIGNAL(triggered()), this, SLOT(paste_file()));
@@ -261,15 +274,13 @@ void Filedialog::del_file()
         settings.endGroup(); // Trash Info
 
         QStringList rem_info_args;
-        rem_info_args <<  path << trash_path + "/Trash/files/";
+        rem_info_args << path << trash_path + "/Trash/files/";
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the directory
         {
-            update_view(); // update the View
-
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
-            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted and moved in") + " " + "<b>" + trash_path + "/Trash/files/" + "</b>");
+            msg.set_info("<b>" + name + "</b>" + " " + tr("will be deleted and moved in") + " " + "<b>" + trash_path + "/Trash/files/" + "</b>");
             msg.set_icon("Information");
             msg.exec();
         }
@@ -285,19 +296,19 @@ void Filedialog::del_file()
         settings.endGroup(); // Trash Info
 
         QStringList rem_info_args;
-        rem_info_args <<  path + name << trash_path + "/Trash/files/";
+        rem_info_args << path + name << trash_path + "/Trash/files/";
 
         if (QProcess::startDetached("/bin/mv", rem_info_args)) // remove the file
         {
-            update_view(); // update the View
-
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
-            msg.set_info("<b>" + name + "</b>" + " " + tr("deleted and moved in") + " " + trash_path + "/Trash/files/");
+            msg.set_info("<b>" + name + "</b>" + " " + tr("will be deleted and moved in") + " " + trash_path + "/Trash/files/");
             msg.set_icon("Information");
             msg.exec();
         }
     }
+    
+    update_view(dir_model->index(line_path->text())); // update the View
 }
 
 void Filedialog::cut_file()
@@ -356,7 +367,7 @@ void Filedialog::paste_file()
 
         if (QProcess::startDetached(command))
         {
-            update_view(); // update the View
+            update_view(dir_model->index(line_path->text())); // update the View
 
             Msgbox msg;
             msg.set_header(tr("INFORMATION"));
@@ -373,35 +384,46 @@ void Filedialog::paste_file()
     }
 }
 
+void Filedialog::new_folder()
+{
+    dir_model->mkdir(dir_model->index(line_path->text()), tr("New folder"));
+}
+
 void Filedialog::change_path(QListWidgetItem *current, QListWidgetItem *previous)
 {
     if (!current)
         current = previous;
-    set_path(current->text());
+
+    abstract_view->setRootIndex(dir_model->index(current->text()));
+    line_path->setText(current->text());
 }
 
-void Filedialog::set_path(const QString &pth) // for folder navigation from deskfolder
+void Filedialog::set_path(const QString &pth) // for folder navigation
 {
+    dir_model->refresh(dir_model->index(pth));
     abstract_view->setRootIndex(dir_model->index(pth));
     line_path->setText(pth);
 }
 
-void Filedialog::path_completer() // on user button press in line_path
+void Filedialog::path_completer() // on user "return" press in line_path
 {
-    update_list(dir_model->index(line_path->text()));
+    update_view(dir_model->index(line_path->text()));
+}
+
+void Filedialog::update_view(const QModelIndex &index)
+{
+    dir_model->refresh(index);
+    
+    if (dir_model->isDir(index)) // is a directory
+    {
+        abstract_view->setRootIndex(index);
+        line_path->setText(dir_model->filePath(index));
+    }
 }
 
 void Filedialog::upper_dir() // go to the upper directory
 {
-    update_list(dir_model->index(line_path->text()).parent());
-}
-
-void Filedialog::update_list(const QModelIndex &index) // update the list on path completer
-{
-    if (index.isValid() && dir_model->isDir(index))
-    {
-        set_path(dir_model->filePath(index));
-    }
+    update_view(dir_model->index(line_path->text()).parent());
 }
 
 void Filedialog::set_filter(QDir::Filters fltr)
@@ -526,14 +548,21 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
 
         main_menu->exec(event->globalPos());
     }
-    abstract_view->clearSelection();
     event->ignore();
 }
 
-void Filedialog::update_view()
+void Filedialog::accepted()
 {
-    tree_view->setRootIndex(dir_model->index(line_path->text()));
-    dir_model->refresh(dir_model->index(line_path->text()));
+    accept();
+    abstract_view->clearSelection();
+    set_path("/");
+}
+
+void Filedialog::rejected()
+{
+    reject();
+    abstract_view->clearSelection();
+    set_path("/");
 }
 
 void Filedialog::update_style()

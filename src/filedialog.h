@@ -44,7 +44,7 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void paintEvent(QPaintEvent *);
- 
+    
 signals:
 
 public slots:
@@ -53,16 +53,18 @@ public slots:
     void cut_file();
     void copy_file();
     void paste_file();
+    void new_folder();
     void reset_actions();
     void show_hidden(bool);
     void path_completer();
     void upper_dir();
-    void update_list(const QModelIndex &);
-    void update_view();
+    void update_view(const QModelIndex &);
     void contextMenuEvent(QContextMenuEvent *);
     void change_path(QListWidgetItem *, QListWidgetItem *);
     void set_icon_mode();
     void set_list_mode();
+    void accepted();
+    void rejected();
 
 private:
     QList <QMenu *> menu_list;
@@ -75,6 +77,7 @@ private:
     QString list_view_pix;
     QString icon_view_pix;
     QString upper_dir_pix;
+    QString new_folder_pix;
     QString ok_button_pix_path;
     QString close_button_pix_path;
     QString folder_pix;

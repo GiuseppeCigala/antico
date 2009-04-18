@@ -41,10 +41,18 @@ void Trashdialog::read_settings()
 
 void Trashdialog::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);
+    QPixmap pixmap(size());
+    QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawRect(0, 0, width(), height());
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundRect(pixmap.rect(), 5, 5);
+    setMask(pixmap.createMaskFromColor(Qt::white));
+
+    QPainter painter1(this);
+    painter1.setRenderHint(QPainter::Antialiasing);
+    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter1.drawRoundedRect(0, 0, width(), height(), 5, 5, Qt::RelativeSize);
 }
 
 void Trashdialog::init()
@@ -121,14 +129,14 @@ void Trashdialog::delete_pressed()
         QStringList rem_file_args;
         rem_file_args << "-rf" << selection_path;
         QProcess::startDetached("/bin/rm", rem_file_args); // remove the selected dir/file
-        update_tree(); // update the TreeView
-
+ 
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("deleted"));
+        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("will be definitively deleted..."));
         msg.set_icon("Information");
         msg.exec();
     }
+    update_tree(); // update the TreeView
 }
 
 void Trashdialog::restore_pressed()
@@ -152,14 +160,14 @@ void Trashdialog::restore_pressed()
         QStringList remove_args;
         remove_args <<  trash_path + "/Trash/info/" + trash_info;
         QProcess::startDetached("/bin/rm", remove_args); // remove the info file
-        update(); // update the TreeView
-
+ 
         Msgbox msg;
         msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("restored in") + " " + "<b>" + restore_path + "</b>");
+        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("will be restored in") + " " + "<b>" + restore_path + "</b>");
         msg.set_icon("Information");
         msg.exec();
     }
+    update_tree(); // update the TreeView
 }
 
 void Trashdialog::update_tree()

@@ -16,8 +16,7 @@ Msgbox::Msgbox(QWidget *parent) : QDialog(parent)
 }
 
 Msgbox::~Msgbox()
-{
-}
+{}
 
 void Msgbox::init()
 {
@@ -38,6 +37,22 @@ void Msgbox::init()
 
     connect(button_box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(button_box, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+void Msgbox::paintEvent(QPaintEvent *)
+{
+    QPixmap pixmap(size());
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.setBrush(Qt::black);
+    painter.drawRoundRect(pixmap.rect(), 10, 10);
+    setMask(pixmap.createMaskFromColor(Qt::white));
+
+    QPainter painter1(this);
+    painter1.setRenderHint(QPainter::Antialiasing);
+    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter1.drawRoundedRect(0, 0, width(), height(), 7, 7);
 }
 
 void Msgbox::read_settings()
@@ -97,14 +112,6 @@ void Msgbox::set_icon(const QString &type)
         button_box->addButton(ok_but, QDialogButtonBox::AcceptRole);
         button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
-}
-
-void Msgbox::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter.drawRect(0, 0, width(), height());
 }
 
 void Msgbox::mousePressEvent(QMouseEvent *event)
