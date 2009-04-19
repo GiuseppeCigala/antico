@@ -108,7 +108,8 @@ void Runner::run_pressed()
         {
             Msgbox msg;
             msg.set_header(tr("COMMAND INCORRECT"));
-            msg.set_info(tr("Check the command syntax. If the app is not in your $PATH, type the absolute app path."));
+            msg.set_info(tr("Check the command syntax.\n"
+                            "If the app is not in your $PATH, type the absolute app path."));
             msg.set_icon("Critical");
             msg.exec();
         }

@@ -278,11 +278,9 @@ void Frame::set_focus(long timestamp) // set to focus to child
 
 void Frame::unmap()
 {
-    XUnmapWindow(QX11Info::display(), winId());
-    XUnmapWindow(QX11Info::display(), c_win);
-    set_state(WithdrawnState);
+    XUnmapWindow(QX11Info::display(), winId()); // only the frame, the client is already unmapped...
     state = "WithdrawnState";
-    qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    qDebug() << "Frame unmapped (unmap):" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
 void Frame::withdraw()
@@ -292,11 +290,9 @@ void Frame::withdraw()
         dockbar->remove_dockicon(this); // remove Dockicon from Dockbar
         desktop->remove_deskicon(this);  // remove Application icon from Desktop
     }
-    XUnmapWindow(QX11Info::display(), winId());
-    XUnmapWindow(QX11Info::display(), c_win);
-    set_state(WithdrawnState);
+    XUnmapWindow(QX11Info::display(), winId()); // only the frame, the client is already unmapped...
     state = "WithdrawnState";
-    qDebug() << "Frame unmapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    qDebug() << "Frame unmapped (withdraw):" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
 void Frame::iconify()

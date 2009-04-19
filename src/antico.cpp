@@ -357,7 +357,6 @@ bool Antico::x11EventFilter(XEvent *event)
         }
         else
         {
-            XSetInputFocus(QX11Info::display(), event->xcrossing.window, RevertToNone, CurrentTime);
             qDebug() << "Enter in not map client:" << event->xcrossing.window;
         }
         return false;
@@ -397,7 +396,7 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_clients.value(event->xproperty.window)) != NULL)
         {
-            qDebug() << "Client already mapped from frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xproperty.window;
+            qDebug() << "Client already mapped by frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xproperty.window;
 
             if (pev->atom == wm_hints)
             {
@@ -432,8 +431,7 @@ bool Antico::x11EventFilter(XEvent *event)
             if (pev->atom == _net_wm_user_time)
             {
                 qDebug() << "---> _net_wm_user_time";
-                set_active_frame(frm); // activation of selected frame and unactivation of others
-                frm->set_focus(event->xproperty.time);
+                frm->set_focus(CurrentTime);
             }
             return true;
         }
@@ -476,6 +474,12 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "Button press:" <<  event->xbutton.button << "for map frame:" << event->xbutton.window;
             set_active_frame(frm);
         }
+        else
+        {
+            qDebug() << "Button press:" <<  event->xbutton.button << "for client:" << event->xbutton.window;
+            XSetInputFocus(QX11Info::display(), event->xbutton.window, RevertToNone, CurrentTime);
+        }
+
         return false;
         break;
 
@@ -539,15 +543,6 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "Press [Alt+d] - Show Desktop";
             show_desktop();
         }
-        return false;
-        break;
-
-    case Expose:
-        qDebug() << "[Expose]";
-        /*
-        if (event->xexpose.window == dock->winId()) // don't cover the dockbar by other apps
-           XRaiseWindow(QX11Info::display(), event->xexpose.window);
-        */
         return false;
         break;
 
@@ -947,7 +942,7 @@ void Antico::set_settings()
     }
     if (antico->status() == QSettings::AccessError)
     {
-        qDebug () << "Error on setting antico.cfg";
+        qFatal ("Error on setting antico.cfg");
     }
 
     QSettings *style = new QSettings(QCoreApplication::applicationDirPath() + "/theme/default/default.stl", QSettings::IniFormat, this);
@@ -1072,6 +1067,6 @@ void Antico::set_settings()
     }
     if (style->status() == QSettings::AccessError)
     {
-        qDebug () << "Error on setting default.stl";
+        qFatal("Error on setting default.stl");
     }
 }

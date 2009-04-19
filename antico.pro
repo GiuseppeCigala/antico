@@ -66,4 +66,5 @@ TRANSLATIONS = language/it_IT.ts \
  language/ru_RU.ts \
  language/pl_PL.ts \
  language/de_DE.ts
+DEFINES = QT_FATAL_WARNINGS
 //DEFINES = QT_NO_DEBUG_OUTPUT

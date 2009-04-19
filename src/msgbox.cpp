@@ -90,25 +90,25 @@ void Msgbox::set_icon(const QString &type)
 {
     if (type == "Information")
     {
-        msg_icon->setPixmap(QPixmap(information_pix_path));
+        msg_icon->setPixmap(QPixmap(information_pix_path).scaled(48, 48));
         button_box->removeButton(ok_but);
         button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
     if (type == "Warning")
     {
-        msg_icon->setPixmap(QPixmap(warning_pix_path));
+        msg_icon->setPixmap(QPixmap(warning_pix_path).scaled(48, 48));
         button_box->removeButton(ok_but);
         button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
     if (type == "Critical")
     {
-        msg_icon->setPixmap(QPixmap(critical_pix_path));
+        msg_icon->setPixmap(QPixmap(critical_pix_path).scaled(48, 48));
         button_box->removeButton(ok_but);
         button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
     if (type == "Question")
     {
-        msg_icon->setPixmap(QPixmap(question_pix_path));
+        msg_icon->setPixmap(QPixmap(question_pix_path).scaled(48, 48));
         button_box->addButton(ok_but, QDialogButtonBox::AcceptRole);
         button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
