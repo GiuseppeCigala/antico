@@ -270,7 +270,7 @@ void Frame::set_state(int state)
 void Frame::set_focus(long timestamp) // set to focus to child
 {
     XSetInputFocus(QX11Info::display(), c_win, RevertToNone, CurrentTime);
-    
+    raise();
     Atom wm_take_focus = XInternAtom(QX11Info::display(), "WM_TAKE_FOCUS", False);
     if (prot_take_focus) // WM_TAKE_FOCUS protocol
         send_wm_protocols(wm_take_focus, timestamp);

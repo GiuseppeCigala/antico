@@ -432,7 +432,6 @@ bool Antico::x11EventFilter(XEvent *event)
             {
                 qDebug() << "---> _net_wm_user_time";
                 frm->set_focus(CurrentTime);
-                set_active_frame(frm); 
             }
             return true;
         }
