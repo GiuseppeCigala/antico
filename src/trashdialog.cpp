@@ -66,9 +66,15 @@ void Trashdialog::init()
     dir_model = new QDirModel(this);
     prov = new Fileicon(); // get the files icon
     dir_model->setIconProvider(prov);
+    dir_model->setFilter(dir_model->filter() | QDir::Hidden); // add hidden files to filter
     tree_view = new QTreeView(this);
     tree_view->setModel(dir_model);
     tree_view->setSortingEnabled(true);
+    tree_view->setAlternatingRowColors(true);
+    tree_view->setFocusPolicy(Qt::ClickFocus);
+    tree_view->header()->setSortIndicator(0, Qt::AscendingOrder);
+    tree_view->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
     trash_path = QDir::homePath() + "/.local/share"; // search in default path directory
     line_path->setText(trash_path + "/Trash/files");
     tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
