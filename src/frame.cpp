@@ -19,6 +19,7 @@ Frame::Frame(Window w, const QString &type, Dockbar *dock, Desk *desk, QWidget *
     setFrameStyle(QFrame::Panel|QFrame::Raised);
     setAttribute(Qt::WA_AlwaysShowToolTips);
     setAcceptDrops(true);
+    set_active(); // set header active
 }
 
 Frame::~Frame()

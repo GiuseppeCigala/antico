@@ -38,7 +38,7 @@ protected:
     virtual bool x11Event (XEvent *);
     
 private:
-    QHash<int, Sysicon *> sys_icons; // mapping frame id with Sysicon (key=frame_win_id value=Sysicon)
+    QHash<int, Sysicon *> sys_icons; // mapping frame id with Sysicon (key=frame_win_id, value=Sysicon)
     QString sys_pix;
     // System tray properties
     Atom kde_systray_prop;

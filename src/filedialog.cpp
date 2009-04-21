@@ -65,11 +65,13 @@ void Filedialog::read_settings()
     cut_file_pix = stl_path + style->value("cut_file_pix").toString();
     copy_file_pix = stl_path + style->value("copy_file_pix").toString();
     paste_file_pix = stl_path + style->value("paste_file_pix").toString();
+    edit_file_pix = stl_path + style->value("open_with_pix").toString();
     open_with_pix = stl_path + style->value("open_with_pix").toString();
     list_view_pix = stl_path + style->value("list_view_pix").toString();
     icon_view_pix = stl_path + style->value("icon_view_pix").toString();
     upper_dir_pix = stl_path + style->value("upper_dir_pix").toString();
-    new_folder_pix = stl_path + style->value("folder_link_pix").toString();;
+    new_folder_pix = stl_path + style->value("folder_link_pix").toString();
+    new_file_pix = stl_path + style->value("file_link_pix").toString();
     style->endGroup(); //Other
     style->beginGroup("Message");
     ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
@@ -142,7 +144,9 @@ void Filedialog::init()
     tree_view->setItemsExpandable(false);
     tree_view->setRootIsDecorated(false);
     tree_view->setSortingEnabled(true);
+    tree_view->setSelectionMode(QAbstractItemView::SingleSelection);
     tree_view->setIconSize(QSize(16, 16));
+    tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     list_view = new QListView(this);
     list_view->setModel(dir_model);
@@ -151,9 +155,11 @@ void Filedialog::init()
     list_view->setResizeMode(QListView::Adjust);
     list_view->setViewMode(QListView::IconMode);
     list_view->setUniformItemSizes(true);
+    list_view->setSelectionMode(QAbstractItemView::SingleSelection);
     list_view->setGridSize(QSize(70, 70));
     list_view->setSpacing(5);
     list_view->setIconSize(QSize(32, 32));
+    list_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     button_box = new QDialogButtonBox(this);
     ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
@@ -210,14 +216,16 @@ void Filedialog::set_category_menu()
     {
         open_menu->addMenu(menu_list.at(i));
     }
-    
+
     main_menu->addSeparator();
     QAction *del_act = main_menu->addAction(QIcon(delete_file_pix), tr("Delete"));
     cut_act = main_menu->addAction(QIcon(cut_file_pix), tr("Cut..."));
     copy_act = main_menu->addAction(QIcon(copy_file_pix), tr("Copy..."));
     paste_act = main_menu->addAction(QIcon(paste_file_pix), tr("Paste"));
+    QAction *edit_act = main_menu->addAction(QIcon(edit_file_pix), tr("Rename"));
     main_menu->addSeparator();
-    QAction *new_folder_act = main_menu->addAction(QIcon(new_folder_pix), tr("New Folder"));
+    QAction *new_folder_act = main_menu->addAction(QIcon(new_folder_pix), tr("New folder"));
+    QAction *new_file_act = main_menu->addAction(QIcon(new_file_pix), tr("New file"));
 
     cut_act->setEnabled(true);
     copy_act->setEnabled(true);
@@ -226,9 +234,11 @@ void Filedialog::set_category_menu()
     connect(main_menu, SIGNAL(aboutToHide()), this, SLOT(reset_actions()));
     connect(del_act, SIGNAL(triggered()), this, SLOT(del_file()));
     connect(new_folder_act, SIGNAL(triggered()), this, SLOT(new_folder()));
+    connect(new_file_act, SIGNAL(triggered()), this, SLOT(new_file()));
     connect(cut_act, SIGNAL(triggered()), this, SLOT(cut_file()));
     connect(copy_act, SIGNAL(triggered()), this, SLOT(copy_file()));
     connect(paste_act, SIGNAL(triggered()), this, SLOT(paste_file()));
+    connect(edit_act, SIGNAL(triggered()), this, SLOT(edit_file()));
 }
 
 void Filedialog::reset_actions() // reset copy/paste action buttons
@@ -307,7 +317,7 @@ void Filedialog::del_file()
             msg.exec();
         }
     }
-    
+
     update_view(dir_model->index(line_path->text())); // update the View
 }
 
@@ -384,9 +394,20 @@ void Filedialog::paste_file()
     }
 }
 
+void Filedialog::edit_file()
+{
+    abstract_view->edit(abstract_view->currentIndex());
+}
+
 void Filedialog::new_folder()
 {
     dir_model->mkdir(dir_model->index(line_path->text()), tr("New folder"));
+}
+
+void Filedialog::new_file()
+{
+    QProcess::startDetached(QString("/bin/touch").append(" ").append(line_path->text()).append("/new_file"));
+    dir_model->refresh(dir_model->index(line_path->text()));
 }
 
 void Filedialog::change_path(QListWidgetItem *current, QListWidgetItem *previous)
@@ -413,7 +434,7 @@ void Filedialog::path_completer() // on user "return" press in line_path
 void Filedialog::update_view(const QModelIndex &index)
 {
     dir_model->refresh(index);
-    
+
     if (dir_model->isDir(index)) // is a directory
     {
         abstract_view->setRootIndex(index);
@@ -538,8 +559,8 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 }
 
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
-{
-    if (abstract_view->currentIndex().isValid() && abstract_view->geometry().contains(event->pos(), true) && cat_menu != NULL)
+{qDebug() << "Is valid" << abstract_view->indexAt(event->pos()).isValid() << "r"<< abstract_view->indexAt(event->pos()).row() << "c" << abstract_view->indexAt(event->pos()).column();
+    if (abstract_view->indexAt(event->pos()).isValid() && cat_menu != NULL)
     {
         if (dir_model->isDir(abstract_view->currentIndex()))
             cat_menu->set_cmd_arguments(get_selected_path()); // set the dir path as argument
@@ -549,6 +570,7 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
         main_menu->exec(event->globalPos());
     }
     event->ignore();
+    abstract_view->clearSelection();
 }
 
 void Filedialog::accepted()

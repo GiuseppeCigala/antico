@@ -53,7 +53,9 @@ public slots:
     void cut_file();
     void copy_file();
     void paste_file();
+    void edit_file();
     void new_folder();
+    void new_file();
     void reset_actions();
     void show_hidden(bool);
     void path_completer();
@@ -73,11 +75,13 @@ private:
     QString cut_file_pix;
     QString copy_file_pix;
     QString paste_file_pix;
+    QString edit_file_pix;
     QString open_with_pix;
     QString list_view_pix;
     QString icon_view_pix;
     QString upper_dir_pix;
     QString new_folder_pix;
+    QString new_file_pix;
     QString ok_button_pix_path;
     QString close_button_pix_path;
     QString folder_pix;
