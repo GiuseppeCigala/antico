@@ -13,6 +13,7 @@ Header::Header(const QPixmap &icn, const QString &nm, QWidget *parent) : QWidget
     setContentsMargins(0, 0, 0, 0);
     icon =  icn;
     app_name = nm;
+    setToolTip(app_name);
 }
 
 Header::~Header()

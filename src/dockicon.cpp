@@ -15,6 +15,8 @@ Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(par
     sys = sys_tr;
     read_settings();
     bdr_width = 1;
+    setAttribute(Qt::WA_AlwaysShowToolTips);
+    setToolTip(title);
 }
  
 Dockicon::~Dockicon()

@@ -48,7 +48,7 @@ protected:
 signals:
 
 public slots:
-    void show_preview(const QModelIndex &);
+    void set_selected(const QModelIndex &);
     void del_file();
     void cut_file();
     void copy_file();
@@ -90,7 +90,6 @@ private:
     QString source_path;
     QLabel *message;
     QLabel *preview_label;
-    QVBoxLayout *layout;
     QDialogButtonBox *button_box;
     QPushButton *ok;
     QPushButton *cancel;

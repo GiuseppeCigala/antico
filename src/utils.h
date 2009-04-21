@@ -47,6 +47,7 @@ public:
     void parse_desktop_file();
     QList <QMenu *> get_menus();
     void set_cmd_arguments(const QString &);
+    void clear_cmd_arguments();
 
 public slots:
     void run_menu(QAction *);

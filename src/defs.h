@@ -83,6 +83,7 @@
 #include <QRubberBand>
 #include <QShortcut>
 #include <QButtonGroup>
+#include <QHeaderView>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

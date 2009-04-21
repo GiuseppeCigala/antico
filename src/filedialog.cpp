@@ -32,7 +32,6 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
 
 Filedialog::~Filedialog()
 {
-    delete layout;
     delete ok;
     delete cancel;
     delete close;
@@ -130,6 +129,7 @@ void Filedialog::init()
     dir_model = new QDirModel(this);
     dir_model->setSupportedDragActions(Qt::LinkAction);
     dir_model->setReadOnly(false);
+    dir_model->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
 
     completer = new QCompleter(this);
     completer->setModel(dir_model);
@@ -144,6 +144,9 @@ void Filedialog::init()
     tree_view->setItemsExpandable(false);
     tree_view->setRootIsDecorated(false);
     tree_view->setSortingEnabled(true);
+    tree_view->setAlternatingRowColors(true);
+    tree_view->setFocusPolicy(Qt::ClickFocus);
+    tree_view->header()->setSortIndicator(0, Qt::AscendingOrder);
     tree_view->setSelectionMode(QAbstractItemView::SingleSelection);
     tree_view->setIconSize(QSize(16, 16));
     tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -155,6 +158,7 @@ void Filedialog::init()
     list_view->setResizeMode(QListView::Adjust);
     list_view->setViewMode(QListView::IconMode);
     list_view->setUniformItemSizes(true);
+    list_view->setFocusPolicy(Qt::ClickFocus);
     list_view->setSelectionMode(QAbstractItemView::SingleSelection);
     list_view->setGridSize(QSize(70, 70));
     list_view->setSpacing(5);
@@ -182,7 +186,7 @@ void Filedialog::init()
     splitter->addWidget(tree_view);
     splitter->addWidget(list_view);
 
-    layout = new QVBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
     layout->addWidget(message);
     layout->addLayout(view_layout);
@@ -192,9 +196,9 @@ void Filedialog::init()
 
     connect(path_widget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
             this, SLOT(change_path(QListWidgetItem *, QListWidgetItem *)));
-    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
+    connect(tree_view, SIGNAL(pressed(QModelIndex)), this, SLOT(set_selected(QModelIndex)));
     connect(tree_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_view(QModelIndex)));
-    connect(list_view, SIGNAL(pressed(QModelIndex)), this, SLOT(show_preview(QModelIndex)));
+    connect(list_view, SIGNAL(pressed(QModelIndex)), this, SLOT(set_selected(QModelIndex)));
     connect(list_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_view(QModelIndex)));
     connect(hidden_radio, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
     connect(icon_but, SIGNAL(pressed()), this, SLOT(set_icon_mode()));
@@ -256,7 +260,6 @@ void Filedialog::set_type(const QString &text, const QString &button_type) // se
     {
         button_box->addButton(ok, QDialogButtonBox::AcceptRole);
         button_box->addButton(close, QDialogButtonBox::RejectRole);
-
     }
     if (button_type.compare("Close") == 0)
     {
@@ -370,7 +373,6 @@ void Filedialog::paste_file()
     if (dir_model->isDir(selection)) // test if is a directory
     {
         QString destination_path = path + "/";
-
         command.append(" ").append(source_path).append(" ").append(destination_path); // add source + destination to command
 
         qDebug() << "Paste command:" << command;
@@ -462,9 +464,20 @@ void Filedialog::set_read_only(bool b)
     dir_model->setReadOnly(b);
 }
 
-void Filedialog::show_preview(const QModelIndex &index) // show file pixmap preview
+void Filedialog::set_selected(const QModelIndex &index)
 {
-    preview_label->setPixmap(QPixmap(dir_model->filePath(index)));
+    cat_menu->clear_cmd_arguments();
+    
+    if (index.isValid())
+    {
+        abstract_view->setCurrentIndex(index);
+        preview_label->setPixmap(QPixmap(dir_model->filePath(index))); // show file pixmap preview
+    }
+    else
+    {
+        abstract_view->clearSelection();
+        abstract_view->setCurrentIndex(QModelIndex ()); // assign a not valid index;
+    }
 }
 
 void Filedialog::show_hidden(bool select)
@@ -559,18 +572,23 @@ void Filedialog::mouseReleaseEvent(QMouseEvent *event)
 }
 
 void Filedialog::contextMenuEvent(QContextMenuEvent *event)
-{qDebug() << "Is valid" << abstract_view->indexAt(event->pos()).isValid() << "r"<< abstract_view->indexAt(event->pos()).row() << "c" << abstract_view->indexAt(event->pos()).column();
-    if (abstract_view->indexAt(event->pos()).isValid() && cat_menu != NULL)
+{
+    if (abstract_view->currentIndex().isValid() && cat_menu != NULL)
     {
         if (dir_model->isDir(abstract_view->currentIndex()))
             cat_menu->set_cmd_arguments(get_selected_path()); // set the dir path as argument
         else
-            cat_menu->set_cmd_arguments(get_selected_path() + get_selected_name()); // set the file path+name as argument
+            cat_menu->set_cmd_arguments(get_selected_path().append(get_selected_name())); // set the file path+name as argument
 
         main_menu->exec(event->globalPos());
     }
-    event->ignore();
+    else
+    {
+        event->ignore();
+    }
     abstract_view->clearSelection();
+    abstract_view->setCurrentIndex(QModelIndex ()); // assign a not valid index;
+    cat_menu->clear_cmd_arguments();
 }
 
 void Filedialog::accepted()

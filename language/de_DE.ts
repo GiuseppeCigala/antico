@@ -281,14 +281,14 @@
 <context>
     <name>Dockicon</name>
     <message>
-        <location filename="../src/dockicon.cpp" line="70"/>
-        <location filename="../src/dockicon.cpp" line="93"/>
+        <location filename="../src/dockicon.cpp" line="72"/>
+        <location filename="../src/dockicon.cpp" line="95"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../src/dockicon.cpp" line="71"/>
-        <location filename="../src/dockicon.cpp" line="99"/>
+        <location filename="../src/dockicon.cpp" line="73"/>
+        <location filename="../src/dockicon.cpp" line="101"/>
         <source>Add to System Tray</source>
         <translation>Zum Benachrichtigungsfeld hinzufügen</translation>
     </message>
@@ -296,37 +296,43 @@
 <context>
     <name>Filedialog</name>
     <message>
-        <location filename="../src/filedialog.cpp" line="111"/>
+        <location filename="../src/filedialog.cpp" line="112"/>
         <source>Upper directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="117"/>
+        <location filename="../src/filedialog.cpp" line="118"/>
         <source>Show hidden files</source>
         <translation>Versteckte Dateien anzeigen</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="118"/>
+        <location filename="../src/filedialog.cpp" line="119"/>
         <source>Icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="119"/>
+        <location filename="../src/filedialog.cpp" line="120"/>
         <source>List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="206"/>
+        <location filename="../src/filedialog.cpp" line="216"/>
         <source>Open with</source>
         <translation>Öffnen mit...</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="215"/>
+        <location filename="../src/filedialog.cpp" line="225"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="389"/>
+        <location filename="../src/filedialog.cpp" line="229"/>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="231"/>
+        <location filename="../src/filedialog.cpp" line="406"/>
         <source>New folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,7 +341,7 @@
         <translation type="obsolete"> gelöscht</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="159"/>
+        <location filename="../src/filedialog.cpp" line="169"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -344,60 +350,60 @@
         <translation type="obsolete">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="160"/>
+        <location filename="../src/filedialog.cpp" line="170"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="282"/>
-        <location filename="../src/filedialog.cpp" line="304"/>
-        <location filename="../src/filedialog.cpp" line="373"/>
+        <location filename="../src/filedialog.cpp" line="232"/>
+        <source>New file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="295"/>
+        <location filename="../src/filedialog.cpp" line="317"/>
+        <location filename="../src/filedialog.cpp" line="385"/>
         <source>INFORMATION</source>
         <translation>INFORMATION</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="170"/>
+        <location filename="../src/filedialog.cpp" line="180"/>
         <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="171"/>
+        <location filename="../src/filedialog.cpp" line="181"/>
         <source>/usr/bin/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="172"/>
+        <location filename="../src/filedialog.cpp" line="182"/>
         <source>/home/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="216"/>
+        <location filename="../src/filedialog.cpp" line="226"/>
         <source>Cut...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="217"/>
+        <location filename="../src/filedialog.cpp" line="227"/>
         <source>Copy...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="218"/>
+        <location filename="../src/filedialog.cpp" line="228"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="220"/>
-        <source>New Folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/filedialog.cpp" line="283"/>
-        <location filename="../src/filedialog.cpp" line="305"/>
+        <location filename="../src/filedialog.cpp" line="296"/>
+        <location filename="../src/filedialog.cpp" line="318"/>
         <source>will be deleted and moved in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="374"/>
+        <location filename="../src/filedialog.cpp" line="386"/>
         <source>pasted in</source>
         <translation type="unfinished"></translation>
     </message>
@@ -409,12 +415,12 @@
         <translation type="obsolete">Minimieren/Maximieren</translation>
     </message>
     <message>
-        <location filename="../src/frame.cpp" line="569"/>
+        <location filename="../src/frame.cpp" line="570"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../src/frame.cpp" line="561"/>
+        <location filename="../src/frame.cpp" line="562"/>
         <source>Minimize(L)/Maximize(R)</source>
         <translation type="unfinished"></translation>
     </message>
