@@ -17,6 +17,7 @@ Desk::Desk(Antico *a, QWidget *parent) : QLabel(parent)
     set_geometry();
     set_desk_icons(); // at startup, restore deskfolder/deskfile/deskapp on desktop
     setAcceptDrops(true); // for drag and drop from Filedialog
+    setAttribute(Qt::WA_AlwaysShowToolTips);
     init();
     show();
 }

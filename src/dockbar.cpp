@@ -18,6 +18,7 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
     dock_layout->setSpacing(1);
     dock_layout->setSizeConstraint(QLayout::SetNoConstraint);
     setAcceptDrops(true); // for drag and drop from Filedialog
+    setAttribute(Qt::WA_AlwaysShowToolTips);
     read_settings();
     init();
     set_geometry();
