@@ -307,6 +307,8 @@ void Manager::add_app_tab()
     tree_view = new QTreeView(this);
     tree_view->setModel(dir_model);
     tree_view->setSortingEnabled(true);
+    tree_view->setAlternatingRowColors(true);
+    tree_view->setFocusPolicy(Qt::ClickFocus);
     QSplitter *splitter = new QSplitter(this);
     path_widget = new QListWidget(this);
     path_widget->setMaximumWidth(150);
@@ -374,6 +376,8 @@ void Manager::remove_app_tab()
     app_tree = new QTreeWidget(this);
     app_tree->setColumnCount(1);
     app_tree->setHeaderLabel(tr("Category/Applications"));
+    app_tree->setAlternatingRowColors(true);
+    app_tree->setFocusPolicy(Qt::ClickFocus);
     update_remove_list();
 
     QHBoxLayout *rem_close_layout = new QHBoxLayout();
@@ -403,6 +407,7 @@ void Manager::run_app_tab()
     QStringList header;
     header << tr("Application") << tr("Path") << tr("Arguments");
     run_table->setHorizontalHeaderLabels(header);
+    run_table->setAlternatingRowColors(true);
     update_run_table();
 
     QHBoxLayout *add_rem_layout = new QHBoxLayout();

@@ -466,7 +466,8 @@ void Filedialog::set_read_only(bool b)
 
 void Filedialog::set_selected(const QModelIndex &index)
 {
-    cat_menu->clear_cmd_arguments();
+    if(cat_menu != NULL)
+        cat_menu->clear_cmd_arguments();
     
     if (index.isValid())
     {
@@ -581,6 +582,7 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
             cat_menu->set_cmd_arguments(get_selected_path().append(get_selected_name())); // set the file path+name as argument
 
         main_menu->exec(event->globalPos());
+        cat_menu->clear_cmd_arguments();
     }
     else
     {
@@ -588,7 +590,6 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
     }
     abstract_view->clearSelection();
     abstract_view->setCurrentIndex(QModelIndex ()); // assign a not valid index;
-    cat_menu->clear_cmd_arguments();
 }
 
 void Filedialog::accepted()
