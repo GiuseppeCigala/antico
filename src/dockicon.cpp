@@ -3,11 +3,11 @@
 // Written by: g_cigala@virgilio.it   //
 // Copyright : GPL                    //
 ////////////////////////////////////////
- 
+
 #include "dockicon.h"
- 
+
 ////////////////////////////////////////
- 
+
 Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(parent)
 {
     frm = frame;
@@ -17,14 +17,15 @@ Dockicon::Dockicon(Frame *frame, Systray *sys_tr, QWidget *parent) : QWidget(par
     bdr_width = 1;
     setAttribute(Qt::WA_AlwaysShowToolTips);
     setToolTip(title);
+    frame_state = 1; // 1 = raised, 0 = unmapped;
 }
- 
+
 Dockicon::~Dockicon()
 {
     delete frm;
     delete sys;
 }
- 
+
 void Dockicon::read_settings()
 {
     // get style path
@@ -45,7 +46,7 @@ void Dockicon::read_settings()
     style->endGroup(); //Other
     pix = QPixmap(d_icon_pix);
 }
- 
+
 void Dockicon::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -63,8 +64,20 @@ void Dockicon::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-       frm->raise();
-       qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name();
+        if (frame_state == 0)
+        {
+            frame_state = 1;
+            frm->raise();
+            qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- State: raised";
+            return;
+        }
+        if (frame_state == 1)
+        {
+            frame_state = 0;
+            frm->unmap();
+            qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- State: unmapped";
+            return;
+        }
     }
     if (event->button() == Qt::RightButton)
     {
@@ -75,21 +88,21 @@ void Dockicon::mousePressEvent(QMouseEvent *event)
         connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
     }
 }
- 
+
 void Dockicon::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
     bdr_width = 2;
     update();
 }
- 
+
 void Dockicon::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
     bdr_width = 1;
     update();
 }
- 
+
 void Dockicon::run_menu(QAction *act)
 {
     if (act->text() == tr("Close"))
@@ -107,13 +120,13 @@ void Dockicon::run_menu(QAction *act)
         close();
     }
 }
- 
+
 void Dockicon::update_name(const QString &name)
 {
     title = name;
     update();
 }
- 
+
 void Dockicon::update_style()
 {
     read_settings();

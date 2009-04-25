@@ -49,6 +49,7 @@ private:
     QString add_to_sys_pix;
     QPixmap pix;
     int bdr_width;
+    int frame_state;
     Frame *frm;
     Systray *sys;
 };

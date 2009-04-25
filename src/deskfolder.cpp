@@ -158,7 +158,7 @@ void Deskfolder::mouseDoubleClickEvent(QMouseEvent *event)
             param << path;
             QProcess::startDetached(exec, param); //open the file with the preferred application
         }
-        else
+        else // open with Filedialog
         {
             file_dialog->set_type(tr("Folder contents:"), "Close");
             file_dialog->setGeometry(geom);

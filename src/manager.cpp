@@ -1603,6 +1603,7 @@ void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
             run_table->setItem(run_table->rowCount()-1, 0, name_item);
             run_table->setItem(run_table->rowCount()-1, 1, path_item);
             run_table->setItem(run_table->rowCount()-1, 2, args_item);
+            run_table->resizeColumnsToContents();
             antico->beginGroup("Startup");
             antico->beginGroup(name);
             antico->setValue("name", name);

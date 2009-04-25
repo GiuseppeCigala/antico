@@ -326,7 +326,6 @@ void Frame::raise()
         dockbar->add_dockicon(this);  // add frame to Dockbar
         desktop->remove_deskicon(this);  // remove Application icon from Desktop
     }
-
     XMapRaised(QX11Info::display(), winId());
     XMapRaised(QX11Info::display(), c_win);
     set_state(NormalState);

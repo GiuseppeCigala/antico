@@ -466,9 +466,9 @@ void Filedialog::set_read_only(bool b)
 
 void Filedialog::set_selected(const QModelIndex &index)
 {
-    if(cat_menu != NULL)
+    if (cat_menu != NULL)
         cat_menu->clear_cmd_arguments();
-    
+
     if (index.isValid())
     {
         abstract_view->setCurrentIndex(index);
@@ -557,6 +557,8 @@ void Filedialog::mousePressEvent(QMouseEvent *event)
         mousepos = event->pos();
         grabMouse(QCursor(Qt::SizeAllCursor));
         raise();
+        abstract_view->clearSelection();
+        abstract_view->setCurrentIndex(QModelIndex ()); // assign a not valid index;
     }
 }
 
@@ -588,8 +590,6 @@ void Filedialog::contextMenuEvent(QContextMenuEvent *event)
     {
         event->ignore();
     }
-    abstract_view->clearSelection();
-    abstract_view->setCurrentIndex(QModelIndex ()); // assign a not valid index;
 }
 
 void Filedialog::accepted()
