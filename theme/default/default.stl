@@ -17,7 +17,7 @@ audiovideo_pix=audiovideo.png
 
 [Frame]
 Border\lateral_bdr_width=3
-Border\top_bdr_height=16
+Border\top_bdr_height=18
 Border\bottom_bdr_height=8
 Header\header_active_pix=header_active.png
 Header\header_inactive_pix=header_inactive.png

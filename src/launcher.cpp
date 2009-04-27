@@ -66,7 +66,7 @@ void Launcher::init()
     {
         main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
     }
-
+    
     main_menu->addSeparator();
     main_menu->addAction(manag);
     main_menu->addAction(run);

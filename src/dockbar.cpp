@@ -47,13 +47,13 @@ Dockbar::Dockbar(Antico *a, QWidget *parent) : QLabel(parent)
     icon_layout = new QHBoxLayout();
     d_icon_widget->setLayout(icon_layout);
     icon_layout->setAlignment(Qt::AlignLeft);
-    icon_layout->setContentsMargins(0, 0, 0, 0);
+    icon_layout->setContentsMargins(5, 0, 5, 0);
     icon_layout->setSpacing(1);
  
     app_layout = new QHBoxLayout();
     d_app_widget->setLayout(app_layout);
     app_layout->setAlignment(Qt::AlignLeft);
-    app_layout->setContentsMargins(0, 0, 0, 0);
+    app_layout->setContentsMargins(5, 0, 5, 0);
     app_layout->setSpacing(1);
  
     dock_layout->insertWidget(0, lchr);
@@ -154,10 +154,6 @@ void Dockbar::remove_dockicon(Frame *frm)
         Dockicon *d_icon = dock_icons.value(frm->winId());
         remove_dockicon(d_icon);
     }
-    else
-    {
-        sys->remove_sysicon(frm->winId()); // check in the System Tray eventually Sysicon still mapped
-    }
 }
  
 void Dockbar::remove_dockicon(Dockicon *d_icon) // remove from "Close" right button mouse on Dockbar
@@ -178,10 +174,6 @@ void Dockbar::remove_dockicon(Window win_id) //remove from "Close" cmd on Systra
         d_icon->close();
         update_dockicon_size();
     }
-    else
-    {
-        sys->remove_sysicon(win_id); // check in the System Tray eventually Sysicon still mapped
-    }
 }
  
 void Dockbar::remove_dockapp(Dockapp *d_app) // remove from "Delete link" right button mouse on Dockbar
@@ -190,7 +182,7 @@ void Dockbar::remove_dockapp(Dockapp *d_app) // remove from "Delete link" right 
     qDebug() << "Dockapp remove. Num. after deletion:" << dock_apps.size();
     d_app->close();
 }
- 
+
 void Dockbar::update_dockicon_size()
 {
     if (! dock_icons.isEmpty())

@@ -338,13 +338,16 @@ bool Antico::x11EventFilter(XEvent *event)
             mapping_clients.remove(event->xdestroywindow.window);
             mapping_frames.remove(frm->winId());
             dsk->remove_deskicon(frm->winId()); // remove eventually Deskicon still mapped
-            dock->remove_dockicon(frm); // remove eventually Dockicon or Sysicon still mapped
+            dock->remove_dockicon(frm); // remove eventually Dockicon still mapped
             delete frm;
             return true;
         }
         if (event->xdestroywindow.event != event->xdestroywindow.window)
+        {
+            dock->system_tray()->remove_sysicon(event->xdestroywindow.window); // check in the System Tray eventually Sysicon still mapped
+            dock->system_tray()->remove_embedder(event->xdestroywindow.window); // remove eventually QX11EmbedContainer
             return true;
-
+        }
         return false;
         break;
 
@@ -385,6 +388,10 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "ReparentNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name();
             mapping_clients.remove(event->xreparent.window);
             return true;
+        }
+        else
+        {
+            qDebug() << "ReparentNotify for client:" << event->xreparent.window << "- new Parent:" << event->xreparent.parent;
         }
         return false;
         break;
@@ -972,7 +979,7 @@ void Antico::set_settings()
         style->beginGroup("Frame");
         style->beginGroup("Border");
         style->setValue("lateral_bdr_width", 3);
-        style->setValue("top_bdr_height", 16);
+        style->setValue("top_bdr_height", 18);
         style->setValue("bottom_bdr_height", 8);
         style->endGroup(); //Border
         style->beginGroup("Header");

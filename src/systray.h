@@ -29,6 +29,7 @@ public:
     void add_sysicon(Frame *);
     void add_embed(Window);
     void remove_sysicon(Window);
+    void remove_embedder(Window);
     void update_style();
  
 public slots:
@@ -39,6 +40,8 @@ protected:
     
 private:
     QHash<int, Sysicon *> sys_icons; // mapping frame id with Sysicon (key=frame_win_id, value=Sysicon)
+    QHash<int, QX11EmbedContainer *> sys_embed; // mapping Client win_id with QX11EmbedContainer
+                                                // (key=client id, value=Container)
     QString sys_pix;
     // System tray properties
     Atom kde_systray_prop;
