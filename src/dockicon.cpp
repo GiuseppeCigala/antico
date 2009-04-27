@@ -102,6 +102,7 @@ void Dockicon::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
     bdr_width = 2;
+    setToolTip(title); // update the tooltip
     update();
 }
 

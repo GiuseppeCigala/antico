@@ -4,7 +4,7 @@
 //  Copyright : GPL                   //
 ////////////////////////////////////////
 
-// add the application icon on desktop
+// add the application icon (small pixmap) on desktop
 
 ////////////////////////////////////////
 
@@ -31,6 +31,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
 public slots:
     void run_menu(QAction *);

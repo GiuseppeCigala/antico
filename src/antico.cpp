@@ -645,20 +645,25 @@ void Antico::check_window_type(Window c_win) // chech the window type before map
                 frame_type << "Normal";
                 qDebug() << "Window type: NORMAL TYPE";
             }
-            if (win_type[i] == _net_wm_window_type_dialog)
+            else if (win_type[i] == _net_wm_window_type_dialog)
             {
                 frame_type << "Dialog";
                 qDebug() << "Window type: DIALOG TYPE";
             }
-            if (win_type[i] == _net_wm_window_type_splash)
+            else if (win_type[i] == _net_wm_window_type_splash)
             {
                 frame_type << "Splash";
                 qDebug() << "Window type: SPLASH TYPE";
             }
-            if (win_type[i] == _net_wm_window_type_desktop)
+            else if (win_type[i] == _net_wm_window_type_desktop)
             {
                 frame_type << "Desktop";
                 qDebug() << "Window type: DESKTOP TYPE";
+            }
+            else // if other window type
+            {
+                frame_type << "Normal";
+                qDebug() << "Other Window type. Set as NORMAL TYPE";
             }
         }
         return;
@@ -793,16 +798,16 @@ void Antico::wm_quit()
     {
         foreach(Frame *frm, mapping_clients)
         {
-            qDebug() << "Quit process:" << frm->cl_win();
+            qDebug() << "Quit Frame:" << frm->winId() << "Client:" << frm->cl_win();
             frm->destroy();
         }
         mapping_clients.clear();
         mapping_frames.clear();
         dock->close();
         dsk->close();
-        XSync(QX11Info::display(), False);
+      //  XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
-        XCloseDisplay(QX11Info::display());
+   //     XCloseDisplay(QX11Info::display());
         emit lastWindowClosed();
     }
 }
@@ -825,7 +830,7 @@ void Antico::wm_shutdown()
 
         foreach(Frame *frm, mapping_clients)
         {
-            qDebug() << "Quit process:" << frm->cl_win();
+            qDebug() << "Quit Frame:" << frm->winId() << "Client:" << frm->cl_win();
             frm->destroy();
         }
         mapping_clients.clear();
@@ -858,7 +863,7 @@ void Antico::wm_restart()
 
         foreach(Frame *frm, mapping_clients)
         {
-            qDebug() << "Quit process:" << frm->cl_win();
+            qDebug() << "Quit Frame:" << frm->winId() << "Client:" << frm->cl_win();
             frm->destroy();
         }
         mapping_clients.clear();
