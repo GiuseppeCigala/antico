@@ -902,13 +902,12 @@ void Antico::show_desktop()
 
     foreach(Frame *frm, mapping_clients)
     {
-        if ((frm->win_state().compare("IconicState") != 0 || frm->win_state().compare("WithdrawnState") != 0) && ! frm->is_splash()) // if not yet iconize/inactive
+        if (frm->win_state().compare("IconicState") != 0 && frm->win_state().compare("WithdrawnState") != 0 && !frm->is_splash()) // if not yet iconize/inactive
         {
             frm->raise(); // set in front
             frm->iconify(); // catch the pixmap
         }
     }
-
     XSync(QX11Info::display(), FALSE);
     flush();
 }
