@@ -91,6 +91,7 @@ private:
     Atom _net_wm_window_type_desktop;
     Atom _net_wm_window_type_dialog;
     Atom _net_wm_window_type_splash;
+    Atom _net_wm_window_type_dnd;
     Atom _kde_net_wm_system_tray_window_for;
     //////////////
     QSettings *antico;

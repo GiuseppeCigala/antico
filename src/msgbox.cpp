@@ -29,7 +29,7 @@ void Msgbox::init()
     msg_icon = new QLabel(this);
     button_box = new QDialogButtonBox(this);
     ok_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"), this);
-    cancel_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Cancel"), this);
+    close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
     layout->addWidget(msg_header, 0, 0, 1, 0);
     layout->addWidget(msg_icon, 1, 0, Qt::AlignCenter);
     layout->addWidget(msg_info, 1, 1, Qt::AlignCenter);
@@ -92,25 +92,25 @@ void Msgbox::set_icon(const QString &type)
     {
         msg_icon->setPixmap(QPixmap(information_pix_path).scaled(48, 48));
         button_box->removeButton(ok_but);
-        button_box->addButton(cancel_but, QDialogButtonBox::RejectRole);
+        button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
     if (type == "Warning")
     {
         msg_icon->setPixmap(QPixmap(warning_pix_path).scaled(48, 48));
         button_box->removeButton(ok_but);
-        button_box->addButton(cancel_but, QDialogButtonBox::RejectRole);
+        button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
     if (type == "Critical")
     {
         msg_icon->setPixmap(QPixmap(critical_pix_path).scaled(48, 48));
         button_box->removeButton(ok_but);
-        button_box->addButton(cancel_but, QDialogButtonBox::RejectRole);
+        button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
     if (type == "Question")
     {
         msg_icon->setPixmap(QPixmap(question_pix_path).scaled(48, 48));
         button_box->addButton(ok_but, QDialogButtonBox::AcceptRole);
-        button_box->addButton(cancel_but, QDialogButtonBox::RejectRole);
+        button_box->addButton(close_but, QDialogButtonBox::RejectRole);
     }
 }
 

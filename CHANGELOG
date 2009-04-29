@@ -1,63 +1,6 @@
 ***********
 CHANGELOG
 ***********
-24/11/08: add Run from command line - path on filemanager - save icon on desktop.
-25/11/08: add "Open with" on filemanager.
-27/11/08: add clock and date on systray.
-28/11/08: save desk icon position after move.
-29/11/08: add deskicon pixmap and name color chooser.
-30/11/08: add destroy dockicon on dockbar - new border mouse cursor on resize - new menu icon.
-01/12/08: add dockicon pixmap selection, toolbar on Manager, tooltip on icon.
-09/12/08: add apps icon on launcher - deletion on filedialog.
-10/12/08: new antico.cfg on application dir.
-11/12/08: add System Tray.
-12/12/08: add application link on desktop.
-15/12/08: add Menu Category - update color selection - update Add/Remove app on Manager.
-17/12/08: new style management - name of classes uppercase.
-18/12/08: XEvent focus bug fix.
-20/12/08: Refresh WM on Launcher to update the style - some bug fix.
-22/12/08: add Style selection - save directory geometry.
-23/12/08: add Launcher/Header pixmap selection on Manager.
-28/12/08: add external device (usb, cdrom) on Desktop - Dockbar raise - no fix general style (select with qtconfig). 
-05/01/09: different header for active/inactive frames - [Ctrl+Tab] to scroll mapped clients - bugs fix
-07/01/09: splash screen with no border - new debug msg.
-08/01/09: add "Show Desktop" - resize Dockbar fix - [Alt+Tab] to scroll apps.
-09/01/09: new pixmap apps find - double click on header to iconize.
-10/01/09: color date/clock.
-13/01/09: add file link on desktop - show pixmap preview on Filedialog - basic pix/file association.
-18/01/09: Freedesktop.org System Tray support - basic DBus/HAL device automount/unmount.
-19/01/09: add "Run app at startup" on Manager - new System Tray layout.
-21/01/09: fix warnings - release version.
-23/01/09: path completion on "Add app" and Filedialog.
-24/01/09: add Pager (on Dockbar).
-25/01/09: add Drag&Drop of Folder/File/App from Filedialog to Desktop.
-25/01/09: update header title on frame/dock - fix SysTray map/unmap bug.
-26/01/09: add PC Restart/Shutdown.
-27/01/09: add internationalization - shading on Dockicon/Sysicon.
-30/01/09: add Freedesktop.org ".desktop" support (remove previous "Launcher" entry in "antico.cfg") - add CZ/RU translation./
-04/02/09: code optimization - "Open with" on Deskfolder/Deskdev - ".desktop" search on subdir.
-08/02/09: add Dockapps on Dockbar (also with Drag&Drop).
-10/02/09: Dialog frame pager fix - colored debug msg - add installation scripts with XSession .desktop file (KDM/GDM).
-12/02/09: Deskfile app/icon association after "Open with.." menu selection - Double click open the preferred app.
-13/02/09: new Manager layout - Deskfolder association like Deskfile after "Open with..".
-16/02/09: new MsgBox layout - Manager/MsgBox icon selection - border mouse cursor fix (remove previous default.stl).
-23/02/09: add Dockbar width and position settings.
-25/02/09: add Trash on Desktop (freedesktop.org spec).
-27/02/09: add "path pointers" on Filedialog/Manager - file/dir removed from Filedialog on Trash.
-01/03/09: new Manager layout - right mouse but. on Header for frame max/min.
-03/03/09: Deskfolder/file/app selection with rubberband for deletion.
-04/03/09: add Cut/Copy/Paste on Filedialog.
-09/03/09: add arguments at Manager/Run at startup.
-17/03/09: new site - add binary release.
-21/03/09: add Application icon on Desktop for map/unmap.
-22/03/09: add Category menu on Dockbar.
-26/03/09: add Filedialog Icon/List view.
-
-***********
-TO DO
-***********
-Fix some XErrors
-Save session
-Bug fix
-Anything else that enhances the project ...
+24/11/08: version 0.1
+29/05/09: version 0.2
  

@@ -48,7 +48,6 @@ protected:
 signals:
 
 public slots:
-    void set_selected(const QModelIndex &);
     void del_file();
     void cut_file();
     void copy_file();
@@ -85,9 +84,8 @@ private:
     QString ok_button_pix_path;
     QString close_button_pix_path;
     QString folder_pix;
-    QString trash_path;
-    QString command;
-    QString source_path;
+    QStringList cut_list;
+    QStringList copy_list;
     QLabel *message;
     QLabel *preview_label;
     QDialogButtonBox *button_box;
@@ -95,7 +93,6 @@ private:
     QPushButton *cancel;
     QPushButton *close;
     QSettings *antico;
-    QCompleter *completer;
     QListWidgetItem *root_item;
     QListWidgetItem *bin_item;
     QListWidgetItem *home_item;
@@ -103,7 +100,7 @@ private:
     QAction *cut_act;
     QAction *copy_act;
     QAction *paste_act;
-    QDirModel *dir_model;
+    QFileSystemModel *fs_model;
     QListView *list_view;
     QTreeView *tree_view;
     QAbstractItemView *abstract_view;

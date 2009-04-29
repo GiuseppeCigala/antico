@@ -208,7 +208,7 @@ void Dockbar::run_menu(QAction *act)
 {
     if (act->text().compare(tr("New link to application")) == 0)
     {
-        file_dialog->set_type(tr("New link to application:"), "OK_Cancel");
+        file_dialog->set_type(tr("New link to application:"), "OK_Close");
  
         if (file_dialog->exec() == QDialog::Accepted)
         {

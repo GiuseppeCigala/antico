@@ -26,7 +26,7 @@ public:
     ~Trashdialog();
     void read_settings();
     void init();
-    void update_tree();
+    int files_counter();
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -51,7 +51,7 @@ private:
     QString stl_path;
     QString stl_name;
     QLineEdit *line_path;
-    QDirModel *dir_model;
+    QFileSystemModel *fs_model;
     QTreeView *tree_view;
     Fileicon *prov;
 };

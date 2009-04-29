@@ -53,7 +53,7 @@ private:
     QLabel *msg_icon;
     QDialogButtonBox *button_box;
     QPushButton *ok_but;
-    QPushButton *cancel_but; 
+    QPushButton *close_but; 
 };
 
 

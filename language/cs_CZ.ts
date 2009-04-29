@@ -8,7 +8,7 @@
         <translation type="obsolete">&lt;b&gt;Ukončit správce oken&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="781"/>
+        <location filename="../src/antico.cpp" line="812"/>
         <source>Are you sure to quit the WM ?</source>
         <translation>Opravdu chcete ukončit správce oken?</translation>
     </message>
@@ -21,7 +21,7 @@
         <translation type="obsolete">&lt;b&gt;Vypnout počítač&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="807"/>
+        <location filename="../src/antico.cpp" line="838"/>
         <source>Are you sure to shutdown the PC ?</source>
         <translation>Opravdu si přejete vypnout počítač?</translation>
     </message>
@@ -30,22 +30,22 @@
         <translation type="obsolete">&lt;b&gt;Restartovat počítač&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="839"/>
+        <location filename="../src/antico.cpp" line="870"/>
         <source>Are you sure to restart the PC ?</source>
         <translation>Opravdu si přejete restartovat počítač?</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="780"/>
+        <location filename="../src/antico.cpp" line="811"/>
         <source>QUIT THE WM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="806"/>
+        <location filename="../src/antico.cpp" line="837"/>
         <source>SHUTDOWN THE PC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="838"/>
+        <location filename="../src/antico.cpp" line="869"/>
         <source>RESTART THE PC</source>
         <translation type="unfinished"></translation>
     </message>
@@ -247,7 +247,7 @@
     <name>Deskicon</name>
     <message>
         <location filename="../src/deskicon.cpp" line="61"/>
-        <location filename="../src/deskicon.cpp" line="81"/>
+        <location filename="../src/deskicon.cpp" line="95"/>
         <source>Close</source>
         <translation type="unfinished">Zavřít</translation>
     </message>
@@ -264,12 +264,12 @@
     <name>Dockbar</name>
     <message>
         <location filename="../src/dockbar.cpp" line="109"/>
-        <location filename="../src/dockbar.cpp" line="217"/>
+        <location filename="../src/dockbar.cpp" line="209"/>
         <source>New link to application</source>
         <translation>Nový odkaz na aplikaci</translation>
     </message>
     <message>
-        <location filename="../src/dockbar.cpp" line="219"/>
+        <location filename="../src/dockbar.cpp" line="211"/>
         <source>New link to application:</source>
         <translation>Nový odkaz na aplikaci:</translation>
     </message>
@@ -277,14 +277,14 @@
 <context>
     <name>Dockicon</name>
     <message>
-        <location filename="../src/dockicon.cpp" line="85"/>
-        <location filename="../src/dockicon.cpp" line="108"/>
+        <location filename="../src/dockicon.cpp" line="73"/>
+        <location filename="../src/dockicon.cpp" line="118"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/dockicon.cpp" line="86"/>
-        <location filename="../src/dockicon.cpp" line="114"/>
+        <location filename="../src/dockicon.cpp" line="74"/>
+        <location filename="../src/dockicon.cpp" line="124"/>
         <source>Add to System Tray</source>
         <translation>Přidat do System Tray</translation>
     </message>
@@ -292,12 +292,12 @@
 <context>
     <name>Filedialog</name>
     <message>
-        <location filename="../src/filedialog.cpp" line="118"/>
+        <location filename="../src/filedialog.cpp" line="117"/>
         <source>Show hidden files</source>
         <translation>Zobrazit skryté soubory</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="169"/>
+        <location filename="../src/filedialog.cpp" line="170"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -306,27 +306,27 @@
         <translation type="obsolete">Storno</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="112"/>
+        <location filename="../src/filedialog.cpp" line="111"/>
         <source>Upper directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="119"/>
+        <location filename="../src/filedialog.cpp" line="118"/>
         <source>Icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="120"/>
+        <location filename="../src/filedialog.cpp" line="119"/>
         <source>List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="170"/>
+        <location filename="../src/filedialog.cpp" line="171"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="216"/>
+        <location filename="../src/filedialog.cpp" line="215"/>
         <source>Open with</source>
         <translation>Otevřít pomocí</translation>
     </message>
@@ -342,7 +342,7 @@
     </message>
     <message>
         <location filename="../src/filedialog.cpp" line="231"/>
-        <location filename="../src/filedialog.cpp" line="406"/>
+        <location filename="../src/filedialog.cpp" line="409"/>
         <source>New folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -356,24 +356,21 @@
         <translation type="obsolete">smazán</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="295"/>
-        <location filename="../src/filedialog.cpp" line="317"/>
-        <location filename="../src/filedialog.cpp" line="385"/>
         <source>INFORMATION</source>
-        <translation>INFORMACE</translation>
+        <translation type="obsolete">INFORMACE</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="180"/>
+        <location filename="../src/filedialog.cpp" line="181"/>
         <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="181"/>
+        <location filename="../src/filedialog.cpp" line="182"/>
         <source>/usr/bin/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="182"/>
+        <location filename="../src/filedialog.cpp" line="183"/>
         <source>/home/</source>
         <translation type="unfinished"></translation>
     </message>
@@ -392,17 +389,6 @@
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../src/filedialog.cpp" line="296"/>
-        <location filename="../src/filedialog.cpp" line="318"/>
-        <source>will be deleted and moved in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/filedialog.cpp" line="386"/>
-        <source>pasted in</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Frame</name>
@@ -411,12 +397,12 @@
         <translation type="obsolete">Maximalizovat/Minimalizovat</translation>
     </message>
     <message>
-        <location filename="../src/frame.cpp" line="569"/>
+        <location filename="../src/frame.cpp" line="570"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/frame.cpp" line="561"/>
+        <location filename="../src/frame.cpp" line="562"/>
         <source>Minimize(L)/Maximize(R)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1198,13 +1184,13 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/msgbox.cpp" line="32"/>
         <source>Cancel</source>
-        <translation type="unfinished">Storno</translation>
+        <translation type="obsolete">Storno</translation>
     </message>
     <message>
+        <location filename="../src/msgbox.cpp" line="32"/>
         <source>Close</source>
-        <translation type="obsolete">Zavřít</translation>
+        <translation type="unfinished">Zavřít</translation>
     </message>
 </context>
 <context>
@@ -1265,6 +1251,21 @@ If the app is not in your $PATH, type the absolute app path.</source>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../src/trash.cpp" line="114"/>
+        <source>The trash contains </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/trash.cpp" line="114"/>
+        <source> entries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/trash.cpp" line="116"/>
+        <source>The trash is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Trashdialog</name>
@@ -1274,33 +1275,28 @@ If the app is not in your $PATH, type the absolute app path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trashdialog.cpp" line="82"/>
+        <location filename="../src/trashdialog.cpp" line="84"/>
         <source>Delete</source>
         <translation type="unfinished">Smazat</translation>
     </message>
     <message>
-        <location filename="../src/trashdialog.cpp" line="83"/>
+        <location filename="../src/trashdialog.cpp" line="85"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/trashdialog.cpp" line="84"/>
+        <location filename="../src/trashdialog.cpp" line="86"/>
         <source>Close</source>
         <translation type="unfinished">Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/trashdialog.cpp" line="140"/>
-        <location filename="../src/trashdialog.cpp" line="171"/>
+        <location filename="../src/trashdialog.cpp" line="150"/>
+        <location filename="../src/trashdialog.cpp" line="186"/>
         <source>INFORMATION</source>
         <translation type="unfinished">INFORMACE</translation>
     </message>
     <message>
-        <location filename="../src/trashdialog.cpp" line="141"/>
-        <source>will be definitively deleted...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/trashdialog.cpp" line="172"/>
+        <location filename="../src/trashdialog.cpp" line="187"/>
         <source>will be restored in</source>
         <translation type="unfinished"></translation>
     </message>

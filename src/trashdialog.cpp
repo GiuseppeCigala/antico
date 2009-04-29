@@ -63,21 +63,23 @@ void Trashdialog::init()
     name->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     line_path = new QLineEdit(this); // show trash path
     line_path->setReadOnly(true);
-    dir_model = new QDirModel(this);
+    fs_model = new QFileSystemModel(this);
     prov = new Fileicon(); // get the files icon
-    dir_model->setIconProvider(prov);
-    dir_model->setFilter(dir_model->filter() | QDir::Hidden); // add hidden files to filter
+    fs_model->setIconProvider(prov);
+    fs_model->setFilter(fs_model->filter() | QDir::Hidden); // add hidden files to filter
     tree_view = new QTreeView(this);
-    tree_view->setModel(dir_model);
+    tree_view->setModel(fs_model);
     tree_view->setSortingEnabled(true);
     tree_view->setAlternatingRowColors(true);
     tree_view->setFocusPolicy(Qt::ClickFocus);
     tree_view->header()->setSortIndicator(0, Qt::AscendingOrder);
-    tree_view->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree_view->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    tree_view->setSelectionBehavior(QAbstractItemView::SelectItems);
     tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
     trash_path = QDir::homePath() + "/.local/share"; // search in default path directory
     line_path->setText(trash_path + "/Trash/files");
-    tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
+    fs_model->setRootPath(trash_path + "/Trash/files");
+    tree_view->setRootIndex(fs_model->index(trash_path + "/Trash/files"));
     QHBoxLayout *button_layout = new QHBoxLayout();
     QPushButton* delete_but = new QPushButton(QIcon(remove_button_pix), tr("Delete"), this);
     QPushButton* restore_but = new QPushButton(QIcon(restore_button_pix), tr("Restore"), this);
@@ -123,61 +125,74 @@ void Trashdialog::close_pressed()
 
 void Trashdialog::delete_pressed()
 {
-    if (tree_view->currentIndex().isValid())
+    QList<QModelIndex> selection = tree_view->selectionModel()->selectedIndexes();
+    QModelIndex index;
+
+    foreach(index, selection)
     {
-        QString selection_path = dir_model->filePath(tree_view->currentIndex());
-        QString selection_name = dir_model->fileName(tree_view->currentIndex());
-        qDebug() << "Selected file path:" << selection_path;
-        QString trash_info = selection_name + ".trashinfo";
-        QStringList rem_info_args;
-        rem_info_args <<  trash_path + "/Trash/info/" + trash_info;
-        QProcess::startDetached("/bin/rm", rem_info_args); // remove the info file
-        QStringList rem_file_args;
-        rem_file_args << "-rf" << selection_path;
-        QProcess::startDetached("/bin/rm", rem_file_args); // remove the selected dir/file
- 
-        Msgbox msg;
-        msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("will be definitively deleted..."));
-        msg.set_icon("Information");
-        msg.exec();
+        tree_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent); // update the current index
+
+        if (index.isValid())
+        {
+            QString selection_path = fs_model->filePath(tree_view->currentIndex());
+            QString selection_name = fs_model->fileName(tree_view->currentIndex());
+            qDebug() << "Selected file path:" << selection_path;
+            QString trash_info = selection_name + ".trashinfo";
+            QStringList rem_info_args;
+            rem_info_args <<  trash_path + "/Trash/info/" + trash_info;
+            QProcess::startDetached("/bin/rm", rem_info_args); // remove the info file
+            QStringList rem_file_args;
+            rem_file_args << "-rf" << selection_path;
+            QProcess::startDetached("/bin/rm", rem_file_args); // remove the selected dir/file
+        }
     }
-    update_tree(); // update the TreeView
+    Msgbox msg;
+    msg.set_header(tr("INFORMATION"));
+    msg.set_info("Files definitively deleted...");
+    msg.set_icon("Information");
+    msg.exec();
 }
 
 void Trashdialog::restore_pressed()
 {
-    if (tree_view->currentIndex().isValid())
+    QList<QModelIndex> selection = tree_view->selectionModel()->selectedIndexes();
+    QModelIndex index;
+
+    foreach(index, selection)
     {
-        QString selection_path = dir_model->filePath(tree_view->currentIndex());
-        QString selection_name = dir_model->fileName(tree_view->currentIndex());
-        qDebug() << "Selected file path:" << selection_path;
-        QString trash_info = selection_name + ".trashinfo";
-        QSettings settings(trash_path + "/Trash/info/" + trash_info, QSettings::IniFormat);
-        settings.beginGroup("Trash Info");
-        QString restore_full_path = settings.value("Path").toString(); // with file name at end
-        settings.endGroup(); // Trash Info
-        qDebug() << "Restore full path:" << restore_full_path;
-        QString restore_path = restore_full_path.remove(selection_name); // remove the file name from restore path
-        qDebug() << "Restore path:" << restore_path;
-        QStringList restore_args;
-        restore_args << selection_path << restore_path;
-        QProcess::startDetached("/bin/mv", restore_args); // restore the selected dir/file
-        QStringList remove_args;
-        remove_args <<  trash_path + "/Trash/info/" + trash_info;
-        QProcess::startDetached("/bin/rm", remove_args); // remove the info file
- 
-        Msgbox msg;
-        msg.set_header(tr("INFORMATION"));
-        msg.set_info("<b>" + selection_name + "</b>" + " " + tr("will be restored in") + " " + "<b>" + restore_path + "</b>");
-        msg.set_icon("Information");
-        msg.exec();
+        tree_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent); // update the current index
+
+        if (index.isValid())
+        {
+            QString selection_path = fs_model->filePath(tree_view->currentIndex());
+            QString selection_name = fs_model->fileName(tree_view->currentIndex());
+            qDebug() << "Selected file path:" << selection_path;
+            QString trash_info = selection_name + ".trashinfo";
+            QSettings settings(trash_path + "/Trash/info/" + trash_info, QSettings::IniFormat);
+            settings.beginGroup("Trash Info");
+            QString restore_full_path = settings.value("Path").toString(); // with file name at end
+            settings.endGroup(); // Trash Info
+            qDebug() << "Restore full path:" << restore_full_path;
+            QString restore_path = restore_full_path.remove(selection_name); // remove the file name from restore path
+            qDebug() << "Restore path:" << restore_path;
+            QStringList restore_args;
+            restore_args << selection_path << restore_path;
+            QProcess::startDetached("/bin/mv", restore_args); // restore the selected dir/file
+            QStringList remove_args;
+            remove_args <<  trash_path + "/Trash/info/" + trash_info;
+            QProcess::startDetached("/bin/rm", remove_args); // remove the info file
+
+            Msgbox msg;
+            msg.set_header(tr("INFORMATION"));
+            msg.set_info("<b>" + selection_name + "</b>" + " " + tr("will be restored in") + " " + "<b>" + restore_path + "</b>");
+            msg.set_icon("Information");
+            msg.exec();
+        }
     }
-    update_tree(); // update the TreeView
 }
 
-void Trashdialog::update_tree()
+int Trashdialog::files_counter()
 {
-    tree_view->setRootIndex(dir_model->index(trash_path + "/Trash/files"));
-    dir_model->refresh(dir_model->index(line_path->text())); // update the TreeView
+    int counter = fs_model->rootDirectory().count();
+    return counter;
 }

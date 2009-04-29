@@ -18,6 +18,7 @@ Frame::Frame(Window w, const QString &type, Dockbar *dock, Desk *desk, QWidget *
     init();
     setFrameStyle(QFrame::Panel|QFrame::Raised);
     setAttribute(Qt::WA_AlwaysShowToolTips);
+    setAttribute(Qt::WA_X11NetWmWindowTypeDND);
     setAcceptDrops(true);
     set_active(); // set header active
 }
@@ -805,6 +806,7 @@ void Frame::dragEnterEvent(QDragEnterEvent *event)
     qDebug() << "dragEnterEvent";
     qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
+    event->accept();
     qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data();
 }
 
@@ -812,6 +814,7 @@ void Frame::dragMoveEvent(QDragMoveEvent *event)
 {
     qDebug() << "dragMoveEvent";
     qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
+    event->acceptProposedAction();
     event->accept();
     qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data();
 }

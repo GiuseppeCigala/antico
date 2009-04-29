@@ -107,6 +107,13 @@ void Trash::enterEvent(QEvent *event)
     Q_UNUSED(event);
     zoom = true;
     update();
+    
+    int counter = trash_dlg->files_counter(); // get the trash files number
+ 
+    if (counter > 0)
+        setToolTip(QString(tr("The trash contains ")).append(QString("%1").arg(counter)).append(tr(" entries")));
+    else
+        setToolTip(tr("The trash is empty"));
 }
 
 void Trash::leaveEvent(QEvent *event)

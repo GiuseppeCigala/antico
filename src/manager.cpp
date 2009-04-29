@@ -34,7 +34,7 @@ void Manager::init()
     setLayout(main_layout);
     QLabel *lab = new QLabel(tr("MANAGER"), this);
     lab->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    file_dialog = new Filedialog(this);
+    file_dialog = new Filedialog(this); // without category menu
     main_layout->addWidget(lab);
     main_layout->addWidget(tab);
     style_tab();
@@ -1361,7 +1361,7 @@ void Manager::path_completer() // on user button press in line_path
 
 void Manager::select_style()
 {
-    file_dialog->set_type(tr("Select the style"), "OK_Cancel");
+    file_dialog->set_type(tr("Select the style"), "OK_Close");
     file_dialog->raise();
     QStringList filters;
     filters << "*.stl";
@@ -1387,7 +1387,7 @@ void Manager::select_style()
 void Manager::select_pixmap(QWidget *pix)
 {
     pixmap = (QLabel *)pix;
-    file_dialog->set_type(tr("Select the pixmap"), "OK_Cancel");
+    file_dialog->set_type(tr("Select the pixmap"), "OK_Close");
     file_dialog->set_path(stl_path);
     file_dialog->set_read_only(true);
     file_dialog->raise();
@@ -1580,7 +1580,7 @@ void Manager::add_app_pressed() // add selected app on lancher menu (in the sele
 
 void Manager::add_run_app_pressed() // add selected app on "Run at startup" list
 {
-    file_dialog->set_type(tr("Add application to run at startup:"), "OK_Cancel");
+    file_dialog->set_type(tr("Add application to run at startup:"), "OK_Close");
     file_dialog->raise();
 
     if (file_dialog->exec() == QDialog::Accepted)

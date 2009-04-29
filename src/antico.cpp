@@ -104,6 +104,7 @@ void Antico::get_atoms()
     _net_wm_window_type_desktop = XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_DESKTOP", False);
     _net_wm_window_type_dialog = XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_DIALOG", False);
     _net_wm_window_type_splash = XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_SPLASH", False);
+    _net_wm_window_type_dnd = XInternAtom(QX11Info::display(), "_NET_WM_WINDOW_TYPE_DND", False);
     _kde_net_wm_system_tray_window_for = XInternAtom(QX11Info::display(), "_KDE_NET_WM_SYSTEM_TRAY_WINDOW_FOR", False);
 }
 
@@ -172,6 +173,7 @@ void Antico::send_supported_hints()
     xev5.format = 32;
     xev5.data.l[0] = _kde_net_wm_system_tray_window_for;
     xev5.data.l[1] = _net_wm_state;
+    xev5.data.l[2] = _net_wm_window_type_dnd;
     XSendEvent(QX11Info::display(), QApplication::desktop()->winId(), False,
                (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&xev5);
 }
@@ -409,36 +411,44 @@ bool Antico::x11EventFilter(XEvent *event)
             {
                 qDebug() << "---> wm_hints";
                 frm->get_wm_hints();
+                return true;
             }
             if (pev->atom == wm_normal_hints)
             {
                 qDebug() << "---> wm_normal_hints";
                 frm->get_wm_normal_hints();
+                return true;
             }
             if (pev->atom == wm_name || pev->atom == _net_wm_name)
             {
                 qDebug() << "---> wm_name";
                 frm->get_wm_name();
                 frm->update_name();
+                return true;
             }
             if (pev->atom == wm_state || pev->atom == _net_wm_state)
             {
                 qDebug() << "---> wm_state";
                 qDebug() << "Window changing state:" << pev->window;
+                return true;
             }
             if (pev->atom == wm_colormaps)
             {
                 qDebug() << "---> wm_colormap_windows";
                 frm->get_colormaps();
+                return true;
             }
             if (pev->atom == wm_transient_for)
             {
                 qDebug() << "---> wm_transient_for";
+                return true;
             }
             if (pev->atom == _net_wm_user_time)
             {
                 qDebug() << "---> _net_wm_user_time";
                 frm->set_focus(CurrentTime);
+                set_active_frame(frm);
+                return true;
             }
             return true;
         }
@@ -480,6 +490,7 @@ bool Antico::x11EventFilter(XEvent *event)
         {
             qDebug() << "Button press:" <<  event->xbutton.button << "for map frame:" << event->xbutton.window;
             set_active_frame(frm);
+            XSetInputFocus(QX11Info::display(), event->xbutton.window, RevertToNone, CurrentTime);
         }
         else
         {
@@ -514,41 +525,49 @@ bool Antico::x11EventFilter(XEvent *event)
         {
             qDebug() << "Press [Alt+Tab] - Scroll active apps";
             raise_next_frame();
+            return false;
         }
         if (sym == XK_F2 && mod == keymask1)
         {
             qDebug() << "Press [Alt+F2] - Start Runner";
             new Runner();
+            return false;
         }
         if (sym == XK_q && mod == keymask1)
         {
             qDebug() << "Press [Alt+q] - Quit the WM";
             wm_quit();
+            return false;
         }
         if (sym == XK_s && mod == keymask1)
         {
             qDebug() << "Press [Alt+s] - Shutdown the PC";
             wm_shutdown();
+            return false;
         }
         if (sym == XK_r && mod == keymask1)
         {
             qDebug() << "Press [Alt+r] - Restart the PC";
             wm_restart();
+            return false;
         }
         if (sym == XK_u && mod == keymask1)
         {
             qDebug() << "Press [Alt+u] - Refresh the WM";
             wm_refresh();
+            return false;
         }
         if (sym == XK_m && mod == keymask1)
         {
             qDebug() << "Press [Alt+m] - Start Manager";
             new Manager();
+            return false;
         }
         if (sym == XK_d && mod == keymask1)
         {
             qDebug() << "Press [Alt+d] - Show Desktop";
             show_desktop();
+            return false;
         }
         return false;
         break;

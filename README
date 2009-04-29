@@ -12,11 +12,10 @@ Menu applications can be added and removed from "Manager" panel.
 Frame border dimension, color, pixmap, desk wallpaper managed from "Manager" panel.
 The style is selected from Manager and save in a xxx.stl file: if you want to share your personal style, save the directory and send it ...
 General style (Oxygen, Plastique ..), fonts family and size, window background etc. can be selected from "qtconfig".
-Add links to filesystem directory with right mouse button (double click to open the link and right mouse button to delete it).
+Add links to filesystem directory/file/application with right mouse button (double click to open the link and right mouse button to delete it).
 Dockicon added to Dockbar deleted with right mouse button or added to System Tray.
-Add application link on desktop.
-Category apps menu on Launcher.
-See CHANGELOG ...
+Category apps menu on Launcher/Dockbar.
+See "git commits" on repository ...
 
 ***********
 REPOSITORY
