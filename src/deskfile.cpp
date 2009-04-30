@@ -176,7 +176,7 @@ void Deskfile::del_file()
     emit destroy_deskfile(this);
 }
 
-QString Deskfile::get_file_name()
+QString Deskfile::get_file_name() const
 {
     return file_name;
 }

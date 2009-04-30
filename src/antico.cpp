@@ -623,7 +623,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
     frame_type.clear(); // clear the window type list
 }
 
-bool Antico::check_net_sys_tray_for(Window c_win)
+bool Antico::check_net_sys_tray_for(Window c_win) const
 {
     Atom type_ret = None;
     unsigned char *data = 0;

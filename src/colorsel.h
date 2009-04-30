@@ -22,8 +22,8 @@ class Colorsel : public QWidget
 public:
     Colorsel(const QColor &, QWidget *parent = 0);
     ~Colorsel();
-    QSize minimumSizeHint();
-    QColor get_color();
+    QSize minimumSizeHint() const;
+    QColor get_color() const;
 
 signals:
 

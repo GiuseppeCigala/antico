@@ -334,7 +334,7 @@ void Frame::raise()
     qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
-bool Frame::query_shape()
+bool Frame::query_shape() const
 {
     int ns, order;
 

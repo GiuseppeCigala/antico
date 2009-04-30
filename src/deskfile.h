@@ -27,7 +27,7 @@ public:
     void read_settings();
     void init();
     void update_style();
-    QString get_file_name();
+    QString get_file_name() const;
     void set_selected(bool);
 
 protected:

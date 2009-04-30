@@ -492,7 +492,7 @@ QIcon Fileicon::icon(const QFileInfo &info) const
     return default_ico; //default icon
 }
 
-QIcon Fileicon::icon()
+QIcon Fileicon::icon() const
 {
     QIcon ico(utility_pix); //default icon
     return ico;

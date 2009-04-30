@@ -103,13 +103,9 @@ void Filedialog::init()
     message->setMaximumHeight(20);
 
     QHBoxLayout *path_layout = new QHBoxLayout();
-    preview_label = new QLabel(this); // show pixmap preview
-    preview_label->setMaximumSize(32, 32);
-    preview_label->setScaledContents(true);
     line_path = new QLineEdit(this); // show path selection
     upper_dir_but = new QPushButton(QIcon(upper_dir_pix), "", this);
     upper_dir_but->setToolTip(tr("Upper directory"));
-    path_layout->addWidget(preview_label);
     path_layout->addWidget(line_path);
     path_layout->addWidget(upper_dir_but);
 
@@ -181,24 +177,64 @@ void Filedialog::init()
     root_item->setText(tr("/"));
     bin_item->setText(tr("/usr/bin/"));
     home_item->setText(tr("/home/"));
-
-    QSplitter *splitter = new QSplitter(this);
-    splitter->addWidget(path_widget);
-    splitter->addWidget(tree_view);
-    splitter->addWidget(list_view);
+    
+    QGroupBox *info_box = new QGroupBox(tr("Info"));
+    info_box->setMaximumWidth(150);
+    QGridLayout *info_layout = new QGridLayout();
+    info_layout->setSpacing(0);
+    info_layout->setColumnMinimumWidth(1, 100);
+    info_box->setLayout(info_layout);
+    QLabel *type_pix = new QLabel(this);
+    QLabel *name = new QLabel(this);
+    QLabel *owner = new QLabel(this);
+    QLabel *permissions = new QLabel(this);
+    preview_pix = new QLabel(this); // show pixmap preview
+    owner_name = new QLabel(this); // show the file owner
+    file_permissions = new QLabel(this); // show file permissions
+    file_name = new QLabel(this); // show file name and extension
+    preview_pix->setScaledContents(true);
+    preview_pix->setFixedSize(32, 32);
+    type_pix->setText(tr("<b>Type:</b>"));
+    name->setText(tr("<b>Name:</b>"));
+    owner->setText(tr("<b>Owner:</b>"));
+    permissions->setText(tr("<b>Permissions:</b> (Own|Usr|Grp|Oth)"));
+    permissions->setWordWrap(true);
+    permissions->setFixedWidth(90);
+    file_name->setWordWrap(true);
+    info_layout->addWidget(type_pix, 0, 0, Qt::AlignLeft);
+    info_layout->addWidget(preview_pix, 0, 1, Qt::AlignLeft);
+    info_layout->addWidget(name, 1, 0, Qt::AlignLeft);
+    info_layout->addWidget(file_name, 1, 1, Qt::AlignLeft);
+    info_layout->addWidget(owner, 2, 0, Qt::AlignLeft);
+    info_layout->addWidget(owner_name, 2, 1, Qt::AlignLeft);
+    info_layout->addWidget(permissions, 3, 0, Qt::AlignLeft);
+    info_layout->addWidget(file_permissions, 3, 1, Qt::AlignRight);
+    
+    QSplitter *ver_splitter = new QSplitter(this);
+    ver_splitter->setOrientation(Qt::Vertical);
+    ver_splitter->addWidget(path_widget);
+    ver_splitter->addWidget(info_box);
+        
+    QSplitter *hor_splitter = new QSplitter(this);
+    hor_splitter->setOrientation(Qt::Horizontal);
+    hor_splitter->addWidget(ver_splitter);
+    hor_splitter->addWidget(tree_view);
+    hor_splitter->addWidget(list_view);
 
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
     layout->addWidget(message);
     layout->addLayout(view_layout);
     layout->addLayout(path_layout);
-    layout->addWidget(splitter);
+    layout->addWidget(hor_splitter);
     layout->addWidget(button_box);
 
     connect(path_widget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
             this, SLOT(change_path(QListWidgetItem *, QListWidgetItem *)));
-    connect(tree_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_view(QModelIndex)));
-    connect(list_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(update_view(QModelIndex)));
+    connect(tree_view, SIGNAL(pressed(const QModelIndex &)), this, SLOT(show_info(const QModelIndex &)));
+    connect(list_view, SIGNAL(pressed(const QModelIndex &)), this, SLOT(show_info(const QModelIndex &)));
+    connect(tree_view, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(update_view(const QModelIndex &)));
+    connect(list_view, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(update_view(const QModelIndex &)));
     connect(hidden_radio, SIGNAL(toggled(bool)), this, SLOT(show_hidden(bool)));
     connect(icon_but, SIGNAL(pressed()), this, SLOT(set_icon_mode()));
     connect(list_but, SIGNAL(pressed()), this, SLOT(set_list_mode()));
@@ -442,6 +478,19 @@ void Filedialog::update_view(const QModelIndex &index)
     {
         abstract_view->setRootIndex(index);
         line_path->setText(fs_model->filePath(index));
+    }
+}
+
+void Filedialog::show_info(const QModelIndex &index)
+{ 
+    if (index.isValid())
+    {
+        abstract_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent); 
+        preview_pix->setPixmap(fs_model->fileIcon(index).pixmap(32, 32)); // show file pixmap preview
+        file_name->setText(fs_model->fileInfo(index).fileName());
+        owner_name->setText(fs_model->fileInfo(index).owner());
+        QString perm = QString("%1").arg(fs_model->fileInfo(index).permissions(), 0, 16);
+        file_permissions->setText(perm);
     }
 }
 

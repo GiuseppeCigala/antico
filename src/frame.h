@@ -43,7 +43,7 @@ public:
     void map();
     void raise();
     void reshape();
-    bool query_shape();
+    bool query_shape() const;
     void get_wm_name();
     void update_name();
     void get_wm_protocols();

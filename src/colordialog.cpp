@@ -53,7 +53,7 @@ void Colordialog::paintEvent(QPaintEvent *)
     painter1.drawRoundedRect(0, 0, width(), height(), 5, 5, Qt::RelativeSize);
 }
 
-QColor Colordialog::get_color()
+QColor Colordialog::get_color() const
 {
     return col_sel->get_color();
 }

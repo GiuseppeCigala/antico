@@ -28,7 +28,7 @@ public:
     void read_settings();
     void update_style();
     void init();
-    QString get_dir_name();
+    QString get_dir_name() const;
     void set_selected(bool);
 
 protected:

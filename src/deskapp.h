@@ -25,7 +25,7 @@ public:
     ~Deskapp();
     void read_settings();
     void update_style();
-    QString get_app_name();
+    QString get_app_name() const;
     void set_selected(bool);
 
 protected:

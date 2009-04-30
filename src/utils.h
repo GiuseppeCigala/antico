@@ -90,7 +90,7 @@ public:
     Fileicon();
     ~Fileicon();
     QIcon icon(const QFileInfo &) const;
-    QIcon icon();
+    QIcon icon() const;
     QString type(const QFileInfo &) const;
     QString icon_type(const QFileInfo &) const;
     void read_settings();

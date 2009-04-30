@@ -23,7 +23,7 @@ class Colordialog : public QDialog
 public:
     Colordialog(const QColor &, QWidget *parent=0);
     ~Colordialog();
-    QColor get_color();
+    QColor get_color() const;
     void init();
 
 protected:

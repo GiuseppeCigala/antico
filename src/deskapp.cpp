@@ -147,7 +147,7 @@ void Deskapp::del_app()
     emit destroy_deskapp(this);
 }
 
-QString Deskapp::get_app_name()
+QString Deskapp::get_app_name() const
 {
     return app_name;
 }

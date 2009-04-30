@@ -62,6 +62,7 @@ public slots:
     void update_view(const QModelIndex &);
     void contextMenuEvent(QContextMenuEvent *);
     void change_path(QListWidgetItem *, QListWidgetItem *);
+    void show_info(const QModelIndex &);
     void set_icon_mode();
     void set_list_mode();
     void accepted();
@@ -87,7 +88,10 @@ private:
     QStringList cut_list;
     QStringList copy_list;
     QLabel *message;
-    QLabel *preview_label;
+    QLabel *preview_pix;
+    QLabel *file_name;
+    QLabel *owner_name;
+    QLabel *file_permissions;
     QDialogButtonBox *button_box;
     QPushButton *ok;
     QPushButton *cancel;

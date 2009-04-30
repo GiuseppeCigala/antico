@@ -308,12 +308,12 @@ void Colorsel::mouseReleaseEvent(QMouseEvent *event)
     setCursor(QCursor(Qt::ArrowCursor));
 }
 
-QSize Colorsel::minimumSizeHint()
+QSize Colorsel::minimumSizeHint() const
 {
     return QSize(20, 20);
 }
 
-QColor Colorsel::get_color()
+QColor Colorsel::get_color() const
 {
     QColor col(redY, greenY, blueY, opY);
     return col;

@@ -54,7 +54,7 @@ public:
     void send_supported_hints();
     void check_window_type(Window);
     void print_window_prop(Window);
-    bool check_net_sys_tray_for(Window);
+    bool check_net_sys_tray_for(Window) const;
     void check_wm_transient_for(Window);
     Filedialog * get_file_dialog();
     Categorymenu * get_category_menu();

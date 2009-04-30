@@ -217,7 +217,7 @@ void Deskfolder::del_folder()
     emit destroy_deskfolder(this);
 }
 
-QString Deskfolder::get_dir_name()
+QString Deskfolder::get_dir_name() const
 {
     return dir_name;
 }
