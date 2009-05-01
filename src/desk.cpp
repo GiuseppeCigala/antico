@@ -266,48 +266,54 @@ void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by d
     if (event->proposedAction() == Qt::LinkAction)
     {
         qDebug() << "dropEvent";
-        QTreeView *tree_view = (QTreeView *)event->source();
-        QDirModel *dir_model = (QDirModel *)tree_view->model();
-        QModelIndex selection = tree_view->currentIndex();
+        QAbstractItemView *abstract_view = (QAbstractItemView *)event->source();
+        QFileSystemModel *fs_model = (QFileSystemModel *)abstract_view->model();
+        QList<QModelIndex> selection = abstract_view->selectionModel()->selectedIndexes();
+        QModelIndex index;
 
-        QString name = dir_model->fileName(tree_view->currentIndex());
-        qDebug() << "Selected name:" << name;
-        QPoint pos = event->pos(); // position of drop event
-
-        if (dir_model->isDir(selection)) // is a directory
+        foreach(index, selection)
         {
-            QString path = dir_model->filePath(selection);
-            qDebug() << "Selected path:" << path;
-            QRect geometry = tree_view->geometry(); // get the dimension of TreeView
+            abstract_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
 
-            if (! name.isEmpty())
+            QString name = fs_model->fileInfo(index).fileName();
+            qDebug() << "Selected name:" << name;
+            QPoint pos = event->pos(); // position of drop event
+
+            if (fs_model->isDir(index)) // is a directory
             {
-                create_desk_folder(name, path, geometry, pos, this);
-            }
-        }
-        else // is a file
-        {
-            QString filepath = dir_model->filePath(selection);
-            QFileInfo pathinfo(filepath);
-            QString path = pathinfo.absolutePath(); // remove the file name from path
-            path.append("/"); // add slash at the end
-            qDebug() << "Selected path:" << path;
+                QString path = fs_model->fileInfo(index).filePath();
+                qDebug() << "Selected path:" << path;
+                QRect geometry = abstract_view->geometry(); // get the dimension of View
 
-            QFileInfo nameinfo(name);
-            Fileicon *prov = (Fileicon *)dir_model->iconProvider();
-            QString icon = prov->icon_type(nameinfo); // get the file icon
-
-            if (! name.isEmpty())
-            {
-                if (pathinfo.isExecutable()) // is an application
+                if (! name.isEmpty())
                 {
-                    Appicon app_icon; // get application icon
-                    QString icon = app_icon.get_app_icon(name);
-                    create_desk_app(name, path, icon, pos, this);
+                    create_desk_folder(name, path, geometry, pos, this);
                 }
-                else // is a file
+            }
+            else // is a file
+            {
+                QString filepath = fs_model->fileInfo(index).filePath();
+                QFileInfo pathinfo(filepath);
+                QString path = pathinfo.absolutePath(); // remove the file name from path
+                path.append("/"); // add slash at the end
+                qDebug() << "Selected path:" << path;
+
+                QFileInfo nameinfo(name);
+                Fileicon *prov = (Fileicon *)fs_model->iconProvider();
+                QString icon = prov->icon_type(nameinfo); // get the file icon
+
+                if (! name.isEmpty())
                 {
-                    create_desk_file(name, path, icon, pos, this);
+                    if (pathinfo.isExecutable()) // is an application
+                    {
+                        Appicon app_icon; // get application icon
+                        QString icon = app_icon.get_app_icon(name);
+                        create_desk_app(name, path, icon, pos, this);
+                    }
+                    else // is a file
+                    {
+                        create_desk_file(name, path, icon, pos, this);
+                    }
                 }
             }
         }
@@ -498,7 +504,7 @@ void Desk::remove_deskicon(Deskicon *d_icon) // remove from "Close" right button
     qDebug() << "Deskicon remove. Num. after deletion:" << desk_icons.size();
     d_icon->close();
 }
- 
+
 void Desk::remove_deskicon(Window win_id) //remove from "Close" cmd on Systray (_NET_SYSTEM_TRAY protocol) if Dockicon is still mapped
 {
     if (desk_icons.contains(win_id))
