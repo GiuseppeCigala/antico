@@ -373,6 +373,12 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
+    case VisibilityNotify:
+        qDebug() << "[VisibilityNotify]";
+
+        return false;
+        break;
+
     case ConfigureNotify:
         qDebug() << "[ConfigureNotify]";
 
@@ -476,12 +482,6 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
-    case VisibilityNotify:
-        qDebug() << "[VisibilityNotify]";
-
-        return false;
-        break;
-
         /////////////////// OTHER EVENTS ///////////////////
     case ButtonPress:
         qDebug() << "[ButtonPress]";
@@ -572,6 +572,12 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
+    case Expose:
+        qDebug() << "[Expose]";
+
+        return false;
+        break;
+
     default:
 
         if (servershapes && event->type == (ShapeEventBase + ShapeNotify))
@@ -611,6 +617,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
         frm = new Frame(c_win, frame_type.at(0), dock, desk); // select always the first type in list (preferred)
         mapping_clients.insert(c_win, frm); // save the client winId/frame
         mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
+        XReparentWindow(QX11Info::display(), frm->winId(), dsk->winId(), frm->x(), frm->y()); // reparent with desktop (to not cover the dockbar)
     }
     else
     {
@@ -824,9 +831,9 @@ void Antico::wm_quit()
         mapping_frames.clear();
         dock->close();
         dsk->close();
-      //  XSync(QX11Info::display(), False);
+        //  XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
-   //     XCloseDisplay(QX11Info::display());
+        //     XCloseDisplay(QX11Info::display());
         emit lastWindowClosed();
     }
 }

@@ -9,7 +9,7 @@
         <translation type="obsolete">&lt;b&gt;Chiudi il WM&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="812"/>
+        <location filename="../src/antico.cpp" line="819"/>
         <source>Are you sure to quit the WM ?</source>
         <translation>Sei sicuro di voler chiudere il WM ?</translation>
     </message>
@@ -18,7 +18,7 @@
         <translation type="obsolete">&lt;b&gt;Spegni il PC&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="838"/>
+        <location filename="../src/antico.cpp" line="845"/>
         <source>Are you sure to shutdown the PC ?</source>
         <translation>Sei sicuro di voler spegnere il PC ?</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation type="obsolete">&lt;b&gt;Riavvia il PC&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="870"/>
+        <location filename="../src/antico.cpp" line="877"/>
         <source>Are you sure to restart the PC ?</source>
         <translation>Sei sicuro di voler riavviare il PC ?</translation>
     </message>
@@ -36,17 +36,17 @@
         <translation type="obsolete">Cancella</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="811"/>
+        <location filename="../src/antico.cpp" line="818"/>
         <source>QUIT THE WM</source>
         <translation>CHIUDI IL WM</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="837"/>
+        <location filename="../src/antico.cpp" line="844"/>
         <source>SHUTDOWN THE PC</source>
         <translation>SPEGNI IL PC</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="869"/>
+        <location filename="../src/antico.cpp" line="876"/>
         <source>RESTART THE PC</source>
         <translation>RIAVVIA IL PC</translation>
     </message>
@@ -293,7 +293,7 @@
 <context>
     <name>Filedialog</name>
     <message>
-        <location filename="../src/filedialog.cpp" line="117"/>
+        <location filename="../src/filedialog.cpp" line="113"/>
         <source>Show hidden files</source>
         <translation>Mostra file nascosti</translation>
     </message>
@@ -302,12 +302,12 @@
         <translation type="obsolete">Mostra come icone</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="215"/>
+        <location filename="../src/filedialog.cpp" line="242"/>
         <source>Open with</source>
         <translation>Apri con</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="225"/>
+        <location filename="../src/filedialog.cpp" line="252"/>
         <source>Delete</source>
         <translation>Cancella</translation>
     </message>
@@ -316,7 +316,7 @@
         <translation type="obsolete">cancellato</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="170"/>
+        <location filename="../src/filedialog.cpp" line="166"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -325,12 +325,17 @@
         <translation type="obsolete">Cancella</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="171"/>
+        <location filename="../src/filedialog.cpp" line="167"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="232"/>
+        <location filename="../src/filedialog.cpp" line="194"/>
+        <source>&lt;b&gt;Permissions:&lt;/b&gt;</source>
+        <translation>&lt;b&gt;Permessi:&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="259"/>
         <source>New file</source>
         <translation>Nuovo file</translation>
     </message>
@@ -343,43 +348,65 @@
         <translation type="obsolete">cancellato</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="111"/>
+        <location filename="../src/filedialog.cpp" line="108"/>
         <source>Upper directory</source>
         <translation>Su di un livello</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="118"/>
+        <location filename="../src/filedialog.cpp" line="114"/>
         <source>Icons</source>
         <translation>Icone</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="119"/>
+        <location filename="../src/filedialog.cpp" line="115"/>
         <source>List</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="181"/>
+        <location filename="../src/filedialog.cpp" line="177"/>
         <source>/</source>
         <translation>/</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="182"/>
+        <location filename="../src/filedialog.cpp" line="178"/>
         <source>/usr/bin/</source>
         <translation>/usr/bin/</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="183"/>
+        <location filename="../src/filedialog.cpp" line="179"/>
         <source>/home/</source>
         <translation>/home/</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="229"/>
+        <location filename="../src/filedialog.cpp" line="181"/>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Type:&lt;/b&gt;</source>
+        <translation type="obsolete">&lt;b&gt;Tipo:&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Name:&lt;/b&gt;</source>
+        <translation type="obsolete">&lt;b&gt;Nome:&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="193"/>
+        <source>&lt;b&gt;Owner:&lt;/b&gt;</source>
+        <translation>&lt;b&gt;Proprietario:&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Permissions:&lt;/b&gt; (Own|Usr|Grp|Oth)</source>
+        <translation type="obsolete">&lt;b&gt;Permessi:&lt;/b&gt; (Own|Usr|Grp|Oth)</translation>
+    </message>
+    <message>
+        <location filename="../src/filedialog.cpp" line="256"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="231"/>
-        <location filename="../src/filedialog.cpp" line="409"/>
+        <location filename="../src/filedialog.cpp" line="258"/>
+        <location filename="../src/filedialog.cpp" line="436"/>
         <source>New folder</source>
         <translation>Nuova cartella</translation>
     </message>
@@ -388,7 +415,7 @@
         <translation type="obsolete">cancellato e spostato in</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="226"/>
+        <location filename="../src/filedialog.cpp" line="253"/>
         <source>Cut...</source>
         <translation>Taglia...</translation>
     </message>
@@ -405,12 +432,12 @@
         <translation type="obsolete">Mostra come lista</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="227"/>
+        <location filename="../src/filedialog.cpp" line="254"/>
         <source>Copy...</source>
         <translation>Copia...</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="228"/>
+        <location filename="../src/filedialog.cpp" line="255"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>

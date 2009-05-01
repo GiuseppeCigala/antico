@@ -177,15 +177,11 @@ void Filedialog::init()
     root_item->setText(tr("/"));
     bin_item->setText(tr("/usr/bin/"));
     home_item->setText(tr("/home/"));
-    
+
     QGroupBox *info_box = new QGroupBox(tr("Info"));
     info_box->setMaximumWidth(150);
     QGridLayout *info_layout = new QGridLayout();
-    info_layout->setSpacing(0);
-    info_layout->setColumnMinimumWidth(1, 100);
     info_box->setLayout(info_layout);
-    QLabel *type_pix = new QLabel(this);
-    QLabel *name = new QLabel(this);
     QLabel *owner = new QLabel(this);
     QLabel *permissions = new QLabel(this);
     preview_pix = new QLabel(this); // show pixmap preview
@@ -194,27 +190,22 @@ void Filedialog::init()
     file_name = new QLabel(this); // show file name and extension
     preview_pix->setScaledContents(true);
     preview_pix->setFixedSize(32, 32);
-    type_pix->setText(tr("<b>Type:</b>"));
-    name->setText(tr("<b>Name:</b>"));
     owner->setText(tr("<b>Owner:</b>"));
-    permissions->setText(tr("<b>Permissions:</b> (Own|Usr|Grp|Oth)"));
+    permissions->setText(tr("<b>Permissions:</b>"));
     permissions->setWordWrap(true);
-    permissions->setFixedWidth(90);
     file_name->setWordWrap(true);
-    info_layout->addWidget(type_pix, 0, 0, Qt::AlignLeft);
-    info_layout->addWidget(preview_pix, 0, 1, Qt::AlignLeft);
-    info_layout->addWidget(name, 1, 0, Qt::AlignLeft);
-    info_layout->addWidget(file_name, 1, 1, Qt::AlignLeft);
+    info_layout->addWidget(preview_pix, 0, 0, 1, 0, Qt::AlignCenter);
+    info_layout->addWidget(file_name, 1, 0, 1, 0, Qt::AlignCenter);
     info_layout->addWidget(owner, 2, 0, Qt::AlignLeft);
     info_layout->addWidget(owner_name, 2, 1, Qt::AlignLeft);
     info_layout->addWidget(permissions, 3, 0, Qt::AlignLeft);
-    info_layout->addWidget(file_permissions, 3, 1, Qt::AlignRight);
-    
+    info_layout->addWidget(file_permissions, 3, 1, Qt::AlignLeft);
+
     QSplitter *ver_splitter = new QSplitter(this);
     ver_splitter->setOrientation(Qt::Vertical);
     ver_splitter->addWidget(path_widget);
     ver_splitter->addWidget(info_box);
-        
+
     QSplitter *hor_splitter = new QSplitter(this);
     hor_splitter->setOrientation(Qt::Horizontal);
     hor_splitter->addWidget(ver_splitter);
@@ -482,11 +473,15 @@ void Filedialog::update_view(const QModelIndex &index)
 }
 
 void Filedialog::show_info(const QModelIndex &index)
-{ 
+{
     if (index.isValid())
     {
-        abstract_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent); 
-        preview_pix->setPixmap(fs_model->fileIcon(index).pixmap(32, 32)); // show file pixmap preview
+        abstract_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+        QString suff =  fs_model->fileInfo(index).suffix();
+        if (suff == "png" || suff == "jpg")
+            preview_pix->setPixmap(fs_model->filePath(index)); // show imagefile pixmap preview
+        else
+            preview_pix->setPixmap(fs_model->fileIcon(index).pixmap(32, 32)); // show file pixmap preview
         file_name->setText(fs_model->fileInfo(index).fileName());
         owner_name->setText(fs_model->fileInfo(index).owner());
         QString perm = QString("%1").arg(fs_model->fileInfo(index).permissions(), 0, 16);

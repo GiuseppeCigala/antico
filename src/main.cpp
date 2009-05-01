@@ -17,7 +17,7 @@ int main(int argc, char **argv)
                  KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask | VisibilityChangeMask |
                  ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
     XClearWindow(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()));
-    XSync(QX11Info::display(), FALSE);
+    XSync(QX11Info::display(), False);
     
     QTranslator translator;
     qDebug() << "Language:" << QLocale::system().name();
