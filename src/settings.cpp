@@ -18,8 +18,7 @@ Settings::Settings(QWidget *parent) : QDialog(parent)
 }
 
 Settings::~Settings()
-{
-}
+{}
 
 void Settings::read_settings()
 {
@@ -87,40 +86,60 @@ void Settings::display_tab()
     QGridLayout *display_layout = new QGridLayout();
     display_frm->setLayout(display_layout);
     QLabel *composite = new QLabel(this);
-    QLabel *composite_set = new QLabel(this);
+    QLineEdit *composite_set = new QLineEdit(this);
     QLabel *virtual_desk = new QLabel(this);
-    QLabel *virtual_desk_set = new QLabel(this);
+    QLineEdit *virtual_desk_set = new QLineEdit(this);
+    QLabel *display = new QLabel(this);
+    QLineEdit *display_num = new QLineEdit(this);
     QLabel *screen = new QLabel(this);
-    QLabel *screen_num = new QLabel(this);
+    QLineEdit *screen_num = new QLineEdit(this);
     QLabel *scr_width = new QLabel(this);
-    QLabel *scr_width_val = new QLabel(this);
+    QLineEdit *scr_width_val = new QLineEdit(this);
     QLabel *scr_height = new QLabel(this);
-    QLabel *scr_height_val = new QLabel(this);
+    QLineEdit *scr_height_val = new QLineEdit(this);
     QLabel *color_dph = new QLabel(this);
-    QLabel *color_dph_num = new QLabel(this);
+    QLineEdit *color_dph_num = new QLineEdit(this);
     QLabel *hor_res = new QLabel(this);
-    QSpinBox *hor_res_spin = new QSpinBox(this);
+    hor_res_spin = new QSpinBox(this);
     QLabel *ver_res = new QLabel(this);
-    QSpinBox *ver_res_spin = new QSpinBox(this);
+    ver_res_spin = new QSpinBox(this);
+    composite_set->setReadOnly(true);
+    virtual_desk_set->setReadOnly(true);
+    display_num->setReadOnly(true);
+    screen_num->setReadOnly(true);
+    scr_width_val->setReadOnly(true);
+    scr_height_val->setReadOnly(true);
+    color_dph_num->setReadOnly(true);
+    composite->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    virtual_desk->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    display->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    screen->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    scr_width->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    scr_height->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    color_dph->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    hor_res->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    ver_res->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     composite->setText(tr("Composite:"));
     virtual_desk->setText(tr("Virtual Desktop:"));
+    display->setText(tr("Display:"));
     screen->setText(tr("Screen num:"));
     scr_width->setText(tr("Screen width:"));
     scr_height->setText(tr("Screen height:"));
     color_dph->setText(tr("Color depth:"));
     hor_res->setText(tr("Horizontal resol:"));
     ver_res->setText(tr("Vertical resol:"));
-    int scr_num = QX11Info::appScreen();
+    scr_num = QX11Info::appScreen();
     QDesktopWidget *desktop = QApplication::desktop();
     QRect geometry = desktop->screenGeometry(scr_num);
     int depth = QX11Info::appDepth(scr_num);
+    display_num->setText(QString("%1").arg(XDisplayName(NULL)));
     screen_num->setText(QString("%1").arg(scr_num));
     scr_width_val->setText(QString("%1").arg(geometry.width()));
     scr_height_val->setText(QString("%1").arg(geometry.height()));
     color_dph_num->setText(QString("%1").arg(depth));
     hor_res_spin->setValue(QX11Info::appDpiX(scr_num));
     ver_res_spin->setValue(QX11Info::appDpiY(scr_num));
-    
+
     if (QX11Info::isCompositingManagerRunning()) // true
         composite_set->setText(tr("True"));
     else
@@ -129,27 +148,32 @@ void Settings::display_tab()
         virtual_desk_set->setText(tr("True"));
     else
         virtual_desk_set->setText(tr("False"));
-        
+
     display_layout->addWidget(composite, 0, 0);
     display_layout->addWidget(composite_set, 0, 1);
     display_layout->addWidget(virtual_desk, 1, 0);
     display_layout->addWidget(virtual_desk_set, 1, 1);
-    display_layout->addWidget(screen, 2, 0);
-    display_layout->addWidget(screen_num, 2, 1);
-    display_layout->addWidget(scr_width, 3, 0);
-    display_layout->addWidget(scr_width_val, 3, 1);
-    display_layout->addWidget(scr_height, 4, 0);
-    display_layout->addWidget(scr_height_val, 4, 1);
-    display_layout->addWidget(color_dph, 5, 0);
-    display_layout->addWidget(color_dph_num, 5, 1);
-    display_layout->addWidget(hor_res, 6, 0);
-    display_layout->addWidget(hor_res_spin, 6, 1);
-    display_layout->addWidget(ver_res, 7, 0);
-    display_layout->addWidget(ver_res_spin, 7, 1);
+    display_layout->addWidget(display, 2, 0);
+    display_layout->addWidget(display_num, 2, 1);
+    display_layout->addWidget(screen, 3, 0);
+    display_layout->addWidget(screen_num, 3, 1);
+    display_layout->addWidget(scr_width, 4, 0);
+    display_layout->addWidget(scr_width_val, 4, 1);
+    display_layout->addWidget(scr_height, 5, 0);
+    display_layout->addWidget(scr_height_val, 5, 1);
+    display_layout->addWidget(color_dph, 6, 0);
+    display_layout->addWidget(color_dph_num, 6, 1);
+    display_layout->addWidget(hor_res, 7, 0);
+    display_layout->addWidget(hor_res_spin, 7, 1);
+    display_layout->addWidget(ver_res, 8, 0);
+    display_layout->addWidget(ver_res_spin, 8, 1);
 }
 
 void Settings::ok_pressed()
-{}
+{
+    QX11Info::setAppDpiX(scr_num, hor_res_spin->value());
+    QX11Info::setAppDpiY(scr_num, ver_res_spin->value());
+}
 
 void Settings::close_pressed()
 {

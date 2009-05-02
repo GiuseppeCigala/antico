@@ -45,6 +45,9 @@ private:
     QString stl_name;
     QPoint mousepos;
     QTabWidget *tab;
+    QSpinBox *hor_res_spin;
+    QSpinBox *ver_res_spin;
+    int scr_num;
 
 };
 
