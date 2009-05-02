@@ -153,6 +153,7 @@ void Manager::read_settings()
     run_pix_path = stl_path + style->value("run_pix").toString();
     show_pix_path = stl_path + style->value("show_pix").toString();
     manager_pix_path = stl_path + style->value("manager_pix").toString();
+    settings_pix_path = stl_path + style->value("settings_pix").toString();
     utility_pix_path = stl_path + style->value("utility_pix").toString();
     office_pix_path = stl_path + style->value("office_pix").toString();
     network_pix_path = stl_path + style->value("network_pix").toString();
@@ -168,6 +169,7 @@ void Manager::read_settings()
     run_pix->setToolTip(style->value("run_pix").toString());
     show_pix->setToolTip(style->value("show_pix").toString());
     manager_pix->setToolTip(style->value("manager_pix").toString());
+    settings_pix->setToolTip(style->value("settings_pix").toString());
     utility_pix->setToolTip(style->value("utility_pix").toString());
     office_pix->setToolTip(style->value("office_pix").toString());
     network_pix->setToolTip(style->value("network_pix").toString());
@@ -183,6 +185,7 @@ void Manager::read_settings()
     run_pix->setPixmap(QPixmap(run_pix_path));
     show_pix->setPixmap(QPixmap(show_pix_path));
     manager_pix->setPixmap(QPixmap(manager_pix_path));
+    settings_pix->setPixmap(QPixmap(settings_pix_path));
     utility_pix->setPixmap(QPixmap(utility_pix_path));
     office_pix->setPixmap(QPixmap(office_pix_path));
     network_pix->setPixmap(QPixmap(network_pix_path));
@@ -780,6 +783,7 @@ void Manager::style_tab()
     QLabel *run_pix_lb = new QLabel(tr("Run:"), this);
     QLabel *show_pix_lb = new QLabel(tr("Show Desktop:"), this);
     QLabel *manager_pix_lb = new QLabel(tr("Manager:"), this);
+    QLabel *settings_pix_lb = new QLabel(tr("Settings:"), this);
     launcher_pix = new QLabel(this);
     quit_pix = new QLabel(this);
     shutdown_pix = new QLabel(this);
@@ -788,6 +792,7 @@ void Manager::style_tab()
     run_pix = new QLabel(this);
     show_pix = new QLabel(this);
     manager_pix = new QLabel(this);
+    settings_pix = new QLabel(this);
     launcher_pix->setMaximumSize(32, 32);
     quit_pix->setMaximumSize(32, 32);
     shutdown_pix->setMaximumSize(32, 32);
@@ -796,6 +801,7 @@ void Manager::style_tab()
     run_pix->setMaximumSize(32, 32);
     show_pix->setMaximumSize(32, 32);
     manager_pix->setMaximumSize(32, 32);
+    settings_pix->setMaximumSize(32, 32);
     launcher_pix->setScaledContents(true);
     quit_pix->setScaledContents(true);
     shutdown_pix->setScaledContents(true);
@@ -804,6 +810,7 @@ void Manager::style_tab()
     run_pix->setScaledContents(true);
     show_pix->setScaledContents(true);
     manager_pix->setScaledContents(true);
+    settings_pix->setScaledContents(true);
     QPushButton *launcher_pix_but = new QPushButton("...", this);
     QPushButton *quit_pix_but = new QPushButton("...", this);
     QPushButton *shutdown_pix_but = new QPushButton("...", this);
@@ -812,6 +819,7 @@ void Manager::style_tab()
     QPushButton *run_pix_but = new QPushButton("...", this);
     QPushButton *show_pix_but = new QPushButton("...", this);
     QPushButton *manager_pix_but = new QPushButton("...", this);
+    QPushButton *settings_pix_but = new QPushButton("...", this);
     launcher_pix_but->setMaximumWidth(50);
     quit_pix_but->setMaximumWidth(50);
     shutdown_pix_but->setMaximumWidth(50);
@@ -820,6 +828,7 @@ void Manager::style_tab()
     run_pix_but->setMaximumWidth(50);
     show_pix_but->setMaximumWidth(50);
     manager_pix_but->setMaximumWidth(50);
+    settings_pix_but->setMaximumWidth(50);
     launcher_grid->addWidget(launcher_pix_lb, 0, 0);
     launcher_grid->addWidget(quit_pix_lb, 1, 0);
     launcher_grid->addWidget(shutdown_pix_lb, 2, 0);
@@ -828,6 +837,7 @@ void Manager::style_tab()
     launcher_grid->addWidget(run_pix_lb, 5, 0);
     launcher_grid->addWidget(show_pix_lb, 6, 0);
     launcher_grid->addWidget(manager_pix_lb, 7, 0);
+    launcher_grid->addWidget(settings_pix_lb, 8, 0);
     launcher_grid->addWidget(launcher_pix, 0, 1, Qt::AlignCenter);
     launcher_grid->addWidget(quit_pix, 1, 1, Qt::AlignCenter);
     launcher_grid->addWidget(shutdown_pix, 2, 1, Qt::AlignCenter);
@@ -836,6 +846,7 @@ void Manager::style_tab()
     launcher_grid->addWidget(run_pix, 5, 1, Qt::AlignCenter);
     launcher_grid->addWidget(show_pix, 6, 1, Qt::AlignCenter);
     launcher_grid->addWidget(manager_pix, 7, 1, Qt::AlignCenter);
+    launcher_grid->addWidget(settings_pix, 8, 1, Qt::AlignCenter);
     launcher_grid->addWidget(launcher_pix_but, 0, 2);
     launcher_grid->addWidget(quit_pix_but, 1, 2);
     launcher_grid->addWidget(shutdown_pix_but, 2, 2);
@@ -844,6 +855,7 @@ void Manager::style_tab()
     launcher_grid->addWidget(run_pix_but, 5, 2);
     launcher_grid->addWidget(show_pix_but, 6, 2);
     launcher_grid->addWidget(manager_pix_but, 7, 2);
+    launcher_grid->addWidget(settings_pix_but, 8, 2);
     ///////// CATEGORY /////////
     category_box = new QGroupBox(tr("Categories"), this);
     category_grid = new QGridLayout();
@@ -1190,6 +1202,7 @@ void Manager::style_tab()
     pixmapMapper->setMapping(run_pix_but, run_pix);
     pixmapMapper->setMapping(show_pix_but, show_pix);
     pixmapMapper->setMapping(manager_pix_but, manager_pix);
+    pixmapMapper->setMapping(settings_pix_but, settings_pix);
     pixmapMapper->setMapping(utility_pix_but, utility_pix);
     pixmapMapper->setMapping(office_pix_but, office_pix);
     pixmapMapper->setMapping(network_pix_but, network_pix);
@@ -1245,6 +1258,7 @@ void Manager::style_tab()
     connect(run_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(show_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(manager_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
+    connect(settings_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(utility_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(office_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
     connect(network_pix_but, SIGNAL(clicked()), pixmapMapper, SLOT(map()));
@@ -1496,6 +1510,7 @@ void Manager::ok_frame_pressed()
     style->setValue("run_pix", run_pix->toolTip());
     style->setValue("show_pix", show_pix->toolTip());
     style->setValue("manager_pix", manager_pix->toolTip());
+    style->setValue("settings_pix", settings_pix->toolTip());
     style->setValue("utility_pix", utility_pix->toolTip());
     style->setValue("office_pix", office_pix->toolTip());
     style->setValue("network_pix", network_pix->toolTip());

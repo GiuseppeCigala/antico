@@ -23,60 +23,6 @@ Launcher::~Launcher()
     delete antico;
 }
 
-void Launcher::init()
-{
-    main_menu = new QMenu(this);
-    connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
-
-    quit = new QAction(tr("Quit WM"), this);
-    shutdown = new QAction(tr("Shutdown PC"), this);
-    restart = new QAction(tr("Restart PC"), this);
-    refresh = new QAction(tr("Refresh WM"), this);
-    run = new QAction(tr("Run..."), this);
-    manag = new QAction(tr("Manager"), this);
-    show_desk = new QAction(tr("Show Desktop"), this);
-
-    quit->setIcon(QIcon(quit_pix));
-    shutdown->setIcon(QIcon(shutdown_pix));
-    restart->setIcon(QIcon(restart_pix));
-    refresh->setIcon(QIcon(refresh_pix));
-    run->setIcon(QIcon(run_pix));
-    manag->setIcon(QIcon(manager_pix));
-    show_desk->setIcon(QIcon(show_pix));
-
-    quit->setData("quit");
-    shutdown->setData("shutdown");
-    restart->setData("restart");
-    refresh->setData("refresh");
-    run->setData("run");
-    manag->setData("manager");
-    show_desk->setData("show");
-        
-    quit->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Q));
-    shutdown->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
-    restart->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
-    refresh->setShortcut(QKeySequence(Qt::ALT + Qt::Key_U));
-    run->setShortcut(QKeySequence(Qt::ALT + Qt::Key_F2));
-    manag->setShortcut(QKeySequence(Qt::ALT + Qt::Key_M));
-    show_desk->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D));
-    
-    // add Category menu on Launcher
-    QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
-    for (int i = 0; i <  menu_list.size(); ++i)
-    {
-        main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
-    }
-    
-    main_menu->addSeparator();
-    main_menu->addAction(manag);
-    main_menu->addAction(run);
-    main_menu->addAction(show_desk);
-    main_menu->addAction(quit);
-    main_menu->addAction(shutdown);
-    main_menu->addAction(restart);
-    main_menu->addAction(refresh);
-}
-
 void Launcher::read_settings()
 {
     // get style path
@@ -94,6 +40,7 @@ void Launcher::read_settings()
     restart_pix = stl_path + style->value("restart_pix").toString();
     refresh_pix = stl_path + style->value("refresh_pix").toString();
     show_pix = stl_path + style->value("show_pix").toString();
+    settings_pix = stl_path + style->value("settings_pix").toString();
     run_pix = stl_path + style->value("run_pix").toString();
     manager_pix = stl_path + style->value("manager_pix").toString();
     style->endGroup(); // Launcher
@@ -101,6 +48,65 @@ void Launcher::read_settings()
     dock_height = style->value("dock_height").toInt();
     dock_position = style->value("dock_position").toInt();
     style->endGroup(); //Dockbar
+}
+
+void Launcher::init()
+{
+    main_menu = new QMenu(this);
+    connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_command(QAction *))); // Quit, Run, Refresh, Manager
+
+    quit = new QAction(tr("Quit WM"), this);
+    shutdown = new QAction(tr("Shutdown PC"), this);
+    restart = new QAction(tr("Restart PC"), this);
+    refresh = new QAction(tr("Refresh WM"), this);
+    run = new QAction(tr("Run..."), this);
+    manager = new QAction(tr("Manager"), this);
+    show_desk = new QAction(tr("Show Desktop"), this);
+    settings = new QAction(tr("Settings"), this);
+
+    quit->setIcon(QIcon(quit_pix));
+    shutdown->setIcon(QIcon(shutdown_pix));
+    restart->setIcon(QIcon(restart_pix));
+    refresh->setIcon(QIcon(refresh_pix));
+    run->setIcon(QIcon(run_pix));
+    manager->setIcon(QIcon(manager_pix));
+    show_desk->setIcon(QIcon(show_pix));
+    settings->setIcon(QIcon(settings_pix));
+
+    quit->setData("quit");
+    shutdown->setData("shutdown");
+    restart->setData("restart");
+    refresh->setData("refresh");
+    run->setData("run");
+    manager->setData("manager");
+    show_desk->setData("show");
+    settings->setData("settings");
+        
+    quit->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Q));
+    shutdown->setShortcut(QKeySequence(Qt::ALT + Qt::Key_S));
+    restart->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
+    refresh->setShortcut(QKeySequence(Qt::ALT + Qt::Key_U));
+    run->setShortcut(QKeySequence(Qt::ALT + Qt::Key_F2));
+    manager->setShortcut(QKeySequence(Qt::ALT + Qt::Key_M));
+    show_desk->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D));
+    settings->setShortcut(QKeySequence(Qt::ALT + Qt::Key_T));
+    
+    // add Category menu on Launcher
+    QList <QMenu *> menu_list = app->get_category_menu()->get_menus();
+    for (int i = 0; i <  menu_list.size(); ++i)
+    {
+        main_menu->addMenu(menu_list.at(i)); // add Category menu on Launcher
+    }
+    
+    main_menu->addSeparator();
+    main_menu->addAction(settings);
+    main_menu->addAction(manager);
+    main_menu->addAction(run);
+    main_menu->addAction(show_desk);
+    main_menu->addAction(quit);
+    main_menu->addAction(shutdown);
+    main_menu->addAction(restart);
+    main_menu->addAction(refresh);
 }
 
 void Launcher::run_command(QAction *act)
@@ -121,6 +127,8 @@ void Launcher::run_command(QAction *act)
         new Manager();
     if (cmd == "run")
         new Runner();
+    if (cmd == "settings")
+        new Settings();
 }
 
 void Launcher::mousePressEvent(QMouseEvent *event)
@@ -160,7 +168,8 @@ void Launcher::update_style()
     refresh->setIcon(QIcon(refresh_pix));
     show_desk->setIcon(QIcon(show_pix));
     run->setIcon(QIcon(run_pix));
-    manag->setIcon(QIcon(manager_pix));
+    manager->setIcon(QIcon(manager_pix));
+    settings->setIcon(QIcon(settings_pix));
     app->get_category_menu()->update_menu(); // update .desktop/user menu entry
     app->get_category_menu()->update_style(); // update category menu pixmap
 }

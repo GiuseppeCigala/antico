@@ -5,6 +5,7 @@ shutdown_pix=shutdown.png
 restart_pix=restart.png
 refresh_pix=refresh.png
 show_pix=show.png
+settings_pix=settings.png
 run_pix=run.png
 manager_pix=manager.png
 utility_pix=utility.png

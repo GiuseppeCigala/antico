@@ -15,6 +15,7 @@
 #include "defs.h"
 #include "antico.h"
 #include "manager.h"
+#include "settings.h"
 #include "runner.h"
 #include "utils.h"
 
@@ -49,6 +50,7 @@ private:
     QString shutdown_pix;
     QString restart_pix;
     QString show_pix;
+    QString settings_pix;
     QString refresh_pix;
     QString run_pix;
     QString manager_pix;
@@ -61,7 +63,8 @@ private:
     QAction *refresh;
     QAction *run;
     QAction *show_desk;
-    QAction *manag;
+    QAction *settings;
+    QAction *manager;
     QSettings *antico;
     QMenu *main_menu;
 };

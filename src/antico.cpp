@@ -569,6 +569,13 @@ bool Antico::x11EventFilter(XEvent *event)
             show_desktop();
             return false;
         }
+        
+        if (sym == XK_t && mod == keymask1)
+        {
+            qDebug() << "Press [Alt+t] - Show Settings";
+            new Settings();
+            return false;
+        }
         return false;
         break;
 
@@ -995,6 +1002,7 @@ void Antico::set_settings()
         style->setValue("restart_pix", "restart.png");
         style->setValue("refresh_pix", "refresh.png");
         style->setValue("show_pix", "show.png");
+        style->setValue("settings_pix", "settings.png");
         style->setValue("run_pix", "run.png");
         style->setValue("manager_pix", "manager.png");
         style->setValue("utility_pix", "utility.png");

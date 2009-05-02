@@ -88,6 +88,7 @@ private:
     QLabel *run_pix;
     QLabel *show_pix;
     QLabel *manager_pix;
+    QLabel *settings_pix;
     QLabel *utility_pix;
     QLabel *office_pix;
     QLabel *network_pix;
@@ -143,6 +144,7 @@ private:
     QString run_pix_path;
     QString show_pix_path;
     QString manager_pix_path;
+    QString settings_pix_path;
     QString utility_pix_path;
     QString office_pix_path;
     QString network_pix_path;
