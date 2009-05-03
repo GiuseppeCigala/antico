@@ -136,6 +136,9 @@ void Filedialog::init()
     tree_view = new QTreeView(this);
     tree_view->setModel(fs_model);
     tree_view->setDragEnabled(true);
+    tree_view->viewport()->setAcceptDrops(true);
+    tree_view->setDropIndicatorShown(true);
+    tree_view->setDragDropMode(QAbstractItemView::DragDrop);
     tree_view->setItemsExpandable(false);
     tree_view->setRootIsDecorated(false);
     tree_view->setSortingEnabled(true);
@@ -150,6 +153,9 @@ void Filedialog::init()
     list_view = new QListView(this);
     list_view->setModel(fs_model);
     list_view->setDragEnabled(true);
+    list_view->viewport()->setAcceptDrops(true);
+    list_view->setDropIndicatorShown(true);
+    list_view->setDragDropMode(QAbstractItemView::DragDrop);
     list_view->setFlow(QListView::LeftToRight);
     list_view->setResizeMode(QListView::Adjust);
     list_view->setViewMode(QListView::IconMode);
@@ -163,8 +169,8 @@ void Filedialog::init()
     list_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     button_box = new QDialogButtonBox(this);
-    ok = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"));
-    close = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"));
+    ok = new QPushButton(QIcon(ok_button_pix_path), tr("Ok"));
+    close = new QPushButton(QIcon(close_button_pix_path), tr("Close"));
 
     path_widget = new QListWidget(this);
     path_widget->setMaximumWidth(150);
@@ -464,11 +470,12 @@ void Filedialog::path_completer() // on user "return" press in line_path
 void Filedialog::update_view(const QModelIndex &index)
 {
     abstract_view->selectionModel()->clearSelection();
-
+    abstract_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+    line_path->setText(fs_model->filePath(index));
+    
     if (fs_model->isDir(index)) // is a directory
     {
         abstract_view->setRootIndex(index);
-        line_path->setText(fs_model->filePath(index));
     }
 }
 

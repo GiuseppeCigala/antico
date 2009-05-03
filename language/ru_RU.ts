@@ -8,7 +8,7 @@
         <translation type="obsolete">&lt;b&gt;Выйти из WM&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="819"/>
+        <location filename="../src/antico.cpp" line="820"/>
         <source>Are you sure to quit the WM ?</source>
         <translation>Вы уверены что хотите выйти из WM ?</translation>
     </message>
@@ -17,7 +17,7 @@
         <translation type="obsolete">&lt;b&gt;Выключить PC&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="845"/>
+        <location filename="../src/antico.cpp" line="846"/>
         <source>Are you sure to shutdown the PC ?</source>
         <translation>Вы  уверены что хотите выключить PC ?</translation>
     </message>
@@ -26,7 +26,7 @@
         <translation type="obsolete">&lt;b&gt;Перезагрузить PC&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="877"/>
+        <location filename="../src/antico.cpp" line="878"/>
         <source>Are you sure to restart the PC ?</source>
         <translation>Вы уверены что хотите перезагрузить PC ?</translation>
     </message>
@@ -35,17 +35,17 @@
         <translation type="obsolete">Отмена</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="818"/>
+        <location filename="../src/antico.cpp" line="819"/>
         <source>QUIT THE WM</source>
         <translation>ВЫХОД</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="844"/>
+        <location filename="../src/antico.cpp" line="845"/>
         <source>SHUTDOWN THE PC</source>
         <translation>ВЫКЛЮЧИТЬ</translation>
     </message>
     <message>
-        <location filename="../src/antico.cpp" line="876"/>
+        <location filename="../src/antico.cpp" line="877"/>
         <source>RESTART THE PC</source>
         <translation>ПЕРЕЗАГРУЗКА</translation>
     </message>
@@ -198,11 +198,6 @@
     <name>Deskapp</name>
     <message>
         <location filename="../src/deskapp.cpp" line="92"/>
-        <source>Edit Icon</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deskapp.cpp" line="93"/>
         <source>Delete link</source>
         <translation>Удалить ссылку</translation>
     </message>
@@ -245,17 +240,17 @@
 <context>
     <name>Deskfolder</name>
     <message>
-        <location filename="../src/deskfolder.cpp" line="49"/>
+        <location filename="../src/deskfolder.cpp" line="47"/>
         <source>Delete link</source>
         <translation>Удалить ссылку</translation>
     </message>
     <message>
-        <location filename="../src/deskfolder.cpp" line="163"/>
+        <location filename="../src/deskfolder.cpp" line="162"/>
         <source>Folder contents:</source>
         <translation>Содержимое каталога:</translation>
     </message>
     <message>
-        <location filename="../src/deskfolder.cpp" line="41"/>
+        <location filename="../src/deskfolder.cpp" line="39"/>
         <source>Open with</source>
         <translation>Открыть с помощью</translation>
     </message>
@@ -277,9 +272,8 @@
         <translation>Удалить ссылку</translation>
     </message>
     <message>
-        <location filename="../src/dockapp.cpp" line="56"/>
         <source>Edit icon</source>
-        <translation type="unfinished">Изменить иконку</translation>
+        <translation type="obsolete">Изменить иконку</translation>
     </message>
 </context>
 <context>
@@ -334,33 +328,33 @@
         <translation>Список</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="181"/>
+        <location filename="../src/filedialog.cpp" line="187"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="193"/>
+        <location filename="../src/filedialog.cpp" line="199"/>
         <source>&lt;b&gt;Owner:&lt;/b&gt;</source>
         <translation>&lt;b&gt;Владелец:&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="242"/>
+        <location filename="../src/filedialog.cpp" line="248"/>
         <source>Open with</source>
         <translation>Открыть с помощью</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="252"/>
+        <location filename="../src/filedialog.cpp" line="258"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="256"/>
+        <location filename="../src/filedialog.cpp" line="262"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="258"/>
-        <location filename="../src/filedialog.cpp" line="436"/>
+        <location filename="../src/filedialog.cpp" line="264"/>
+        <location filename="../src/filedialog.cpp" line="442"/>
         <source>New folder</source>
         <translation>Новый каталог</translation>
     </message>
@@ -369,7 +363,7 @@
         <translation type="obsolete">удалено</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="166"/>
+        <location filename="../src/filedialog.cpp" line="172"/>
         <source>Ok</source>
         <translation></translation>
     </message>
@@ -378,12 +372,12 @@
         <translation type="obsolete">Отмена</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="167"/>
+        <location filename="../src/filedialog.cpp" line="173"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="259"/>
+        <location filename="../src/filedialog.cpp" line="265"/>
         <source>New file</source>
         <translation>Новый файл</translation>
     </message>
@@ -392,37 +386,37 @@
         <translation type="obsolete">ИНФОРМАЦИЯ</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="177"/>
+        <location filename="../src/filedialog.cpp" line="183"/>
         <source>/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="178"/>
+        <location filename="../src/filedialog.cpp" line="184"/>
         <source>/usr/bin/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="179"/>
+        <location filename="../src/filedialog.cpp" line="185"/>
         <source>/home/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="194"/>
+        <location filename="../src/filedialog.cpp" line="200"/>
         <source>&lt;b&gt;Permissions:&lt;/b&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="253"/>
+        <location filename="../src/filedialog.cpp" line="259"/>
         <source>Cut...</source>
         <translation>Вырезать ...</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="254"/>
+        <location filename="../src/filedialog.cpp" line="260"/>
         <source>Copy...</source>
         <translation>Копировать...</translation>
     </message>
     <message>
-        <location filename="../src/filedialog.cpp" line="255"/>
+        <location filename="../src/filedialog.cpp" line="261"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
@@ -447,39 +441,44 @@
 <context>
     <name>Launcher</name>
     <message>
-        <location filename="../src/launcher.cpp" line="31"/>
+        <location filename="../src/launcher.cpp" line="58"/>
         <source>Quit WM</source>
         <translation>Выйти из WM</translation>
     </message>
     <message>
-        <location filename="../src/launcher.cpp" line="32"/>
+        <location filename="../src/launcher.cpp" line="59"/>
         <source>Shutdown PC</source>
         <translation>Выключить PC</translation>
     </message>
     <message>
-        <location filename="../src/launcher.cpp" line="33"/>
+        <location filename="../src/launcher.cpp" line="60"/>
         <source>Restart PC</source>
         <translation>Перезагрузить PC</translation>
     </message>
     <message>
-        <location filename="../src/launcher.cpp" line="34"/>
+        <location filename="../src/launcher.cpp" line="61"/>
         <source>Refresh WM</source>
         <translation>Обновить WM</translation>
     </message>
     <message>
-        <location filename="../src/launcher.cpp" line="35"/>
+        <location filename="../src/launcher.cpp" line="62"/>
         <source>Run...</source>
         <translation>Запустить...</translation>
     </message>
     <message>
-        <location filename="../src/launcher.cpp" line="36"/>
+        <location filename="../src/launcher.cpp" line="63"/>
         <source>Manager</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/launcher.cpp" line="37"/>
+        <location filename="../src/launcher.cpp" line="64"/>
         <source>Show Desktop</source>
         <translation>Показать рабочий стол</translation>
+    </message>
+    <message>
+        <location filename="../src/launcher.cpp" line="65"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -489,24 +488,24 @@
         <translation type="obsolete">НАСТРОЙКИ</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="297"/>
+        <location filename="../src/manager.cpp" line="303"/>
         <source>Add application</source>
         <translation>Добавить приложение</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="330"/>
+        <location filename="../src/manager.cpp" line="337"/>
         <source>Select the category:</source>
         <translation>Выберите категорию:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="334"/>
-        <location filename="../src/manager.cpp" line="343"/>
+        <location filename="../src/manager.cpp" line="341"/>
+        <location filename="../src/manager.cpp" line="350"/>
         <source>Utility</source>
         <translation>Утилиты</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="335"/>
-        <location filename="../src/manager.cpp" line="344"/>
+        <location filename="../src/manager.cpp" line="342"/>
+        <location filename="../src/manager.cpp" line="351"/>
         <source>Office</source>
         <translation>Офис</translation>
     </message>
@@ -519,14 +518,14 @@
         <translation type="obsolete">Графика</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="338"/>
-        <location filename="../src/manager.cpp" line="347"/>
+        <location filename="../src/manager.cpp" line="345"/>
+        <location filename="../src/manager.cpp" line="354"/>
         <source>Development</source>
         <translation>Разработка</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="339"/>
-        <location filename="../src/manager.cpp" line="348"/>
+        <location filename="../src/manager.cpp" line="346"/>
+        <location filename="../src/manager.cpp" line="355"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
@@ -539,8 +538,8 @@
         <translation type="obsolete">Видео</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="351"/>
-        <location filename="../src/manager.cpp" line="418"/>
+        <location filename="../src/manager.cpp" line="358"/>
+        <location filename="../src/manager.cpp" line="427"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
@@ -549,48 +548,48 @@
         <translation type="obsolete">Выйти</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="372"/>
+        <location filename="../src/manager.cpp" line="381"/>
         <source>Remove application</source>
         <translation>Удалить приложение</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="378"/>
+        <location filename="../src/manager.cpp" line="387"/>
         <source>Category/Applications</source>
         <translation>Категория/Приложения</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="386"/>
-        <location filename="../src/manager.cpp" line="419"/>
+        <location filename="../src/manager.cpp" line="394"/>
+        <location filename="../src/manager.cpp" line="428"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="405"/>
+        <location filename="../src/manager.cpp" line="414"/>
         <source>Run at startup</source>
         <translation>Запускать при старте</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="440"/>
+        <location filename="../src/manager.cpp" line="452"/>
         <source>Style</source>
         <translation>Стиль</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="447"/>
+        <location filename="../src/manager.cpp" line="459"/>
         <source>Actual style:</source>
         <translation>Текущий стиль:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="486"/>
+        <location filename="../src/manager.cpp" line="498"/>
         <source>Top border height:</source>
         <translation>Толщина верхней границы:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="487"/>
+        <location filename="../src/manager.cpp" line="499"/>
         <source>Lateral border width:</source>
         <translation>Ширина границы:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="488"/>
+        <location filename="../src/manager.cpp" line="500"/>
         <source>Bottom border height:</source>
         <translation>Толщина нижней границы:</translation>
     </message>
@@ -603,8 +602,8 @@
         <translation type="obsolete">Неактивный заголовок:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="491"/>
-        <location filename="../src/manager.cpp" line="590"/>
+        <location filename="../src/manager.cpp" line="503"/>
+        <location filename="../src/manager.cpp" line="602"/>
         <source>Title color:</source>
         <translation>Цвет заголовка:</translation>
     </message>
@@ -617,25 +616,25 @@
         <translation type="obsolete">Закрыть (img):</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="554"/>
+        <location filename="../src/manager.cpp" line="566"/>
         <source>Height:</source>
         <translation>Высота:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="566"/>
-        <location filename="../src/manager.cpp" line="586"/>
-        <location filename="../src/manager.cpp" line="609"/>
-        <location filename="../src/manager.cpp" line="655"/>
-        <location filename="../src/manager.cpp" line="738"/>
+        <location filename="../src/manager.cpp" line="578"/>
+        <location filename="../src/manager.cpp" line="598"/>
+        <location filename="../src/manager.cpp" line="621"/>
+        <location filename="../src/manager.cpp" line="667"/>
+        <location filename="../src/manager.cpp" line="750"/>
         <source>Pixmap:</source>
         <translation>Изображение:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="659"/>
-        <location filename="../src/manager.cpp" line="678"/>
-        <location filename="../src/manager.cpp" line="692"/>
-        <location filename="../src/manager.cpp" line="714"/>
-        <location filename="../src/manager.cpp" line="742"/>
+        <location filename="../src/manager.cpp" line="671"/>
+        <location filename="../src/manager.cpp" line="690"/>
+        <location filename="../src/manager.cpp" line="704"/>
+        <location filename="../src/manager.cpp" line="726"/>
+        <location filename="../src/manager.cpp" line="754"/>
         <source>Name color:</source>
         <translation>Цвет названия:</translation>
     </message>
@@ -648,12 +647,12 @@
         <translation type="obsolete">CDRom (img):</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="623"/>
+        <location filename="../src/manager.cpp" line="635"/>
         <source>Date color:</source>
         <translation>Цвет даты:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="624"/>
+        <location filename="../src/manager.cpp" line="636"/>
         <source>Clock color:</source>
         <translation>Цвет часов:</translation>
     </message>
@@ -770,64 +769,64 @@
         <translation type="obsolete">Настройки панели меню</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="582"/>
+        <location filename="../src/manager.cpp" line="594"/>
         <source>Dockbar icon</source>
         <translation>Иконка панели меню</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="763"/>
+        <location filename="../src/manager.cpp" line="775"/>
         <source>Desktop wallpaper</source>
         <translation>Обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="651"/>
+        <location filename="../src/manager.cpp" line="663"/>
         <source>Desktop folder</source>
         <translation>Каталог рабочего стола</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="674"/>
+        <location filename="../src/manager.cpp" line="686"/>
         <source>Desktop file</source>
         <translation>Файлы рабочего стола</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="688"/>
+        <location filename="../src/manager.cpp" line="700"/>
         <source>Desktop application</source>
         <translation>Приложения рабочего стола</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="702"/>
+        <location filename="../src/manager.cpp" line="714"/>
         <source>Desktop device</source>
         <translation>Устройства рабочего стола</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="605"/>
+        <location filename="../src/manager.cpp" line="617"/>
         <source>System Tray icon</source>
         <translation>Иконка системного лотка</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="619"/>
+        <location filename="../src/manager.cpp" line="631"/>
         <source>Clock/Date</source>
         <translation>Часы/Дата</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="469"/>
-        <location filename="../src/manager.cpp" line="774"/>
+        <location filename="../src/manager.cpp" line="481"/>
+        <location filename="../src/manager.cpp" line="786"/>
         <source>Launcher</source>
         <translation>Меню запуска</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="475"/>
-        <location filename="../src/manager.cpp" line="1006"/>
+        <location filename="../src/manager.cpp" line="487"/>
+        <location filename="../src/manager.cpp" line="1027"/>
         <source>Other</source>
         <translation>Другое</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1367"/>
+        <location filename="../src/manager.cpp" line="1371"/>
         <source>Select the style</source>
         <translation>Выберите стиль</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1393"/>
+        <location filename="../src/manager.cpp" line="1397"/>
         <source>Select the pixmap</source>
         <translation>Выберите изображение</translation>
     </message>
@@ -836,9 +835,9 @@
         <translation type="obsolete">Настройки стиля для Antico обновлены</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1544"/>
-        <location filename="../src/manager.cpp" line="1577"/>
-        <location filename="../src/manager.cpp" line="1685"/>
+        <location filename="../src/manager.cpp" line="1549"/>
+        <location filename="../src/manager.cpp" line="1582"/>
+        <location filename="../src/manager.cpp" line="1658"/>
         <source>To apply the modify, select &lt;b&gt;Refresh WM&lt;/b&gt; on Launcher menu</source>
         <translation>Для применения измений  выберите  &lt;b&gt;Обновить WM&lt;/b&gt;  в меню запуска</translation>
     </message>
@@ -851,7 +850,7 @@
         <translation type="obsolete">меню</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1586"/>
+        <location filename="../src/manager.cpp" line="1591"/>
         <source>Add application to run at startup:</source>
         <translation>Добавить приложения в автозапуск:</translation>
     </message>
@@ -868,20 +867,20 @@
         <translation type="obsolete">удалить из</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="336"/>
-        <location filename="../src/manager.cpp" line="345"/>
+        <location filename="../src/manager.cpp" line="343"/>
+        <location filename="../src/manager.cpp" line="352"/>
         <source>Network</source>
         <translation>Сеть </translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="337"/>
-        <location filename="../src/manager.cpp" line="346"/>
+        <location filename="../src/manager.cpp" line="344"/>
+        <location filename="../src/manager.cpp" line="353"/>
         <source>Graphics</source>
         <translation>Графика </translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="340"/>
-        <location filename="../src/manager.cpp" line="349"/>
+        <location filename="../src/manager.cpp" line="347"/>
+        <location filename="../src/manager.cpp" line="356"/>
         <source>AudioVideo</source>
         <translation>Мультимедиа </translation>
     </message>
@@ -914,74 +913,73 @@
         <translation type="obsolete">Приложение удалено из автозапуска</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="385"/>
         <source>Edit icon</source>
-        <translation type="unfinished">Изменить иконку</translation>
+        <translation type="obsolete">Изменить иконку</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="461"/>
-        <location filename="../src/manager.cpp" line="482"/>
+        <location filename="../src/manager.cpp" line="473"/>
+        <location filename="../src/manager.cpp" line="494"/>
         <source>Frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="463"/>
-        <location filename="../src/manager.cpp" line="550"/>
+        <location filename="../src/manager.cpp" line="475"/>
+        <location filename="../src/manager.cpp" line="562"/>
         <source>Dockbar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="465"/>
+        <location filename="../src/manager.cpp" line="477"/>
         <source>Desktop</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="467"/>
+        <location filename="../src/manager.cpp" line="479"/>
         <source>Wallpaper</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="471"/>
-        <location filename="../src/manager.cpp" line="851"/>
+        <location filename="../src/manager.cpp" line="483"/>
+        <location filename="../src/manager.cpp" line="872"/>
         <source>Categories</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="352"/>
-        <location filename="../src/manager.cpp" line="387"/>
-        <location filename="../src/manager.cpp" line="420"/>
-        <location filename="../src/manager.cpp" line="1152"/>
+        <location filename="../src/manager.cpp" line="359"/>
+        <location filename="../src/manager.cpp" line="395"/>
+        <location filename="../src/manager.cpp" line="429"/>
+        <location filename="../src/manager.cpp" line="1173"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="473"/>
-        <location filename="../src/manager.cpp" line="920"/>
+        <location filename="../src/manager.cpp" line="485"/>
+        <location filename="../src/manager.cpp" line="941"/>
         <source>Message</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1151"/>
+        <location filename="../src/manager.cpp" line="1172"/>
         <source>Ok</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="557"/>
+        <location filename="../src/manager.cpp" line="569"/>
         <source>Width:</source>
         <translation>Шырина:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="562"/>
+        <location filename="../src/manager.cpp" line="574"/>
         <source>Position:</source>
         <translation>Позиция:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="564"/>
+        <location filename="../src/manager.cpp" line="576"/>
         <source>Bottom</source>
         <translation>Низ</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="565"/>
+        <location filename="../src/manager.cpp" line="577"/>
         <source>Top</source>
         <translation>Верх</translation>
     </message>
@@ -991,278 +989,278 @@
         <translation>НАСТРОЙКИ</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="734"/>
+        <location filename="../src/manager.cpp" line="746"/>
         <source>Trash</source>
         <translation>Корзина</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1022"/>
+        <location filename="../src/manager.cpp" line="1043"/>
         <source>List view:</source>
         <translation>Список:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1023"/>
+        <location filename="../src/manager.cpp" line="1044"/>
         <source>Icon view:</source>
         <translation>Значки:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1024"/>
+        <location filename="../src/manager.cpp" line="1045"/>
         <source>Upper dir:</source>
         <translation>На уровень выше:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1543"/>
+        <location filename="../src/manager.cpp" line="1548"/>
         <source>ANTICO STYLE SETTINGS UPDATED</source>
         <translation>НАСТРОЙКА СТИЛЯ ANTICO</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1576"/>
+        <location filename="../src/manager.cpp" line="1581"/>
         <source>APPLICATION ADDED</source>
         <translation>ПРИЛОЖЕНИЕ ДОБАВЛЕНО</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1660"/>
-        <source> change icon menu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/manager.cpp" line="1684"/>
+        <location filename="../src/manager.cpp" line="1657"/>
         <source>APPLICATION REMOVED</source>
         <translation>ПРИЛОЖЕНИЕ УДАЛЕНО</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="319"/>
+        <location filename="../src/manager.cpp" line="326"/>
         <source>/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="321"/>
+        <location filename="../src/manager.cpp" line="328"/>
         <source>/usr/bin/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="323"/>
+        <location filename="../src/manager.cpp" line="330"/>
         <source>/home/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="489"/>
+        <location filename="../src/manager.cpp" line="501"/>
         <source>Header active:</source>
         <translation>Активный заголовок:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="490"/>
+        <location filename="../src/manager.cpp" line="502"/>
         <source>Header inactive:</source>
         <translation>Не активный заголовок:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="492"/>
+        <location filename="../src/manager.cpp" line="504"/>
         <source>Minimize/Maximize:</source>
         <translation>Свернуть/Развернуть:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="493"/>
-        <location filename="../src/manager.cpp" line="925"/>
+        <location filename="../src/manager.cpp" line="505"/>
+        <location filename="../src/manager.cpp" line="946"/>
         <source>Close:</source>
         <translation>Закрыть:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="706"/>
+        <location filename="../src/manager.cpp" line="718"/>
         <source>Disk:</source>
         <translation>Диск:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="710"/>
+        <location filename="../src/manager.cpp" line="722"/>
         <source>CDRom:</source>
         <translation>CD привод:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="778"/>
+        <location filename="../src/manager.cpp" line="790"/>
         <source>Launcher:</source>
         <translation>Меню запуска:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="779"/>
+        <location filename="../src/manager.cpp" line="791"/>
         <source>Quit:</source>
         <translation>Выход:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="780"/>
+        <location filename="../src/manager.cpp" line="792"/>
         <source>Shutdown:</source>
         <translation>Выключение:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="781"/>
+        <location filename="../src/manager.cpp" line="793"/>
         <source>Restart:</source>
         <translation>Перезагрузка:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="782"/>
+        <location filename="../src/manager.cpp" line="794"/>
         <source>Refresh:</source>
         <translation>Обновление:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="783"/>
+        <location filename="../src/manager.cpp" line="795"/>
         <source>Run:</source>
         <translation>Запуск:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="784"/>
+        <location filename="../src/manager.cpp" line="796"/>
         <source>Show Desktop:</source>
         <translation>Показать рабочий стол:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="785"/>
+        <location filename="../src/manager.cpp" line="797"/>
         <source>Manager:</source>
         <translation>Настройки:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="855"/>
+        <location filename="../src/manager.cpp" line="798"/>
+        <source>Settings:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/manager.cpp" line="876"/>
         <source>Utility:</source>
         <translation>Утилиты:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="856"/>
+        <location filename="../src/manager.cpp" line="877"/>
         <source>Office:</source>
         <translation>Офис:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="857"/>
+        <location filename="../src/manager.cpp" line="878"/>
         <source>Network:</source>
         <translation>Сеть:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="858"/>
+        <location filename="../src/manager.cpp" line="879"/>
         <source>Graphics:</source>
         <translation>Графика:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="859"/>
+        <location filename="../src/manager.cpp" line="880"/>
         <source>Development:</source>
         <translation>Разработка:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="860"/>
+        <location filename="../src/manager.cpp" line="881"/>
         <source>System:</source>
         <translation>Системные:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="861"/>
+        <location filename="../src/manager.cpp" line="882"/>
         <source>AudioVideo:</source>
         <translation>Мультимедиа:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="924"/>
+        <location filename="../src/manager.cpp" line="945"/>
         <source>Ok:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="926"/>
+        <location filename="../src/manager.cpp" line="947"/>
         <source>Add:</source>
         <translation>Добавить:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="927"/>
+        <location filename="../src/manager.cpp" line="948"/>
         <source>Remove:</source>
         <translation>Удалить:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="928"/>
+        <location filename="../src/manager.cpp" line="949"/>
         <source>Restore:</source>
         <translation>Востановить:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="929"/>
+        <location filename="../src/manager.cpp" line="950"/>
         <source>Question:</source>
         <translation>Запрос:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="930"/>
+        <location filename="../src/manager.cpp" line="951"/>
         <source>Information:</source>
         <translation>Штформация:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="931"/>
+        <location filename="../src/manager.cpp" line="952"/>
         <source>Warning:</source>
         <translation>Предупреждение:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="932"/>
+        <location filename="../src/manager.cpp" line="953"/>
         <source>Critical:</source>
         <translation>Сритический сбой:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1010"/>
+        <location filename="../src/manager.cpp" line="1031"/>
         <source>Application:</source>
         <translation>Приложение:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1011"/>
+        <location filename="../src/manager.cpp" line="1032"/>
         <source>Folder link:</source>
         <translation>Ссылка на каталог:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1012"/>
+        <location filename="../src/manager.cpp" line="1033"/>
         <source>File link:</source>
         <translation>Ссылка на файл:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1013"/>
+        <location filename="../src/manager.cpp" line="1034"/>
         <source>Application link:</source>
         <translation>Ссылка на приложение:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1014"/>
+        <location filename="../src/manager.cpp" line="1035"/>
         <source>Delete link:</source>
         <translation>Удалить ссылку:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1015"/>
+        <location filename="../src/manager.cpp" line="1036"/>
         <source>Delete file:</source>
         <translation>Удалить файл:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1016"/>
+        <location filename="../src/manager.cpp" line="1037"/>
         <source>Cut file:</source>
         <translation>Вырезать файл:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1017"/>
+        <location filename="../src/manager.cpp" line="1038"/>
         <source>Copy file:</source>
         <translation>копировать файл:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1018"/>
+        <location filename="../src/manager.cpp" line="1039"/>
         <source>Paste file:</source>
         <translation>Вставить файл:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1019"/>
+        <location filename="../src/manager.cpp" line="1040"/>
         <source>Close Dock:</source>
         <translation>Закрыть панель:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1020"/>
+        <location filename="../src/manager.cpp" line="1041"/>
         <source>Add to SysTray:</source>
         <translation>Добавить в трей:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="1021"/>
+        <location filename="../src/manager.cpp" line="1042"/>
         <source>Open with:</source>
         <translation>Откруть с помощью:</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="411"/>
+        <location filename="../src/manager.cpp" line="420"/>
         <source>Application</source>
         <translation>Прилодение</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="411"/>
+        <location filename="../src/manager.cpp" line="420"/>
         <source>Path</source>
         <translation>Путь</translation>
     </message>
     <message>
-        <location filename="../src/manager.cpp" line="411"/>
+        <location filename="../src/manager.cpp" line="420"/>
         <source>Arguments</source>
         <translation>Аргументы</translation>
     </message>
@@ -1336,6 +1334,111 @@ If the app is not in your $PATH, type the absolute app path.</source>
     </message>
 </context>
 <context>
+    <name>Settings</name>
+    <message>
+        <location filename="../src/settings.cpp" line="64"/>
+        <source>SETTINGS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="70"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="71"/>
+        <source>Close</source>
+        <translation type="unfinished">Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="90"/>
+        <source>Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="120"/>
+        <source>Composite:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="121"/>
+        <source>Virtual Desktop:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="122"/>
+        <source>Display:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="123"/>
+        <source>Screen num:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="124"/>
+        <source>Screen width:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="125"/>
+        <source>Screen height:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="126"/>
+        <source>Color depth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="127"/>
+        <source>Horizontal resol:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="128"/>
+        <source>Vertical resol:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="142"/>
+        <location filename="../src/settings.cpp" line="146"/>
+        <source>True</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="144"/>
+        <location filename="../src/settings.cpp" line="148"/>
+        <source>False</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="173"/>
+        <source>System</source>
+        <translation type="unfinished">Система</translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="188"/>
+        <source>Cursor flash time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="189"/>
+        <source>Double click interval:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="190"/>
+        <source>Keyboard input interval:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.cpp" line="191"/>
+        <source>Wheel scroll lines:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Trash</name>
     <message>
         <location filename="../src/trash.cpp" line="54"/>
@@ -1391,39 +1494,6 @@ If the app is not in your $PATH, type the absolute app path.</source>
         <location filename="../src/trashdialog.cpp" line="187"/>
         <source>will be restored in</source>
         <translation>будет востановлено в</translation>
-    </message>
-</context>
-<context>
-    <name>iconDialog</name>
-    <message>
-        <location filename="../src/icondialog.cpp" line="38"/>
-        <source>Icons type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/icondialog.cpp" line="43"/>
-        <source>Sandart Icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/icondialog.cpp" line="53"/>
-        <source>Extendet Icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/icondialog.cpp" line="55"/>
-        <source>View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/icondialog.cpp" line="66"/>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/icondialog.cpp" line="151"/>
-        <source>Select icon directory</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

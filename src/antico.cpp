@@ -579,12 +579,6 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
-    case Expose:
-        qDebug() << "[Expose]";
-
-        return false;
-        break;
-
     default:
 
         if (servershapes && event->type == (ShapeEventBase + ShapeNotify))

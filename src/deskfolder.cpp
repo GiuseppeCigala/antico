@@ -8,9 +8,8 @@
 
 ////////////////////////////////////////
 
-Deskfolder::Deskfolder(Filedialog *dial, Categorymenu *menu, const QString &dir_nm, const QString &dir_pth, const QRect &geo, QWidget *parent) : QWidget(parent)
+Deskfolder::Deskfolder(Categorymenu *menu, const QString &dir_nm, const QString &dir_pth, const QRect &geo, QWidget *parent) : QWidget(parent)
 {
-    file_dialog = dial;
     cat_menu = menu;
     read_settings();
     dir_name = dir_nm;
@@ -25,7 +24,6 @@ Deskfolder::~Deskfolder()
     delete antico;
     delete delete_folder;
     delete open_menu;
-    delete file_dialog;
     delete cat_menu;
 }
 
@@ -160,6 +158,7 @@ void Deskfolder::mouseDoubleClickEvent(QMouseEvent *event)
         }
         else // open with Filedialog
         {
+            Filedialog *file_dialog = new Filedialog(cat_menu);
             file_dialog->set_type(tr("Folder contents:"), "Close");
             file_dialog->setGeometry(geom);
             file_dialog->set_path(dir_path);

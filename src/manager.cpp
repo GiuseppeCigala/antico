@@ -296,19 +296,23 @@ void Manager::add_app_tab()
     style->beginGroup("Deskfolder");
     deskfolder_pix_path = stl_path + style->value("d_folder_pix").toString();
     style->endGroup(); // Deskfolder
+    style->beginGroup("Message");
+    add_button_pix_path = stl_path + style->value("add_button_pix").toString();
+    style->endGroup(); // Message
     QFrame *add_frm = new QFrame(this);
-    tab->addTab(add_frm, tr("Add application"));
+    tab->addTab(add_frm, QIcon(add_button_pix_path), tr("Add application"));
     add_layout = new QVBoxLayout();
     add_frm->setLayout(add_layout);
     app_path = new QLineEdit(this); // show selection path
-    dir_model = new QDirModel(this);
+    fs_model = new QFileSystemModel(this);
+    fs_model->setRootPath("/"); // must set on init
     prov = new Fileicon(); // get the files icon
-    dir_model->setIconProvider(prov);
-    completer = new QCompleter();
-    completer->setModel(dir_model);
+    fs_model->setIconProvider(prov);
+    QCompleter *completer = new QCompleter(this); // to complete the path
+    completer->setModel(new QDirModel(completer));
     app_path->setCompleter(completer);
     tree_view = new QTreeView(this);
-    tree_view->setModel(dir_model);
+    tree_view->setModel(fs_model);
     tree_view->setSortingEnabled(true);
     tree_view->setAlternatingRowColors(true);
     tree_view->setFocusPolicy(Qt::ClickFocus);
@@ -351,8 +355,8 @@ void Manager::add_app_tab()
     cat_map.insert(tr("System"), "System");
     cat_map.insert(tr("AudioVideo"), "AudioVideo");
     style->beginGroup("Message");
-    QPushButton *add_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("add_button_pix").toString())), tr("Add"), this);
-    QPushButton* close_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("close_button_pix").toString())), tr("Close"), this);
+    QPushButton *add_but = new QPushButton(QIcon(stl_path + style->value("add_button_pix").toString()), tr("Add"), this);
+    QPushButton* close_but = new QPushButton(QIcon(stl_path + style->value("close_button_pix").toString()), tr("Close"), this);
     style->endGroup(); // Message
     category_lay->addStretch(1);
     category_lay->addWidget(category_lab);
@@ -365,14 +369,16 @@ void Manager::add_app_tab()
     connect(tree_view, SIGNAL(clicked(QModelIndex)), this, SLOT(show_path(QModelIndex)));
     connect(add_but, SIGNAL(pressed()), this, SLOT(add_app_pressed()));
     connect(close_but, SIGNAL(pressed()), this, SLOT(close_pressed()));
-    connect(completer, SIGNAL(activated(QModelIndex)), this, SLOT(update_add_tree(QModelIndex)));
     connect(app_path, SIGNAL(returnPressed()), this, SLOT(path_completer()));
 }
 
 void Manager::remove_app_tab()
 {
+    style->beginGroup("Message");
+    remove_button_pix_path = stl_path + style->value("remove_button_pix").toString();
+    style->endGroup(); // Message
     QFrame *rem_frm = new QFrame(this);
-    tab->addTab(rem_frm, tr("Remove application"));
+    tab->addTab(rem_frm, QIcon(remove_button_pix_path), tr("Remove application"));
     rem_layout = new QVBoxLayout();
     rem_frm->setLayout(rem_layout);
 
@@ -385,8 +391,8 @@ void Manager::remove_app_tab()
 
     QHBoxLayout *rem_close_layout = new QHBoxLayout();
     style->beginGroup("Message");
-    QPushButton *rem_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("remove_button_pix").toString())), tr("Remove"), this);
-    QPushButton* close_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("close_button_pix").toString())), tr("Close"), this);
+    QPushButton *rem_but = new QPushButton(QIcon(stl_path + style->value("remove_button_pix").toString()), tr("Remove"), this);
+    QPushButton* close_but = new QPushButton(QIcon(stl_path + style->value("close_button_pix").toString()), tr("Close"), this);
     style->endGroup(); // Message
     rem_close_layout->addStretch(1);
     rem_close_layout->addWidget(rem_but);
@@ -401,8 +407,11 @@ void Manager::remove_app_tab()
 
 void Manager::run_app_tab()
 {
+    style->beginGroup("Other");
+    application_pix_path = stl_path + style->value("application_pix").toString();
+    style->endGroup(); // Other
     QFrame *run_frm = new QFrame(this);
-    tab->addTab(run_frm, tr("Run at startup"));
+    tab->addTab(run_frm, QIcon(application_pix_path), tr("Run at startup"));
     run_layout = new QVBoxLayout();
     run_frm->setLayout(run_layout);
 
@@ -415,9 +424,9 @@ void Manager::run_app_tab()
 
     QHBoxLayout *add_rem_layout = new QHBoxLayout();
     style->beginGroup("Message");
-    QPushButton *add_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("add_button_pix").toString())), tr("Add"), this);
-    QPushButton *rem_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("remove_button_pix").toString())), tr("Remove"), this);
-    QPushButton* close_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("close_button_pix").toString())), tr("Close"), this);
+    QPushButton *add_but = new QPushButton(QIcon(stl_path + style->value("add_button_pix").toString()), tr("Add"), this);
+    QPushButton *rem_but = new QPushButton(QIcon(stl_path + style->value("remove_button_pix").toString()), tr("Remove"), this);
+    QPushButton* close_but = new QPushButton(QIcon(stl_path + style->value("close_button_pix").toString()), tr("Close"), this);
     style->endGroup(); // Message
 
     add_rem_layout->addStretch(1);
@@ -436,8 +445,11 @@ void Manager::run_app_tab()
 
 void Manager::style_tab()
 {
+    style->beginGroup("Launcher");
+    settings_pix_path = stl_path + style->value("settings_pix").toString();
+    style->endGroup(); // Launcher
     QFrame *style_frm = new QFrame(this);
-    tab->addTab(style_frm, tr("Style"));
+    tab->addTab(style_frm, QIcon(settings_pix_path), tr("Style"));
     style_layout = new QVBoxLayout();
     style_frm->setLayout(style_layout);
     ///////// STYLE SELECTION /////////
@@ -1157,8 +1169,8 @@ void Manager::style_tab()
     QHBoxLayout *ok_close_layout = new QHBoxLayout();
     ok_close_box->setLayout(ok_close_layout);
     style->beginGroup("Message");
-    QPushButton *ok_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("ok_button_pix").toString())), tr("Ok"), this);
-    QPushButton* close_but = new QPushButton(QIcon(QPixmap(stl_path + style->value("close_button_pix").toString())), tr("Close"), this);
+    QPushButton *ok_but = new QPushButton(QIcon(stl_path + style->value("ok_button_pix").toString()), tr("Ok"), this);
+    QPushButton* close_but = new QPushButton(QIcon(stl_path + style->value("close_button_pix").toString()), tr("Close"), this);
     ok_but->setDefault(true); // default button for this Dialog
     style->endGroup(); // Message
     ok_close_layout->addStretch(1);
@@ -1332,7 +1344,7 @@ void Manager::change_path(QListWidgetItem *current, QListWidgetItem *previous)
     if (!current)
         current = previous;
 
-    tree_view->setRootIndex(dir_model->index(current->text()));
+    tree_view->setRootIndex(fs_model->index(current->text()));
     tree_view->collapseAll();
     app_path->setText(current->text());
 }
@@ -1347,30 +1359,11 @@ void Manager::set_run_args(QTableWidgetItem *item) // to set run arguments for s
     antico->endGroup(); // Startup
 }
 
-void Manager::update_add_tree(const QModelIndex &index)
-{
-    if (index.isValid())
-    {
-        QModelIndex id = dir_model->index(app_path->text());
-        tree_view->scrollTo(id);
-        tree_view->setCurrentIndex(id);
-    }
-    else
-    {
-        tree_view->scrollTo(index);
-        tree_view->setCurrentIndex(index);
-        tree_view->resizeColumnToContents(0);
-    }
-}
-
 void Manager::path_completer() // on user button press in line_path
 {
-    QModelIndex index = dir_model->index(app_path->text());
-
-    if (index.isValid())
-    {
-        tree_view->setCurrentIndex(index);
-    }
+    QModelIndex index = fs_model->index(app_path->text());
+    tree_view->selectionModel()->clearSelection();
+    tree_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
 }
 
 void Manager::select_style()
@@ -1560,11 +1553,11 @@ void Manager::ok_frame_pressed()
 
 void Manager::add_app_pressed() // add selected app on lancher menu (in the select Category)
 {
-    if (tree_view->currentIndex().isValid())
+    if (tree_view->selectionModel()->currentIndex().isValid())
     {
-        QString path = dir_model->filePath(tree_view->currentIndex());
-        QString app = dir_model->fileName(tree_view->currentIndex());
-        QFileInfo info = dir_model->fileInfo(tree_view->currentIndex());
+        QString path = fs_model->filePath(tree_view->selectionModel()->currentIndex());
+        QString app = fs_model->fileName(tree_view->selectionModel()->currentIndex());
+        QFileInfo info = fs_model->fileInfo(tree_view->selectionModel()->currentIndex());
         Appicon app_ico; // get application icon
         QString icon = app_ico.get_app_icon(app);
 
@@ -1732,7 +1725,7 @@ void Manager::close_pressed()
 
 void Manager::show_path(const QModelIndex &index)
 {
-    app_path->setText(dir_model->filePath(index));
+    app_path->setText(fs_model->filePath(index));
 }
 
 void Manager::mousePressEvent(QMouseEvent *event)

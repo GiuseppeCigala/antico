@@ -47,7 +47,6 @@ public slots:
     void select_pixmap(QWidget *);
     void select_color(QWidget *);
     void show_path(const QModelIndex &);
-    void update_add_tree(const QModelIndex &);
     void path_completer();
     void select_style();
     void changeSection(QListWidgetItem *, QListWidgetItem *);
@@ -249,8 +248,7 @@ private:
     QGridLayout *category_grid;
     QGridLayout *message_grid;
     QGridLayout *other_grid;
-    QDirModel *dir_model;
-    QCompleter *completer;
+    QFileSystemModel *fs_model;
     QHBoxLayout *category_lay;
     QComboBox *category_combo;
     QSignalMapper *pixmapMapper;

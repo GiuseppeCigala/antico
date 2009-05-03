@@ -23,7 +23,7 @@ class Deskfolder : public QWidget
     Q_OBJECT
 
 public:
-    Deskfolder(Filedialog *, Categorymenu *, const QString &, const QString &, const QRect &, QWidget *parent=0);
+    Deskfolder(Categorymenu *, const QString &, const QString &, const QRect &, QWidget *parent=0);
     ~Deskfolder();
     void read_settings();
     void update_style();

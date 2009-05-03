@@ -25,6 +25,7 @@ public:
     void read_settings();
     void init();
     void display_tab();
+    void system_tab();
 
 protected:
     void mousePressEvent(QMouseEvent *);
@@ -39,14 +40,20 @@ public slots:
     void close_pressed();
 
 private:
-    QString ok_button_pix;
-    QString close_button_pix;
+    QString ok_button_pix_path;
+    QString close_button_pix_path;
+    QString system_pix_path;
+    QString utility_pix_path;
     QString stl_path;
     QString stl_name;
     QPoint mousepos;
     QTabWidget *tab;
     QSpinBox *hor_res_spin;
     QSpinBox *ver_res_spin;
+    QSpinBox *cursor_flash_spin;
+    QSpinBox *double_click_spin;
+    QSpinBox *keyboard_input_spin;
+    QSpinBox *wheel_scroll_spin;
     int scr_num;
 
 };

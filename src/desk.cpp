@@ -75,7 +75,7 @@ void Desk::set_desk_icons()
         QRect geom = antico->value("geometry").value<QRect>();
         QPoint pos = antico->value("pos").value<QPoint>();
 
-        d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geom, this);
+        d_folder = new Deskfolder(cat_menu, name, path, geom, this);
         desk_folders << d_folder; // save the new deskfolder
         d_folder->move(pos.x(), pos.y());
         connect(d_folder, SIGNAL(destroy_deskfolder(Deskfolder *)), this, SLOT(remove_deskfolder(Deskfolder *))); // delete deskfolder from list
@@ -381,7 +381,7 @@ void Desk::run_menu(QAction *act)
 
 void Desk::create_desk_folder(const QString &name, const QString &path, const QRect &geometry, const QPoint &pos, QWidget *parent)
 {
-    d_folder = new Deskfolder(file_dialog, cat_menu, name, path, geometry, parent);
+    d_folder = new Deskfolder(cat_menu, name, path, geometry, parent);
     desk_folders << d_folder; // save the new deskfolder
     d_folder->move(pos.x(), pos.y());
     connect(d_folder, SIGNAL(destroy_deskfolder(Deskfolder *)), this, SLOT(remove_deskfolder(Deskfolder *))); // delete deskfolder from list

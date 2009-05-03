@@ -28,8 +28,8 @@ void Msgbox::init()
     msg_info = new QLabel(this);
     msg_icon = new QLabel(this);
     button_box = new QDialogButtonBox(this);
-    ok_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Ok"), this);
-    close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
+    ok_but = new QPushButton(QIcon(ok_button_pix_path), tr("Ok"), this);
+    close_but = new QPushButton(QIcon(close_button_pix_path), tr("Close"), this);
     layout->addWidget(msg_header, 0, 0, 1, 0);
     layout->addWidget(msg_icon, 1, 0, Qt::AlignCenter);
     layout->addWidget(msg_info, 1, 1, Qt::AlignCenter);

@@ -31,9 +31,13 @@ void Settings::read_settings()
     // get style values
     QSettings *style = new QSettings(stl_path + stl_name, QSettings::IniFormat, this);
     style->beginGroup("Message");
-    ok_button_pix = stl_path + style->value("ok_button_pix").toString();
-    close_button_pix = stl_path + style->value("close_button_pix").toString();
+    ok_button_pix_path = stl_path + style->value("ok_button_pix").toString();
+    close_button_pix_path = stl_path + style->value("close_button_pix").toString();
     style->endGroup(); //Message
+    style->beginGroup("Launcher");
+    system_pix_path = stl_path + style->value("system_pix").toString();
+    utility_pix_path = stl_path + style->value("utility_pix").toString();
+    style->endGroup(); //Launcher
 }
 
 void Settings::paintEvent(QPaintEvent *)
@@ -63,8 +67,8 @@ void Settings::init()
     QGroupBox *ok_close_box = new QGroupBox(this);
     QHBoxLayout *ok_close_layout = new QHBoxLayout();
     ok_close_box->setLayout(ok_close_layout);
-    QPushButton *ok_but = new QPushButton(QIcon(QPixmap(ok_button_pix)), tr("Ok"), this);
-    QPushButton* close_but = new QPushButton(QIcon(QPixmap(close_button_pix)), tr("Close"), this);
+    QPushButton *ok_but = new QPushButton(QIcon(ok_button_pix_path), tr("Ok"), this);
+    QPushButton *close_but = new QPushButton(QIcon(close_button_pix_path), tr("Close"), this);
     ok_but->setDefault(true);
     connect(ok_but, SIGNAL(clicked()), this, SLOT(ok_pressed()));
     connect(close_but, SIGNAL(clicked()), this, SLOT(close_pressed()));
@@ -77,12 +81,13 @@ void Settings::init()
     main_layout->addWidget(ok_close_box);
 
     display_tab();
+    system_tab();
 }
 
 void Settings::display_tab()
 {
     QFrame *display_frm = new QFrame(this);
-    tab->addTab(display_frm, tr("Display"));
+    tab->addTab(display_frm, QIcon(utility_pix_path), tr("Display"));
     QGridLayout *display_layout = new QGridLayout();
     display_frm->setLayout(display_layout);
     QLabel *composite = new QLabel(this);
@@ -101,8 +106,10 @@ void Settings::display_tab()
     QLineEdit *color_dph_num = new QLineEdit(this);
     QLabel *hor_res = new QLabel(this);
     hor_res_spin = new QSpinBox(this);
+    hor_res_spin->setRange(0, 200);
     QLabel *ver_res = new QLabel(this);
     ver_res_spin = new QSpinBox(this);
+    ver_res_spin->setRange(0, 200);
     composite_set->setReadOnly(true);
     virtual_desk_set->setReadOnly(true);
     display_num->setReadOnly(true);
@@ -110,15 +117,6 @@ void Settings::display_tab()
     scr_width_val->setReadOnly(true);
     scr_height_val->setReadOnly(true);
     color_dph_num->setReadOnly(true);
-    composite->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    virtual_desk->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    display->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    screen->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    scr_width->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    scr_height->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    color_dph->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    hor_res->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    ver_res->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     composite->setText(tr("Composite:"));
     virtual_desk->setText(tr("Virtual Desktop:"));
     display->setText(tr("Display:"));
@@ -169,10 +167,51 @@ void Settings::display_tab()
     display_layout->addWidget(ver_res_spin, 8, 1);
 }
 
+void Settings::system_tab()
+{
+    QFrame *system_frm = new QFrame(this);
+    tab->addTab(system_frm, QIcon(system_pix_path), tr("System"));
+    QGridLayout *system_layout = new QGridLayout();
+    system_frm->setLayout(system_layout);
+    QLabel *cursor_flash = new QLabel(this);
+    cursor_flash_spin = new QSpinBox(this);
+    cursor_flash_spin->setRange(0, 2000); // default = 1000 milliseconds
+    QLabel *double_click = new QLabel(this);
+    double_click_spin = new QSpinBox(this);
+    double_click_spin->setRange(0, 1000); // default = 400 milliseconds
+    QLabel *keyboard_input = new QLabel(this);
+    keyboard_input_spin = new QSpinBox(this);
+    keyboard_input_spin->setRange(0, 1000); // default = 400 milliseconds
+    QLabel *wheel_scroll = new QLabel(this);
+    wheel_scroll_spin = new QSpinBox(this);
+    wheel_scroll_spin->setRange(0, 20); // default = 3 lines
+    cursor_flash->setText(tr("Cursor flash time:"));
+    double_click->setText(tr("Double click interval:"));
+    keyboard_input->setText(tr("Keyboard input interval:"));
+    wheel_scroll->setText(tr("Wheel scroll lines:"));
+    cursor_flash_spin->setValue(qApp->cursorFlashTime());
+    double_click_spin->setValue(qApp->doubleClickInterval());
+    keyboard_input_spin->setValue(qApp->keyboardInputInterval());
+    wheel_scroll_spin->setValue(qApp->wheelScrollLines());
+
+    system_layout->addWidget(cursor_flash, 0, 0);
+    system_layout->addWidget(cursor_flash_spin, 0, 1);
+    system_layout->addWidget(double_click, 1, 0);
+    system_layout->addWidget(double_click_spin, 1, 1);
+    system_layout->addWidget(keyboard_input, 2, 0);
+    system_layout->addWidget(keyboard_input_spin, 2, 1);
+    system_layout->addWidget(wheel_scroll, 3, 0);
+    system_layout->addWidget(wheel_scroll_spin, 3, 1);
+}
+
 void Settings::ok_pressed()
 {
     QX11Info::setAppDpiX(scr_num, hor_res_spin->value());
     QX11Info::setAppDpiY(scr_num, ver_res_spin->value());
+    qApp->setCursorFlashTime(cursor_flash_spin->value());
+    qApp->setDoubleClickInterval(double_click_spin->value());
+    qApp->setKeyboardInputInterval(keyboard_input_spin->value());
+    qApp->setWheelScrollLines(wheel_scroll_spin->value());
 }
 
 void Settings::close_pressed()

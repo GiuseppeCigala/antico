@@ -49,8 +49,8 @@ void Runner::init()
     QCompleter *completer = new QCompleter(this);
     completer->setModel(dir_model);
     command->setCompleter(completer);
-    QPushButton *run_but = new QPushButton(QIcon(QPixmap(ok_button_pix_path)), tr("Run"), this);
-    QPushButton *close_but = new QPushButton(QIcon(QPixmap(close_button_pix_path)), tr("Close"), this);
+    QPushButton *run_but = new QPushButton(QIcon(ok_button_pix_path), tr("Run"), this);
+    QPushButton *close_but = new QPushButton(QIcon(close_button_pix_path), tr("Close"), this);
     layout->addWidget(name, 0, 0, 1, 0);
     layout->addWidget(text, 1, 0, 1, 0);
     layout->addWidget(command, 2, 0, 1, 0);
