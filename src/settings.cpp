@@ -37,6 +37,7 @@ void Settings::read_settings()
     style->beginGroup("Launcher");
     system_pix_path = stl_path + style->value("system_pix").toString();
     utility_pix_path = stl_path + style->value("utility_pix").toString();
+    graphics_pix_path = stl_path + style->value("graphics_pix").toString();
     style->endGroup(); //Launcher
 }
 
@@ -80,8 +81,77 @@ void Settings::init()
     main_layout->addWidget(tab);
     main_layout->addWidget(ok_close_box);
 
+    gui_tab();
     display_tab();
     system_tab();
+}
+
+void Settings::gui_tab()
+{
+    QFrame *gui_frm = new QFrame(this);
+    tab->addTab(gui_frm, QIcon(graphics_pix_path), tr("GUI"));
+    QGridLayout *gui_layout = new QGridLayout();
+    gui_frm->setLayout(gui_layout);
+    QLabel *style = new QLabel(this);
+    // get settings from $HOME/.config/Trolltech.conf
+    QSettings settings(QLatin1String("Trolltech"));
+    settings.beginGroup(QLatin1String("Qt"));
+    QString current_style = settings.value(QLatin1String("style")).toString();
+    QFont current_font = settings.value(QLatin1String("font")).value<QFont>();
+    settings.endGroup();
+    // GUI Style
+    style_combo = new QComboBox(this);
+    style->setText(tr("GUI Style:"));
+    QStringList styles = QStyleFactory::keys();// get Qt style list
+    styles.sort();
+    style_combo->addItems(styles);
+    int index = style_combo->findText(current_style, Qt::MatchFixedString);
+    style_combo->setCurrentIndex(index);
+    // Font settings
+    QLabel *font_family = new QLabel(this);
+    font_family_combo = new QComboBox(this);
+    QLabel *font_style = new QLabel(this);
+    font_style_combo = new QComboBox(this);
+    QLabel *font_size = new QLabel(this);
+    font_size_combo = new QComboBox(this);
+    sample_text = new QLineEdit(this);
+    sample_text->setAlignment(Qt::AlignCenter);
+    sample_text->setReadOnly(true);
+    sample_text->setFont(current_font);
+    sample_text->setText("Antico");
+    font_family->setText(tr("Font family:"));
+    font_style->setText(tr("Font style:"));
+    font_size->setText(tr("Font size:"));
+    // set font families and select the current
+    QFontDatabase db;
+    QStringList families = db.families();
+    font_family_combo->addItems(families);
+    font_family_combo->setCurrentIndex(font_family_combo->findText(current_font.family(), Qt::MatchFixedString)); // set the current font family
+    // set font styles and select the current
+    QStringList font_styles = db.styles(font_family_combo->currentText());
+    font_style_combo->addItems(font_styles);
+    font_style_combo->setCurrentIndex(font_style_combo->findText(db.styleString(current_font), Qt::MatchFixedString));
+     // set font sizes and select the current    
+    QList <int> sizes = db.pointSizes(font_family_combo->currentText(), font_style_combo->currentText());
+    for (int i = 0; i < sizes.size(); ++i) // set the current font sizes
+    {
+        font_size_combo->addItem(QString::number(sizes.at(i)));
+    }
+    font_size_combo->setCurrentIndex(font_size_combo->findText(QString::number(current_font.pointSize()), Qt::MatchFixedString));
+    
+    connect(font_family_combo, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(update_style_combo(const QString &)));
+    connect(font_style_combo, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(update_size_combo(const QString &)));   
+    connect(font_size_combo, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(update_sample_text(const QString &)));  
+    
+    gui_layout->addWidget(style, 0, 0);
+    gui_layout->addWidget(style_combo, 0, 1);
+    gui_layout->addWidget(font_family, 1, 0);
+    gui_layout->addWidget(font_family_combo, 1, 1);
+    gui_layout->addWidget(font_style, 2, 0);
+    gui_layout->addWidget(font_style_combo, 2, 1);
+    gui_layout->addWidget(font_size, 3, 0);
+    gui_layout->addWidget(font_size_combo, 3, 1);
+    gui_layout->addWidget(sample_text, 4, 0, 1, 0);
 }
 
 void Settings::display_tab()
@@ -107,9 +177,11 @@ void Settings::display_tab()
     QLabel *hor_res = new QLabel(this);
     hor_res_spin = new QSpinBox(this);
     hor_res_spin->setRange(0, 200);
+    hor_res_spin->setSuffix(" dpi");
     QLabel *ver_res = new QLabel(this);
     ver_res_spin = new QSpinBox(this);
     ver_res_spin->setRange(0, 200);
+    ver_res_spin->setSuffix(" dpi");
     composite_set->setReadOnly(true);
     virtual_desk_set->setReadOnly(true);
     display_num->setReadOnly(true);
@@ -130,11 +202,11 @@ void Settings::display_tab()
     QDesktopWidget *desktop = QApplication::desktop();
     QRect geometry = desktop->screenGeometry(scr_num);
     int depth = QX11Info::appDepth(scr_num);
-    display_num->setText(QString("%1").arg(XDisplayName(NULL)));
-    screen_num->setText(QString("%1").arg(scr_num));
-    scr_width_val->setText(QString("%1").arg(geometry.width()));
-    scr_height_val->setText(QString("%1").arg(geometry.height()));
-    color_dph_num->setText(QString("%1").arg(depth));
+    display_num->setText(QString("%1").arg((XDisplayName(NULL))));
+    screen_num->setText(QString::number(scr_num));
+    scr_width_val->setText(QString::number(geometry.width()));
+    scr_height_val->setText(QString::number(geometry.height()));
+    color_dph_num->setText(QString::number(depth));
     hor_res_spin->setValue(QX11Info::appDpiX(scr_num));
     ver_res_spin->setValue(QX11Info::appDpiY(scr_num));
 
@@ -176,12 +248,15 @@ void Settings::system_tab()
     QLabel *cursor_flash = new QLabel(this);
     cursor_flash_spin = new QSpinBox(this);
     cursor_flash_spin->setRange(0, 2000); // default = 1000 milliseconds
+    cursor_flash_spin->setSuffix(" ms");
     QLabel *double_click = new QLabel(this);
     double_click_spin = new QSpinBox(this);
     double_click_spin->setRange(0, 1000); // default = 400 milliseconds
+    double_click_spin->setSuffix(" ms");
     QLabel *keyboard_input = new QLabel(this);
     keyboard_input_spin = new QSpinBox(this);
     keyboard_input_spin->setRange(0, 1000); // default = 400 milliseconds
+    keyboard_input_spin->setSuffix(" ms");
     QLabel *wheel_scroll = new QLabel(this);
     wheel_scroll_spin = new QSpinBox(this);
     wheel_scroll_spin->setRange(0, 20); // default = 3 lines
@@ -204,6 +279,41 @@ void Settings::system_tab()
     system_layout->addWidget(wheel_scroll_spin, 3, 1);
 }
 
+void Settings::update_style_combo(const QString &text)
+{
+    QString actual_style = font_style_combo->currentText();
+    QFontDatabase db;
+    QStringList font_styles = db.styles(text);
+    font_style_combo->clear();
+    font_style_combo->addItems(font_styles);
+    font_style_combo->setCurrentIndex(font_style_combo->findText(actual_style, Qt::MatchFixedString));
+    update_sample_text(text);
+}
+
+void Settings::update_size_combo(const QString &text)
+{   
+    QString actual_size = font_size_combo->currentText();
+    QFontDatabase db;
+    QList <int> sizes = db.pointSizes(font_family_combo->currentText(), text);
+    font_size_combo->clear();
+    
+    for (int i = 0; i < sizes.size(); ++i) 
+    {
+        font_size_combo->addItem(QString::number(sizes.at(i)));
+    }
+    font_size_combo->setCurrentIndex(font_size_combo->findText(actual_size, Qt::MatchFixedString));
+    update_sample_text(text);
+}
+
+void Settings::update_sample_text(const QString &text)
+{
+    Q_UNUSED(text);
+    QFontDatabase db;
+    QFont font = db.font(font_family_combo->currentText(), font_style_combo->currentText(),
+                         font_size_combo->currentText().toInt());
+    sample_text->setFont(font);
+}
+
 void Settings::ok_pressed()
 {
     QX11Info::setAppDpiX(scr_num, hor_res_spin->value());
@@ -212,6 +322,20 @@ void Settings::ok_pressed()
     qApp->setDoubleClickInterval(double_click_spin->value());
     qApp->setKeyboardInputInterval(keyboard_input_spin->value());
     qApp->setWheelScrollLines(wheel_scroll_spin->value());
+    // save the new style
+    qApp->setStyle(style_combo->currentText());
+    QSettings settings(QLatin1String("Trolltech"));
+    settings.beginGroup(QLatin1String("Qt"));
+    settings.setValue(QLatin1String("style"), style_combo->currentText());
+    // save the new font
+    QFontDatabase db;
+    QFont font = db.font(font_family_combo->currentText(), font_style_combo->currentText(),
+                         font_size_combo->currentText().toInt());
+    settings.setValue(QLatin1String("font"), font.toString()); 
+    settings.endGroup();
+    // update style and font
+    qApp->setStyle(style_combo->currentText());
+    qApp->setFont(font);
 }
 
 void Settings::close_pressed()
