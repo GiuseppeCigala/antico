@@ -144,12 +144,10 @@ void Filedialog::init()
     tree_view->setSortingEnabled(true);
     tree_view->setAlternatingRowColors(true);
     tree_view->setFocusPolicy(Qt::ClickFocus);
-    tree_view->header()->setSortIndicator(0, Qt::AscendingOrder);
     tree_view->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree_view->setSelectionBehavior(QAbstractItemView::SelectItems);
     tree_view->setIconSize(QSize(16, 16));
     tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
     list_view = new QListView(this);
     list_view->setModel(fs_model);
     list_view->setDragEnabled(true);

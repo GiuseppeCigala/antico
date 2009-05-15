@@ -18,14 +18,12 @@ Frame::Frame(Window w, const QString &type, Dockbar *dock, Desk *desk, QWidget *
     init();
     setFrameStyle(QFrame::Panel|QFrame::Raised);
     setAttribute(Qt::WA_AlwaysShowToolTips);
-    setAttribute(Qt::WA_X11NetWmWindowTypeDND);
     setAcceptDrops(true);
     set_active(); // set header active
 }
 
 Frame::~Frame()
-{
-}
+{}
 
 void Frame::read_settings()
 {
@@ -66,7 +64,8 @@ void Frame::read_settings()
 void Frame::init()
 {
     maximized = false;
-    state = "NormalState";
+    set_state(1);
+    state = "WithdrawnState";
     shaped = false;
 
     XSelectInput(QX11Info::display(), winId(), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
@@ -93,6 +92,8 @@ void Frame::init()
     get_wm_name();
     // set the frame geometry
     set_frame_geometry();
+    // set the window modality
+    set_window_modality();
 
     shaped = query_shape();
     if (shaped)
@@ -101,7 +102,7 @@ void Frame::init()
     XSetWindowBorderWidth(QX11Info::display(), c_win, 0);  //client
     XSetWindowBorderWidth(QX11Info::display(), winId(), 0);  //frame
 
-     // ***THE MOST IMPORTANT FUNCTION*** // reparent client with frame
+    // *** THE MOST IMPORTANT FUNCTION *** // reparent client with frame
     XReparentWindow(QX11Info::display(), c_win, winId(), lateral_bdr_width, top_bdr_height);
     qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
     qDebug() << "Reparent Client:" << c_win << "with Frame:" << winId() << "- Name:" << cl_name();
@@ -110,11 +111,11 @@ void Frame::init()
     XAddToSaveSet(QX11Info::display(), c_win);
     // move and resize client
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
-    
+
     //if the frame is too large, maximize it
     if (frame_w >= QApplication::desktop()->width()-20 || frame_h >= QApplication::desktop()->height()-40)
     {
-        maximize();
+        maximize_it();
     }
     else // normal size
     {
@@ -177,7 +178,7 @@ void Frame::set_frame_geometry()
 {
     qDebug() << "Frame type:" << frame_type;
 
-    if (frame_type.compare("Splash") == 0)
+    if (frame_type == "Splash")
     {
         // set spacing between client and frame window
         diff_border_h = 0; // height space
@@ -203,6 +204,14 @@ void Frame::set_frame_geometry()
     }
 }
 
+void Frame::set_window_modality()
+{
+    if (frame_type == "Dialog") // modal for Dialog frames
+    {
+        setWindowModality(Qt::WindowModal);
+    }
+}
+
 void Frame::get_wm_hints()
 {
     XWMHints *xwmhints;
@@ -211,7 +220,8 @@ void Frame::get_wm_hints()
     {
         if (xwmhints->flags & StateHint && xwmhints->initial_state == IconicState)
         {
-            set_state(IconicState);
+            set_state(3);
+            state = "IconicState";
         }
         XFree(xwmhints);
     }
@@ -254,38 +264,39 @@ void Frame::get_wm_normal_hints() // Poor implementation of many applications ..
                 client_h = xsizehints->base_height;
             qDebug() << "PBaseSize:" << client_w << client_h;
         }
-  
+
         qDebug() << "Final Client Size:" << client_w << client_h;
     }
 }
 
-void Frame::set_state(int state)
+void Frame::set_state(int state) // 0 = Withdrawn, 1 = Normal, 3 = Iconic
 {
     ulong data[2];
     data[0] = (ulong)state;
     data[1] = (ulong)None;
     Atom wm_state = XInternAtom(QX11Info::display(), "WM_STATE", FALSE);
     XChangeProperty(QX11Info::display(), c_win, wm_state, wm_state, 32, PropModeReplace, (uchar *)data, 2);
-    qDebug() << "Frame:" << winId() << "Name:" << wm_name << "Client:" << c_win << "changhin state:" << state;
+    qDebug() << "Frame:" << winId() << "Name:" << wm_name << "Client:" << c_win << "changing state (0=Withdrawn, 1=Normal, 3=Iconic):" << state;
 }
 
-void Frame::set_focus(long timestamp) // set to focus to child
+void Frame::set_focus(long timestamp) // set focus to child
 {
-    XSetInputFocus(QX11Info::display(), c_win, RevertToNone, CurrentTime);
+    XSetInputFocus(QX11Info::display(), c_win, RevertToParent, CurrentTime);
     raise();
     Atom wm_take_focus = XInternAtom(QX11Info::display(), "WM_TAKE_FOCUS", False);
     if (prot_take_focus) // WM_TAKE_FOCUS protocol
         send_wm_protocols(wm_take_focus, timestamp);
 }
 
-void Frame::unmap()
+void Frame::unmap_it()
 {
     XUnmapWindow(QX11Info::display(), winId()); // only the frame, the client is already unmapped...
     state = "WithdrawnState";
+    set_state(0);
     qDebug() << "Frame unmapped (unmap):" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
-void Frame::withdraw()
+void Frame::withdrawn_it()
 {
     if (frame_type != "Dialog")
     {
@@ -293,34 +304,35 @@ void Frame::withdraw()
         desktop->remove_deskicon(this);  // remove Application icon from Desktop
     }
     XUnmapWindow(QX11Info::display(), winId()); // only the frame, the client is already unmapped...
+    set_state(0);
     state = "WithdrawnState";
-    qDebug() << "Frame unmapped (withdraw):" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
+    qDebug() << "Frame unmapped (withdrawn):" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
-void Frame::iconify()
+void Frame::iconify_it()
 {
     if (frame_type != "Dialog") // no iconify on Dialog frames
     {
         desktop->add_deskicon(this);  // add Application icon (small pixmap) on Desktop
         XUnmapWindow(QX11Info::display(), winId());
         XUnmapWindow(QX11Info::display(), c_win);
-        set_state(IconicState);
+        set_state(3);
         state = "IconicState";
         qDebug() << "Frame iconify:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
         dockbar->remove_dockicon(this);  // remove Dockicon from Dockbar
     }
 }
 
-void Frame::map()
+void Frame::map_it()
 {
     XMapWindow(QX11Info::display(), winId());
     XMapWindow(QX11Info::display(), c_win);
-    set_state(NormalState);
+    set_state(1);
     state = "NormalState";
     qDebug() << "Frame mapped:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
 
-void Frame::raise()
+void Frame::raise_it()
 {
     if (frame_type != "Dialog")
     {
@@ -329,7 +341,7 @@ void Frame::raise()
     }
     XMapRaised(QX11Info::display(), winId());
     XMapRaised(QX11Info::display(), c_win);
-    set_state(NormalState);
+    set_state(1);
     state = "NormalState";
     qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;
 }
@@ -608,14 +620,14 @@ void Frame::create_border()
     }
 
     // top left (icon)
-    connect(tl_bdr, SIGNAL(mouse_left_press()), this, SLOT(iconify()));
-    connect(tl_bdr, SIGNAL(mouse_right_press()), this, SLOT(maximize()));
+    connect(tl_bdr, SIGNAL(mouse_left_press()), this, SLOT(iconify_it()));
+    connect(tl_bdr, SIGNAL(mouse_right_press()), this, SLOT(maximize_it()));
     // top right (icon)
-    connect(tr_bdr, SIGNAL(mouse_left_press()), this, SLOT(destroy()));
+    connect(tr_bdr, SIGNAL(mouse_left_press()), this, SLOT(destroy_it()));
     // top mid (title bar)
-    connect(tm_bdr, SIGNAL(mouse_double_click()), this, SLOT(iconify()));
+    connect(tm_bdr, SIGNAL(mouse_double_click()), this, SLOT(iconify_it()));
     connect(tm_bdr, SIGNAL(mouse_left_press(QMouseEvent *)), this, SLOT(press_top_mid(QMouseEvent *)));
-    connect(tm_bdr, SIGNAL(mouse_right_press()), this, SLOT(maximize()));
+    connect(tm_bdr, SIGNAL(mouse_right_press()), this, SLOT(maximize_it()));
     connect(tm_bdr, SIGNAL(mouse_move(QMouseEvent *)), this, SLOT(move_top_mid(QMouseEvent *)));
     // bottom left
     connect(bl_bdr, SIGNAL(mouse_left_press(QMouseEvent *)), this, SLOT(press_bottom_left(QMouseEvent *)));
@@ -749,7 +761,7 @@ void Frame::move_left(QMouseEvent *event)
 }
 
 ////////// DESTROY WINDOW //////////////
-void Frame::destroy()
+void Frame::destroy_it()
 {
     if (prot_delete)
     {
@@ -766,7 +778,7 @@ void Frame::destroy()
 }
 
 ////////// MAXIMIZE WINDOW //////////////
-void Frame::maximize()
+void Frame::maximize_it()
 {
     if (! maximized)
     {
@@ -802,11 +814,9 @@ void Frame::maximize()
 
 void Frame::dragEnterEvent(QDragEnterEvent *event)
 {
-    raise();
     qDebug() << "dragEnterEvent";
     qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
-    event->accept();
     qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data();
 }
 
@@ -815,7 +825,6 @@ void Frame::dragMoveEvent(QDragMoveEvent *event)
     qDebug() << "dragMoveEvent";
     qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
-    event->accept();
     qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data();
 }
 
@@ -824,8 +833,5 @@ void Frame::dropEvent(QDropEvent *event)
     qDebug() << "dropEvent";
     qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
-    event->accept();
     qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data();
 }
-
-

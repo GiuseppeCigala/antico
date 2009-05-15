@@ -252,13 +252,17 @@ void Desk::keyPressEvent(QKeyEvent *event)
 void Desk::dragEnterEvent(QDragEnterEvent *event)
 {
     qDebug() << "dragEnterEvent";
+    qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
+    qDebug() << "Drag enter contents:" << event->mimeData()->text().toLatin1().data();
 }
 
 void Desk::dragMoveEvent(QDragMoveEvent *event)
 {
     qDebug() << "dragMoveEvent";
+    qDebug() << "Proposed action:" << event->proposedAction() << " [1:Copy - 2:Move - 4:Link]";
     event->acceptProposedAction();
+    qDebug() << "Drag move contents:" << event->mimeData()->text().toLatin1().data();
 }
 
 void Desk::dropEvent(QDropEvent *event) // add file or directory on desktop by drag&drop from Filedialog

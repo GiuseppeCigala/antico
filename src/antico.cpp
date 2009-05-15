@@ -181,6 +181,7 @@ void Antico::send_supported_hints()
 bool Antico::x11EventFilter(XEvent *event)
 {
     Frame *frm;
+    XWindowAttributes wa;
     XPropertyEvent *pev;
     XClientMessageEvent *mev;
     KeySym sym;
@@ -199,14 +200,23 @@ bool Antico::x11EventFilter(XEvent *event)
     case MapRequest:
         qDebug() << "[MapRequest]" << event->xmaprequest.window;
 
+        if (!XGetWindowAttributes(QX11Info::display(), event->xmaprequest.window, &wa))
+            return true;
+
+        if (wa.override_redirect)
+        {
+            qDebug() << "No Frame for Override redirect on Client:" << event->xmaprequest.window;
+            return true;
+        }
+
         if ((frm = mapping_clients.value(event->xmaprequest.window)) != NULL)
         {
-            qDebug() << "--> Map Client:" << event->xmaprequest.window;
-            frm->map();
+            qDebug() << "--> MapRequest for already mapped Client:" << event->xmaprequest.window;
+            frm->map_it();
         }
         else
         {
-            qDebug() << "--> Map new Client:" << event->xmaprequest.window;
+            qDebug() << "--> MapRequest for new Client:" << event->xmaprequest.window;
             create_frame(event->xmaprequest.window, dock, dsk); // create new Frame for Client
         }
         return false;
@@ -281,7 +291,7 @@ bool Antico::x11EventFilter(XEvent *event)
         {
             if (event->xcirculaterequest.place == PlaceOnTop)
             {
-                frm->raise();
+                frm->raise_it();
                 qDebug() << "--> CirculateRequest for frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xcirculaterequest.window;
             }
         }
@@ -298,7 +308,7 @@ bool Antico::x11EventFilter(XEvent *event)
 
         if ((frm = mapping_clients.value(event->xunmap.window)) != NULL)
         {
-            frm->map();
+            frm->map_it();
             qDebug() << "MapNotify for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
             return true;
         }
@@ -315,12 +325,12 @@ bool Antico::x11EventFilter(XEvent *event)
         {
             if (event->xunmap.send_event)
             {
-                frm->withdraw();
-                qDebug() << "Withdraw for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
+                frm->withdrawn_it();
+                qDebug() << "Withdrawn for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
             }
             else
             {
-                frm->unmap();
+                frm->unmap_it();
                 qDebug() << "Unmap for frame:" << frm->winId() << "- Name:" << frm->cl_name() << " - Client:" << frm->cl_win();
             }
             return true;
@@ -334,7 +344,8 @@ bool Antico::x11EventFilter(XEvent *event)
     case DestroyNotify:
         qDebug() << "[DestroyNotify]";
 
-        if ((frm = mapping_clients.value(event->xdestroywindow.window)) != NULL)
+        if ((frm = mapping_clients.value(event->xdestroywindow.window)) != NULL ||
+            (frm = mapping_frames.value(event->xdestroywindow.window)) != NULL)
         {
             qDebug() << "--> Destroy frame:" << frm->winId() << "- Name:" << frm->cl_name() << "- Client:" << event->xdestroywindow.window;
             mapping_clients.remove(event->xdestroywindow.window);
@@ -350,6 +361,7 @@ bool Antico::x11EventFilter(XEvent *event)
             dock->system_tray()->remove_embedder(event->xdestroywindow.window); // remove eventually QX11EmbedContainer
             return true;
         }
+        qDebug() << "Mapping clients num:" << mapping_clients.size() << "Mapping frames num:" << mapping_frames.size();
         return false;
         break;
 
@@ -435,7 +447,7 @@ bool Antico::x11EventFilter(XEvent *event)
             if (pev->atom == wm_state || pev->atom == _net_wm_state)
             {
                 qDebug() << "---> wm_state";
-                qDebug() << "Window changing state:" << pev->window;
+                qDebug() << "Window:" << pev->window << "changing state";
                 return true;
             }
             if (pev->atom == wm_colormaps)
@@ -510,8 +522,14 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "---> wm_change_state: IconicState";
 
             if ((frm = mapping_clients.value(event->xclient.window)) != NULL)
-                frm->iconify();
+                frm->iconify_it();
         }
+        return false;
+        break;
+
+    case Expose:
+        qDebug() << "[Expose]";
+
         return false;
         break;
 
@@ -569,7 +587,7 @@ bool Antico::x11EventFilter(XEvent *event)
             show_desktop();
             return false;
         }
-        
+
         if (sym == XK_t && mod == keymask1)
         {
             qDebug() << "Press [Alt+t] - Show Settings";
@@ -618,7 +636,6 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
         frm = new Frame(c_win, frame_type.at(0), dock, desk); // select always the first type in list (preferred)
         mapping_clients.insert(c_win, frm); // save the client winId/frame
         mapping_frames.insert(frm->winId(), frm); // save the frame winId/frame
-        XReparentWindow(QX11Info::display(), frm->winId(), dsk->winId(), frm->x(), frm->y()); // reparent with desktop (to not cover the dockbar)
     }
     else
     {
@@ -629,6 +646,7 @@ void Antico::create_frame(Window c_win, Dockbar *dock, Desk *desk) // create new
         dock->add_dockicon(frm); // add frame to dockbar
 
     frame_type.clear(); // clear the window type list
+    qDebug() << "Mapping clients num:" << mapping_clients.size() << "Mapping frames num:" << mapping_frames.size();
 }
 
 bool Antico::check_net_sys_tray_for(Window c_win) const
@@ -753,8 +771,12 @@ void Antico::raise_next_frame() // raise next frame on [Alt+Tab] key combination
     if (frm_list.size() <= next_frame)
         next_frame = 0; // start from first element
 
-    qDebug() << "Frame raise: " << frm_list.at(next_frame)->winId();
-    set_active_frame(frm_list.at(next_frame));
+    Frame *frm = frm_list.at(next_frame);
+
+    if (frm->win_state() != "IconicState" && frm->win_state() != "WithdrawnState" && ! frm->is_splash()) // if not active
+    {
+        set_active_frame(frm_list.at(next_frame));
+    }
     next_frame++;
 }
 
@@ -766,15 +788,12 @@ void Antico::set_active_frame(Frame *frm) // activation of selected frame and un
         {
             qDebug() << "Frame raise and active: " << frame->winId() << "- Name:" << frame->cl_name() << "- state:" << frm->win_state();
             frame->set_active();
-            frame->raise();
+            frame->raise_it();
         }
         else
         {
-            if ((frm->win_state().compare("IconicState") != 0 || frm->win_state().compare("WithdrawnState") != 0) && ! frm->is_splash()) // if not active
-            {
-                qDebug() << "Frame inactive:"  << frame->winId() << "- Name:" << frame->cl_name() << "- state:" << frm->win_state() << "- is Splash:" << frm->is_splash();
-                frame->set_inactive();
-            }
+            qDebug() << "Frame inactive:"  << frame->winId() << "- Name:" << frame->cl_name() << "- state:" << frm->win_state() << "- is Splash:" << frm->is_splash();
+            frame->set_inactive();
         }
     }
 }
@@ -825,16 +844,17 @@ void Antico::wm_quit()
     {
         foreach(Frame *frm, mapping_clients)
         {
+            XReparentWindow(QX11Info::display(), frm->winId(), QX11Info::appRootWindow(), 0, 0);
             qDebug() << "Quit Frame:" << frm->winId() << "Client:" << frm->cl_win();
-            frm->destroy();
+            frm->destroy_it();
         }
         mapping_clients.clear();
         mapping_frames.clear();
         dock->close();
         dsk->close();
-        //  XSync(QX11Info::display(), False);
+        XSync(QX11Info::display(), False);
         qDebug() << "Quit Antico WM ...";
-        //     XCloseDisplay(QX11Info::display());
+        XCloseDisplay(QX11Info::display());
         emit lastWindowClosed();
     }
 }
@@ -857,8 +877,9 @@ void Antico::wm_shutdown()
 
         foreach(Frame *frm, mapping_clients)
         {
+            XReparentWindow(QX11Info::display(), frm->winId(), QX11Info::appRootWindow(), 0, 0);
             qDebug() << "Quit Frame:" << frm->winId() << "Client:" << frm->cl_win();
-            frm->destroy();
+            frm->destroy_it();
         }
         mapping_clients.clear();
         mapping_frames.clear();
@@ -890,8 +911,9 @@ void Antico::wm_restart()
 
         foreach(Frame *frm, mapping_clients)
         {
+            XReparentWindow(QX11Info::display(), frm->winId(), QX11Info::appRootWindow(), 0, 0);
             qDebug() << "Quit Frame:" << frm->winId() << "Client:" << frm->cl_win();
-            frm->destroy();
+            frm->destroy_it();
         }
         mapping_clients.clear();
         mapping_frames.clear();
@@ -912,8 +934,8 @@ void Antico::show_desktop()
     {
         if (frm->win_state().compare("IconicState") != 0 && frm->win_state().compare("WithdrawnState") != 0 && !frm->is_splash()) // if not yet iconize/inactive
         {
-            frm->raise(); // set in front
-            frm->iconify(); // catch the pixmap
+            frm->raise_it(); // set in front
+            frm->iconify_it(); // catch the pixmap
         }
     }
     XSync(QX11Info::display(), FALSE);

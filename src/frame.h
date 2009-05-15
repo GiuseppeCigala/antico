@@ -36,12 +36,13 @@ public:
     void create_border();
     void get_client_geometry();
     void set_frame_geometry();
+    void set_window_modality();
     void get_wm_hints();
     void get_wm_normal_hints();
-    void unmap();
-    void withdraw();
-    void map();
-    void raise();
+    void unmap_it();
+    void withdrawn_it();
+    void map_it();
+    void raise_it();
     void reshape();
     bool query_shape() const;
     void get_wm_name();
@@ -107,9 +108,9 @@ public slots:
     void move_right(QMouseEvent *);             // right border move
     void press_left(QMouseEvent *);             // left border press
     void move_left(QMouseEvent *);              // left border move
-    void destroy();                             // destroy client
-    void maximize();                            // maximize client
-    void iconify();                             // iconify client
+    void destroy_it();                          // destroy client
+    void maximize_it();                         // maximize client
+    void iconify_it();                          // iconify client
     void dragEnterEvent(QDragEnterEvent *);
     void dragMoveEvent(QDragMoveEvent *);
     void dropEvent(QDropEvent *);

@@ -64,7 +64,7 @@ void Dockicon::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && frame_state == 1)
     {
-        frm->raise();
+        frm->raise_it();
         qDebug() << "Dockicon (mouse press):" << frm->cl_win() << "- Name:" << frm->cl_name();
     }
     if (event->button() == Qt::RightButton)
@@ -84,14 +84,14 @@ void Dockicon::mouseDoubleClickEvent(QMouseEvent *event)
         if (frame_state == 0)
         {
             frame_state = 1;
-            frm->raise();
+            frm->raise_it();
             qDebug() << "Dockicon (double click):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- State: raised";
             return;
         }
         if (frame_state == 1)
         {
             frame_state = 0;
-            frm->unmap();
+            frm->unmap_it();
             qDebug() << "Dockicon (double click):" << frm->cl_win() << "- Name:" << frm->cl_name() << "- State: unmapped";
             return;
         }
@@ -118,7 +118,7 @@ void Dockicon::run_menu(QAction *act)
     if (act->text() == tr("Close"))
     {
         emit destroy_dockicon(this);
-        frm->destroy();
+        frm->destroy_it();
         close();
     }
     if (act->text() == tr("Add to System Tray"))
@@ -126,7 +126,7 @@ void Dockicon::run_menu(QAction *act)
         sys->add_sysicon(frm); // add Dockicon to System Tray
         qDebug() << "Dockicon add to System Tray";
         emit destroy_dockicon(this);
-        frm->unmap();
+        frm->unmap_it();
         close();
     }
 }

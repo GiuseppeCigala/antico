@@ -43,7 +43,7 @@ void Deskicon::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        frm->raise();
+        frm->raise_it();
         emit destroy_deskicon(this);
     }
 }
@@ -95,7 +95,7 @@ void Deskicon::run_menu(QAction *act)
     if (act->text() == tr("Close"))
     {
         emit destroy_deskicon(this);
-        frm->destroy();
+        frm->destroy_it();
         close();
     }
 }

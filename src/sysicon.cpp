@@ -61,7 +61,7 @@ void Sysicon::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         emit show_sys(this);
-        frm->raise();
+        frm->raise_it();
         close();
     }
     if (event->button() == Qt::RightButton)
@@ -90,7 +90,7 @@ void Sysicon::leaveEvent(QEvent *event)
 void Sysicon::sys_close()
 {
     emit destroy_sys(this);
-    frm->destroy();
+    frm->destroy_it();
     close();
 }
 
