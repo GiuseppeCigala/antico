@@ -25,6 +25,7 @@ public:
     ~Runner();
     void read_settings();
     void init();
+    void load_cmd_history();
 
 protected:
     void mouseMoveEvent(QMouseEvent *);
@@ -42,7 +43,9 @@ private:
     QPoint mousepos;
     QString ok_button_pix_path;
     QString close_button_pix_path;
-    QLineEdit *command;
+    QComboBox *command_line;
+    QFile *run_history;
+    QStringList history_list;
 };
 
 

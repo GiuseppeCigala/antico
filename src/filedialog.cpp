@@ -25,6 +25,7 @@ Filedialog::Filedialog(QWidget *parent) : QDialog(parent) // without Category me
     cat_menu = NULL;
     setSizeGripEnabled(true);
     setWindowModality(Qt::WindowModal);
+    setAttribute(Qt::WA_AlwaysShowToolTips);
     read_settings();
     init();
     set_list_mode(); // list view at startup
@@ -123,6 +124,7 @@ void Filedialog::init()
 
     fs_model = new QFileSystemModel(this);
     fs_model->setSupportedDragActions(Qt::LinkAction);
+    fs_model->setFilter(fs_model->filter() | QDir::Hidden); // add hidden files to filter
     fs_model->setReadOnly(false);
     fs_model->setRootPath("/"); // must set on init
 
@@ -142,6 +144,7 @@ void Filedialog::init()
     tree_view->setItemsExpandable(false);
     tree_view->setRootIsDecorated(false);
     tree_view->setSortingEnabled(true);
+    tree_view->header()->setSortIndicator(0, Qt::AscendingOrder);
     tree_view->setAlternatingRowColors(true);
     tree_view->setFocusPolicy(Qt::ClickFocus);
     tree_view->setSelectionMode(QAbstractItemView::ExtendedSelection);

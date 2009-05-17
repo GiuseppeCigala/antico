@@ -188,7 +188,7 @@ bool Antico::x11EventFilter(XEvent *event)
     uint mod;
     uint keymask1 = Mod1Mask & 0x0F;
 
-    if (event->type!=6) // ignore Motion event
+    if (event->type != 6 && event->type != 12) // ignore Motion/Expose event
     {
         qDebug() << "--------------------------------------------------------------------------------------------";
         qDebug() << GREEN "XEvent:" YELLOW << event_names.value(event->type) << WHITE " ( WId:" MAGENTA << event->xany.window << WHITE")";
@@ -527,12 +527,6 @@ bool Antico::x11EventFilter(XEvent *event)
         return false;
         break;
 
-    case Expose:
-        qDebug() << "[Expose]";
-
-        return false;
-        break;
-
     case KeyPress:
         qDebug() << "[KeyPress]";
 
@@ -853,6 +847,7 @@ void Antico::wm_quit()
         dock->close();
         dsk->close();
         XSync(QX11Info::display(), False);
+        QProcess::startDetached(QString("/bin/rm").append(" ").append(QDir::tempPath() + "/antico-runner.log"));
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
         emit lastWindowClosed();
@@ -886,6 +881,7 @@ void Antico::wm_shutdown()
         dock->close();
         dsk->close();
         XSync(QX11Info::display(), False);
+        QProcess::startDetached(QString("/bin/rm").append(" ").append(QDir::tempPath() + "/antico-runner.log"));
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
         emit lastWindowClosed();
@@ -920,6 +916,7 @@ void Antico::wm_restart()
         dock->close();
         dsk->close();
         XSync(QX11Info::display(), False);
+        QProcess::startDetached(QString("/bin/rm").append(" ").append(QDir::tempPath() + "/antico-runner.log"));
         qDebug() << "Quit Antico WM ...";
         XCloseDisplay(QX11Info::display());
         emit lastWindowClosed();
@@ -979,6 +976,16 @@ void Antico::create_gui()
 Filedialog * Antico::get_file_dialog()
 {
     return file_dialog;
+}
+
+Desk * Antico::get_desktop()
+{
+    return dsk;
+}
+
+Dockbar * Antico::get_dockbar()
+{
+    return dock;
 }
 
 Categorymenu * Antico::get_category_menu()

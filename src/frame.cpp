@@ -130,7 +130,7 @@ void Frame::init()
     if (frame_type != "Splash") // Splash frame have no header and no border
     {
         // create frame borders/header
-        create_border();
+        create_borders();
         // set the header pixmap
         set_inactive();
         splash = false;
@@ -559,7 +559,7 @@ void Frame::update_style()
 
 ////////// WINDOW BORDER CREATION //////////////
 
-void Frame::create_border()
+void Frame::create_borders()
 {
     layout = new QGridLayout(this); // 3x3 grid for window borders
     layout->setMargin(0);
@@ -656,11 +656,8 @@ void Frame::press_top_mid(QMouseEvent *event)
 void Frame::move_top_mid(QMouseEvent *event)
 {
     QPoint p(event->globalPos()-mousepos);
-    if (p.x() <= 0)
-        p.setX(0);
-    if (p.y() <= 0)
-        p.setY(0);
-    else
+
+    if(desktop->geometry().contains(p, true))
         move(p.x(), p.y());
 }
 

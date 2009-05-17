@@ -323,7 +323,6 @@ void Settings::ok_pressed()
     qApp->setKeyboardInputInterval(keyboard_input_spin->value());
     qApp->setWheelScrollLines(wheel_scroll_spin->value());
     // save the new style
-    qApp->setStyle(style_combo->currentText());
     QSettings settings(QLatin1String("Trolltech"));
     settings.beginGroup(QLatin1String("Qt"));
     settings.setValue(QLatin1String("style"), style_combo->currentText());

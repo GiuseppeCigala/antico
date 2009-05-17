@@ -57,6 +57,8 @@ public:
     bool check_net_sys_tray_for(Window) const;
     void check_wm_transient_for(Window);
     Filedialog * get_file_dialog();
+    Desk * get_desktop();
+    Dockbar * get_dockbar();
     Categorymenu * get_category_menu();
    
 private:

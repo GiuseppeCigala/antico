@@ -33,7 +33,7 @@ public:
     ~Frame();
     void init();
     void update_style();
-    void create_border();
+    void create_borders();
     void get_client_geometry();
     void set_frame_geometry();
     void set_window_modality();
