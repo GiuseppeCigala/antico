@@ -8,9 +8,10 @@
 
 ////////////////////////////////////////
 
-Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, const QString &mnt_path, const QString &label, const QString &type, QWidget *parent) : QWidget(parent)
+Deskdev::Deskdev(Categorymenu *menu, const QString &uu, const QString &device, const QString &mnt_path, const QString &label, const QString &type, Desk *parent) : QWidget(parent)
 {
-    file_dialog = dial;
+    desktop = parent;
+    uuid = uu;
     cat_menu = menu;
     device_name = device;
     mount_path = mnt_path;
@@ -27,7 +28,6 @@ Deskdev::Deskdev(Filedialog *dial, Categorymenu *menu, const QString &device, co
 Deskdev::~Deskdev()
 {
     delete open_menu;
-    delete file_dialog;
     delete cat_menu;
 }
 
@@ -67,6 +67,9 @@ void Deskdev::init()
     {
         open_menu->addMenu(menu_list.at(i));
     }
+
+    main_menu->addAction(QIcon(d_disk_pix), tr("Remove device"));
+    connect(main_menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
 }
 
 void Deskdev::paintEvent(QPaintEvent *)
@@ -122,6 +125,7 @@ void Deskdev::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
+        Filedialog *file_dialog = new Filedialog(cat_menu);
         file_dialog->set_type(tr("Device contents:"), "Close");
         file_dialog->set_path(mount_path);
         file_dialog->exec();
@@ -148,6 +152,15 @@ void Deskdev::contextMenuEvent(QContextMenuEvent *event)
     main_menu->exec(event->globalPos());
 }
 
+void Deskdev::run_menu(QAction *act)
+{
+    if (act->text().compare(tr("Remove device")) == 0)
+    {
+        desktop->device_removed(uuid);
+        qDebug() << "Deskdev removed from menu selection";
+    }
+}
+
 void Deskdev::update_style()
 {
     read_settings();
@@ -157,4 +170,5 @@ void Deskdev::update_style()
         dev_pix = QPixmap(d_cdrom_pix);
     update();
 }
+
 

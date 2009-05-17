@@ -13,8 +13,10 @@
 
 #include "defs.h"
 #include "filedialog.h"
+#include "desk.h"
 
 class Filedialog;
+class Desk;
 
 ////////////////////////////////////////
 
@@ -23,7 +25,7 @@ class Deskdev : public QWidget
     Q_OBJECT
 
 public:
-    Deskdev(Filedialog *, Categorymenu *, const QString &, const QString &, const QString &, const QString &, QWidget *parent=0);
+    Deskdev(Categorymenu *, const QString &, const QString &, const QString &, const QString &, const QString &, Desk *parent=0);
     ~Deskdev();
     void read_settings();
     void init();
@@ -42,12 +44,14 @@ protected:
 signals:
 
 public slots:
+    void run_menu(QAction *);
  
 private:
     QString device_name;
     QString mount_path;
     QString device_label;
     QString device_type;
+    QString uuid;
     QPoint mousepos;
     QString d_disk_pix;
     QString d_cdrom_pix;
@@ -59,6 +63,7 @@ private:
     QMenu *open_menu;
     Filedialog *file_dialog;
     Categorymenu *cat_menu;
+    Desk *desktop;
 };
 
 #endif

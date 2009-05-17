@@ -143,7 +143,7 @@ void Desk::init()
     menu->addAction(QIcon(file_link_pix), tr("New link to file"));
     menu->addAction(QIcon(app_link_pix), tr("New link to application"));
     connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(run_menu(QAction *)));
-    // to mount external device
+    // to mount/unmount external device
     dbus_interface = new QDBusInterface("org.freedesktop.Hal", "/org/freedesktop/Hal/Manager", "org.freedesktop.Hal.Manager", QDBusConnection::systemBus(), this);
     dbus_interface->connection().connect("org.freedesktop.Hal", "/org/freedesktop/Hal/Manager", "org.freedesktop.Hal.Manager", "DeviceAdded", this, SLOT(device_added(const QString &)));
     dbus_interface->connection().connect("org.freedesktop.Hal", "/org/freedesktop/Hal/Manager", "org.freedesktop.Hal.Manager", "DeviceRemoved", this, SLOT(device_removed(const QString &)));
@@ -617,7 +617,7 @@ void Desk::mount_device(const QString &uuid, const QString &block_device, const 
     QDBusReply<QString> mnt_point = uuid_interface.call("GetProperty", "volume.mount_point");
     QString mnt_dir = mnt_point.value();
 
-    Deskdev *d_dev = new Deskdev(file_dialog, cat_menu, block_device, mnt_dir, vol_label, drive_type, this); // save the new deskdev
+    Deskdev *d_dev = new Deskdev(cat_menu, uuid, block_device, mnt_dir, vol_label, drive_type, this); // save the new deskdev
     desk_dev.insert(uuid, d_dev);
 
     if (mnt_cmd)
