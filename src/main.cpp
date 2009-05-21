@@ -16,6 +16,15 @@ int main(int argc, char **argv)
     XSelectInput(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
                  KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask | VisibilityChangeMask |
                  ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
+    
+    XSelectInput(QX11Info::display(), QX11Info::appRootWindow(),
+	SubstructureNotifyMask|SubstructureRedirectMask| 
+	StructureNotifyMask|
+	ButtonPressMask|
+	PropertyChangeMask|
+	KeyPressMask|
+	ColormapChangeMask|
+	EnterWindowMask);
     XClearWindow(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()));
     XSync(QX11Info::display(), False);
     

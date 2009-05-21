@@ -83,18 +83,10 @@ void Filedialog::read_settings()
 
 void Filedialog::paintEvent(QPaintEvent *)
 {
-    QPixmap pixmap(size());
-    QPainter painter(&pixmap);
+    QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.fillRect(pixmap.rect(), Qt::white);
-    painter.setBrush(Qt::black);
-    painter.drawRoundRect(pixmap.rect(), 5, 5);
-    setMask(pixmap.createMaskFromColor(Qt::white));
-
-    QPainter painter1(this);
-    painter1.setRenderHint(QPainter::Antialiasing);
-    painter1.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    painter1.drawRoundedRect(0, 0, width(), height(), 5, 5, Qt::RelativeSize);
+    painter.setPen(QPen(Qt::darkGray, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawRect(0, 0, width(), height());
 }
 
 void Filedialog::init()
@@ -125,7 +117,6 @@ void Filedialog::init()
     fs_model = new QFileSystemModel(this);
     fs_model->setSupportedDragActions(Qt::LinkAction);
     fs_model->setFilter(fs_model->filter() | QDir::Hidden); // add hidden files to filter
-    fs_model->setReadOnly(false);
     fs_model->setRootPath("/"); // must set on init
 
     QCompleter *completer = new QCompleter(this); // to complete the path

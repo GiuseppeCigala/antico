@@ -92,6 +92,11 @@ void Antico::get_atoms()
     wm_normal_hints = XInternAtom(QX11Info::display(), "WM_NORMAL_HINTS", False);
     wm_name = XInternAtom(QX11Info::display(), "WM_NAME", False);
     wm_transient_for = XInternAtom(QX11Info::display(), "WM_TRANSIENT_FOR", False);
+    xdnd_aware = XInternAtom(QX11Info::display(), "XdndAware", False);
+    xdnd_position = XInternAtom(QX11Info::display(), "XdndPosition", False);
+    xdnd_enter = XInternAtom(QX11Info::display(), "XdndEnter", False);
+    xdnd_finished = XInternAtom(QX11Info::display(), "XdndFinished", False);
+    xdnd_status = XInternAtom(QX11Info::display(), "XdndStatus", False);
 
     // extensions required by EWMH
     _net_wm_name = XInternAtom(QX11Info::display(), "_NET_WM_NAME", False);
@@ -118,6 +123,7 @@ void Antico::send_supported_hints()
     XClientMessageEvent xev3;
     XClientMessageEvent xev4;
     XClientMessageEvent xev5;
+    XClientMessageEvent xev6;
 
     xev1.type = ClientMessage;
     xev1.window = QApplication::desktop()->winId();
@@ -174,8 +180,20 @@ void Antico::send_supported_hints()
     xev5.data.l[0] = _kde_net_wm_system_tray_window_for;
     xev5.data.l[1] = _net_wm_state;
     xev5.data.l[2] = _net_wm_window_type_dnd;
+    xev5.data.l[3] = xdnd_aware;
+    xev5.data.l[4] = xdnd_position;
     XSendEvent(QX11Info::display(), QApplication::desktop()->winId(), False,
                (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&xev5);
+
+    xev6.type = ClientMessage;
+    xev6.window = QApplication::desktop()->winId();
+    xev6.message_type = _net_supported;
+    xev6.format = 32;
+    xev6.data.l[0] = xdnd_enter;
+    xev6.data.l[1] = xdnd_finished;
+    xev6.data.l[2] = xdnd_status;
+    XSendEvent(QX11Info::display(), QApplication::desktop()->winId(), False,
+               (SubstructureNotifyMask | SubstructureRedirectMask), (XEvent *)&xev6);
 }
 
 bool Antico::x11EventFilter(XEvent *event)
@@ -509,7 +527,6 @@ bool Antico::x11EventFilter(XEvent *event)
             qDebug() << "Button press:" <<  event->xbutton.button << "for client:" << event->xbutton.window;
             XSetInputFocus(QX11Info::display(), event->xbutton.window, RevertToNone, CurrentTime);
         }
-
         return false;
         break;
 
@@ -523,7 +540,14 @@ bool Antico::x11EventFilter(XEvent *event)
 
             if ((frm = mapping_clients.value(event->xclient.window)) != NULL)
                 frm->iconify_it();
+            return true;
         }
+      /*  if (mev->message_type == xdnd_aware || mev->message_type == xdnd_position
+            || mev->message_type == xdnd_enter || mev->message_type == xdnd_finished
+            || mev->message_type == xdnd_status)
+        {
+            return true;
+        }*/
         return false;
         break;
 

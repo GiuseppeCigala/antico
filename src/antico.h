@@ -82,6 +82,12 @@ private:
     Atom wm_normal_hints;
     Atom wm_name;
     Atom wm_transient_for;
+    // XDND Protocol
+    Atom xdnd_aware;
+    Atom xdnd_position;
+    Atom xdnd_enter;
+    Atom xdnd_finished;
+    Atom xdnd_status;
     // Extensions
     Atom _net_wm_name;
     Atom _net_wm_icon;

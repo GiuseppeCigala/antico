@@ -107,7 +107,17 @@ void Frame::init()
     qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
     qDebug() << "Reparent Client:" << c_win << "with Frame:" << winId() << "- Name:" << cl_name();
     qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+/*
+    XSetWindowAttributes c_attr;
 
+    c_attr.do_not_propagate_mask = ButtonPressMask|ButtonReleaseMask|ButtonMotionMask;
+    c_attr.override_redirect = False;
+    c_attr.event_mask = ButtonMotionMask|SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|
+                        ButtonReleaseMask|ExposureMask|EnterWindowMask|LeaveWindowMask;
+
+    XChangeWindowAttributes(QX11Info::display(), c_win, CWDontPropagate, &c_attr);
+    XSelectInput(QX11Info::display(), c_win, FocusChangeMask|PropertyChangeMask);
+*/
     XAddToSaveSet(QX11Info::display(), c_win);
     // move and resize client
     XMoveResizeWindow(QX11Info::display(), c_win, lateral_bdr_width, top_bdr_height+3, client_w, client_h);
@@ -832,3 +842,4 @@ void Frame::dropEvent(QDropEvent *event)
     event->acceptProposedAction();
     qDebug() << "Drop event contents:" << event->mimeData()->text().toLatin1().data();
 }
+
