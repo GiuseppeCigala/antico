@@ -11,12 +11,13 @@
 Deskicon::Deskicon(Frame *frame, QWidget *parent) : QLabel(parent)
 {
     frm = frame;
-    setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     grab_pix = QPixmap::grabWindow(frm->winId(), 0, 0, frm->width(), frm->height());
     setPixmap(grab_pix.scaled(frm->width()/4, frm->height()/4, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     setToolTip(frm->cl_name());
     read_settings();
     show();
+    setFrameStyle(QFrame::Box | QFrame::Raised);
+    setLineWidth(2);
 }
 
 Deskicon::~Deskicon()
@@ -73,15 +74,15 @@ void Deskicon::mouseMoveEvent(QMouseEvent *event)
 void Deskicon::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setGeometry(x()-width()/24, y()-height()/24, width()+width()/12, height()+height()/12);
-    setPixmap(grab_pix.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setFrameStyle(QFrame::Box | QFrame::Raised);
+    setLineWidth(3);
 }
 
 void Deskicon::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    setGeometry(x()+width()/26, y()+height()/26, width()-width()/13, height()-height()/13);
-    setPixmap(grab_pix.scaled(width(), height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setFrameStyle(QFrame::Box | QFrame::Raised);
+    setLineWidth(2);
 }
 
 void Deskicon::mouseReleaseEvent(QMouseEvent *event)

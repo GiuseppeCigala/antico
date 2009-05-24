@@ -86,6 +86,7 @@
 #include <QHeaderView>
 #include <QFileSystemModel>
 #include <QFontDatabase>
+#include <QDockWidget>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
