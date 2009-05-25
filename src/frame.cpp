@@ -70,7 +70,7 @@ void Frame::init()
 
     XSelectInput(QX11Info::display(), winId(), KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
                  KeymapStateMask | ButtonMotionMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask | FocusChangeMask |
-                 VisibilityChangeMask | ExposureMask | StructureNotifyMask | SubstructureNotifyMask);
+                 VisibilityChangeMask | ExposureMask | StructureNotifyMask | SubstructureRedirectMask | SubstructureNotifyMask);
 
     XSetWindowAttributes at;
     at.event_mask = ColormapChangeMask|PropertyChangeMask;
